@@ -3527,6 +3527,8 @@ public class Solutions {
 
 
     /**
+     * 突破点：后序排列中最后一个是根节点，通过根节点可以将中序排列二分，同样要对后序排列做二分，从而对比获得子树非子根节点
+     * http://www.lintcode.com/zh-cn/problem/construct-binary-tree-from-inorder-and-postorder-traversal/
      *@param inorder : A list of integers that inorder traversal of a tree
      *@param postorder : A list of integers that postorder traversal of a tree
      *@return : Root of a tree
