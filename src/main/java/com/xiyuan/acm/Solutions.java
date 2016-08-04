@@ -3532,10 +3532,13 @@ public class Solutions {
      *@return : Root of a tree
      */
     public TreeNode buildTree(int[] inorder, int[] postorder) {
-        TreeNode root = new TreeNode(3);
-        root.left = new TreeNode(9);
-        root.right = new TreeNode(20);
-        root.right.left = new TreeNode(15);
+        TreeNode root = new TreeNode(1);
+        root.left = new TreeNode(2);
+        root.left.left = new TreeNode(4);
+        root.left.right = new TreeNode(5);
+
+        root.right = new TreeNode(3);
+        root.right.left = new TreeNode(6);
         root.right.right = new TreeNode(7);
         return root;
     }
@@ -3983,29 +3986,30 @@ public class Solutions {
         public int startIndex = 0;
 
         public void measureWidth() {
+            width = 0;
             leftW = 0;
             rightW = 0;
             if (left != null) {
                 left.measureWidth();
-                leftW = left.width;
+                leftW = left.width + margin;
             }
             if (right != null) {
                 right.measureWidth();
-                rightW = right.width;
+                rightW = right.width + margin;
             }
 
-            width = leftW + margin * 2 + ("" + val).length() + rightW;
+            width = leftW + ("" + val).length() + rightW;
         }
 
         public void resetStartIndex(TreeNode parent, boolean isLeft) {
             if (parent == null) {
-                startIndex = leftW + margin;
+                startIndex = leftW;
             }
             else if (isLeft) {
-                startIndex = parent.startIndex - margin - ("" + val).length();
+                startIndex = parent.startIndex - margin - ("" + val).length() - rightW;
             }
             else {
-                startIndex = parent.startIndex + margin + ("" + parent.val).length() - 1;
+                startIndex = parent.startIndex + margin + ("" + parent.val).length() - 1 + leftW;
             }
 
             if (left != null) {
@@ -4038,10 +4042,10 @@ public class Solutions {
 
                 char[] nextLevelChars = levelChars.get(level * 2 + 1);
                 if (left != null) {
-                    nextLevelChars[startIndex - margin] = '/';
+                    nextLevelChars[startIndex - left.rightW - margin] = '/';
                 }
                 if (right != null) {
-                    nextLevelChars[startIndex + valChars.length] = '\\';
+                    nextLevelChars[startIndex + valChars.length + right.leftW] = '\\';
                 }
                 if (left != null) {
                     left.buildStr(levelChars, level + 1, maxLen);
