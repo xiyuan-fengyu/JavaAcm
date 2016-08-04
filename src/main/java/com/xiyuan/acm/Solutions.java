@@ -3970,7 +3970,7 @@ public class Solutions {
             resetStartIndex(null, true);
             ArrayList<char[]> levels = new ArrayList<char[]>();
             buildStr(levels, 0, width);
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             sb.append('\n');
             for (char[] chars: levels) {
                 sb.append(chars).append('\n');
