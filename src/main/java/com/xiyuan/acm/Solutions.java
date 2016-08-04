@@ -3527,25 +3527,49 @@ public class Solutions {
 
 
     /**
-     * 突破点：后序排列中最后一个是根节点，通过根节点可以将中序排列二分，同样要对后序排列做二分，从而对比获得子树非子根节点
+     * 突破点：后序排列中最后一个是根节点，通过根节点可以将中序排列二分，同样要对后序排列做二分(注意中序和后序的分割方式不同)，从而对比获得子树非子根节点
      * http://www.lintcode.com/zh-cn/problem/construct-binary-tree-from-inorder-and-postorder-traversal/
      *@param inorder : A list of integers that inorder traversal of a tree
      *@param postorder : A list of integers that postorder traversal of a tree
      *@return : Root of a tree
      */
     public TreeNode buildTree(int[] inorder, int[] postorder) {
-        TreeNode root = new TreeNode(1);
-        root.left = new TreeNode(2);
-        root.left.left = new TreeNode(4);
-        root.left.right = new TreeNode(5);
-
-        root.right = new TreeNode(3);
-        root.right.left = new TreeNode(6);
-        root.right.right = new TreeNode(7);
-        return root;
+        if (inorder == null
+                || inorder.length == 0
+                || postorder == null
+                || postorder.length == 0
+                || inorder.length != postorder.length) {
+            return null;
+        }
+        else {
+            return buildTree(inorder, 0, inorder.length - 1, postorder, 0, inorder.length - 1);
+        }
     }
 
+    private int findRootInorderIndex(int[] inorder, int rootVal, int left, int right) {
+        for (int i = left; i <= right; i++) {
+            if (inorder[i] == rootVal) {
+                return i;
+            }
+        }
+        return right;
+    }
 
+    private TreeNode buildTree(int[] inorder, int inLeft, int inRight, int[] postorder, int poLeft, int poRight) {
+        if (inLeft <= inRight) {
+            int rootVal = postorder[poRight];
+            int rootInorderIndex = findRootInorderIndex(inorder, rootVal, inLeft, inRight);
+            TreeNode tempRoot = new TreeNode(rootVal);
+            if (inLeft < rootInorderIndex) {
+                tempRoot.left = buildTree(inorder, inLeft, rootInorderIndex - 1, postorder, poLeft, poLeft + rootInorderIndex - 1 - inLeft);
+            }
+            if (inRight > rootInorderIndex) {
+                tempRoot.right = buildTree(inorder, rootInorderIndex + 1, inRight, postorder, poRight - rootInorderIndex + inLeft, poRight - 1);
+            }
+            return tempRoot;
+        }
+        return null;
+    }
 
 
 
@@ -3553,9 +3577,9 @@ public class Solutions {
         Solutions solutions = new Solutions();
 
         //根据中序遍历和后序遍历树构造二叉树
-        int[] middelArr = {1, 2, 3};
-        int[] afterArr = {1, 3, 2};
-        XYLog.d(solutions.buildTree(middelArr, afterArr));
+//        int[][] arrs = {{8, 4, 2, 5, 1, 6, 3, 7},{8, 4, 5, 2, 6, 7, 3, 1}};
+        int[][] arrs = {{2,4,5,3,1},{5,4,3,2,1}};
+        XYLog.d(solutions.buildTree(arrs[0], arrs[1]));
 
 
         //给出一棵二叉树，返回其节点值的锯齿形层次遍历（先从左往右，下一层再从右往左，层与层之间交替进行）
