@@ -1,5 +1,7 @@
 package com.xiyuan.acm;
 
+import com.xiyuan.util.XYLog;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -3438,10 +3440,139 @@ public class Solutions {
 
 
 
+    /**
+     * http://www.lintcode.com/zh-cn/problem/binary-tree-level-order-traversal-ii/
+     * @param root: The root of binary tree.
+     * @return: buttom-up level order a list of lists of integer
+     */
+    public ArrayList<ArrayList<Integer>> levelOrderBottom(TreeNode root) {
+        ArrayList<ArrayList<Integer>> temp = new ArrayList<ArrayList<Integer>>();
+        visitTreeByLevelOrderBottom(root, 0, temp);
+
+        ArrayList<ArrayList<Integer>> result = new ArrayList<ArrayList<Integer>>();
+        for (int i = temp.size() - 1; i > -1; i--) {
+            result.add(temp.remove(i));
+        }
+        return result;
+    }
+
+    public void visitTreeByLevelOrderBottom(TreeNode curNode, int curLevel, ArrayList<ArrayList<Integer>> temp) {
+        if (curNode != null) {
+            if (curLevel + 1 > temp.size()) {
+                temp.add(new ArrayList<Integer>());
+            }
+            if (curLevel == 0) {
+                ArrayList<Integer> curLevelList = temp.get(curLevel);
+                curLevelList.add(curNode.val);
+            }
+
+            if (curNode.left != null || curNode.right != null) {
+                if (curLevel + 2 > temp.size()) {
+                    temp.add(new ArrayList<Integer>());
+                }
+                ArrayList<Integer> nextLevelList = temp.get(curLevel + 1);
+                if (curNode.left != null) {
+                    nextLevelList.add(curNode.left.val);
+                }
+                if (curNode.right != null) {
+                    nextLevelList.add(curNode.right.val);
+                }
+
+                if (curNode.left != null) {
+                    visitTreeByLevelOrderBottom(curNode.left, curLevel + 1, temp);
+                }
+                if (curNode.right != null) {
+                    visitTreeByLevelOrderBottom(curNode.right, curLevel + 1, temp);
+                }
+            }
+        }
+    }
+
+
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/binary-tree-zigzag-level-order-traversal/
+     * @param root: The root of binary tree.
+     * @return: A list of lists of integer include
+     *          the zigzag level order traversal of its nodes' values
+     */
+    public ArrayList<ArrayList<Integer>> zigzagLevelOrder(TreeNode root) {
+        ArrayList<ArrayList<Integer>> temp = new ArrayList<ArrayList<Integer>>();
+        visitTreeByLevelOrderBottom(root, 0, temp);
+
+        ArrayList<ArrayList<Integer>> result = new ArrayList<ArrayList<Integer>>();
+        for (int i = 0, size = temp.size(); i < size; i++) {
+            if (i % 2 == 0) {
+                result.add(temp.get(i));
+            }
+            else {
+                ArrayList<Integer> level = temp.get(i);
+                ArrayList<Integer> reverse = new ArrayList<Integer>();
+                for (int j = level.size() - 1; j > -1; j--) {
+                    reverse.add(level.remove(j));
+                }
+                result.add(reverse);
+            }
+        }
+        return result;
+    }
+
+
+
+
+
+    /**
+     *@param inorder : A list of integers that inorder traversal of a tree
+     *@param postorder : A list of integers that postorder traversal of a tree
+     *@return : Root of a tree
+     */
+    public TreeNode buildTree(int[] inorder, int[] postorder) {
+        TreeNode root = new TreeNode(3);
+        root.left = new TreeNode(9);
+        root.right = new TreeNode(20);
+        root.right.left = new TreeNode(15);
+        root.right.right = new TreeNode(7);
+        return root;
+    }
+
+
+
 
 
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        //根据中序遍历和后序遍历树构造二叉树
+        int[] middelArr = {1, 2, 3};
+        int[] afterArr = {1, 3, 2};
+        XYLog.d(solutions.buildTree(middelArr, afterArr));
+
+
+        //给出一棵二叉树，返回其节点值的锯齿形层次遍历（先从左往右，下一层再从右往左，层与层之间交替进行）
+//        TreeNode root = new TreeNode(3);
+//        root.left = new TreeNode(9);
+//        root.right = new TreeNode(20);
+//        root.right.left = new TreeNode(15);
+//        root.right.right = new TreeNode(7);
+//        XYLog.d(solutions.zigzagLevelOrder(root));
+
+
+
+        //给出一棵二叉树，返回其节点值从底向上的层次序遍历（按从叶节点所在层到根节点所在的层遍历，然后逐层从左往右遍历）
+//        TreeNode root = new TreeNode(3);
+//        root.left = new TreeNode(9);
+//        root.right = new TreeNode(20);
+//        root.right.left = new TreeNode(15);
+//        root.right.right = new TreeNode(7);
+//        XYLog.d(solutions.levelOrderBottom(root));
+
+
+
         //利用位运算实现加法
 //		int a = (int)(Math.random() * 100);
 //		int b = (int)(Math.random() * 100);
@@ -3820,9 +3951,6 @@ public class Solutions {
 //        int[] b = {2,3,4,5};
 //        System.out.println(solutions.findMedianSortedArrays(a, b));
 
-
-
-
     }
 
     public static class TreeNode {
@@ -3832,6 +3960,98 @@ public class Solutions {
             this.val = val;
             this.left = this.right = null;
         }
+
+        @Override
+        public String toString() {
+            measureWidth();
+            resetStartIndex(null, true);
+            ArrayList<char[]> levels = new ArrayList<char[]>();
+            buildStr(levels, 0, width);
+            StringBuffer sb = new StringBuffer();
+            sb.append('\n');
+            for (char[] chars: levels) {
+                sb.append(chars).append('\n');
+            }
+            return sb.toString();
+        }
+
+        private static final int margin = 2;
+
+        public int width = 0;
+        public int leftW = 0;
+        public int rightW = 0;
+        public int startIndex = 0;
+
+        public void measureWidth() {
+            leftW = 0;
+            rightW = 0;
+            if (left != null) {
+                left.measureWidth();
+                leftW = left.width;
+            }
+            if (right != null) {
+                right.measureWidth();
+                rightW = right.width;
+            }
+
+            width = leftW + margin * 2 + ("" + val).length() + rightW;
+        }
+
+        public void resetStartIndex(TreeNode parent, boolean isLeft) {
+            if (parent == null) {
+                startIndex = leftW + margin;
+            }
+            else if (isLeft) {
+                startIndex = parent.startIndex - margin - ("" + val).length();
+            }
+            else {
+                startIndex = parent.startIndex + margin + ("" + parent.val).length() - 1;
+            }
+
+            if (left != null) {
+                left.resetStartIndex(this, true);
+            }
+            if (right != null) {
+                right.resetStartIndex(this, false);
+            }
+        }
+
+        public void buildStr(ArrayList<char[]> levelChars, int level, int maxLen) {
+            if (level * 2 + 1 > levelChars.size()) {
+                char[] chars = new char[maxLen];
+                Arrays.fill(chars, ' ');
+                levelChars.add(chars);
+            }
+
+            char[] curLevelChars = levelChars.get(level * 2);
+            char[] valChars = ("" + val).toCharArray();
+            for (int i = 0, len = valChars.length; i < len; i++) {
+                curLevelChars[startIndex + i] = valChars[i];
+            }
+
+            if (left != null || right != null) {
+                if (level * 2 + 2 > levelChars.size()) {
+                    char[] chars = new char[maxLen];
+                    Arrays.fill(chars, ' ');
+                    levelChars.add(chars);
+                }
+
+                char[] nextLevelChars = levelChars.get(level * 2 + 1);
+                if (left != null) {
+                    nextLevelChars[startIndex - margin] = '/';
+                }
+                if (right != null) {
+                    nextLevelChars[startIndex + valChars.length] = '\\';
+                }
+                if (left != null) {
+                    left.buildStr(levelChars, level + 1, maxLen);
+                }
+                if (right != null) {
+                    right.buildStr(levelChars, level + 1, maxLen);
+                }
+            }
+        }
+
     }
 
     public static class MinStack {
