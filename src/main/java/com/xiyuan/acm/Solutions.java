@@ -3622,14 +3622,60 @@ public class Solutions {
 
 
 
-    /**
+    /**二分法
      * http://www.lintcode.com/zh-cn/problem/find-peak-element/
      * @param arr: An integers array.
      * @return: return any of peek positions.
      */
     public int findPeak(int[] arr) {
+        if (arr == null || arr.length == 0) {
+            return -1;
+        }
+        else {
+            return findPeak(arr, 0, arr.length - 1);
+        }
+    }
 
-        return 0;
+    private int findPeak(int[] arr, int left, int right) {
+        if (right - left < 2) {
+            return -1;
+        }
+
+        int mIndex = (left + right) / 2;
+        int mVal = arr[mIndex];
+
+        int mlIndex = mIndex - 1;
+        int mlVal = arr[mlIndex];
+
+        int mrIndex = mIndex + 1;
+        int mrVal = arr[mrIndex];
+
+        if (mVal > mlVal && mVal > mrVal) {
+            return mIndex;
+        }
+        else {
+            int findInLeft = -1;
+            if (mlVal > mVal) {
+                findInLeft = findPeak(arr, left, mIndex);
+            }
+            else {
+                findInLeft = findPeak(arr, left, mlIndex);
+            }
+
+            if (findInLeft != -1) {
+                return findInLeft;
+            }
+            else {
+                int findInRight = -1;
+                if (mrVal > mVal) {
+                    findInRight = findPeak(arr, mIndex, right);
+                }
+                else {
+                    findInRight = findPeak(arr, mrIndex, right);
+                }
+                return findInRight;
+            }
+        }
     }
 
 
@@ -3641,7 +3687,7 @@ public class Solutions {
         //A[0] < A[1] 并且 A[n - 2] > A[n - 1]
         //假定P是峰值的位置则满足A[P] > A[P-1]且A[P] > A[P+1]，返回数组中任意一个峰值的位置。
         //给出数组[1, 2, 1, 3, 4, 5, 7, 6]返回1, 即数值 2 所在位置, 或者6, 即数值 7 所在位置.
-        int[] arr = {1, 2, 1, 3, 4, 5, 7, 6};
+        int[] arr = {1,2,4,5,6,7,8,6};
         int peakIndex = solutions.findPeak(arr);
         XYLog.d(arr, "的一个峰值为：", arr[peakIndex], "，index=", peakIndex);
 
