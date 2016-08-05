@@ -3829,10 +3829,42 @@ public class Solutions {
      * @return: The length of longest common subsequence of A and B.
      */
     public int longestCommonSubsequence(String strA, String strB) {
+        if (strA == null || strA.isEmpty()
+                || strB == null || strB.isEmpty()) {
+            return 0;
+        }
 
-        return 0;
+        int lenA = strA.length();
+        int lenB = strB.length();
+        int[] f = new int[lenA * lenB];
+        Arrays.fill(f, -1);
+        return f(f, strA, strB, lenA - 1, lenB - 1);
     }
 
+    private int f(int[] f, String strA, String strB, int i, int j) {
+        if (i < 0 || j < 0) {
+            return 0;
+        }
+
+        int lenA = strA.length();
+        int fIJ = f[i * lenA + j];
+        if (fIJ != -1) {
+            return fIJ;
+        }
+
+        int value = 0;
+        if (strA.charAt(i) == strB.charAt(j)) {
+            value = f(f, strA, strB, i - 1, j - 1) + 1;
+        }
+        else {
+            int temp0 = f(f, strA, strB, i, j - 1);
+            int temp1 = f(f, strA, strB, i - 1, j);
+            value = Math.max(temp0, temp1);
+        }
+
+        f[i * lenA + j] = value;
+        return value;
+    }
 
 
 
@@ -3842,8 +3874,18 @@ public class Solutions {
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
 
-
-
+        /**
+         给出两个字符串，找到最长公共子序列(LCS)，返回LCS的长度。
+         最长公共子序列的定义：
+         最长公共子序列问题是在一组序列（通常2个）中找到最长公共子序列（注意：不同于子串，LCS不需要是连续的子串）。
+         该问题是典型的计算机科学问题，是文件差异比较程序的基础，在生物信息学中也有所应用。
+         样例
+         给出"ABCD" 和 "EDCA"，这个LCS是 "A" (或 D或C)，返回1
+         给出 "ABCD" 和 "EACB"，这个LCS是"AC"返回 2
+         */
+//        String strA = "ABCD";
+//        String strB = "EACB";
+//        XYLog.d(strA, " 和 ", strB, " 的最长公共子序列长度为：", solutions.longestCommonSubsequence(strA, strB));
 
 
         /**
