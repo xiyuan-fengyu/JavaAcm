@@ -3622,7 +3622,7 @@ public class Solutions {
 
 
 
-    /**二分法
+    /**二分法查找峰值
      * http://www.lintcode.com/zh-cn/problem/find-peak-element/
      * @param arr: An integers array.
      * @return: return any of peek positions.
@@ -3679,17 +3679,167 @@ public class Solutions {
     }
 
 
+
+
+
+
+
+
+
+
+    /**查找最长升序列，序列不要求连续
+     *思路：(f[n]代表以nums[n]结尾的最大升序列)
+     * f[0] = 1
+     * f[n] = 1 + max{nums[i] < nums[n] | f[n]} (即1 + 前n-1项中满足nums[i] < nums[n]的最大的f[n])
+     * 而最终需要返回的是max{f[0], ..., f[n]},而不是f[n]
+     * http://www.lintcode.com/zh-cn/problem/longest-increasing-subsequence/
+     * @param nums: The integer array
+     * @return: The length of LIS (longest increasing subsequence)
+     */
+    public int longestIncreasingSubsequence(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+
+        int maxOfAll = 0;
+        int len = nums.length;
+        int[] f = new int[len];
+        for (int i = 0; i < len; i++) {
+            if (i == 0) {
+                f[i] = 1;
+            }
+            else {
+                int max = 0;
+                for (int j = 0; j < i; j++) {
+                    if (nums[i] > nums[j] && f[j] > max) {
+                        max = f[j];
+                    }
+                }
+
+                f[i] = max + 1;
+            }
+
+            if (f[i] > maxOfAll) {
+                maxOfAll = f[i];
+            }
+        }
+
+        return maxOfAll;
+    }
+
+    /**
+     * 采用二分算法对longestIncreasingSubsequence进行优化
+     * 思路：
+     * f[n]代表以nums[n]结尾的最长升序列的长度
+     * m[n]代表长度为n的所有升序列中最小的结尾值
+     * 例如：[10, 1, 11, 2, 12, 3, 11]
+     * 步骤大概如下：
+     * f[0] = 1
+     * (m[1] == 0,添加新值)
+     * m[1] = 10
+     *
+     * f[1] = 1
+     * (nums[1]=1 比 m[1] = 10 小，更新值)
+     * m[1] = 1 （1比10小，更新值）
+     *
+     * f[2] = (满足m[i] < nums[2]的最大i, 这里是1) + 1 = 2
+     * m[2] = 11 (新添加值)
+     *
+     * f[3] = (满足m[i] < nums[3]的最大i, 这里是1) + 1 = 2
+     * (nums[3]=2 比 m[2] = 11 小，更新值)
+     *  m[2] = 2
+     *
+     * f[4] = (满足m[i] < nums[4]的最大i, 这里是2) + 1 = 3
+     * (m[3] == 0,添加新值)
+     * m[3] = nums[4] = 12
+     *
+     * 后面的步骤就不提了，二分主要用在(满足m[i] < nums[4]的最大i, 这里是2)这种步骤中, 当x < y时，m[y] < m[y]
+     *
+     * @param nums
+     * @return
+     */
+    public int longestIncreasingSubsequenceWithBitch(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+
+        int maxOfAll = 0;
+        int len = nums.length;
+        int[] f = new int[len];
+        int[] m = new int[len + 1];
+        for (int i = 0; i < len; i++) {
+            if (i == 0) {
+                f[i] = 1;
+                m[1] = nums[i];
+            }
+            else {
+                //通过二分法搜索m，来快速查找到满足m[j] < nums[i]的最大j,注意要用maxOfAll来限制右边界，因为右边界右边的全为0
+                int temp = bitchSearchMaxIndex(m, nums[i], 1, maxOfAll) + 1;
+                f[i] = temp;
+                if (m[temp] == 0 || nums[i] < m[temp]) {
+                    m[temp] = nums[i];
+                }
+            }
+
+            if (f[i] > maxOfAll) {
+                maxOfAll = f[i];
+            }
+        }
+
+        return maxOfAll;
+    }
+
+    private int bitchSearchMaxIndex(int[] m, int numsI, int left, int right) {
+        if (left <= right) {
+            int mIndex = (left + right) / 2;
+            if (m[mIndex] < numsI) {
+                int temp = bitchSearchMaxIndex(m, numsI, mIndex + 1, right);
+                if (temp == 0) {
+                    return mIndex;
+                }
+                else {
+                    return temp;
+                }
+            }
+            else {
+                return bitchSearchMaxIndex(m, numsI, left, mIndex - 1);
+            }
+        }
+
+        return 0;
+    }
+
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         给定一个整数序列，找到最长上升子序列（LIS），返回LIS的长度。
+         最长上升子序列的定义：
+         最长上升子序列问题是在一个无序的给定序列中找到一个尽可能长的由低到高排列的子序列，这种子序列不一定是连续的或者唯一的。
+         https://en.wikipedia.org/wiki/Longest_increasing_subsequence
+         给出 [5,4,1,2,3]，LIS 是 [1,2,3]，返回 3
+         给出 [4,2,4,5,3,7]，LIS 是 [2,4,5,7]，返回 4
+         */
+        int[] arr = {88,4,24,82,86,1,56,74,71,9,8,18,26,53,77,87,60,27,69,17,76,23,67,14,98,13,10,83,20,43,39,29,92,31,0,30,90,70,37,59};
+//        int[] arr = {1, 1,1, 1, 1,1};
+        XYLog.d(arr, "的最长升序列长度为：", solutions.longestIncreasingSubsequence(arr));
+        XYLog.d(arr, "的最长升序列长度为(采用二分法优化)：", solutions.longestIncreasingSubsequenceWithBitch(arr));
+
+
+
 
         //你给出一个整数数组(size为n)，其具有以下特点：
         //相邻位置的数字是不同的
         //A[0] < A[1] 并且 A[n - 2] > A[n - 1]
         //假定P是峰值的位置则满足A[P] > A[P-1]且A[P] > A[P+1]，返回数组中任意一个峰值的位置。
         //给出数组[1, 2, 1, 3, 4, 5, 7, 6]返回1, 即数值 2 所在位置, 或者6, 即数值 7 所在位置.
-        int[] arr = {1,2,4,5,6,7,8,6};
-        int peakIndex = solutions.findPeak(arr);
-        XYLog.d(arr, "的一个峰值为：", arr[peakIndex], "，index=", peakIndex);
+//        int[] arr = {1,2,4,5,6,7,8,6};
+//        int peakIndex = solutions.findPeak(arr);
+//        XYLog.d(arr, "的一个峰值为：", arr[peakIndex], "，index=", peakIndex);
+
+
+
 
 
         //根据前序遍历和中序遍历树构造二叉树.
