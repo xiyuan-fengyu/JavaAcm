@@ -3842,6 +3842,10 @@ public class Solutions {
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
 
+
+
+
+
         /**
          给定一个整数序列，找到最长上升子序列（LIS），返回LIS的长度。
          最长上升子序列的定义：
@@ -3850,10 +3854,10 @@ public class Solutions {
          给出 [5,4,1,2,3]，LIS 是 [1,2,3]，返回 3
          给出 [4,2,4,5,3,7]，LIS 是 [2,4,5,7]，返回 4
          */
-        int[] arr = {88,4,24,82,86,1,56,74,71,9,8,18,26,53,77,87,60,27,69,17,76,23,67,14,98,13,10,83,20,43,39,29,92,31,0,30,90,70,37,59};
-//        int[] arr = {1, 1,1, 1, 1,1};
-        XYLog.d(arr, "的最长升序列长度为：", solutions.longestIncreasingSubsequence(arr));
-        XYLog.d(arr, "的最长升序列长度为(采用二分法优化)：", solutions.longestIncreasingSubsequenceWithBitch(arr));
+//        int[] arr = {88,4,24,82,86,1,56,74,71,9,8,18,26,53,77,87,60,27,69,17,76,23,67,14,98,13,10,83,20,43,39,29,92,31,0,30,90,70,37,59};
+////        int[] arr = {1, 1,1, 1, 1,1};
+//        XYLog.d(arr, "的最长升序列长度为：", solutions.longestIncreasingSubsequence(arr));
+//        XYLog.d(arr, "的最长升序列长度为(采用二分法优化)：", solutions.longestIncreasingSubsequenceWithBitch(arr));
 
 
 
@@ -3869,17 +3873,10 @@ public class Solutions {
 
 
 
-
-
         //根据前序遍历和中序遍历树构造二叉树.
 //        int[][] arrs = {{1, 2, 4, 8, 5, 3, 6, 7},{8, 4, 2, 5, 1, 6, 3, 7}};
 ////        int[][] arrs = {{1, 2, 3, 4, 5},{2, 4, 5, 3, 1}};
 //        XYLog.d(solutions.buildTreePreIn(arrs[0], arrs[1]));
-
-
-
-
-
 
 
         //根据中序遍历和后序遍历树构造二叉树
@@ -3887,11 +3884,6 @@ public class Solutions {
 ////        int[][] arrs = {{2,4,5,3,1},{5,4,3,2,1}};
 //        XYLog.d(solutions.buildTree(arrs[0], arrs[1]));
 
-
-
-////        int[][] arrs = {{8, 4, 2, 5, 1, 6, 3, 7},{8, 4, 5, 2, 6, 7, 3, 1}};
-//        int[][] arrs = {{2,4,5,3,1},{5,4,3,2,1}};
-//        XYLog.d(solutions.buildTree(arrs[0], arrs[1]));
 
 
         //给出一棵二叉树，返回其节点值的锯齿形层次遍历（先从左往右，下一层再从右往左，层与层之间交替进行）
