@@ -3564,7 +3564,7 @@ public class Solutions {
                 tempRoot.left = buildTree(inorder, inLeft, rootInorderIndex - 1, postorder, poLeft, poLeft + rootInorderIndex - 1 - inLeft);
             }
             if (inRight > rootInorderIndex) {
-                tempRoot.right = buildTree(inorder, rootInorderIndex + 1, inRight, postorder, poRight + rootInorderIndex - inRight, poRight - 1);
+                tempRoot.right = buildTree(inorder, rootInorderIndex + 1, inRight, postorder, poRight - rootInorderIndex + inLeft, poRight - 1);
             }
             return tempRoot;
         }
@@ -3810,6 +3810,35 @@ public class Solutions {
     }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/longest-common-subsequence/
+     * @param strA, strB: Two strings.
+     * @return: The length of longest common subsequence of A and B.
+     */
+    public int longestCommonSubsequence(String strA, String strB) {
+
+        return 0;
+    }
+
+
+
+
+
+
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
 
@@ -3848,6 +3877,11 @@ public class Solutions {
 //        XYLog.d(solutions.buildTreePreIn(arrs[0], arrs[1]));
 
 
+
+
+
+
+
         //根据中序遍历和后序遍历树构造二叉树
 //        int[][] arrs = {{8, 4, 2, 5, 1, 6, 3, 7},{8, 4, 5, 2, 6, 7, 3, 1}};
 ////        int[][] arrs = {{2,4,5,3,1},{5,4,3,2,1}};
@@ -3855,6 +3889,9 @@ public class Solutions {
 
 
 
+////        int[][] arrs = {{8, 4, 2, 5, 1, 6, 3, 7},{8, 4, 5, 2, 6, 7, 3, 1}};
+//        int[][] arrs = {{2,4,5,3,1},{5,4,3,2,1}};
+//        XYLog.d(solutions.buildTree(arrs[0], arrs[1]));
 
 
         //给出一棵二叉树，返回其节点值的锯齿形层次遍历（先从左往右，下一层再从右往左，层与层之间交替进行）
