@@ -3577,8 +3577,8 @@ public class Solutions {
         Solutions solutions = new Solutions();
 
         //根据中序遍历和后序遍历树构造二叉树
-//        int[][] arrs = {{8, 4, 2, 5, 1, 6, 3, 7},{8, 4, 5, 2, 6, 7, 3, 1}};
-        int[][] arrs = {{2,4,5,3,1},{5,4,3,2,1}};
+        int[][] arrs = {{8, 4, 2, 5, 1, 6, 3, 7},{8, 4, 5, 2, 6, 7, 3, 1}};
+//        int[][] arrs = {{2,4,5,3,1},{5,4,3,2,1}};
         XYLog.d(solutions.buildTree(arrs[0], arrs[1]));
 
 
