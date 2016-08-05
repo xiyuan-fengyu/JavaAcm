@@ -3564,7 +3564,7 @@ public class Solutions {
                 tempRoot.left = buildTree(inorder, inLeft, rootInorderIndex - 1, postorder, poLeft, poLeft + rootInorderIndex - 1 - inLeft);
             }
             if (inRight > rootInorderIndex) {
-                tempRoot.right = buildTree(inorder, rootInorderIndex + 1, inRight, postorder, poRight - rootInorderIndex + inLeft, poRight - 1);
+                tempRoot.right = buildTree(inorder, rootInorderIndex + 1, inRight, postorder, poRight + rootInorderIndex - inRight, poRight - 1);
             }
             return tempRoot;
         }
