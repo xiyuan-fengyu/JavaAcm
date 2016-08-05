@@ -3573,13 +3573,92 @@ public class Solutions {
 
 
 
+
+
+
+
+
+
+
+    /**以前序为标准，最前面的为根节点，在中序中，根节点左边的构成左子树，根节点右边的构成右子树，由此二分
+     * http://www.lintcode.com/zh-cn/problem/construct-binary-tree-from-preorder-and-inorder-traversal/
+     *@param preorder : A list of integers that preorder traversal of a tree
+     *@param inorder : A list of integers that inorder traversal of a tree
+     *@return : Root of a tree
+     */
+    public TreeNode buildTreePreIn(int[] preorder, int[] inorder) {
+        if (inorder == null
+                || inorder.length == 0
+                || preorder == null
+                || preorder.length == 0
+                || inorder.length != preorder.length) {
+            return null;
+        }
+        else {
+            return buildTreePreIn(inorder, 0, inorder.length - 1, preorder, 0, inorder.length - 1);
+        }
+    }
+
+    private TreeNode buildTreePreIn(int[] inorder, int inLeft, int inRight, int[] preorder, int prLeft, int prRight) {
+        if (inLeft <= inRight) {
+            int rootVal = preorder[prLeft];
+            int rootInorderIndex = findRootInorderIndex(inorder, rootVal, inLeft, inRight);
+            TreeNode tempRoot = new TreeNode(rootVal);
+            if (inLeft < rootInorderIndex) {
+                tempRoot.left = buildTreePreIn(inorder, inLeft, rootInorderIndex - 1, preorder, prLeft + 1, prLeft + rootInorderIndex - inLeft);
+            }
+            if (inRight > rootInorderIndex) {
+                tempRoot.right = buildTreePreIn(inorder, rootInorderIndex + 1, inRight, preorder, prRight + rootInorderIndex - inRight + 1, prRight);
+            }
+            return tempRoot;
+        }
+        return null;
+    }
+
+
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/find-peak-element/
+     * @param arr: An integers array.
+     * @return: return any of peek positions.
+     */
+    public int findPeak(int[] arr) {
+
+        return 0;
+    }
+
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
 
+        //你给出一个整数数组(size为n)，其具有以下特点：
+        //相邻位置的数字是不同的
+        //A[0] < A[1] 并且 A[n - 2] > A[n - 1]
+        //假定P是峰值的位置则满足A[P] > A[P-1]且A[P] > A[P+1]，返回数组中任意一个峰值的位置。
+        //给出数组[1, 2, 1, 3, 4, 5, 7, 6]返回1, 即数值 2 所在位置, 或者6, 即数值 7 所在位置.
+        int[] arr = {1, 2, 1, 3, 4, 5, 7, 6};
+        int peakIndex = solutions.findPeak(arr);
+        XYLog.d(arr, "的一个峰值为：", arr[peakIndex], "，index=", peakIndex);
+
+
+        //根据前序遍历和中序遍历树构造二叉树.
+//        int[][] arrs = {{1, 2, 4, 8, 5, 3, 6, 7},{8, 4, 2, 5, 1, 6, 3, 7}};
+////        int[][] arrs = {{1, 2, 3, 4, 5},{2, 4, 5, 3, 1}};
+//        XYLog.d(solutions.buildTreePreIn(arrs[0], arrs[1]));
+
+
         //根据中序遍历和后序遍历树构造二叉树
-        int[][] arrs = {{8, 4, 2, 5, 1, 6, 3, 7},{8, 4, 5, 2, 6, 7, 3, 1}};
-//        int[][] arrs = {{2,4,5,3,1},{5,4,3,2,1}};
-        XYLog.d(solutions.buildTree(arrs[0], arrs[1]));
+//        int[][] arrs = {{8, 4, 2, 5, 1, 6, 3, 7},{8, 4, 5, 2, 6, 7, 3, 1}};
+////        int[][] arrs = {{2,4,5,3,1},{5,4,3,2,1}};
+//        XYLog.d(solutions.buildTree(arrs[0], arrs[1]));
+
+
+
 
 
         //给出一棵二叉树，返回其节点值的锯齿形层次遍历（先从左往右，下一层再从右往左，层与层之间交替进行）

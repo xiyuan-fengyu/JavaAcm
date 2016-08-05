@@ -38,9 +38,7 @@ public class XYLog {
         StringBuilder buffer = new StringBuilder();
         if (objs != null && objs.length > 0) {
             for (Object obj: objs) {
-                if (obj != null) {
-                    buffer.append(anyToString(obj));
-                }
+                buffer.append(anyToString(obj));
             }
         }
         return buffer.toString();
@@ -54,7 +52,10 @@ public class XYLog {
         Class<?> clazz = t.getClass();
         String clazzName = clazz.getName();
         String toString = t.toString();
-        if (clazzName.startsWith("[")) {
+        if (clazz == String.class) {
+            return (String) t;
+        }
+        else if (clazzName.startsWith("[")) {
             if (clazzName.equalsIgnoreCase("[I")) {
                 int[] objs = (int[]) t;
                 return intArrToString(objs);
