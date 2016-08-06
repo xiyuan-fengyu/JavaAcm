@@ -3925,8 +3925,76 @@ public class Solutions {
 
 
 
+
+
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/longest-common-substring/
+     * @param strA, strB: Two string.
+     * @return: the length of the longest common substring.
+     */
+    public int longestCommonSubstring(String strA, String strB) {
+        if (strA == null || strA.isEmpty()
+                || strB == null || strB.isEmpty()) {
+            return 0;
+        }
+
+        int aLen = strA.length();
+        int bLen = strB.length();
+
+        int max = 0;
+
+        int[] f = new int[aLen];
+        for (int j = 0; j < bLen; j++) {
+            int[] temp = Arrays.copyOf(f, aLen);
+            for (int i = 0; i < aLen; i++) {
+                if (strA.charAt(i) == strB.charAt(j)) {
+                    if (i == 0) {
+                        f[i] = 1;
+                    }
+                    else {
+                        f[i] = temp[i - 1] + 1;
+                    }
+
+                    if (f[i] > max) {
+                        max = f[i];
+                    }
+                }
+                else {
+                    f[i] = 0;
+                }
+            }
+        }
+
+        return max;
+    }
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         最长公共子串
+
+         给出两个字符串，找到最长公共子串，并返回其长度。
+         样例
+         给出A=“ABCD”，B=“CBCE”，返回 2
+
+         思路
+         http://my.oschina.net/leejun2005/blog/117167
+         */
+        String strA = "abccccccccccde";
+        String strB = "dbccccccabccde";
+        XYLog.d(strA, " 和 ", strB, " 的最长公共子串长度为：", solutions.longestCommonSubstring(strA, strB));
+
+
+
+
+
 
         /**
          最长公共前缀
