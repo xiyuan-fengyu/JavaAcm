@@ -3871,10 +3871,80 @@ public class Solutions {
 
 
 
+
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/longest-common-prefix/
+     * @param strs: A list of strings
+     * @return: The longest common prefix
+     */
+    public String longestCommonPrefix(String[] strs) {
+        if (strs == null || strs.length == 0) {
+            return "";
+        }
+        else if (strs.length == 1) {
+            return strs[0];
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; ; i++) {
+            boolean flag = true;
+
+            char c = '\0';
+            for (String str: strs) {
+                if (str == null || str.length() <= i) {
+                    flag = false;
+                    break;
+                }
+                else if (c == '\0') {
+                    c = str.charAt(i);
+                }
+                else if (c != str.charAt(i)) {
+                    flag = false;
+                    break;
+                }
+            }
+
+            if (!flag) {
+                break;
+            }
+            else {
+                sb.append(c);
+            }
+        }
+
+        return sb.toString();
+    }
+
+
+
+
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
 
         /**
+         最长公共前缀
+
+         给k个字符串，求出他们的最长公共前缀(LCP)
+         样例
+         在 "ABCD" "ABEF" 和 "ACEF" 中,  LCP 为 "A"
+         在 "ABCDEFG", "ABCEFG", "ABCEFA" 中, LCP 为 "ABC"
+         */
+//        String[] strs = {"ABCDEFG", "ABCEFG", "ABCEFA"};
+//        XYLog.d(strs, "的最长公共前缀为：", solutions.longestCommonPrefix(strs));
+
+
+
+
+        /**
+         最长公共子序列
+
          给出两个字符串，找到最长公共子序列(LCS)，返回LCS的长度。
          最长公共子序列的定义：
          最长公共子序列问题是在一组序列（通常2个）中找到最长公共子序列（注意：不同于子串，LCS不需要是连续的子串）。
@@ -3889,10 +3959,13 @@ public class Solutions {
 
 
         /**
+         最长上升子序列
+
          给定一个整数序列，找到最长上升子序列（LIS），返回LIS的长度。
          最长上升子序列的定义：
          最长上升子序列问题是在一个无序的给定序列中找到一个尽可能长的由低到高排列的子序列，这种子序列不一定是连续的或者唯一的。
          https://en.wikipedia.org/wiki/Longest_increasing_subsequence
+         样例
          给出 [5,4,1,2,3]，LIS 是 [1,2,3]，返回 3
          给出 [4,2,4,5,3,7]，LIS 是 [2,4,5,7]，返回 4
          */
@@ -3902,13 +3975,15 @@ public class Solutions {
 //        XYLog.d(arr, "的最长升序列长度为(采用二分法优化)：", solutions.longestIncreasingSubsequenceWithBitch(arr));
 
 
+        /**
+         寻找峰值
 
-
-        //你给出一个整数数组(size为n)，其具有以下特点：
-        //相邻位置的数字是不同的
-        //A[0] < A[1] 并且 A[n - 2] > A[n - 1]
-        //假定P是峰值的位置则满足A[P] > A[P-1]且A[P] > A[P+1]，返回数组中任意一个峰值的位置。
-        //给出数组[1, 2, 1, 3, 4, 5, 7, 6]返回1, 即数值 2 所在位置, 或者6, 即数值 7 所在位置.
+         你给出一个整数数组(size为n)，其具有以下特点：
+         相邻位置的数字是不同的
+         A[0] < A[1] 并且 A[n - 2] > A[n - 1]
+         假定P是峰值的位置则满足A[P] > A[P-1]且A[P] > A[P+1]，返回数组中任意一个峰值的位置。
+         给出数组[1, 2, 1, 3, 4, 5, 7, 6]返回1, 即数值 2 所在位置, 或者6, 即数值 7 所在位置.
+         */
 //        int[] arr = {1,2,4,5,6,7,8,6};
 //        int peakIndex = solutions.findPeak(arr);
 //        XYLog.d(arr, "的一个峰值为：", arr[peakIndex], "，index=", peakIndex);
