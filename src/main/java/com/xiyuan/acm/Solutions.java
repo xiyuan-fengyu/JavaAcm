@@ -4028,8 +4028,221 @@ public class Solutions {
         }
     }
 
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/data-stream-median/
+     * @param nums: A list of integers.
+     * @return: the median of numbers
+     */
+    public int[] medianII(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return new int[0];
+        }
+
+        SortedHeap<Integer> minHeap = new SortedHeap<Integer>(new Comparator<Integer>() {
+            @Override
+            boolean lt(Integer t1, Integer t2) {
+                return t1 < t2;
+            }
+        });
+
+        SortedHeap<Integer> maxHeap = new SortedHeap<Integer>(new Comparator<Integer>() {
+            @Override
+            boolean lt(Integer t1, Integer t2) {
+                return t1 > t2;
+            }
+        });
+
+        int len = nums.length;
+        int[] ms = new int[len];
+        for (int i = 0; i < len; i++) {
+            int cur = nums[i];
+            int maxCount = maxHeap.count();
+            int minCount = minHeap.count();
+            if (maxCount == 0) {
+                maxHeap.push(cur);
+            }
+            else if (maxCount <= minCount) {
+                if (minHeap.root() >= cur) {
+                    maxHeap.push(cur);
+                }
+                else {
+                    maxHeap.push(minHeap.pop());
+                    minHeap.push(cur);
+                }
+            }
+            else {
+                if (maxHeap.root() >= cur) {
+                    minHeap.push(maxHeap.pop());
+                    maxHeap.push(cur);
+                }
+                else {
+                    minHeap.push(cur);
+                }
+            }
+            ms[i] = maxHeap.root();
+        }
+
+        return ms;
+    }
+
+    class SortedHeap<T> {
+
+        private ArrayList<T> nodes;
+
+        private Comparator<T> comparator;
+
+        public SortedHeap(Comparator<T> comparator) {
+            this.nodes = new ArrayList<T>();
+            this.comparator = comparator;
+        }
+
+        public int count() {
+            return nodes.size();
+        }
+
+        public T push(T t) {
+            nodes.add(t);
+            checkParent(count() - 1);
+            return root();
+        }
+
+        private void checkParent(int index) {
+            int parentIndex = getParentIndex(index);
+            if (parentIndex != -1) {
+                T cur = nodes.get(index);
+                T parent = nodes.get(parentIndex);
+                if (comparator.lt(cur, parent)) {
+                    nodes.set(index, parent);
+                    nodes.set(parentIndex, cur);
+
+                    checkChildren(parentIndex);
+                    checkParent(parentIndex);
+                }
+            }
+        }
+
+        private void checkChildren(int index) {
+            T cur = nodes.get(index);
+            int leftIndex = getLeftChildIndex(index);
+            if (leftIndex != -1) {
+                T left = nodes.get(leftIndex);
+                T right = null;
+                int rightIndex = getRightChildIndex(index);
+                if (rightIndex == -1 || comparator.lt(left, nodes.get(rightIndex))) {
+                    if (comparator.lt(left, cur)) {
+                        nodes.set(index, left);
+                        nodes.set(leftIndex, cur);
+
+                        checkChildren(leftIndex);
+                    }
+                }
+                else {
+                    right = nodes.get(rightIndex);
+                    if (comparator.lt(right, cur)) {
+                        nodes.set(index, right);
+                        nodes.set(rightIndex, cur);
+
+                        checkChildren(rightIndex);
+                    }
+                }
+            }
+        }
+
+        public T pop() {
+            if (isEmpty()) {
+                return null;
+            }
+            else if (count() == 1) {
+                return nodes.remove(0);
+            }
+
+            int lastIndex = count() - 1;
+            T root = nodes.get(0);
+            T last = nodes.get(lastIndex);
+            nodes.set(0, last);
+            nodes.remove(lastIndex);
+            if (lastIndex - 1 >= 0) {
+                checkChildren(0);
+            }
+            return root;
+        }
+
+        public T root() {
+            if (isEmpty()) {
+                return null;
+            }
+            return nodes.get(0);
+        }
+
+        public boolean isEmpty() {
+            return nodes.isEmpty();
+        }
+
+        private int getParentIndex(int index) {
+            if (index == 0) {
+                return -1;
+            }
+            return (index - 1) / 2;
+        }
+
+        private int getLeftChildIndex(int index) {
+            int temp = index * 2 + 1;
+            if (temp >= count()) {
+                return -1;
+            }
+            return temp;
+        }
+
+        private int getRightChildIndex(int index) {
+            int temp = index * 2 + 2;
+            if (temp >= count()) {
+                return -1;
+            }
+            return temp;
+        }
+
+    }
+
+    abstract class Comparator<T> {
+        abstract boolean lt(T t1, T t2);
+    }
+
+
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         数据流中位数
+
+         数字是不断进入数组的，在每次添加一个新的数进入数组的同时返回当前新数组的中位数。
+         中位数的定义：
+         中位数是排序后数组的中间值，如果有数组中有n个数，则中位数为A[(n-1)/2]。
+         比如：数组A=[1,2,3]的中位数是2，数组A=[1,19]的中位数是1。
+         样例
+         持续进入数组的数的列表为：[1, 2, 3, 4, 5]，则返回[1, 1, 2, 2, 3]
+         持续进入数组的数的列表为：[4, 5, 1, 3, 2, 6, 0]，则返回 [4, 4, 4, 3, 3, 3, 3]
+         持续进入数组的数的列表为：[2, 20, 100]，则返回[2, 2, 20]
+
+         堆 http://blog.csdn.net/genios/article/details/8157031
+         */
+        int[] arr = {2,20,13,18,15,8,3,5,4,25};
+        XYLog.d(arr, " 的流数据中位数为：", solutions.medianII(arr));
+
+
+
+
 
         /**
          中位数
