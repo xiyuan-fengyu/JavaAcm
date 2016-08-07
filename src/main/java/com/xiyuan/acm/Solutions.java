@@ -3974,8 +3974,79 @@ public class Solutions {
         return max;
     }
 
+
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/median/
+     * @param nums: A list of integers.
+     * @return: An integer denotes the middle number of the array.
+     */
+    public int median(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+
+        return mediaByQuickSort(nums, 0, nums.length - 1);
+    }
+
+    private int mediaByQuickSort(int[] arr, int left, int right) {
+        if (left >= right) {
+            return arr[right];
+        }
+
+        int key = arr[left];
+        int i = left;
+        int j = right;
+
+        while (i < j) {
+            while (i < j && key <= arr[j]) {
+                j --;
+            }
+            arr[i] = arr[j];
+
+            while (i < j && key >= arr[i]) {
+                i ++;
+            }
+            arr[j] = arr[i];
+        }
+        arr[i] = key;
+
+        int mIndex = (arr.length - 1) / 2;
+        if (i == mIndex) {
+            return key;
+        }
+        else if (i < mIndex) {
+            return mediaByQuickSort(arr, i + 1, right);
+        }
+        else {
+            return mediaByQuickSort(arr, left, i - 1);
+        }
+    }
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         中位数
+
+         给定一个未排序的整数数组，找到其中位数。
+         中位数是排序后数组的中间值，如果数组的个数是偶数个，则返回排序后数组的第N/2个数。
+         样例
+         给出数组[4, 5, 1, 2, 3]， 返回 3
+         给出数组[7, 9, 4, 5]，返回 5
+         */
+//        int[] arr = {4, 5, 1, 2, 3};
+//        XYLog.d(arr, " 的中位数为：", solutions.median(arr));
+
+
+
+
+
 
         /**
          最长公共子串
@@ -3987,9 +4058,9 @@ public class Solutions {
          思路
          http://my.oschina.net/leejun2005/blog/117167
          */
-        String strA = "abccccccccccde";
-        String strB = "dbccccccabccde";
-        XYLog.d(strA, " 和 ", strB, " 的最长公共子串长度为：", solutions.longestCommonSubstring(strA, strB));
+//        String strA = "abccccccccccde";
+//        String strB = "dbccccccabccde";
+//        XYLog.d(strA, " 和 ", strB, " 的最长公共子串长度为：", solutions.longestCommonSubstring(strA, strB));
 
 
 
