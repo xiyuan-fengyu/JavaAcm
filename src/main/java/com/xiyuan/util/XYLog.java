@@ -93,7 +93,7 @@ public class XYLog {
                 return objArrToString(objs);
             }
         }
-        else if (!toString.startsWith(clazzName + "@")) {
+        else if (!toString.startsWith(clazzName + "@") && toString.charAt(0) != '[') {
             return toString;
         }
         else if (t instanceof Iterable) {
@@ -120,7 +120,7 @@ public class XYLog {
             if (len > 0) {
                 strBld.deleteCharAt(len - 1);
             }
-            return toString + " {" + strBld.toString() + "\n}";
+            return "\n" + toString + " {" + strBld.toString() + "\n}\n";
         }
     }
 
@@ -272,8 +272,7 @@ public class XYLog {
         Iterator<?> it = iterable.iterator();
         StringBuilder buffer = new StringBuilder();
         while (it.hasNext()) {
-            Object cur = it.next();
-            buffer.append(cur.toString()).append(", ");
+            buffer.append(anyToString(it.next())).append(", ");
         }
         int len = buffer.length();
         if (len > 0) {
