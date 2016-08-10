@@ -4220,8 +4220,46 @@ public class Solutions {
 
 
 
+
+
+
+
+
+    /**
+     *@param arr : an integer array
+     *return : a integer
+     */
+    public int singleNumber(int[] arr) {
+        if (arr == null || arr.length == 0) {
+            return 0;
+        }
+
+        int result = 0;
+        for (int i: arr) {
+            result ^= i;
+        }
+        return result;
+    }
+
+
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         落单的数
+         给出2*n + 1 个的数字，除其中一个数字之外其他每个数字均出现两次，找到这个数字。
+
+         样例
+         给出 [1,2,2,1,3,4,3]，返回 4
+         挑战
+         一次遍历，常数级的额外空间复杂度
+         思路
+         由于亦或运算满足结合律，即a1 ^ a2 ^ a1 = a1 ^ a1 ^ a2 = 0 ^ a2 = a2,最终结果就是落单的
+         */
+        int[] arr = {1,2,2,1,3,4,3};
+        XYLog.d(arr, "中，落单的数为：", solutions.singleNumber(arr));
+
 
         /**
          数据流中位数
@@ -4237,8 +4275,8 @@ public class Solutions {
 
          堆 http://blog.csdn.net/genios/article/details/8157031
          */
-        int[] arr = {2,20,13,18,15,8,3,5,4,25};
-        XYLog.d(arr, " 的流数据中位数为：", solutions.medianII(arr));
+//        int[] arr = {2,20,13,18,15,8,3,5,4,25};
+//        XYLog.d(arr, " 的流数据中位数为：", solutions.medianII(arr));
 
 
 
