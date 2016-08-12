@@ -55,7 +55,7 @@ public class XYLog {
         if (clazz == String.class) {
             return (String) t;
         }
-        else if (clazzName.startsWith("[")) {
+        else if (clazzName.charAt(0) == '[') {
             if (clazzName.equalsIgnoreCase("[I")) {
                 int[] objs = (int[]) t;
                 return intArrToString(objs);
@@ -255,14 +255,15 @@ public class XYLog {
     private static <T> String objArrToString(T[] ts) {
         StringBuilder buffer = new StringBuilder();
         for (int i = 0, len = ts.length; i < len; i++) {
+            String str = anyToString(ts[i]);
             if (i == 0) {
-                buffer.append('[').append(ts[i].toString()).append(", ");
+                buffer.append('[').append(str).append(", ");
             }
             else if (i == len - 1) {
-                buffer.append(ts[i].toString()).append(']');
+                buffer.append(str).append(']');
             }
             else {
-                buffer.append(ts[i].toString()).append(", ");
+                buffer.append(str).append(", ");
             }
         }
         return buffer.toString();
