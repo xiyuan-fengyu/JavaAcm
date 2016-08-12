@@ -4226,6 +4226,7 @@ public class Solutions {
 
 
     /**
+     * http://www.lintcode.com/problem/single-number
      *@param arr : an integer array
      *return : a integer
      */
@@ -4243,8 +4244,84 @@ public class Solutions {
 
 
 
+
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/single-number-ii/
+     * @param arr : An integer array
+     * @return : An integer
+     */
+    public int singleNumberII(int[] arr) {
+        if (arr == null || arr.length == 0) {
+            return 0;
+        }
+
+        int[] pArr = new int[32];
+        int[] nArr = new int[32];
+        for (int i = 0, lastI = arr.length - 1; i <= lastI; i++) {
+            int a = arr[i];
+            boolean b = a >= 0;
+            a = a >= 0? a: -a;
+            int temp = 1;
+            int index = 0;
+            while (temp <= a) {
+                int t = temp;
+                temp <<= 1;
+
+                if (temp == 0) {
+                    break;
+                }
+                else {
+                    int mod = a % temp;
+                    a -= mod;
+                    int indexVal = mod / t;
+                    if (b) {
+                        pArr[index++] += indexVal;
+                    }
+                    else {
+                        nArr[index++] += indexVal;
+                    }
+                }
+
+            }
+        }
+
+        int single = 0;
+        for (int i = 0, temp = 1; i < 32; i++) {
+            if (pArr[i] % 3 != 0) {
+                single += temp;
+            }
+            else if (nArr[i] % 3 != 0) {
+                single -= temp;
+            }
+            temp <<= 1;
+        }
+        return single;
+    }
+
+
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         落单的数 II
+         给出3*n + 1 个的数字，除其中一个数字之外其他每个数字均出现三次，找到这个数字。
+
+         样例
+         给出 [1,1,2,3,3,3,2,2,4,1] ，返回 4
+         */
+//        int[] arr = {1,1,2,3,3,3,2,2,4,1};
+        int[] arr = {43,16,45,89,45,-2147483648,45,2147483646,-2147483647,-2147483648,43,2147483647,-2147483646,-2147483648,89,-2147483646,89,-2147483646,-2147483647,2147483646,-2147483647,16,16,2147483646,43};
+        XYLog.d(arr, "中落单的数为：", solutions.singleNumberII(arr));
+
+
+
 
         /**
          落单的数
@@ -4257,8 +4334,8 @@ public class Solutions {
          思路
          由于亦或运算满足结合律，即a1 ^ a2 ^ a1 = a1 ^ a1 ^ a2 = 0 ^ a2 = a2,最终结果就是落单的
          */
-        int[] arr = {1,2,2,1,3,4,3};
-        XYLog.d(arr, "中，落单的数为：", solutions.singleNumber(arr));
+//        int[] arr = {1,2,2,1,3,4,3};
+//        XYLog.d(arr, "中，落单的数为：", solutions.singleNumber(arr));
 
 
         /**
