@@ -4306,8 +4306,134 @@ public class Solutions {
 
 
 
+
+
+
+
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/single-number-iii/
+     * @param arr : An integer array
+     * @return : Two integers
+     */
+    public List<Integer> singleNumberIII(int[] arr) {
+        if (arr == null || arr.length < 2) {
+            return null;
+        }
+
+        ArrayList<Integer> result = new ArrayList<Integer>();
+
+        int[] pArr = new int[32];
+        int[] nArr = new int[32];
+        for (int a: arr) {
+            if (a == 0) {
+                continue;
+            }
+            int[] tempArr = a >= 0?pArr: nArr;
+            int aAbs = a >= 0?a: -a;
+            int index = 0;
+            while (aAbs > 0) {
+                tempArr[index] += aAbs & 1;
+                aAbs >>= 1;
+                index += 1;
+            }
+        }
+
+        //找到一个单数位
+        boolean isPositive = true;
+        int singleIndex = 33;
+        for (int i = 0, len = pArr.length; i < len; i++) {
+            if (pArr[i] % 2 == 1) {
+                singleIndex = i;
+                break;
+            }
+        }
+
+        if (singleIndex == 33) {
+            for (int i = 0, len = nArr.length; i < len; i++) {
+                if (nArr[i] % 2 == 1) {
+                    singleIndex = i;
+                    isPositive = false;
+                    break;
+                }
+            }
+        }
+
+        for (int a: arr) {
+            if (a == 0) {
+                continue;
+            }
+
+            int aAbs = a >= 0?a: -a;
+            if (isPositive && a > 0 && (aAbs >> singleIndex & 1) == 0) {
+                int index = 0;
+                while (aAbs > 0) {
+                    pArr[index] -= aAbs & 1;
+                    aAbs >>= 1;
+                    index += 1;
+                }
+            }
+            else if (!isPositive && a < 0 && (aAbs >> singleIndex & 1) == 0) {
+                int index = 0;
+                while (aAbs > 0) {
+                    nArr[index] -= aAbs & 1;
+                    aAbs >>= 1;
+                    index += 1;
+                }
+            }
+        }
+
+        int single = 0;
+        for (int i = 0, len = pArr.length, temp = 1; i < len; i++) {
+            if (pArr[i] % 2 == 1) {
+                single += temp;
+            }
+            temp <<= 1;
+        }
+
+        if (single == 0) {
+            for (int i = 0, len = nArr.length, temp = 1; i < len; i++) {
+                if (nArr[i] % 2 == 1) {
+                    single -= temp;
+                }
+                temp <<= 1;
+            }
+        }
+        result.add(single);
+
+        int anotherSingle = 0;
+        for (int a: arr) {
+            if (a != single) {
+                anotherSingle ^= a;
+            }
+        }
+        result.add(anotherSingle);
+
+        return result;
+    }
+
+
+
+
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         落单的数 III
+         给出2*n + 2个的数字，除其中两个数字之外其他每个数字均出现两次，找到这两个数字。
+         样例
+         给出 [1,2,2,3,4,4,5,3]，返回 1和5
+         */
+        int[] arr = {1,2,2,3,4,4,5,3};
+        XYLog.d(arr, "中落单的数为：", solutions.singleNumberIII(arr));
+
+
 
         /**
          落单的数 II
@@ -4316,9 +4442,9 @@ public class Solutions {
          样例
          给出 [1,1,2,3,3,3,2,2,4,1] ，返回 4
          */
-//        int[] arr = {1,1,2,3,3,3,2,2,4,1};
-        int[] arr = {43,16,45,89,45,-2147483648,45,2147483646,-2147483647,-2147483648,43,2147483647,-2147483646,-2147483648,89,-2147483646,89,-2147483646,-2147483647,2147483646,-2147483647,16,16,2147483646,43};
-        XYLog.d(arr, "中落单的数为：", solutions.singleNumberII(arr));
+////        int[] arr = {1,1,2,3,3,3,2,2,4,1};
+//        int[] arr = {43,16,45,89,45,-2147483648,45,2147483646,-2147483647,-2147483648,43,2147483647,-2147483646,-2147483648,89,-2147483646,89,-2147483646,-2147483647,2147483646,-2147483647,16,16,2147483646,43};
+//        XYLog.d(arr, "中落单的数为：", solutions.singleNumberII(arr));
 
 
 
