@@ -2,16 +2,7 @@ package com.xiyuan.acm;
 
 import com.xiyuan.util.XYLog;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * Created by xiyuan_fengyu on 2016/8/4.
@@ -4474,8 +4465,72 @@ public class Solutions {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/dices-sum/
+     * @param n an integer
+     * @return a list of Map.Entry<sum, probability>
+     */
+    public List<Map.Entry<Integer, Double>> dicesSum(int n) {
+        List<Map.Entry<Integer, Double>> result = new ArrayList<Map.Entry<Integer, Double>>();
+        HashMap<String, Double> map = new HashMap<String, Double>();
+        for (int i = n, max = n * 6; i <= max; i++) {
+            result.add(new AbstractMap.SimpleEntry<Integer, Double>(i, dicesSum(n, i, map)));
+        }
+        return result;
+    }
+
+    private double dicesSum(int n, int s, HashMap<String, Double> map) {
+        if (s < n || s > 6 * n || n <= 0) {
+            return 0;
+        }
+        else if (n == 1) {
+            map.put(n + "," + s, 1 / 6.0);
+            return 1 / 6.0;
+        }
+        else {
+            String key = n + "," + s;
+            if (map.containsKey(key)) {
+                return map.get(key);
+            }
+            else {
+                double temp = 0;
+                for (int i = 1; i <= 6; i++) {
+                    temp += dicesSum(1,i, map) * dicesSum(n - 1, s - i, map);
+                }
+                map.put(key, temp);
+                return temp;
+            }
+        }
+    }
+
+
+
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         骰子求和
+         扔 n 个骰子，向上面的数字之和为 S。给定 Given n，请列出所有可能的 S 值及其相应的概率。
+
+         样例
+         给定 n = 1，返回 [ [1, 0.17], [2, 0.17], [3, 0.17], [4, 0.17], [5, 0.17], [6, 0.17]]。
+         */
+        int n = 2;
+        XYLog.d("抛掷" + n + "枚骰子", "所有骰子出现和的概率为:", solutions.dicesSum(n));
+
+
 
         /**
          在二叉查找树中插入节点
@@ -4490,15 +4545,15 @@ public class Solutions {
                /             / \
               3             3   6
          */
-        TreeNode root = new TreeNode(2);
-        root.left = new TreeNode(1);
-        root.right = new TreeNode(4);
-        root.right.left = new TreeNode(3);
-        XYLog.d(root);
-        TreeNode newNode = new TreeNode(6);
-        XYLog.d("插入", newNode);
-        solutions.insertNode(root, newNode);
-        XYLog.d(root);
+//        TreeNode root = new TreeNode(2);
+//        root.left = new TreeNode(1);
+//        root.right = new TreeNode(4);
+//        root.right.left = new TreeNode(3);
+//        XYLog.d(root);
+//        TreeNode newNode = new TreeNode(6);
+//        XYLog.d("插入", newNode);
+//        solutions.insertNode(root, newNode);
+//        XYLog.d(root);
 
 
 
