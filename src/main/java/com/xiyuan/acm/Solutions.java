@@ -4483,12 +4483,64 @@ public class Solutions {
      */
     public List<Map.Entry<Integer, Double>> dicesSum(int n) {
         List<Map.Entry<Integer, Double>> result = new ArrayList<Map.Entry<Integer, Double>>();
+
+        //从要求的问题开始动态规划求解,运行时间7026
+//        HashMap<String, Double> map = new HashMap<String, Double>();
+//        for (int i = n, max = n * 6; i <= max; i++) {
+//            result.add(new AbstractMap.SimpleEntry<Integer, Double>(i, dicesSum(n, i, map)));
+//        }
+
+
+        //采用正向计算，但是用map来存储中间结果，比直接用数组节省空间，且更快,运行时间6943
         HashMap<String, Double> map = new HashMap<String, Double>();
-        for (int i = n, max = n * 6; i <= max; i++) {
-            result.add(new AbstractMap.SimpleEntry<Integer, Double>(i, dicesSum(n, i, map)));
+        for (int i = 1; i <= 6; i++) {
+            map.put(1 + " " + i, 1 / 6.0);
         }
+
+        for (int i = 2; i <= n; i++) {
+            for (int j = i, max = i * 6; j <= max; j++) {
+                String key = i + " " + j;
+                map.put(key, 0.0);
+                for (int k = 1; k <= 6; k++) {
+                    if (j > k) {
+                        String otherKey = (i - 1) + " " + (j - k);
+                        if (map.containsKey(otherKey)) {
+                            map.put(key, map.get(key) + map.get(otherKey));
+                        }
+                    }
+                }
+                map.put(key, map.get(key) / 6.0);
+            }
+        }
+
+        for (int i = n, max = n * 6; i <= max; i++) {
+            result.add(new AbstractMap.SimpleEntry<Integer, Double>(i, map.get(n + " " + i)));
+        }
+
+        //由于动态规划的中间结果全部都会使用到，所以由子问题推向最终问题会好一点，避免使用递归,但是占用空间更多，当n比较大的时候，开辟大数组的时间消耗会使得算法效率打折扣，运行时间8060
+//         double[][] f = new double[n + 1][6 * n + 1];
+//         for (int i = 1; i <= 6; i++) {
+//             f[1][i] = 1 / 6.0;
+//         }
+//
+//         for (int i = 2; i <= n; i++) {
+//             for (int j = i, max = i * 6; j <= max; j++) {
+//                 for (int k = 1; k <= 6; k++) {
+//                     if (j > k) {
+//                         f[i][j] += f[i - 1][j - k];
+//                     }
+//                 }
+//                 f[i][j] *= 1 / 6.0;
+//             }
+//         }
+//
+//         for (int i = n, max = n * 6; i <= max; i++) {
+//             result.add(new AbstractMap.SimpleEntry<Integer, Double>(i, f[n][i]));
+//         }
+
         return result;
     }
+
 
     private double dicesSum(int n, int s, HashMap<String, Double> map) {
         if (s < n || s > 6 * n || n <= 0) {
