@@ -4421,8 +4421,88 @@ public class Solutions {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/insert-node-in-a-binary-search-tree/
+     * @param root: The root of the binary search tree.
+     * @param node: insert this node into the binary search tree
+     * @return: The root of the new binary search tree.
+     */
+    public TreeNode insertNode(TreeNode root, TreeNode node) {
+        if (node != null) {
+            if (root == null) {
+                return node;
+            }
+
+            if (node.val < root.val) {
+                if (root.left == null) {
+                    root.left = node;
+                }
+                else {
+                    insertNode(root.left, node);
+                }
+            }
+            else {
+                if (root.right == null) {
+                    root.right = node;
+                }
+                else {
+                    insertNode(root.right, node);
+                }
+            }
+        }
+        return root;
+    }
+
+
+
+
+
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         在二叉查找树中插入节点
+         给定一棵二叉查找树和一个新的树节点，将节点插入到树中。
+         你需要保证该树仍然是一棵二叉查找树。
+
+         样例
+         给出如下一棵二叉查找树，在插入节点6之后这棵二叉查找树可以是这样的：
+               2             2
+             / \           / \
+            1   4   -->   1   4
+               /             / \
+              3             3   6
+         */
+        TreeNode root = new TreeNode(2);
+        root.left = new TreeNode(1);
+        root.right = new TreeNode(4);
+        root.right.left = new TreeNode(3);
+        XYLog.d(root);
+        TreeNode newNode = new TreeNode(6);
+        XYLog.d("插入", newNode);
+        solutions.insertNode(root, newNode);
+        XYLog.d(root);
+
+
+
+
 
         /**
          落单的数 III
@@ -4430,8 +4510,8 @@ public class Solutions {
          样例
          给出 [1,2,2,3,4,4,5,3]，返回 1和5
          */
-        int[] arr = {1,2,2,3,4,4,5,3};
-        XYLog.d(arr, "中落单的数为：", solutions.singleNumberIII(arr));
+//        int[] arr = {1,2,2,3,4,4,5,3};
+//        XYLog.d(arr, "中落单的数为：", solutions.singleNumberIII(arr));
 
 
 
