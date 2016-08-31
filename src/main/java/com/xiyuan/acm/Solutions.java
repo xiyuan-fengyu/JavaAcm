@@ -4657,6 +4657,75 @@ public class Solutions {
 
 
 
+
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/lowest-common-ancestor/
+     * @param root: The root of the binary search tree.
+     * @param nodeA and nodeB: two nodes in a Binary.
+     * @return: Return the least common ancestor(LCA) of the two nodes.
+     */
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode nodeA, TreeNode nodeB) {
+        if (root == null || nodeA == null || nodeB == null) {
+            return null;
+        }
+
+        Stack<TreeNode> nodeAFinder = new Stack<TreeNode>();
+        Stack<TreeNode> nodeBFinder = new Stack<TreeNode>();
+        findNodes(root, nodeA, nodeB, nodeAFinder, nodeBFinder);
+
+        int lcaIndex = -1;
+        for (int i = 0, lenA = nodeAFinder.size(), lenB = nodeBFinder.size(); i < lenA && i < lenB; i++) {
+            if (nodeAFinder.get(i) == nodeBFinder.get(i)) {
+                lcaIndex = i;
+            }
+            else {
+                break;
+            }
+        }
+
+        if (lcaIndex != -1) {
+            return nodeAFinder.get(lcaIndex);
+        }
+        return null;
+    }
+
+    private void findNodes(TreeNode cur, TreeNode nodeA, TreeNode nodeB, Stack<TreeNode> nodeAFinder, Stack<TreeNode> nodeBFinder) {
+        int needMoreSearch = 0;
+
+        if (nodeAFinder.empty() || nodeAFinder.peek() != nodeA) {
+            nodeAFinder.push(cur);
+            needMoreSearch += 1;
+        }
+
+        if (nodeBFinder.empty() || nodeBFinder.peek() != nodeB) {
+            nodeBFinder.push(cur);
+            needMoreSearch += 1;
+        }
+
+        if (needMoreSearch > 0) {
+            if (cur.left != null) {
+                findNodes(cur.left, nodeA, nodeB, nodeAFinder, nodeBFinder);
+            }
+            if (cur.right != null) {
+                findNodes(cur.right, nodeA, nodeB, nodeAFinder, nodeBFinder);
+            }
+        }
+
+        if (!nodeAFinder.empty() && nodeAFinder.peek() != nodeA) {
+            nodeAFinder.pop();
+        }
+
+        if (!nodeBFinder.empty() && nodeBFinder.peek() != nodeB) {
+            nodeBFinder.pop();
+        }
+    }
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
 
@@ -4678,6 +4747,17 @@ public class Solutions {
          LCA(5, 6) = 7
          LCA(6, 7) = 7
          */
+        String buildStr = "4, 3, 7, #, #, 5, 6";
+        TreeNode root = TreeNodeFactory.build(buildStr);
+        TreeNode nodeA = root.left;
+        TreeNode nodeB = root.right.left;
+        XYLog.d("在", root, "中", nodeA, "和", nodeB, "的最近公共祖先为", solutions.lowestCommonAncestor(root, nodeA, nodeB));
+
+
+
+
+
+
 
 
 
@@ -5352,6 +5432,62 @@ public class Solutions {
 //        int[] a = {1,2,3,4,5,6};
 //        int[] b = {2,3,4,5};
 //        System.out.println(solutions.findMedianSortedArrays(a, b));
+
+    }
+
+    public static class TreeNodeFactory {
+
+        public static TreeNode build(Integer[] arr) {
+            java.util.Queue<TreeNode> nodeQueue = new java.util.LinkedList<TreeNode>();
+            return build(arr, 0, nodeQueue);
+        }
+
+        public static TreeNode build(String str) {
+            java.util.Queue<TreeNode> nodeQueue = new java.util.LinkedList<TreeNode>();
+            String[] split = str.split(",");
+            Integer[] arr = new Integer[split.length];
+            for (int i = 0, len = split.length; i < len; i++) {
+                try {
+                    arr[i] = Integer.parseInt(split[i].trim());
+                }
+                catch (Exception e) {
+                    arr[i] = null;
+                }
+            }
+            return build(arr, 0, nodeQueue);
+        }
+
+        private static TreeNode build(Integer[] arr, int index, java.util.Queue<TreeNode> nodeQueue) {
+            if (index >= arr.length) {
+                return null;
+            }
+
+            if (nodeQueue.isEmpty()) {
+                Integer first = arr[0];
+                if (first == null) {
+                    return null;
+                }
+                else {
+                    TreeNode root = new TreeNode(first);
+                    nodeQueue.offer(root);
+                    build(arr, index + 1, nodeQueue);
+                    return root;
+                }
+            }
+            else {
+                TreeNode curParent = nodeQueue.poll();
+                if (arr[index] != null) {
+                    curParent.left = new TreeNode(arr[index]);
+                    nodeQueue.offer(curParent.left);
+                }
+                if (index + 1 < arr.length && arr[index + 1] != null) {
+                    curParent.right = new TreeNode(arr[index + 1]);
+                    nodeQueue.offer(curParent.right);
+                }
+                build(arr, index + 2, nodeQueue);
+            }
+            return null;
+        }
 
     }
 
