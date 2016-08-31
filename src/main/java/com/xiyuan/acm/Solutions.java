@@ -4567,10 +4567,45 @@ public class Solutions {
     }
 
 
+    /**
+     * http://www.lintcode.com/zh-cn/problem/binary-search-tree-iterator/
+     * @param root
+     */
+    public List<Integer> listBinarySearchTree(TreeNode root) {
+        List<Integer> list = new ArrayList<Integer>();
+        BSTIterator it = new BSTIterator(root);
+        while (it.hasNext()) {
+            list.add(it.next().val);
+        }
+        return list;
+    }
+
 
 
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         二叉查找树迭代器
+         设计实现一个带有下列属性的二叉查找树的迭代器：
+         元素按照递增的顺序被访问（比如中序遍历）
+         next()和hasNext()的询问操作要求均摊时间复杂度是O(1)
+
+         样例
+         对于下列二叉查找树，使用迭代器进行中序遍历的结果为 [1, 6, 10, 11, 12]
+            10
+         /    \
+         1      11
+          \       \
+           6       12
+         */
+        TreeNode root = new TreeNode(10);
+        root.left = new TreeNode(1);
+        root.left.right = new TreeNode(6);
+        root.right = new TreeNode(11);
+        root.right.right = new TreeNode(12);
+        XYLog.d(root, "通过" + BSTIterator.class.getSimpleName() + "遍历，得到的序列为：", solutions.listBinarySearchTree(root));
+
 
         /**
          骰子求和
@@ -4579,8 +4614,8 @@ public class Solutions {
          样例
          给定 n = 1，返回 [ [1, 0.17], [2, 0.17], [3, 0.17], [4, 0.17], [5, 0.17], [6, 0.17]]。
          */
-        int n = 2;
-        XYLog.d("抛掷" + n + "枚骰子", "所有骰子出现和的概率为:", solutions.dicesSum(n));
+//        int n = 2;
+//        XYLog.d("抛掷" + n + "枚骰子", "所有骰子出现和的概率为:", solutions.dicesSum(n));
 
 
 
@@ -5207,12 +5242,12 @@ public class Solutions {
 
         private static final int margin = 2;
 
-        public int width = 0;
-        public int leftW = 0;
-        public int rightW = 0;
-        public int startIndex = 0;
+        private int width = 0;
+        private int leftW = 0;
+        private int rightW = 0;
+        private int startIndex = 0;
 
-        public void measureWidth() {
+        private void measureWidth() {
             width = 0;
             leftW = 0;
             rightW = 0;
@@ -5228,7 +5263,7 @@ public class Solutions {
             width = leftW + ("" + val).length() + rightW;
         }
 
-        public void resetStartIndex(TreeNode parent, boolean isLeft) {
+        private void resetStartIndex(TreeNode parent, boolean isLeft) {
             if (parent == null) {
                 startIndex = leftW;
             }
@@ -5247,7 +5282,7 @@ public class Solutions {
             }
         }
 
-        public void buildStr(ArrayList<char[]> levelChars, int level, int maxLen) {
+        private void buildStr(ArrayList<char[]> levelChars, int level, int maxLen) {
             if (level * 2 + 1 > levelChars.size()) {
                 char[] chars = new char[maxLen];
                 Arrays.fill(chars, ' ');
@@ -5477,6 +5512,42 @@ public class Solutions {
 
         public int top() {
             return top == null?0: top;
+        }
+    }
+
+    public static class BSTIterator {
+
+        private List<TreeNode> nodeStack = new ArrayList<TreeNode>();
+
+        private int iteratorIndexMax = 0;
+
+        private int iteratorIndex = 0;
+
+        public BSTIterator(TreeNode root) {
+            insertIntoStack(root);
+            iteratorIndexMax = nodeStack.size();
+        }
+
+        private void insertIntoStack(TreeNode node) {
+            if (node != null) {
+                if (node.left != null) {
+                    insertIntoStack(node.left);
+                }
+
+                nodeStack.add(node);
+
+                if (node.right != null) {
+                    insertIntoStack(node.right);
+                }
+            }
+        }
+
+        public boolean hasNext() {
+            return iteratorIndex < iteratorIndexMax;
+        }
+
+        public TreeNode next() {
+            return nodeStack.get(iteratorIndex++);
         }
     }
 
