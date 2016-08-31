@@ -4726,8 +4726,83 @@ public class Solutions {
         }
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/k-sum/
+     * @param arr: an integer array.
+     * @param k: a positive integer (k <= length(A))
+     * @param target: a integer
+     * @return an integer
+     */
+    public int kSum(int[] arr, int k, int target) {
+        if (arr != null && arr.length > 0 && arr.length >= k) {
+            int len = arr.length;
+            HashMap<String, Integer> map = new HashMap<String, Integer>();
+            for (int i = 0; i < len; i++) {
+                for (int j = i; j < len; j++) {
+                    map.put(j + "," + 1 + "," + arr[i], 1);
+                }
+            }
+
+            int result = ikSum(arr, len - 1, k, target, map);
+            return result;
+        }
+        return 0;
+    }
+
+    private int ikSum(int[] arr, int i, int k, int sum, HashMap<String, Integer> map) {
+        String key = i + "," + k + "," + sum;
+        if (map.containsKey(key)) {
+            return map.get(key);
+        }
+        else if (k == 1 || i < 0) {
+            return  0;
+        }
+
+        int num = ikSum(arr, i - 1, k - 1, sum - arr[i], map) + ikSum(arr, i - 1, k, sum, map);
+        map.put(key, num);
+        return num;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         k数和
+         给定n个不同的正整数，整数k（k < = n）以及一个目标数字。　　　　
+         在这n个数里面找出K个数，使得这K个数的和等于目标数字，求问有多少种方案？
+
+         样例
+         给出[1,2,3,4]，k=2， target=5，[1,4] and [2,3]是2个符合要求的方案
+         */
+//        int[] arr = {1,2,3,4};
+//        int k = 2;
+//        int sum = 5;
+//        XYLog.d(arr, "中找出", k, "个数之和为", sum, "的方案总数为：", solutions.kSum(arr, k, sum));
+
+
 
         /**
          最近公共祖先
@@ -4747,11 +4822,11 @@ public class Solutions {
          LCA(5, 6) = 7
          LCA(6, 7) = 7
          */
-        String buildStr = "4, 3, 7, #, #, 5, 6";
-        TreeNode root = TreeNodeFactory.build(buildStr);
-        TreeNode nodeA = root.left;
-        TreeNode nodeB = root.right.left;
-        XYLog.d("在", root, "中", nodeA, "和", nodeB, "的最近公共祖先为", solutions.lowestCommonAncestor(root, nodeA, nodeB));
+//        String buildStr = "4, 3, 7, #, #, 5, 6";
+//        TreeNode root = TreeNodeFactory.build(buildStr);
+//        TreeNode nodeA = root.left;
+//        TreeNode nodeB = root.right.left;
+//        XYLog.d("在", root, "中", nodeA, "和", nodeB, "的最近公共祖先为", solutions.lowestCommonAncestor(root, nodeA, nodeB));
 
 
 
