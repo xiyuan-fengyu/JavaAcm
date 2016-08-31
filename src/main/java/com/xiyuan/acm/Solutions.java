@@ -4567,6 +4567,18 @@ public class Solutions {
     }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
     /**
      * http://www.lintcode.com/zh-cn/problem/binary-search-tree-iterator/
      * @param root
@@ -4582,8 +4594,133 @@ public class Solutions {
 
 
 
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/remove-node-in-binary-search-tree/
+     * @param root: The root of the binary search tree.
+     * @param value: Remove the node with given value.
+     * @return: The root of the binary search tree after removal.
+     */
+    public TreeNode removeNode(TreeNode root, int value) {
+        if (root != null) {
+            TreeNode newRoot = new TreeNode(0);
+            newRoot.left = root;
+
+            TreeNode parent = newRoot;
+            TreeNode cur = root;
+            while (cur != null && cur.val != value) {
+                parent = cur;
+                if (value < cur.val) {
+                    cur = cur.left;
+                }
+                else {
+                    cur = cur.right;
+                }
+            }
+
+            if (cur != null) {
+                if (cur.right == null) {
+                    parent.left = cur.left;
+                }
+                else {
+                    TreeNode p = cur;
+                    TreeNode c = cur.right;
+                    while (c.left != null) {
+                        p = c;
+                        c = c.left;
+                    }
+                    if (parent.left == cur) {
+                        parent.left = c;
+                    }
+                    else {
+                        parent.right = c;
+                    }
+                    if (cur.right != c) {
+                        p.left = c.right;
+                        c.right = cur.right;
+                    }
+                    else {
+                        p.left = null;
+                    }
+                    c.left = cur.left;
+                }
+            }
+
+            return newRoot.left;
+        }
+        return null;
+    }
+
+
+
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         最近公共祖先
+         给定一棵二叉树，找到两个节点的最近公共父节点(LCA)。
+         最近公共祖先是两个节点的公共的祖先节点且具有最大深度。
+         注意事项
+         假设给出的两个节点都在树中存在
+
+         样例
+         对于下面这棵二叉树
+                4
+              / \
+            3    7
+               / \
+              5   6
+         LCA(3, 5) = 4
+         LCA(5, 6) = 7
+         LCA(6, 7) = 7
+         */
+
+
+
+        /**
+         删除二叉查找树的节点
+         给定一棵具有不同节点值的二叉查找树，删除树中与给定值相同的节点。如果树中没有相同值的节点，就不做任何处理。你应该保证处理之后的树仍是二叉查找树。
+         给出如下二叉查找树：
+                5
+            /      \
+           3        6
+         /   \
+         2    4
+
+         删除节点3之后，你可以返回：
+                 5
+             /      \
+            2        6
+             \
+              4
+         或者：
+               5
+           /      \
+          4        6
+         /
+         2
+         */
+////        TreeNode root = new TreeNode(5);
+////        root.left = new TreeNode(3);
+////        root.left.left = new TreeNode(2);
+////        root.left.right = new TreeNode(4);
+////        root.right = new TreeNode(6);
+////        XYLog.d(root);
+////        XYLog.d("移除3之后：", solutions.removeNode(root, 3));
+//        TreeNode root = new TreeNode(20);
+//        root.left = new TreeNode(1);
+//        root.right = new TreeNode(40);
+//        root.right.left = new TreeNode(35);
+//        XYLog.d(root);
+//        XYLog.d("移除20之后：", solutions.removeNode(root, 20));
+
+
+
+
 
         /**
          二叉查找树迭代器
@@ -4599,12 +4736,12 @@ public class Solutions {
           \       \
            6       12
          */
-        TreeNode root = new TreeNode(10);
-        root.left = new TreeNode(1);
-        root.left.right = new TreeNode(6);
-        root.right = new TreeNode(11);
-        root.right.right = new TreeNode(12);
-        XYLog.d(root, "通过" + BSTIterator.class.getSimpleName() + "遍历，得到的序列为：", solutions.listBinarySearchTree(root));
+//        TreeNode root = new TreeNode(10);
+//        root.left = new TreeNode(1);
+//        root.left.right = new TreeNode(6);
+//        root.right = new TreeNode(11);
+//        root.right.right = new TreeNode(12);
+//        XYLog.d(root, "通过" + BSTIterator.class.getSimpleName() + "遍历，得到的序列为：", solutions.listBinarySearchTree(root));
 
 
         /**
