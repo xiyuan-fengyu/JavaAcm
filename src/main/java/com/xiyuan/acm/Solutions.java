@@ -4784,10 +4784,87 @@ public class Solutions {
 
 
 
+    /**
+     * http://www.lintcode.com/zh-cn/problem/k-sum-ii/
+     * @param arr: an integer array.
+     * @param k: a positive integer (k <= length(A))
+     * @param target: a integer
+     * @return a list of lists of integer
+     */
+    public ArrayList<ArrayList<Integer>> kSumII(int[] arr, int k, int target) {
+        if (arr != null && arr.length > 0 && arr.length >= k) {
+            int len = arr.length;
+            HashMap<String, ArrayList<ArrayList<Integer>>> map = new HashMap<String, ArrayList<ArrayList<Integer>>>();
+            for (int i = 0; i < len; i++) {
+                ArrayList<ArrayList<Integer>> list = new ArrayList<ArrayList<Integer>>();
+                ArrayList<Integer> item = new ArrayList<Integer>();
+                item.add(arr[i]);
+                list.add(item);
+                for (int j = i; j < len; j++) {
+                    map.put(j + "," + 1 + "," + arr[i], list);
+                }
+            }
+
+            return ikSumII(arr, len - 1, k, target, map);
+        }
+        return new ArrayList<ArrayList<Integer>>();
+    }
+
+    private ArrayList<ArrayList<Integer>> ikSumII(int[] arr, int i, int k, int sum, HashMap<String, ArrayList<ArrayList<Integer>>> map) {
+        ArrayList<ArrayList<Integer>> result = null;
+        String key = i + "," + k + "," + sum;
+        if (map.containsKey(key)) {
+            return map.get(key);
+        }
+        else if (k == 1 || i < 0) {
+            return  null;
+        }
+
+        ArrayList<ArrayList<Integer>> result0 = ikSumII(arr, i - 1, k - 1, sum - arr[i], map);
+        ArrayList<ArrayList<Integer>> result1 = ikSumII(arr, i - 1, k, sum, map);
+        if (result0 != null || result1 != null) {
+            result = new ArrayList<ArrayList<Integer>>();
+
+            if (result0 != null) {
+                for (ArrayList<Integer> item: result0) {
+                    ArrayList<Integer> copyItem = new ArrayList<Integer>();
+                    copyItem.addAll(item);
+                    copyItem.add(arr[i]);
+                    result.add(copyItem);
+                }
+            }
+
+            if (result1 != null) {
+                for (ArrayList<Integer> item: result1) {
+                    ArrayList<Integer> copyItem = new ArrayList<Integer>();
+                    copyItem.addAll(item);
+                    result.add(copyItem);
+                }
+            }
+
+            map.put(key, result);
+        }
+        return result;
+    }
 
 
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         k数和 II
+         给定n个不同的正整数，整数k（1<= k <= n）以及一个目标数字。　　　　
+         在这n个数里面找出K个数，使得这K个数的和等于目标数字，你需要找出所有满足要求的方案。
+         样例
+         给出[1,2,3,4]，k=2， target=5，返回 [[1,4],[2,3]]
+         */
+        int[] arr = {1,2,3,4};
+        int k = 2;
+        int sum = 5;
+        XYLog.d(arr, "中找出", k, "个数之和为", sum, "的所有方案为：", solutions.kSumII(arr, k, sum));
+
+
+
 
         /**
          k数和
