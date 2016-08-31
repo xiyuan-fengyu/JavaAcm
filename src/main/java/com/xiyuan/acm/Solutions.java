@@ -4848,8 +4848,80 @@ public class Solutions {
     }
 
 
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/minimum-adjustment-cost/
+     * @param list: An integer array.
+     * @param target: An integer.
+     */
+    public int MinAdjustmentCost(ArrayList<Integer> list, int target) {
+        int adjustNum = 0;
+        if (list != null && list.size() > 1) {
+            boolean needAdjust = false;
+            do {
+                needAdjust = false;
+
+                int size = list.size();
+                double avg = list.get(0);
+                for (int i = 1; i < size; i++) {
+                    if (Math.abs(list.get(i - 1)  - list.get(i)) > target) {
+                        needAdjust = true;
+                    }
+                    avg += list.get(i);
+                }
+                avg /= size;
+
+                if (needAdjust) {
+                    int adjustIndex = 0;
+                    double maxDelta = 0;
+                    for (int i = 0; i < size; i++) {
+                        double tempDelta = Math.abs(list.get(i) - avg);
+                        if (tempDelta > maxDelta) {
+                            maxDelta = tempDelta;
+                            adjustIndex = i;
+                        }
+                    }
+
+                    if (maxDelta > 0) {
+                        int old = list.get(adjustIndex);
+                        if (old < avg) {
+                            list.set(adjustIndex, old + 1);
+                        }
+                        else {
+                            list.set(adjustIndex, old - 1);
+                        }
+                        adjustNum += 1;
+                    }
+                }
+
+            } while (needAdjust);
+        }
+        return adjustNum;
+    }
+
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         最小调整代价
+         给一个整数数组，调整每个数的大小，使得相邻的两个数的差小于一个给定的整数target，调整每个数的代价为调整前后的差的绝对值，求调整代价之和最小是多少。
+         注意事项
+         你可以假设数组中每个整数都是正整数，且小于等于100。
+         样例
+         对于数组[1, 4, 2, 3]和target=1，最小的调整方案是调整为[2, 3, 2, 3]，调整代价之和是2。返回2。
+         */
+        int[] arr = {20,25,35,45,55,65,75,85,25,35,45,55,15,15,15,7,2,11,15,11,15};
+        ArrayList<Integer> list = new ArrayList<Integer>();
+        for (int i: arr) {
+            list.add(i);
+        }
+        int target = 10;
+        XYLog.d(list, "的最小调整代价为：");
+        XYLog.d(solutions.MinAdjustmentCost(list, target));
+
+
 
         /**
          k数和 II
@@ -4858,10 +4930,10 @@ public class Solutions {
          样例
          给出[1,2,3,4]，k=2， target=5，返回 [[1,4],[2,3]]
          */
-        int[] arr = {1,2,3,4};
-        int k = 2;
-        int sum = 5;
-        XYLog.d(arr, "中找出", k, "个数之和为", sum, "的所有方案为：", solutions.kSumII(arr, k, sum));
+//        int[] arr = {1,2,3,4};
+//        int k = 2;
+//        int sum = 5;
+//        XYLog.d(arr, "中找出", k, "个数之和为", sum, "的所有方案为：", solutions.kSumII(arr, k, sum));
 
 
 
