@@ -5054,6 +5054,56 @@ public class Solutions {
 
 
 
+    /**
+     * http://www.lintcode.com/zh-cn/problem/validate-binary-search-tree/
+     * @param root: The root of binary tree.
+     * @return: True if the binary tree is BST, or false
+     */
+    public boolean isValidBST(TreeNode root) {
+        if (root != null) {
+            return checkBST(root).isBST;
+        }
+        return true;
+    }
+
+    private CheckBSTResult checkBST(TreeNode cur) {
+        if (cur.left == null && cur.right == null) {
+            return new CheckBSTResult(true, cur.val, cur.val);
+        }
+        else if (cur.left != null && cur.right == null) {
+            if (cur.val > cur.left.val) {
+                CheckBSTResult temp = checkBST(cur.left);
+                return new CheckBSTResult(temp.maxVal < cur.val, temp.minVal, cur.val);
+            }
+        }
+        else if (cur.left == null && cur.right != null) {
+            if (cur.val < cur.right.val) {
+                CheckBSTResult temp = checkBST(cur.right);
+                return new CheckBSTResult(temp.minVal > cur.val, cur.val, temp.maxVal);
+            }
+        }
+        else {
+            CheckBSTResult tempL = checkBST(cur.left);
+            CheckBSTResult tempR = checkBST(cur.right);
+            if (tempL.maxVal < cur.val && tempR.minVal > cur.val) {
+                return new CheckBSTResult(true, tempL.minVal, tempR.maxVal);
+            }
+        }
+        return new CheckBSTResult(false, 0, 0);
+    }
+
+    private class CheckBSTResult {
+        public boolean isBST;
+        public int minVal;
+        public int maxVal;
+        public CheckBSTResult(boolean isBST, int minVal, int maxVal) {
+            this.isBST = isBST;
+            this.minVal = minVal;
+            this.maxVal =  maxVal;
+        }
+    }
+
+
 
 
     public static void main(String[] args) {
@@ -5077,8 +5127,8 @@ public class Solutions {
               3   5
          上述这棵二叉树序列化为 {2,1,4,#,#,3,5}.
          */
-        TreeNode root = TreeNodeFactory.build("22222,1,4,#,#,3,5,45,1234,#,#,5767");
-        XYLog.d(root);
+//        TreeNode root = TreeNodeFactory.build("2,1,4,#,#,3,5");
+//        XYLog.d(root, solutions.isValidBST(root)? "是": "不是", "二叉查找树");
 
 
 
