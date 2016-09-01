@@ -4997,8 +4997,78 @@ public class Solutions {
 
 
 
+
+
+
+
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/binary-tree-maximum-path-sum/
+     * @param root: The root of binary tree.
+     * @return: An integer.
+     */
+    public int maxPathSum(TreeNode root) {
+        //思路
+        //（左树单枝最大长度 + 根节点 + 右树单枝最大长度），（左树双枝最大长度），（右树双枝最大长度）三者的最大长度
+        if (root != null) {
+            ArrayList<Integer> maxes = new ArrayList<Integer>();
+            measurePathSum(root, maxes);
+            Collections.sort(maxes);
+            return maxes.get(maxes.size() - 1);
+        }
+
+        return 0;
+    }
+
+    /**
+     * @param cur
+     * @return 单枝最大路径长度
+     */
+    private int measurePathSum(TreeNode cur, ArrayList<Integer> maxes) {
+        if (cur == null) {
+            return 0;
+        }
+        else if (cur.left == null && cur.right == null) {
+            maxes.add(cur.val);
+            return cur.val;
+        }
+        else {
+            int left = measurePathSum(cur.left, maxes);
+            int right = measurePathSum(cur.right, maxes);
+            maxes.add(Math.max(left + right + cur.val, cur.val));
+            return Math.max(left, right) + cur.val;
+        }
+    }
+
+
+
+
+
+
+
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         二叉树中的最大路径和
+         给出一棵二叉树，寻找一条路径使其路径和最大，路径可以在任一节点中开始和结束（路径和为两个节点之间所在路径上的节点权值之和）
+
+         样例
+         给出一棵二叉树：
+            1
+          / \
+         2   3
+         返回 6
+         */
+        TreeNode root = TreeNodeFactory.build("-10,-20,#,#,-31,-24,-5,#,#,-6,-7,-8,-9");
+        XYLog.d(root, "最大路径和为：", solutions.maxPathSum(root));
+
 
         /**
          平衡二叉树
