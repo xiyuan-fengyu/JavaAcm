@@ -4856,47 +4856,32 @@ public class Solutions {
      * @param target: An integer.
      */
     public int MinAdjustmentCost(ArrayList<Integer> list, int target) {
-        int adjustNum = 0;
+        int adjustNum = Integer.MAX_VALUE;
         if (list != null && list.size() > 1) {
-            boolean needAdjust = false;
-            do {
-                needAdjust = false;
+            int size = list.size();
+            int[][] f = new int[size][101];
+            int list0 = list.get(0);
+            for (int i = 0; i < 101; i++) {
+                f[0][i] = Math.abs(i - list0);
+            }
 
-                int size = list.size();
-                double avg = list.get(0);
-                for (int i = 1; i < size; i++) {
-                    if (Math.abs(list.get(i - 1)  - list.get(i)) > target) {
-                        needAdjust = true;
-                    }
-                    avg += list.get(i);
-                }
-                avg /= size;
-
-                if (needAdjust) {
-                    int adjustIndex = 0;
-                    double maxDelta = 0;
-                    for (int i = 0; i < size; i++) {
-                        double tempDelta = Math.abs(list.get(i) - avg);
-                        if (tempDelta > maxDelta) {
-                            maxDelta = tempDelta;
-                            adjustIndex = i;
-                        }
-                    }
-
-                    if (maxDelta > 0) {
-                        int old = list.get(adjustIndex);
-                        if (old < avg) {
-                            list.set(adjustIndex, old + 1);
-                        }
-                        else {
-                            list.set(adjustIndex, old - 1);
-                        }
-                        adjustNum += 1;
+            for (int i = 1; i < size; i++) {
+                for (int j = 0;j < 101; j++) {
+                    f[i][j] = Integer.MAX_VALUE;
+                    int delta = Math.abs(j - list.get(i));
+                    int upper = Math.min(j + target, 100);
+                    int lower = Math.max(j - target, 0);
+                    for (int k = lower; k <= upper; k++) {
+                        f[i][j] = Math.min(f[i][j], f[i - 1][k] + delta);
                     }
                 }
+            }
 
-            } while (needAdjust);
+            for (int i = 0; i < 101; i++) {
+                adjustNum = Math.min(adjustNum, f[size - 1][i]);
+            }
         }
+
         return adjustNum;
     }
 
@@ -4912,14 +4897,14 @@ public class Solutions {
          样例
          对于数组[1, 4, 2, 3]和target=1，最小的调整方案是调整为[2, 3, 2, 3]，调整代价之和是2。返回2。
          */
-        int[] arr = {20,25,35,45,55,65,75,85,25,35,45,55,15,15,15,7,2,11,15,11,15};
-        ArrayList<Integer> list = new ArrayList<Integer>();
-        for (int i: arr) {
-            list.add(i);
-        }
-        int target = 10;
-        XYLog.d(list, "的最小调整代价为：");
-        XYLog.d(solutions.MinAdjustmentCost(list, target));
+//        int[] arr = {20,25,35,45,55,65,75,85,25,35,45,55,15,15,15,7,2,11,15,11,15};
+//        ArrayList<Integer> list = new ArrayList<Integer>();
+//        for (int i: arr) {
+//            list.add(i);
+//        }
+//        int target = 10;
+//        XYLog.d(list, "的最小调整代价为：");
+//        XYLog.d(solutions.MinAdjustmentCost(list, target));
 
 
 
