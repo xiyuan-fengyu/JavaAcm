@@ -77,9 +77,7 @@ public class TreeNode {
         List<PositionChar> result = new ArrayList<PositionChar>();
         String valStr = "" + val;
         int valStrLen = valStr.length();
-        for (int i = 0, len = valStr.length(); i < len; i++) {
-            result.add(new PositionChar(i, 0, valStr.charAt(i)));
-        }
+        int offset = 0;
         if (left != null || right != null) {
             List<PositionChar> leftChars = null;
             List<PositionChar> rightChars = null;
@@ -124,12 +122,11 @@ public class TreeNode {
 
             if (leftChars != null && rightChars != null) {
                 boolean isCrossing = true;
-                int offset = 0;
                 do {
                     isCrossing = false;
                     Set<Integer> keys = leftMax.keySet();
                     for (Integer key: keys) {
-                        if (rightMin.containsKey(key) && leftMax.get(key) + 1 > rightMin.get(key) + offset) {
+                        if (rightMin.containsKey(key) && leftMax.get(key) + 2 > rightMin.get(key) + offset) {
                             isCrossing = true;
                             break;
                         }
@@ -157,7 +154,9 @@ public class TreeNode {
                 }
             }
         }
-
+        for (int i = 0, len = valStr.length(); i < len; i++) {
+            result.add(new PositionChar(i + (int)(offset / 2.0 + 0.5), 0, valStr.charAt(i)));
+        }
         return result;
     }
 

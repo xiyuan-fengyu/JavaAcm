@@ -5111,6 +5111,12 @@ public class Solutions {
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
 
+        TreeNode root = TreeNodeFactory.build("1,2,3,4,5,666,7,#,#,888,#,99,10");
+        XYLog.d(root);
+
+
+
+
         /**
          验证二叉查找树
          给定一个二叉树，判断它是否是合法的二叉查找树(BST)
