@@ -5112,6 +5112,11 @@ public class Solutions {
 
 
 
+
+
+
+
+
     /**
      * http://www.lintcode.com/zh-cn/problem/partition-list/
      * @param head: The first node of linked list.
@@ -5144,8 +5149,55 @@ public class Solutions {
 
 
 
+
+
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/maximum-depth-of-binary-tree/
+     * @param root: The root of binary tree.
+     * @return: An integer.
+     */
+    public int maxDepth(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        else {
+            int leftDepth = maxDepth(root.left);
+            int rightDepth = maxDepth(root.right);
+            return 1 + Math.max(leftDepth, rightDepth);
+        }
+    }
+
+
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         二叉树的最大深度/二叉树高度
+         给定一个二叉树，找出其最大深度。
+         二叉树的深度为根节点到最远叶子节点的距离。
+
+         样例
+         给出一棵如下的二叉树:
+            1
+          / \
+         2   3
+            / \
+           4   5
+         这个二叉树的最大深度为3.
+         */
+//        TreeNode root = TreeNodeFactory.build("1,2,3,#,#,4,5");
+//        XYLog.d(root, "的高度为：", solutions.maxDepth(root));
+
+
+
+
 
         /**
          链表划分
@@ -5156,9 +5208,9 @@ public class Solutions {
          给定链表 1->4->3->2->5->2->null，并且 x=3
          返回 1->2->2->4->3->5->null
          */
-        ListNode head = ListNodeFactory.build("1->4->3->2->5->2->null");
-        int x = 3;
-        XYLog.d(head, "通过" + x + "分割，得到", solutions.partition(head, x));
+//        ListNode head = ListNodeFactory.build("1->4->3->2->5->2->null");
+//        int x = 3;
+//        XYLog.d(head, "通过" + x + "分割，得到", solutions.partition(head, x));
 
 
 
