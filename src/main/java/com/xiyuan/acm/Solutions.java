@@ -4850,6 +4850,15 @@ public class Solutions {
 
 
 
+
+
+
+
+
+
+
+
+
     /**
      * http://www.lintcode.com/zh-cn/problem/minimum-adjustment-cost/
      * @param list: An integer array.
@@ -4859,6 +4868,7 @@ public class Solutions {
         int adjustNum = Integer.MAX_VALUE;
         if (list != null && list.size() > 1) {
             int size = list.size();
+            //f[i][j] 表示将第i个数调整为j的最小代价
             int[][] f = new int[size][101];
             int list0 = list.get(0);
             for (int i = 0; i < 101; i++) {
@@ -4868,9 +4878,12 @@ public class Solutions {
             for (int i = 1; i < size; i++) {
                 for (int j = 0;j < 101; j++) {
                     f[i][j] = Integer.MAX_VALUE;
+                    //list(i)调整为j的代价
                     int delta = Math.abs(j - list.get(i));
+                    //list(i - 1)的可调整范围
                     int upper = Math.min(j + target, 100);
                     int lower = Math.max(j - target, 0);
+                    //计算list(i - 1)在lower，upper范围类调整的最小值,加上delta就是f[i][j]
                     for (int k = lower; k <= upper; k++) {
                         f[i][j] = Math.min(f[i][j], f[i - 1][k] + delta);
                     }
@@ -4886,8 +4899,75 @@ public class Solutions {
     }
 
 
+
+
+
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/backpack/
+     * @param m: An integer m denotes the size of a backpack
+     * @param arr: Given n items with size arr[i]
+     * @return: The maximum size
+     */
+    public int backPack(int m, int[] arr) {
+        if (arr != null && arr.length > 0) {
+            int len = arr.length;
+            //f[i][j]表示将前i个物品装入容量为j的背包的最大重量
+            int[][] f = new int[len][m + 1];
+            int w0 = arr[0];
+            for (int i = 0; i <= m; i++) {
+                f[0][i] = w0 <= i? w0: 0;
+            }
+
+            for (int i = 1; i < len; i++) {
+                int wi = arr[i];
+                for (int j = 0; j <= m; j++) {
+                    if (wi > j) {
+                        f[i][j] = f[i - 1][j];
+                    }
+                    else if (wi == j) {
+                        f[i][j] = wi;
+                    }
+                    else {
+                        f[i][j] = Math.max(wi + f[i - 1][j - wi], f[i - 1][j]);
+                    }
+                }
+            }
+            return f[len - 1][m];
+        }
+        return 0;
+    }
+
+
+
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         背包问题
+         在n个物品中挑选若干物品装入背包，最多能装多满？假设背包的大小为m，每个物品的大小为A[i]
+         注意事项
+         你不可以将物品进行切割。
+
+         样例
+         如果有4个物品[2, 3, 5, 7]
+         如果背包的大小为11，可以选择[2, 3, 5]装入背包，最多可以装满10的空间。
+         如果背包的大小为12，可以选择[2, 3, 7]装入背包，最多可以装满12的空间。
+         函数需要返回最多能装满的空间大小。
+         */
+//        int[] arr = {2, 3, 5, 7};
+//        int backSize = 12;
+//        XYLog.d("将不可分割的几个物品", arr, "装入容量为", backSize, "的背包中，能放下的最大重量为：", solutions.backPack(backSize, arr));
+
+
+
+
 
         /**
          最小调整代价
