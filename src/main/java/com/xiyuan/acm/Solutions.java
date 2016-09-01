@@ -4946,8 +4946,80 @@ public class Solutions {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/balanced-binary-tree/
+     * @param root: The root of binary tree.
+     * @return: True if this Binary tree is Balanced, or false.
+     */
+    public boolean isBalanced(TreeNode root) {
+        return balacneCheck(root).isBalance;
+    }
+
+    private TreeBalanceInfo balacneCheck(TreeNode cur) {
+        if (cur == null) {
+            return new TreeBalanceInfo(0, true);
+        }
+        else {
+            TreeBalanceInfo left = balacneCheck(cur.left);
+            TreeBalanceInfo right = balacneCheck(cur.right);
+            if (left.isBalance && right.isBalance && Math.abs(left.depth - right.depth) <= 1) {
+                return new TreeBalanceInfo(Math.max(left.depth, right.depth) + 1, true);
+            }
+            else {
+                return new TreeBalanceInfo(0, false);
+            }
+        }
+    }
+
+    private class TreeBalanceInfo {
+        public boolean isBalance;
+        public int depth;
+        public TreeBalanceInfo(int depth, boolean isBalance) {
+            this.depth = depth;
+            this.isBalance = isBalance;
+        }
+    }
+
+
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         平衡二叉树
+         给定一个二叉树,确定它是高度平衡的。对于这个问题,一棵高度平衡的二叉树的定义是：一棵二叉树中每个节点的两个子树的深度相差不会超过1。
+
+         样例
+         给出二叉树 A={3,9,20,#,#,15,7}, B={3,#,20,15,7}
+         二叉树A是高度平衡的二叉树，但是B不是
+         */
+//        TreeNode rootA = TreeNodeFactory.build("3,9,20,#,#,15,7");
+//        TreeNode rootB = TreeNodeFactory.build("3,#,20,15,7");
+//        XYLog.d(rootA, solutions.isBalanced(rootA)? "平衡": "不平衡");
+//        XYLog.d(rootB, solutions.isBalanced(rootB)? "平衡": "不平衡");
+
+
+
+
+
+
+
+
 
         /**
          背包问题
