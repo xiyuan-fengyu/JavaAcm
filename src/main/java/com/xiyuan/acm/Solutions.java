@@ -6,6 +6,7 @@ import com.xiyuan.acm.model.ListNode;
 import com.xiyuan.acm.model.TreeNode;
 import com.xiyuan.util.XYLog;
 
+import java.io.*;
 import java.util.*;
 
 /**
@@ -5175,8 +5176,110 @@ public class Solutions {
 
 
 
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/sort-list/
+     * @param head: The head of linked list.
+     * @return: You should return the head of the sorted linked list,
+    using constant space complexity.
+     */
+    public ListNode sortList(ListNode head) {
+        ListNode[] temp = sortListNode(head);
+        if (temp != null) {
+            return temp[0];
+        }
+        else {
+            return null;
+        }
+    }
+
+    public ListNode[] sortListNode(ListNode head) {
+        if (head != null) {
+            ListNode cur = head.next;
+            head.next = null;
+
+            ListNode left = new ListNode(0);
+            ListNode leftCur = left;
+
+            ListNode middel = head;
+            middel.next = head;
+            ListNode middleCur = head;
+
+            ListNode right = new ListNode(0);
+            ListNode rightCur = right;
+            while (cur != null) {
+                if (cur.val < head.val) {
+                    leftCur.next = cur;
+                    leftCur = cur;
+                }
+                else if (cur.val == head.val) {
+                    middleCur.next = cur;
+                    middleCur = cur;
+                }
+                else {
+                    rightCur.next = cur;
+                    rightCur = cur;
+                }
+
+                ListNode tempNext = cur.next;
+                cur.next = null;
+                cur = tempNext;
+            }
+
+            ListNode[] lefts = sortListNode(left.next);
+            ListNode[] rights = sortListNode(right.next);
+            ListNode start = new ListNode(0);
+            cur = start;
+            if (lefts != null) {
+                cur.next = lefts[0];
+                cur = lefts[1];
+            }
+            cur.next = middel;
+            cur = middleCur;
+            if (rights != null) {
+                cur.next = rights[0];
+                cur = rights[1];
+            }
+            ListNode[] startAndEnd = {start.next, cur};
+            return startAndEnd;
+        }
+        return null;
+    }
+
+
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         链表排序
+         在 O(n log n) 时间复杂度和常数级的空间复杂度下给链表排序。
+
+         样例
+         给出 1->3->2->null，给它排序变成 1->2->3->null.
+         */
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader("D:\\Download\\12.in"));
+            StringBuilder builder = new StringBuilder();
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                builder.append(line);
+            }
+
+            ListNode head = ListNodeFactory.build(builder.toString());
+            XYLog.d(head, "排序之后是");
+            XYLog.d(solutions.sortList(head));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
 
         /**
          二叉树的最大深度/二叉树高度
