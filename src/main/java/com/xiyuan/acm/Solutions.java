@@ -1,6 +1,8 @@
 package com.xiyuan.acm;
 
+import com.xiyuan.acm.factory.ListNodeFactory;
 import com.xiyuan.acm.factory.TreeNodeFactory;
+import com.xiyuan.acm.model.ListNode;
 import com.xiyuan.acm.model.TreeNode;
 import com.xiyuan.util.XYLog;
 
@@ -5108,12 +5110,55 @@ public class Solutions {
 
 
 
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/partition-list/
+     * @param head: The first node of linked list.
+     * @param x: an integer
+     * @return: a ListNode
+     */
+    public ListNode partition(ListNode head, int x) {
+        ListNode headL = new ListNode(0);
+        ListNode headGE = new ListNode(0);
+
+        ListNode curL = headL;
+        ListNode curGE = headGE;
+        ListNode cur = head;
+        while (cur != null) {
+            ListNode nextTemp = cur.next;
+            cur.next = null;
+            if (cur.val >= x) {
+                curGE.next = cur;
+                curGE = curGE.next;
+            }
+            else {
+                curL.next = cur;
+                curL = curL.next;
+            }
+            cur = nextTemp;
+        }
+        curL.next = headGE.next;
+        return headL.next;
+    }
+
+
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
 
-        TreeNode root = TreeNodeFactory.build("1,2,3,4,5,666,7,#,#,888,#,99,10");
-        XYLog.d(root);
+        /**
+         链表划分
+         给定一个单链表和数值x，划分链表使得所有小于x的节点排在大于等于x的节点之前。
+         你应该保留两部分内链表节点原有的相对顺序。
 
+         样例
+         给定链表 1->4->3->2->5->2->null，并且 x=3
+         返回 1->2->2->4->3->5->null
+         */
+        ListNode head = ListNodeFactory.build("1->4->3->2->5->2->null");
+        int x = 3;
+        XYLog.d(head, "通过" + x + "分割，得到", solutions.partition(head, x));
 
 
 
@@ -6055,31 +6100,6 @@ public class Solutions {
         @Override
         public String toString() {
             return "[" + start + ", " + end + "]";
-        }
-    }
-
-
-    public static class ListNode {
-        public int val;
-        public ListNode next;
-        public ListNode(int val) {
-            this.val = val;
-            this.next = null;
-        }
-
-        @Override
-        public String toString() {
-            StringBuffer sb = new StringBuffer();
-            ListNode cur = this;
-            while (cur != null) {
-                sb.append(cur.val);
-                cur = cur.next;
-                if(cur != null)
-                {
-                    sb.append(" -> ");
-                }
-            }
-            return sb.toString();
         }
     }
 
