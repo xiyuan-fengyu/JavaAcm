@@ -5052,6 +5052,10 @@ public class Solutions {
 
 
 
+
+
+
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
 
@@ -5066,8 +5070,8 @@ public class Solutions {
          2   3
          返回 6
          */
-        TreeNode root = TreeNodeFactory.build("-10,-20,#,#,-31,-24,-5,#,#,-6,-7,-8,-9");
-        XYLog.d(root, "最大路径和为：", solutions.maxPathSum(root));
+//        TreeNode root = TreeNodeFactory.build("-10,-20,#,#,-31,-24,-5,#,#,-6,-7,-8,-9");
+//        XYLog.d(root, "最大路径和为：", solutions.maxPathSum(root));
 
 
         /**
