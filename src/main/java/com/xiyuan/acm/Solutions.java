@@ -5060,6 +5060,29 @@ public class Solutions {
         Solutions solutions = new Solutions();
 
         /**
+         验证二叉查找树
+         给定一个二叉树，判断它是否是合法的二叉查找树(BST)
+         一棵BST定义为：
+         节点的左子树中的值要严格小于该节点的值。
+         节点的右子树中的值要严格大于该节点的值。
+         左右子树也必须是二叉查找树。
+         一个节点的树也是二叉查找树。
+
+         样例
+         一个例子：
+                2
+              / \
+             1   4
+               / \
+              3   5
+         上述这棵二叉树序列化为 {2,1,4,#,#,3,5}.
+         */
+        TreeNode root = TreeNodeFactory.build("22222,1,4,#,#,3,5,45,1234,#,#,5767");
+        XYLog.d(root);
+
+
+
+        /**
          二叉树中的最大路径和
          给出一棵二叉树，寻找一条路径使其路径和最大，路径可以在任一节点中开始和结束（路径和为两个节点之间所在路径上的节点权值之和）
 
@@ -5934,95 +5957,229 @@ public class Solutions {
             this.left = this.right = null;
         }
 
+//        @Override
+//        public String toString() {
+//            measureWidth();
+//            resetStartIndex(null, true);
+//            ArrayList<char[]> levels = new ArrayList<char[]>();
+//            buildStr(levels, 0, width);
+//            StringBuilder sb = new StringBuilder();
+//            sb.append('\n');
+//            for (char[] chars: levels) {
+//                sb.append(chars).append('\n');
+//            }
+//            return sb.toString();
+//        }
+//
+//        private static final int margin = 2;
+//
+//        private int width = 0;
+//        private int leftW = 0;
+//        private int rightW = 0;
+//        private int startIndex = 0;
+//
+//        private void measureWidth() {
+//            width = 0;
+//            leftW = 0;
+//            rightW = 0;
+//            if (left != null) {
+//                left.measureWidth();
+//                leftW = left.width + margin;
+//            }
+//            if (right != null) {
+//                right.measureWidth();
+//                rightW = right.width + margin;
+//            }
+//
+//            width = leftW + ("" + val).length() + rightW;
+//        }
+//
+//        private void resetStartIndex(TreeNode parent, boolean isLeft) {
+//            if (parent == null) {
+//                startIndex = leftW;
+//            }
+//            else if (isLeft) {
+//                startIndex = parent.startIndex - margin - ("" + val).length() - rightW;
+//            }
+//            else {
+//                startIndex = parent.startIndex + margin + ("" + parent.val).length() - 1 + leftW;
+//            }
+//
+//            if (left != null) {
+//                left.resetStartIndex(this, true);
+//            }
+//            if (right != null) {
+//                right.resetStartIndex(this, false);
+//            }
+//        }
+//
+//        private void buildStr(ArrayList<char[]> levelChars, int level, int maxLen) {
+//            if (level * 2 + 1 > levelChars.size()) {
+//                char[] chars = new char[maxLen];
+//                Arrays.fill(chars, ' ');
+//                levelChars.add(chars);
+//            }
+//
+//            char[] curLevelChars = levelChars.get(level * 2);
+//            char[] valChars = ("" + val).toCharArray();
+//            for (int i = 0, len = valChars.length; i < len; i++) {
+//                curLevelChars[startIndex + i] = valChars[i];
+//            }
+//
+//            if (left != null || right != null) {
+//                if (level * 2 + 2 > levelChars.size()) {
+//                    char[] chars = new char[maxLen];
+//                    Arrays.fill(chars, ' ');
+//                    levelChars.add(chars);
+//                }
+//
+//                char[] nextLevelChars = levelChars.get(level * 2 + 1);
+//                if (left != null) {
+//                    nextLevelChars[startIndex - left.rightW - margin] = '/';
+//                }
+//                if (right != null) {
+//                    nextLevelChars[startIndex + valChars.length + right.leftW] = '\\';
+//                }
+//                if (left != null) {
+//                    left.buildStr(levelChars, level + 1, maxLen);
+//                }
+//                if (right != null) {
+//                    right.buildStr(levelChars, level + 1, maxLen);
+//                }
+//            }
+//        }
+
         @Override
         public String toString() {
-            measureWidth();
-            resetStartIndex(null, true);
-            ArrayList<char[]> levels = new ArrayList<char[]>();
-            buildStr(levels, 0, width);
-            StringBuilder sb = new StringBuilder();
-            sb.append('\n');
-            for (char[] chars: levels) {
-                sb.append(chars).append('\n');
+            List<PositionChar> chars = toPositionChars();
+            int minX = Integer.MAX_VALUE;
+            int maxX = Integer.MIN_VALUE;
+            int maxY = Integer.MIN_VALUE;
+            for (PositionChar item: chars) {
+                if (item.x < minX) {
+                    minX = item.x;
+                }
+                if (item.x > maxX) {
+                    maxX = item.x;
+                }
+                if (item.y > maxY) {
+                    maxY = item.y;
+                }
             }
-            return sb.toString();
+            int xLen = maxX - minX + 1;
+            int offsetX = -minX;
+            char[][] charArr = new char[maxY + 1][xLen];
+            for (PositionChar item: chars) {
+                charArr[item.y][item.x + offsetX] = item.c;
+            }
+            StringBuilder strBld = new StringBuilder();
+            strBld.append('\n');
+            for (int i = 0; i <= maxY; i++) {
+                for (int j = 0; j < xLen; j++) {
+                    char c = charArr[i][j];
+                    strBld.append(c == '\0'? ' ': c);
+                }
+                strBld.append('\n');
+            }
+            return strBld.toString();
         }
 
-        private static final int margin = 2;
-
-        private int width = 0;
-        private int leftW = 0;
-        private int rightW = 0;
-        private int startIndex = 0;
-
-        private void measureWidth() {
-            width = 0;
-            leftW = 0;
-            rightW = 0;
-            if (left != null) {
-                left.measureWidth();
-                leftW = left.width + margin;
+        private List<PositionChar> toPositionChars() {
+            List<PositionChar> result = new ArrayList<PositionChar>();
+            String valStr = "" + val;
+            int valStrLen = valStr.length();
+            for (int i = 0, len = valStr.length(); i < len; i++) {
+                result.add(new PositionChar(i, 0, valStr.charAt(i)));
             }
-            if (right != null) {
-                right.measureWidth();
-                rightW = right.width + margin;
-            }
-
-            width = leftW + ("" + val).length() + rightW;
-        }
-
-        private void resetStartIndex(TreeNode parent, boolean isLeft) {
-            if (parent == null) {
-                startIndex = leftW;
-            }
-            else if (isLeft) {
-                startIndex = parent.startIndex - margin - ("" + val).length() - rightW;
-            }
-            else {
-                startIndex = parent.startIndex + margin + ("" + parent.val).length() - 1 + leftW;
-            }
-
-            if (left != null) {
-                left.resetStartIndex(this, true);
-            }
-            if (right != null) {
-                right.resetStartIndex(this, false);
-            }
-        }
-
-        private void buildStr(ArrayList<char[]> levelChars, int level, int maxLen) {
-            if (level * 2 + 1 > levelChars.size()) {
-                char[] chars = new char[maxLen];
-                Arrays.fill(chars, ' ');
-                levelChars.add(chars);
-            }
-
-            char[] curLevelChars = levelChars.get(level * 2);
-            char[] valChars = ("" + val).toCharArray();
-            for (int i = 0, len = valChars.length; i < len; i++) {
-                curLevelChars[startIndex + i] = valChars[i];
-            }
-
             if (left != null || right != null) {
-                if (level * 2 + 2 > levelChars.size()) {
-                    char[] chars = new char[maxLen];
-                    Arrays.fill(chars, ' ');
-                    levelChars.add(chars);
+                List<PositionChar> leftChars = null;
+                List<PositionChar> rightChars = null;
+                Map<Integer, Integer> leftMax = new HashMap<Integer, Integer>();
+                Map<Integer, Integer> rightMin = new HashMap<Integer, Integer>();
+                if (left != null) {
+                    leftChars = left.toPositionChars();
+                    int leftOffset = ("" + left.val).length() + 1;
+                    for (PositionChar item: leftChars) {
+                        item.x -= leftOffset;
+                        item.y += 2;
+                        if (leftMax.containsKey(item.y)) {
+                            leftMax.put(item.y, Math.max(item.x, leftMax.get(item.y)));
+                        }
+                        else {
+                            leftMax.put(item.y, item.x);
+                        }
+                    }
+                    if (leftMax.containsKey(2)) {
+                        leftChars.add(new PositionChar(leftMax.get(2) + 1, 1, '/'));
+                        leftMax.put(1, leftMax.get(2) + 1);
+                    }
+                }
+                if (right != null) {
+                    rightChars = right.toPositionChars();
+                    int rightOffset = valStrLen + 1;
+                    for (PositionChar item: rightChars) {
+                        item.x += rightOffset;
+                        item.y += 2;
+                        if (rightMin.containsKey(item.y)) {
+                            rightMin.put(item.y, Math.min(item.x, rightMin.get(item.y)));
+                        }
+                        else {
+                            rightMin.put(item.y, item.x);
+                        }
+                    }
+                    if (rightMin.containsKey(2)) {
+                        rightChars.add(new PositionChar(rightMin.get(2) - 1, 1, '\\'));
+                        rightMin.put(1, rightMin.get(2) - 1);
+                    }
                 }
 
-                char[] nextLevelChars = levelChars.get(level * 2 + 1);
-                if (left != null) {
-                    nextLevelChars[startIndex - left.rightW - margin] = '/';
+                if (leftChars != null && rightChars != null) {
+                    boolean isCrossing = true;
+                    int offset = 0;
+                    do {
+                        isCrossing = false;
+                        Set<Integer> keys = leftMax.keySet();
+                        for (Integer key: keys) {
+                            if (rightMin.containsKey(key) && leftMax.get(key) + 1 > rightMin.get(key) + offset) {
+                                isCrossing = true;
+                                break;
+                            }
+                        }
+
+                        if (isCrossing) {
+                            offset += 1;
+                        }
+                    }
+                    while (isCrossing);
+
+                    for (PositionChar item: rightChars) {
+                        item.x += offset;
+                    }
                 }
-                if (right != null) {
-                    nextLevelChars[startIndex + valChars.length + right.leftW] = '\\';
+
+                if (leftChars != null) {
+                    for (PositionChar item: leftChars) {
+                        result.add(item);
+                    }
                 }
-                if (left != null) {
-                    left.buildStr(levelChars, level + 1, maxLen);
+                if (rightChars != null) {
+                    for (PositionChar item: rightChars) {
+                        result.add(item);
+                    }
                 }
-                if (right != null) {
-                    right.buildStr(levelChars, level + 1, maxLen);
-                }
+            }
+
+            return result;
+        }
+
+        private class PositionChar {
+            public int x;
+            public int y;
+            public char c;
+            public PositionChar(int x, int y, char c) {
+                this.c = c;
+                this.x = x;
+                this.y = y;
             }
         }
 
