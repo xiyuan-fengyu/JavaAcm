@@ -5357,13 +5357,51 @@ public class Solutions {
      * @return : return an integer
      */
     public int removeDuplicatesII(int[] nums) {
+        int k = 0;
+        if (nums != null && nums.length > 2) {
+            int j = 1;
+            int dumplict = 0;
+            int len = nums.length;
+            while (j < len) {
+                if (nums[k] == nums[j]) {
+                    dumplict++;
+                    if (dumplict < 2) {
+                        k++;
+                        nums[k] = nums[j];
+                    }
+                }
+                else {
+                    nums[++k] = nums[j];
+                    dumplict = 0;
+                }
 
-        return 0;
+                j ++;
+            }
+            return k + 1;
+        }
+        return nums == null? 0: nums.length;
     }
 
 
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         删除排序数组中的重复数字 II
+         跟进“删除重复数字”：
+         如果可以允许出现两次重复将如何处理？
+
+         样例
+         给出数组A =[1,1,1,2,2,3]，你的函数应该返回长度5，此时A=[1,1,2,2,3]。
+         */
+//        int[] arr = {-14,-14,-14,-14,-14,-14,-14,-13,-13,-13,-13,-12,-11,-11,-11,-9,-9,-9,-7,-7,-7,-6,-6,-5,-5,-5,-4,-4,-4,-3,-3,-3,-2,-2,-2,-1,-1,0,0,0,0,1,1,1,2,2,2,2,3,3,3,3,3,4,4,4,5,5,6,6,6,7,7,7,7,8,8,8,8,9,9,10,10,11,11,11,11,11,12,12,12,12,13,13,13,13,14,14,15,16,17,18,18,18,20,20,21,21,21,21,21,22,22,22,22,23,24,24,25};
+//        XYLog.d(arr, "去重后：");
+//        XYLog.d("长度：", solutions.removeDuplicatesII(arr), arr);
+
+
+
+
+
 
         /**
          删除排序数组中的重复数字
