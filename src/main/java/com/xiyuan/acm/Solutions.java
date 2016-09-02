@@ -5633,9 +5633,9 @@ public class Solutions {
          排序列表转换为平衡二叉查找树
          给出一个所有元素以升序排序的单链表，将它转换成一棵高度平衡的二分查找树
          */
-        ListNode head = ListNodeFactory.build("1->2->3->4->5->6");
-        XYLog.d(head);
-        XYLog.d("转换为二叉查找树之后是：", solutions.sortedListToBST(head));
+//        ListNode head = ListNodeFactory.build("1->2->3->4->5->6");
+//        XYLog.d(head);
+//        XYLog.d("转换为二叉查找树之后是：", solutions.sortedListToBST(head));
 
 
 
