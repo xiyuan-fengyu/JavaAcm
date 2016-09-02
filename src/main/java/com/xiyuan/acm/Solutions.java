@@ -5189,66 +5189,70 @@ public class Solutions {
     using constant space complexity.
      */
     public ListNode sortList(ListNode head) {
-        ListNode[] temp = sortListNode(head);
-        if (temp != null) {
-            return temp[0];
+        if (head == null || head.next == null) {
+            return head;
         }
-        else {
-            return null;
+        ListNode mid = findMedian(head);
+        ListNode leftDummy = new ListNode(0), leftTail = leftDummy;
+        ListNode rightDummy = new ListNode(0), rightTail = rightDummy;
+        ListNode middleDummy = new ListNode(0), middleTail = middleDummy;
+        while (head != null) {
+            if (head.val < mid.val) {
+                leftTail.next = head;
+                leftTail = head;
+            } else if (head.val > mid.val) {
+                rightTail.next = head;
+                rightTail = head;
+            } else {
+                middleTail.next = head;
+                middleTail = head;
+            }
+            head = head.next;
         }
+
+        leftTail.next = null;
+        middleTail.next = null;
+        rightTail.next = null;
+
+        ListNode left = sortList(leftDummy.next);
+        ListNode right = sortList(rightDummy.next);
+
+        return concat(left, middleDummy.next, right);
     }
 
-    public ListNode[] sortListNode(ListNode head) {
-        if (head != null) {
-            ListNode cur = head.next;
-            head.next = null;
-
-            ListNode left = new ListNode(0);
-            ListNode leftCur = left;
-
-            ListNode middel = head;
-            middel.next = head;
-            ListNode middleCur = head;
-
-            ListNode right = new ListNode(0);
-            ListNode rightCur = right;
-            while (cur != null) {
-                if (cur.val < head.val) {
-                    leftCur.next = cur;
-                    leftCur = cur;
-                }
-                else if (cur.val == head.val) {
-                    middleCur.next = cur;
-                    middleCur = cur;
-                }
-                else {
-                    rightCur.next = cur;
-                    rightCur = cur;
-                }
-
-                ListNode tempNext = cur.next;
-                cur.next = null;
-                cur = tempNext;
-            }
-
-            ListNode[] lefts = sortListNode(left.next);
-            ListNode[] rights = sortListNode(right.next);
-            ListNode start = new ListNode(0);
-            cur = start;
-            if (lefts != null) {
-                cur.next = lefts[0];
-                cur = lefts[1];
-            }
-            cur.next = middel;
-            cur = middleCur;
-            if (rights != null) {
-                cur.next = rights[0];
-                cur = rights[1];
-            }
-            ListNode[] startAndEnd = {start.next, cur};
-            return startAndEnd;
+    private ListNode findMedian(ListNode head) {
+        ListNode slow = head;
+        ListNode fast = head.next;
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
         }
-        return null;
+        return slow;
+    }
+
+    private ListNode concat(ListNode left, ListNode middle, ListNode right) {
+        ListNode dummy = new ListNode(0);
+        ListNode tail = dummy;
+
+        tail.next = left;
+        tail = getTail(tail);
+
+        tail.next = middle;
+        tail = getTail(tail);
+
+        tail.next = right;
+        return dummy.next;
+    }
+
+    private ListNode getTail(ListNode head) {
+        if (head == null) {
+            return null;
+        }
+
+        while (head.next != null) {
+            head = head.next;
+        }
+        return head;
     }
 
 
