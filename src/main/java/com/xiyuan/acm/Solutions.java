@@ -5326,10 +5326,40 @@ public class Solutions {
      * @return : return an integer
      */
     public int removeDuplicates(int[] nums) {
+        int k = 0;
+        if (nums != null && nums.length > 1) {
+            int j = 1;
+            int len = nums.length;
+            while (j < len) {
+                if (nums[k] != nums[j]) {
+                    nums[++k] = nums[j];
+                }
+                if (k != j) {
+                    nums[j] = 0;
+                }
+                j ++;
+            }
+            return k + 1;
+        }
+        return nums == null? 0: nums.length;
+    }
+
+
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/remove-duplicates-from-sorted-array-ii/
+     * @param nums: a array of integers
+     * @return : return an integer
+     */
+    public int removeDuplicatesII(int[] nums) {
 
         return 0;
     }
-
 
 
     public static void main(String[] args) {
@@ -5343,6 +5373,9 @@ public class Solutions {
          样例
          给出数组A =[1,1,2]，你的函数应该返回长度2，此时A=[1,2]。
          */
+//        int[] arr = {-10,0,1,2,3};
+//        XYLog.d(arr, "去重后：");
+//        XYLog.d("长度：", solutions.removeDuplicates(arr), arr);
 
 
 
