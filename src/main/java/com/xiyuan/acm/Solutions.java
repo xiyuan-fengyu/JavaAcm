@@ -5267,22 +5267,13 @@ public class Solutions {
          样例
          给出 1->3->2->null，给它排序变成 1->2->3->null.
          */
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader("D:\\Download\\12.in"));
-            StringBuilder builder = new StringBuilder();
-            String line = null;
-            while ((line = reader.readLine()) != null) {
-                builder.append(line);
-            }
+//        ListNode head = ListNodeFactory.build("1->3->2->null");
+//        XYLog.d(head, "排序之后是");
+//        XYLog.d(solutions.sortList(head));
 
-            ListNode head = ListNodeFactory.build(builder.toString());
-            XYLog.d(head, "排序之后是");
-            XYLog.d(solutions.sortList(head));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+
+
 
 
         /**
