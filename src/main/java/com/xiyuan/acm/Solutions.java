@@ -5455,8 +5455,84 @@ public class Solutions {
 
 
 
+
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/merge-k-sorted-lists/
+     * @param lists: a list of ListNode
+     * @return: The head of one sorted list.
+     */
+    public ListNode mergeKLists(List<ListNode> lists) {
+        if (lists != null && lists.size() != 0) {
+            while (lists.size() != 1) {
+                for (int i = 0, size = lists.size(), newSize = (size  + 1) / 2; i < newSize; i++) {
+                    ListNode list0 = lists.get(i * 2);
+                    ListNode list1 = i * 2 + 1 == size? null: lists.get(i * 2 + 1);
+                    lists.set(i, merageTwoLists(list0, list1));
+                }
+                for (int size = lists.size(), newSize = (size  + 1) / 2, i = size - 1; i >= newSize; i--) {
+                    lists.remove(i);
+                }
+            }
+            return lists.get(0);
+        }
+        return null;
+    }
+
+    private ListNode merageTwoLists(ListNode list0, ListNode list1) {
+        ListNode newHead = new ListNode(0);
+        ListNode cur = newHead;
+        while (list0 != null && list1 != null) {
+            if (list0.val < list1.val) {
+                cur.next = list0;
+                list0 = list0.next;
+            }
+            else {
+                cur.next = list1;
+                list1 = list1.next;
+            }
+            cur = cur.next;
+        }
+
+        while (list0 != null) {
+            cur.next = list0;
+            list0 = list0.next;
+            cur = cur.next;
+        }
+        while (list1 != null) {
+            cur.next = list1;
+            list1 = list1.next;
+            cur = cur.next;
+        }
+        return newHead.next;
+    }
+
+
+
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         合并k个排序链表
+         合并k个排序链表，并且返回合并后的排序链表。尝试分析和描述其复杂度。
+
+         样例
+         给出3个排序链表[2->4->null,null,-1->null]，返回 -1->2->4->null
+         */
+//        ArrayList<ListNode> lists = new ArrayList<ListNode>();
+//        lists.add(ListNodeFactory.build("null"));
+//        lists.add(ListNodeFactory.build("-1->5->11->null"));
+//        lists.add(ListNodeFactory.build("null"));
+//        lists.add(ListNodeFactory.build("6->10->null"));
+//        XYLog.d(lists, "合并排序之后：");
+//        XYLog.d(solutions.mergeKLists(lists));
+
 
         /**
          带环链表 II
