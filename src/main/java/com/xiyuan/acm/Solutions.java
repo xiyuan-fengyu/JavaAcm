@@ -5,6 +5,7 @@ import com.xiyuan.acm.factory.TreeNodeFactory;
 import com.xiyuan.acm.model.ListNode;
 import com.xiyuan.acm.model.RandomListNode;
 import com.xiyuan.acm.model.TreeNode;
+import com.xiyuan.acm.util.GetInputFromUrl;
 import com.xiyuan.util.XYLog;
 
 import java.io.*;
@@ -5626,8 +5627,76 @@ public class Solutions {
 
 
 
+
+
+
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/word-break/
+     * @param s: A string s
+     * @param dict: A dictionary of words dict
+     */
+    public boolean wordBreak(String s, Set<String> dict) {
+        if (s != null && !s.isEmpty()) {
+            HashMap<String, Boolean> matrix = new HashMap<String, Boolean>();
+            return wordBreak(s, dict, matrix, 0, s.length());
+        }
+        return true;
+    }
+
+    private boolean wordBreak(String s, Set<String> dict, HashMap<String, Boolean> matrix, int i, int j) {
+        String key = i + "," + j;
+        if (matrix.containsKey(key)) {
+            return matrix.get(key);
+        }
+
+        String temp = s.substring(i, j);
+        if (dict.contains(temp)) {
+            matrix.put(key, true);
+            return true;
+        }
+
+        boolean flag = false;
+        for (int k = i + 1; k < j; k++) {
+            if (wordBreak(s, dict, matrix, i, k) && wordBreak(s, dict, matrix, k, j)) {
+                flag = true;
+                break;
+            }
+        }
+        matrix.put(key, flag);
+        return flag;
+    }
+
+
+
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         单词切分
+         给出一个字符串s和一个词典，判断字符串s是否可以被空格切分成一个或多个出现在字典中的单词。
+
+         样例
+         给出 s = "lintcode" ,dict = ["lint","code"]
+         返回 true 因为"lintcode"可以被空格切分成"lint code"
+         */
+        String s = "lintcode";
+        Set<String> dict = new HashSet<String>();
+        dict.add("lint");
+        dict.add("code");
+        XYLog.d(s, solutions.wordBreak(s, dict)? "": "不", "可以被", dict, "切分");
+
+        XYLog.d(GetInputFromUrl.get("https://lintcode.s3.amazonaws.com/testdata/107/data/21.in?Signature=JWxa7vVhnOxIB3ax6A%2BFHUxPSuQ%3D&Expires=1472813451&AWSAccessKeyId=AKIAIH3ZNX6LINDR57QA&response-content-type=application/octet-stream"));
+
+
+
+
 
         /**
          排序列表转换为平衡二叉查找树
