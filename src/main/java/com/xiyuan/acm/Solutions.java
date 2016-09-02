@@ -3,6 +3,7 @@ package com.xiyuan.acm;
 import com.xiyuan.acm.factory.ListNodeFactory;
 import com.xiyuan.acm.factory.TreeNodeFactory;
 import com.xiyuan.acm.model.ListNode;
+import com.xiyuan.acm.model.RandomListNode;
 import com.xiyuan.acm.model.TreeNode;
 import com.xiyuan.util.XYLog;
 
@@ -5515,8 +5516,91 @@ public class Solutions {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/copy-list-with-random-pointer/
+     * @param head: The head of linked list with a random pointer.
+     * @return: A new head of a deep copy of the list.
+     */
+    public RandomListNode copyRandomList(RandomListNode head) {
+        if (head == null) {
+            return null;
+        }
+        copyNext(head);
+        copyRandom(head);
+        return splitList(head);
+    }
+
+
+    private void copyNext(RandomListNode head) {
+        while (head != null) {
+            RandomListNode newNode = new RandomListNode(head.label);
+            newNode.random = head.random;
+            newNode.next = head.next;
+            head.next = newNode;
+            head = head.next.next;
+        }
+    }
+
+    private void copyRandom(RandomListNode head) {
+        while (head != null) {
+            if (head.next.random != null) {
+                head.next.random = head.random.next;
+            }
+            head = head.next.next;
+        }
+    }
+
+    private RandomListNode splitList(RandomListNode head) {
+        RandomListNode newHead = head.next;
+        while (head != null) {
+            RandomListNode temp = head.next;
+            head.next = temp.next;
+            head = head.next;
+            if (temp.next != null) {
+                temp.next = temp.next.next;
+            }
+        }
+        return newHead;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         (一脸懵逼)
+         复制带随机指针的链表
+         给出一个链表，每个节点包含一个额外增加的随机指针可以指向链表中的任何节点或空的节点。
+         返回一个深拷贝的链表。
+         */
+
+
+
+
+
 
         /**
          合并k个排序链表
