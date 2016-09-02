@@ -5439,6 +5439,10 @@ public class Solutions {
      *           if there is no cycle, return null
      */
     public ListNode detectCycle(ListNode head) {
+        if (head == null) {
+            return null;
+        }
+
         ListNode tail = findCircleTail(head);
         if (tail.next == null) {
             return null;
