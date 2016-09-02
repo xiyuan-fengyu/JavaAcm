@@ -5429,13 +5429,45 @@ public class Solutions {
     }
 
 
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/linked-list-cycle-ii/
+     * @param head: The first node of linked list.
+     * @return: The node where the cycle begins.
+     *           if there is no cycle, return null
+     */
+    public ListNode detectCycle(ListNode head) {
+        ListNode tail = findCircleTail(head);
+        if (tail.next == null) {
+            return null;
+        }
+        else {
+            return tail;
+        }
+    }
+
+
+
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
 
         /**
+         带环链表 II
+         给定一个链表，如果链表中存在环，则返回到链表中环的起始节点的值，如果没有环，返回null。
 
+         样例
+         给出 -21->10->4->5, tail connects to node index 1，返回10
          */
-
+//        ListNode head = new ListNode(-20);
+//        head.next = new ListNode(10);
+//        head.next.next = new ListNode(4);
+//        head.next.next.next = new ListNode(5);
+//        head.next.next.next.next = head.next;
+//        XYLog.d(head);
+//        XYLog.d(solutions.detectCycle(head));
 
 
 
