@@ -5257,8 +5257,113 @@ public class Solutions {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/reorder-list/
+     * @param head: The head of linked list.
+     * @return: void
+     */
+    public void reorderList(ListNode head) {
+        if (head != null && head.next != null) {
+            ListNode newHead = new ListNode(0);
+            ListNode cur = head;
+            while (cur != null) {
+                newHead.next = cur;
+                newHead = cur;
+
+                ListNode tempNext = cur.next;
+                newHead.next = popTail(tempNext);
+                newHead = newHead.next;
+
+                if (tempNext == newHead) {
+                    cur = null;
+                }
+                else {
+                    cur = tempNext;
+                }
+            }
+        }
+    }
+
+    private ListNode popTail(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+        else {
+            while (head.next.next != null) {
+                head = head.next;
+            }
+            ListNode tail = head.next;
+            head.next = null;
+            return tail;
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/remove-duplicates-from-sorted-array/
+     * @param nums: a array of integers
+     * @return : return an integer
+     */
+    public int removeDuplicates(int[] nums) {
+
+        return 0;
+    }
+
+
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         删除排序数组中的重复数字
+         给定一个排序数组，在原数组中删除重复出现的数字，使得每个元素只出现一次，并且返回新的数组的长度。
+         不要使用额外的数组空间，必须在原地没有额外空间的条件下完成。
+
+         样例
+         给出数组A =[1,1,2]，你的函数应该返回长度2，此时A=[1,2]。
+         */
+
+
+
+
+
+        /**
+         重排链表
+         给定一个单链表L: L0→L1→…→Ln-1→Ln,
+         重新排列后为：L0→Ln→L1→Ln-1→L2→Ln-2→…
+         必须在不改变节点值的情况下进行原地操作。
+
+         样例
+         给出链表 1->2->3->4->null，重新排列后为1->4->2->3->null。
+         */
+//        ListNode head = ListNodeFactory.build("1->2->3->4->null");
+//        XYLog.d(head, "重排后：");
+//        solutions.reorderList(head);
+//        XYLog.d(head);
+
+
+
 
         /**
          链表排序
