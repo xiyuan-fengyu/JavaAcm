@@ -5383,8 +5383,80 @@ public class Solutions {
     }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/linked-list-cycle/
+     * @param head: The first node of linked list.
+     * @return: True if it has a cycle, or false
+     */
+    public boolean hasCycle(ListNode head) {
+        if (head != null) {
+            ListNode tail = findCircleTail(head);
+            while (head != null) {
+                if (head == tail && tail.next != null) {
+                    return true;
+                }
+                head = head.next;
+            }
+        }
+        return false;
+    }
+
+    private ListNode findCircleTail(ListNode node) {
+        if (node.next != null) {
+            ListNode next = node.next;
+            node.next = null;
+            ListNode tail = findCircleTail(next);
+            node.next = next;
+            return tail;
+        }
+        else {
+            return node;
+        }
+    }
+
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+
+         */
+
+
+
+
+
+
+        /**
+         带环链表
+         给定一个链表，判断它是否有环。
+
+         样例
+         给出 -21->10->4->5, tail connects to node index 1，返回 true
+         */
+//        ListNode head = new ListNode(-20);
+//        head.next = new ListNode(10);
+//        head.next.next = new ListNode(4);
+//        head.next.next.next = new ListNode(5);
+//        head.next.next.next.next = null;
+//        XYLog.d(head, solutions.hasCycle(head)? "带环": "不带环");
+
+
+
 
         /**
          删除排序数组中的重复数字 II
