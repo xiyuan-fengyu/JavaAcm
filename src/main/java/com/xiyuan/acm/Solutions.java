@@ -5582,7 +5582,46 @@ public class Solutions {
 
 
 
+    /**
+     * http://www.lintcode.com/zh-cn/problem/convert-sorted-list-to-balanced-bst/
+     * @param head: The first node of linked list.
+     * @return: a tree node
+     */
+    public TreeNode sortedListToBST(ListNode head) {
+        if (head == null) {
+            return null;
+        }
 
+        ListNode middle = findMiddleAndSplit(head);
+        ListNode left = middle == head? null: head;
+        ListNode right = middle == null? null: middle.next;
+        middle.next = null;
+
+        TreeNode root = new TreeNode(middle.val);
+        root.left = sortedListToBST(left);
+        root.right = sortedListToBST(right);
+
+        return root;
+    }
+
+    private ListNode findMiddleAndSplit(ListNode head) {
+        ListNode fast = head.next;
+        while (fast != null) {
+            if (fast.next != null) {
+                fast = fast.next.next;
+            }
+            else {
+                fast = null;
+            }
+
+            ListNode next = head.next;
+            if (fast == null) {
+                head.next = null;
+            }
+            head = next;
+        }
+        return head;
+    }
 
 
 
@@ -5591,7 +5630,19 @@ public class Solutions {
         Solutions solutions = new Solutions();
 
         /**
-         (一脸懵逼)
+         排序列表转换为平衡二叉查找树
+         给出一个所有元素以升序排序的单链表，将它转换成一棵高度平衡的二分查找树
+         */
+        ListNode head = ListNodeFactory.build("1->2->3->4->5->6");
+        XYLog.d(head);
+        XYLog.d("转换为二叉查找树之后是：", solutions.sortedListToBST(head));
+
+
+
+
+
+        /**
+         (一脸懵逼,lintcode上面的检验也没有做好)
          复制带随机指针的链表
          给出一个链表，每个节点包含一个额外增加的随机指针可以指向链表中的任何节点或空的节点。
          返回一个深拷贝的链表。
