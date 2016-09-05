@@ -128,13 +128,14 @@ public class XYLog {
         StringBuilder buffer = new StringBuilder();
         for (int i = 0, len = ts.length; i < len; i++) {
             if (i == 0) {
-                buffer.append('[').append(ts[i]).append(", ");
+                buffer.append('[');
             }
-            else if (i == len - 1) {
-                buffer.append(ts[i]).append(']');
+            buffer.append(ts[i]);
+            if (i == len - 1) {
+                buffer.append(']');
             }
             else {
-                buffer.append(ts[i]).append(", ");
+                buffer.append(", ");
             }
         }
         return buffer.toString();
@@ -144,13 +145,14 @@ public class XYLog {
         StringBuilder buffer = new StringBuilder();
         for (int i = 0, len = ts.length; i < len; i++) {
             if (i == 0) {
-                buffer.append('[').append(ts[i]).append(", ");
+                buffer.append('[');
             }
-            else if (i == len - 1) {
-                buffer.append(ts[i]).append(']');
+            buffer.append(ts[i]);
+            if (i == len - 1) {
+                buffer.append(']');
             }
             else {
-                buffer.append(ts[i]).append(", ");
+                buffer.append(", ");
             }
         }
         return buffer.toString();
@@ -160,13 +162,14 @@ public class XYLog {
         StringBuilder buffer = new StringBuilder();
         for (int i = 0, len = ts.length; i < len; i++) {
             if (i == 0) {
-                buffer.append('[').append(ts[i]).append(", ");
+                buffer.append('[');
             }
-            else if (i == len - 1) {
-                buffer.append(ts[i]).append(']');
+            buffer.append(ts[i]);
+            if (i == len - 1) {
+                buffer.append(']');
             }
             else {
-                buffer.append(ts[i]).append(", ");
+                buffer.append(", ");
             }
         }
         return buffer.toString();
@@ -176,13 +179,14 @@ public class XYLog {
         StringBuilder buffer = new StringBuilder();
         for (int i = 0, len = ts.length; i < len; i++) {
             if (i == 0) {
-                buffer.append('[').append(ts[i]).append(", ");
+                buffer.append('[');
             }
-            else if (i == len - 1) {
-                buffer.append(ts[i]).append(']');
+            buffer.append(ts[i]);
+            if (i == len - 1) {
+                buffer.append(']');
             }
             else {
-                buffer.append(ts[i]).append(", ");
+                buffer.append(", ");
             }
         }
         return buffer.toString();
@@ -192,13 +196,14 @@ public class XYLog {
         StringBuilder buffer = new StringBuilder();
         for (int i = 0, len = ts.length; i < len; i++) {
             if (i == 0) {
-                buffer.append('[').append(ts[i]).append(", ");
+                buffer.append('[');
             }
-            else if (i == len - 1) {
-                buffer.append(ts[i]).append(']');
+            buffer.append(ts[i]);
+            if (i == len - 1) {
+                buffer.append(']');
             }
             else {
-                buffer.append(ts[i]).append(", ");
+                buffer.append(", ");
             }
         }
         return buffer.toString();
@@ -208,13 +213,14 @@ public class XYLog {
         StringBuilder buffer = new StringBuilder();
         for (int i = 0, len = ts.length; i < len; i++) {
             if (i == 0) {
-                buffer.append('[').append(ts[i]).append(", ");
+                buffer.append('[');
             }
-            else if (i == len - 1) {
-                buffer.append(ts[i]).append(']');
+            buffer.append(ts[i]);
+            if (i == len - 1) {
+                buffer.append(']');
             }
             else {
-                buffer.append(ts[i]).append(", ");
+                buffer.append(", ");
             }
         }
         return buffer.toString();
@@ -224,13 +230,14 @@ public class XYLog {
         StringBuilder buffer = new StringBuilder();
         for (int i = 0, len = ts.length; i < len; i++) {
             if (i == 0) {
-                buffer.append('[').append(ts[i]).append(", ");
+                buffer.append('[');
             }
-            else if (i == len - 1) {
-                buffer.append(ts[i]).append(']');
+            buffer.append(ts[i]);
+            if (i == len - 1) {
+                buffer.append(']');
             }
             else {
-                buffer.append(ts[i]).append(", ");
+                buffer.append(", ");
             }
         }
         return buffer.toString();
@@ -240,13 +247,14 @@ public class XYLog {
         StringBuilder buffer = new StringBuilder();
         for (int i = 0, len = ts.length; i < len; i++) {
             if (i == 0) {
-                buffer.append('[').append(ts[i]).append(", ");
+                buffer.append('[');
             }
-            else if (i == len - 1) {
-                buffer.append(ts[i]).append(']');
+            buffer.append(ts[i]);
+            if (i == len - 1) {
+                buffer.append(']');
             }
             else {
-                buffer.append(ts[i]).append(", ");
+                buffer.append(", ");
             }
         }
         return buffer.toString();
@@ -257,13 +265,14 @@ public class XYLog {
         for (int i = 0, len = ts.length; i < len; i++) {
             String str = anyToString(ts[i]);
             if (i == 0) {
-                buffer.append('[').append(str).append(", ");
+                buffer.append('[');
             }
-            else if (i == len - 1) {
-                buffer.append(str).append(']');
+            buffer.append(str);
+            if (i == len - 1) {
+                buffer.append(']');
             }
             else {
-                buffer.append(str).append(", ");
+                buffer.append(", ");
             }
         }
         return buffer.toString();
