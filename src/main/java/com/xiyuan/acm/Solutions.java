@@ -1,14 +1,10 @@
 package com.xiyuan.acm;
 
-import com.xiyuan.acm.factory.ListNodeFactory;
-import com.xiyuan.acm.factory.TreeNodeFactory;
 import com.xiyuan.acm.model.ListNode;
 import com.xiyuan.acm.model.RandomListNode;
 import com.xiyuan.acm.model.TreeNode;
-import com.xiyuan.acm.util.GetInputFromUrl;
 import com.xiyuan.util.XYLog;
 
-import java.io.*;
 import java.util.*;
 
 /**
@@ -5691,10 +5687,6 @@ public class Solutions {
         dict.add("lint");
         dict.add("code");
         XYLog.d(s, solutions.wordBreak(s, dict)? "": "不", "可以被", dict, "切分");
-
-        XYLog.d(GetInputFromUrl.get("https://lintcode.s3.amazonaws.com/testdata/107/data/21.in?Signature=JWxa7vVhnOxIB3ax6A%2BFHUxPSuQ%3D&Expires=1472813451&AWSAccessKeyId=AKIAIH3ZNX6LINDR57QA&response-content-type=application/octet-stream"));
-
-
 
 
 
