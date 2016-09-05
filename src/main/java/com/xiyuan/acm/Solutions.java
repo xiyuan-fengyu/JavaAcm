@@ -5638,36 +5638,40 @@ public class Solutions {
      * @param dict: A dictionary of words dict
      */
     public boolean wordBreak(String s, Set<String> dict) {
-        if (s != null && !s.isEmpty()) {
-            HashMap<String, Boolean> matrix = new HashMap<String, Boolean>();
-            return wordBreak(s, dict, matrix, 0, s.length());
-        }
-        return true;
-    }
-
-    private boolean wordBreak(String s, Set<String> dict, HashMap<String, Boolean> matrix, int i, int j) {
-        String key = i + "," + j;
-        if (matrix.containsKey(key)) {
-            return matrix.get(key);
-        }
-
-        String temp = s.substring(i, j);
-        if (dict.contains(temp)) {
-            matrix.put(key, true);
+        if (s == null || s.length() == 0) {
             return true;
         }
 
-        boolean flag = false;
-        for (int k = i + 1; k < j; k++) {
-            if (wordBreak(s, dict, matrix, i, k) && wordBreak(s, dict, matrix, k, j)) {
-                flag = true;
-                break;
+        int maxLength = getMaxLength(dict);
+        boolean[] canSegment = new boolean[s.length() + 1];
+
+        canSegment[0] = true;
+        for (int i = 1; i <= s.length(); i++) {
+            canSegment[i] = false;
+            for (int lastWordLength = 1;
+                 lastWordLength <= maxLength && lastWordLength <= i;
+                 lastWordLength++) {
+                if (!canSegment[i - lastWordLength]) {
+                    continue;
+                }
+                String word = s.substring(i - lastWordLength, i);
+                if (dict.contains(word)) {
+                    canSegment[i] = true;
+                    break;
+                }
             }
         }
-        matrix.put(key, flag);
-        return flag;
+
+        return canSegment[s.length()];
     }
 
+    private int getMaxLength(Set<String> dict) {
+        int maxLength = 0;
+        for (String word : dict) {
+            maxLength = Math.max(maxLength, word.length());
+        }
+        return maxLength;
+    }
 
 
 
@@ -5682,11 +5686,11 @@ public class Solutions {
          给出 s = "lintcode" ,dict = ["lint","code"]
          返回 true 因为"lintcode"可以被空格切分成"lint code"
          */
-        String s = "lintcode";
-        Set<String> dict = new HashSet<String>();
-        dict.add("lint");
-        dict.add("code");
-        XYLog.d(s, solutions.wordBreak(s, dict)? "": "不", "可以被", dict, "切分");
+//        String s = "lintcode";
+//        Set<String> dict = new HashSet<String>();
+//        dict.add("lint");
+//        dict.add("code");
+//        XYLog.d(s, solutions.wordBreak(s, dict)? "": "不", "可以被", dict, "切分");
 
 
 
