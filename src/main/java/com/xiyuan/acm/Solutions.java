@@ -5742,6 +5742,11 @@ public class Solutions {
      * @return: An integer, minimum path sum.
      */
     public int minimumTotal(int[][] triangle) {
+        if (triangle == null || triangle.length == 0) {
+            return 0;
+        }
+
+
 
         return 0;
     }
