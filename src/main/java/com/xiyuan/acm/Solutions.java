@@ -5675,8 +5675,79 @@ public class Solutions {
 
 
 
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/palindrome-partitioning-ii/
+     * @param s a string
+     * @return an integer
+     */
+    public int minCut(String s) {
+        if (s == null || s.isEmpty()) {
+            return 0;
+        }
+
+        int len = s.length();
+        int[] f = new int[len];
+        for (int i = 0; i < len; i++) {
+            if (isPalindrome(s, 0, i)) {
+                f[i] = 0;
+            }
+            else {
+                int tempMinCut = Integer.MAX_VALUE;
+                for (int j = i - 1; j > -1; j--) {
+                    if (isPalindrome(s, j + 1, i) && f[j] + 1 < tempMinCut) {
+                        tempMinCut = f[j] + 1;
+                    }
+                }
+                f[i] = tempMinCut;
+            }
+        }
+        return f[len - 1];
+    }
+
+    /**
+     * s的left到right部分是否回文(aba,aabbaa,abcba)
+     * @return
+     */
+    private boolean isPalindrome(String s, int left, int right) {
+        if (left == right) {
+            return true;
+        }
+
+        while (left <= right) {
+            if (s.charAt(left) != s.charAt(right)) {
+                return false;
+            }
+            left++;
+            right--;
+        }
+        return true;
+    }
+
+
+
+
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         分割回文串 II
+         给定一个字符串s，将s分割成一些子串，使每个子串都是回文。
+         返回s符合要求的的最少分割次数。
+
+         样例
+         比如，给出字符串s = "aab"，
+         返回 1， 因为进行一次分割可以将字符串s分割成["aa","b"]这样两个回文子串
+         */
+//        String str = "abcbaaba";
+//        XYLog.d(str, "经过", solutions.minCut(str), "次分割就能全部变成回文串");
+
+
 
         /**
          单词切分
