@@ -5858,14 +5858,157 @@ public class Solutions {
      * @return: The root of expression tree
      */
     public ExpressionTreeNode build(String[] expression) {
+        if (expression == null || expression.length == 0) {
+            return null;
+        }
+        List<Object> exps = new ArrayList<Object>();
+        Collections.addAll(exps, expression);
+        return buildExpTree(exps);
+    }
 
+    private ExpressionTreeNode buildExpTree(List<Object> exps) {
+        int leftBracketIndex = -1;
+        int rightBracketIndex = -1;
+        int leftBracketNum = 0;
+        int rightBracketNum = 0;
+
+        //处理所有的括号
+        for (int i = 0; ; ) {
+            if (i >= exps.size()) {
+                break;
+            }
+
+            Object item = exps.get(i);
+            if (item instanceof String) {
+                String itemStr = (String) item;
+                if (itemStr.equals("(")) {
+                    leftBracketNum++;
+                    if (leftBracketNum == 1) {
+                        leftBracketIndex = i;
+                    }
+                }
+                else if (itemStr.equals(")")) {
+                    rightBracketNum++;
+                    if (rightBracketNum == leftBracketNum) {
+                        rightBracketIndex = i;
+                        //将leftBracketIndex + 1到rightBracketIndex - 1之间的表达式转换为ExpressionTreeNode
+                        List<Object> subExps = exps.subList(leftBracketIndex + 1, rightBracketIndex);
+                        ExpressionTreeNode newNode = buildExpTree(subExps);
+                        if (exps.size() > leftBracketIndex) {
+                            exps.set(leftBracketIndex, newNode);
+                            exps.remove(leftBracketIndex + 1);
+                            if (newNode != null) {
+                                exps.remove(leftBracketIndex + 1);
+                            }
+                        }
+
+                        i = leftBracketIndex;
+                        leftBracketIndex = -1;
+                        rightBracketIndex = -1;
+                        leftBracketNum = 0;
+                        rightBracketNum = 0;
+                    }
+                }
+            }
+            i++;
+        }
+
+        //处理所有的乘号或除号
+        for (int i = 0; ; ) {
+            if (i >= exps.size()) {
+                break;
+            }
+
+            Object item = exps.get(i);
+            if (item instanceof String) {
+                String itemStr = (String) item;
+                if (itemStr.equals("*") || itemStr.equals("/")) {
+                    exps.set(i - 1, buildSimpleTree(exps.get(i - 1), itemStr, exps.get(i + 1)));
+                    exps.remove(i);
+                    exps.remove(i);
+                    i = i - 1;
+                }
+            }
+            i++;
+        }
+
+        //处理所有的加号或减号
+        for (int i = 0; ; ) {
+            if (i >= exps.size()) {
+                break;
+            }
+
+            Object item = exps.get(i);
+            if (item instanceof String) {
+                String itemStr = (String) item;
+                if (itemStr.equals("+") || itemStr.equals("-")) {
+                    exps.set(i - 1, buildSimpleTree(exps.get(i - 1), itemStr, exps.get(i + 1)));
+                    exps.remove(i);
+                    exps.remove(i);
+                    i = i - 1;
+                }
+            }
+
+            i++;
+        }
+
+        if (exps.size() > 0) {
+            Object item0 = exps.get(0);
+            if (item0 instanceof String) {
+                return new ExpressionTreeNode((String) item0);
+            }
+            else {
+                return (ExpressionTreeNode) exps.get(0);
+            }
+        }
         return null;
+    }
+
+    private ExpressionTreeNode buildSimpleTree(Object leftExp, String option, Object rightExp) {
+        ExpressionTreeNode left = null;
+        if (leftExp instanceof ExpressionTreeNode) {
+            left = (ExpressionTreeNode) leftExp;
+        }
+        else {
+            left = new ExpressionTreeNode((String) leftExp);
+        }
+
+        ExpressionTreeNode right = null;
+        if (rightExp instanceof ExpressionTreeNode) {
+            right = (ExpressionTreeNode) rightExp;
+        }
+        else {
+            right = new ExpressionTreeNode((String) rightExp);
+        }
+        ExpressionTreeNode newNode = new ExpressionTreeNode(option);
+        newNode.left = left;
+        newNode.right = right;
+        return newNode;
     }
 
 
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
 
+        /**
+         表达树构造
+         表达树是一个二叉树的结构，用于衡量特定的表达。所有表达树的叶子都有一个数字字符串值。而所有表达树的非叶子都有另一个操作字符串值。
+         给定一个表达数组，请构造该表达的表达树，并返回该表达树的根。
+
+         样例
+         对于 (2*6-(23+7)/(1+2)) 的表达（可表示为 ["2" "*" "6" "-" "(" "23" "+" "7" ")" "/" "(" "1" "+" "2" ")"]).
+         其表达树如下：
+                    -
+                 /    \
+                *      /
+              / \   /   \
+             2   6 +     +
+                  / \   / \
+                23   7 1   2
+         */
+////        String[] expression = {"(","(","(","(","(",")",")",")",")",")"};
+//        String[] expression = {"2","*","6","-","(","(","23","+","7",")","/","(","1","+","2",")", "-", "12", ")"};
+//        XYLog.d("表达式", expression, "的表达树为：", solutions.build(expression));
 
 
 
