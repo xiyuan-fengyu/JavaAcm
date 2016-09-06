@@ -6047,8 +6047,37 @@ public class Solutions {
     }
 
 
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/convert-expression-to-reverse-polish-notation/
+     * @param expression: A string array
+     * @return: The Reverse Polish notation of this expression
+     */
+    public ArrayList<String> convertToRPN(String[] expression) {
+
+        return null;
+    }
+
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         将表达式转换为逆波兰表达式
+         给定一个表达式字符串数组，返回该表达式的逆波兰表达式（即去掉括号）。
+
+         样例
+         对于 [3 - 4 + 5]的表达式（该表达式可表示为["3", "-", "4", "+", "5"]），返回 [3 4 - 5 +]（该表达式可表示为 ["3", "4", "-", "5", "+"]）。
+         */
+
+
+
+
+
+
+
 
         /**
          爬楼梯    实际上是一个1,1开头的斐波拉切数列,f[0] = 1, f[1] = 1, f[2] = 2, f[3] = 3...
