@@ -6024,8 +6024,47 @@ public class Solutions {
     }
 
 
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/climbing-stairs/
+     * @param n: An integer
+     * @return: An integer
+     */
+    public int climbStairs(int n) {
+        if (n == 0) {
+            return 1;
+        }
+
+        int a = 1;
+        int b = 1;
+        for (int i = 2; i < n + 1; i++) {
+            b += a;
+            a = b - a;
+        }
+        return b;
+    }
+
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         爬楼梯    实际上是一个1,1开头的斐波拉切数列,f[0] = 1, f[1] = 1, f[2] = 2, f[3] = 3...
+         假设你正在爬楼梯，需要n步你才能到达顶部。但每次你只能爬一步或者两步，你能有多少种不同的方法爬到楼顶部？
+
+         样例
+         比如n=3，1+1+1=1+2=2+1=3，共有3中不同的方法
+         返回 3
+         */
+//        int n = 3;
+//        XYLog.d("爬一个", n , "阶的台阶，一次可以爬1或2阶，一共有", solutions.climbStairs(n), "种方式");
+
+
+
+
+
 
         /**
          最小路径和
