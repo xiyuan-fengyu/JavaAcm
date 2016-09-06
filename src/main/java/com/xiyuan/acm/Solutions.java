@@ -2,6 +2,7 @@ package com.xiyuan.acm;
 
 import com.xiyuan.acm.model.ListNode;
 import com.xiyuan.acm.model.RandomListNode;
+import com.xiyuan.acm.model.Sudoku;
 import com.xiyuan.acm.model.TreeNode;
 import com.xiyuan.util.XYLog;
 
@@ -5779,8 +5780,98 @@ public class Solutions {
 
 
 
+
+
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/valid-sudoku/
+     * @param board: the board
+     @return: wether the Sudoku is valid
+     */
+    public boolean isValidSudoku(char[][] board) {
+        HashMap<Character, Boolean> rowExiste = new HashMap<Character, Boolean>();
+        HashMap<Character, Boolean> colExiste = new HashMap<Character, Boolean>();
+        //检测每一行/列
+        for (int i = 0; i < 9; i++) {
+            rowExiste.clear();
+            colExiste.clear();
+            for (int j = 0; j < 9; j++) {
+                char rowC = board[i][j];
+                if (isNumChar(rowC)) {
+                    if (rowExiste.containsKey(rowC)) {
+                        return false;
+                    }
+                    else {
+                        rowExiste.put(rowC, true);
+                    }
+                }
+
+                char colC = board[j][i];
+                if (isNumChar(colC)) {
+                    if (colExiste.containsKey(colC)) {
+                        return false;
+                    }
+                    else {
+                        colExiste.put(colC, true);
+                    }
+                }
+            }
+        }
+
+        //检查每一个九宫格
+        for (int i = 0; i < 9; i++) {
+            rowExiste.clear();
+
+            int startIndex = i / 3 * 9 + i % 3 * 3;
+            int startX = startIndex / 9;
+            int startY = startIndex % 9;
+            for (int j = 0; j < 3; j++) {
+                for (int k = 0; k < 3; k++) {
+                    char c = board[startX + j][startY + k];
+                    if (isNumChar(c)) {
+                        if (rowExiste.containsKey(c)) {
+                            return false;
+                        }
+                        else {
+                            rowExiste.put(c, true);
+                        }
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    private boolean isNumChar(char c) {
+        return c >= '1' && c <= '9';
+    }
+
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         判断数独是否合法
+         请判定一个数独是否有效。
+         该数独可能只填充了部分数字，其中缺少的数字用 . 表示。
+         注意事项
+         一个合法的数独（仅部分填充）并不一定是可解的。我们仅需使填充的空格有效即可。
+
+         什么是 数独？
+         http://sudoku.com.au/TheRules.aspx
+         http://baike.baidu.com/subview/961/10842669.htm
+         */
+//        String[] strs = {"..5.....6","....14...",".........",".....92..","5....2...",".......3.","...54....","3.....42.","...27.6.."};
+//        Sudoku sudoku = new Sudoku(strs);
+//        XYLog.d(sudoku.board, "\n", solutions.isValidSudoku(sudoku.board)? "": "不", "是合法的数独");
+
+
+
 
         /**
          数字三角形
