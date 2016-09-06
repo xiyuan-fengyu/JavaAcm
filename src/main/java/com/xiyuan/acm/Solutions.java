@@ -6212,8 +6212,158 @@ public class Solutions {
         }
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/building-outline/
+     * @param buildings: A list of lists of integers
+     * @return: Find the outline of those buildings
+     */
+    public ArrayList<ArrayList<Integer>> buildingOutline(int[][] buildings) {
+        ArrayList<ArrayList<Integer>> result = new ArrayList<ArrayList<Integer>>();
+        if (buildings != null && buildings.length > 0) {
+            for (int i = 0, lenI = buildings.length; i< lenI; i++) {
+                result.add(outline(buildings[i][0], buildings[i][1], buildings[i][2]));
+            }
+            mergeOutline(result);
+        }
+        return result;
+    }
+
+    private void mergeOutline(ArrayList<ArrayList<Integer>> outlines) {
+        boolean moreMerge = false;
+        ArrayList<ArrayList<Integer>> temp = new ArrayList<ArrayList<Integer>>();
+        do {
+            moreMerge = false;
+            for (ArrayList<Integer> item: outlines) {
+                if (temp.isEmpty()) {
+                    temp.add(item);
+                }
+                else {
+                    for (int i = 0; i < temp.size(); i++) {
+                        ArrayList<Integer> tempItem = temp.get(i);
+                        if (item.get(1) < tempItem.get(0) || item.get(0) > tempItem.get(1)
+                                || ((item.get(1) == tempItem.get(0) || item.get(0) == tempItem.get(1)) && item.get(2) != tempItem.get(2))) {
+                            //不相邻，item 在 tempItem 左边 或 右边
+                            //或者相邻，但高度不同
+                            if (i + 1 == temp.size()) {
+                                temp.add(item);
+                                break;
+                            }
+                        }
+                        else if ((Math.max(item.get(0), tempItem.get(0)) <= Math.min(item.get(1), tempItem.get(1))) && item.get(2) == tempItem.get(2)){
+                            //相邻或相交，且高度相同,直接合并成一个
+                            tempItem.set(0, Math.min(item.get(0), tempItem.get(0)));
+                            tempItem.set(1, Math.max(item.get(1), tempItem.get(1)));
+                            moreMerge = true;
+                            break;
+                        }
+                        else if (item.get(0) <= tempItem.get(0) && item.get(1) >= tempItem.get(1) && item.get(2) >= tempItem.get(2)) {
+                            //item 完全包含 tempItem
+                            tempItem.set(0, item.get(0));
+                            tempItem.set(1, item.get(1));
+                            tempItem.set(2, item.get(2));
+                            moreMerge = true;
+                            break;
+                        }
+                        else if (item.get(0) >= tempItem.get(0) && item.get(1) <= tempItem.get(1) && item.get(2) <= tempItem.get(2)) {
+                            //tempItem 完全包含 item
+                            break;
+                        }
+                        else if (item.get(2) > tempItem.get(2)) {
+                            //item 更高
+                            if (item.get(0) > tempItem.get(0)) {
+                                //item 在右边
+                                tempItem.set(1, item.get(0));
+                            }
+                            else {
+                                //item 在左边
+                                tempItem.set(0, item.get(1));
+                            }
+                            temp.add(item);
+                            moreMerge = true;
+                            break;
+                        }
+                        else {
+                            //tempItem 更高
+                            if (item.get(0) > tempItem.get(0)) {
+                                //item 在右边
+                                item.set(0, tempItem.get(1));
+                            }
+                            else {
+                                //item 在左边
+                                item.set(1, tempItem.get(0));
+                            }
+
+                            if (i + 1 == temp.size()) {
+                                temp.add(item);
+                                moreMerge = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
+            outlines.clear();
+            outlines.addAll(temp);
+            temp.clear();
+        } while (moreMerge);
+    }
+
+    private ArrayList<Integer> outline(int xStart, int xEnd, int height) {
+        ArrayList<Integer> result = new ArrayList<Integer>();
+        result.add(xStart);
+        result.add(xEnd);
+        result.add(height);
+        return result;
+    }
+
+
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         大楼轮廓
+         水平面上有 N 座大楼，每座大楼都是矩阵的形状，可以用三个数字表示 (start, end, height)，分别代表其在x轴上的起点，终点和高度。大楼之间从远处看可能会重叠，求出 N 座大楼的外轮廓线。
+         外轮廓线的表示方法为若干三元组，每个三元组包含三个数字 (start, end, height)，代表这段轮廓的起始位置，终止位置和高度。
+         注意事项
+         请注意合并同样高度的相邻轮廓，不同的轮廓线在x轴上不能有重叠。
+
+         样例
+         给出三座大楼：
+         [
+         [1, 3, 3],
+         [2, 4, 4],
+         [5, 6, 1]
+         ]
+         外轮廓线为：
+         [
+         [1, 2, 3],
+         [2, 4, 4],
+         [5, 6, 1]
+         ]
+         */
+        int[][] buildings = {
+                {1,5,9},{2,10,3},{7,14,9},{12,18,3},{16,20,9}
+        };
+        XYLog.d(buildings, "的外轮廓线为：", solutions.buildingOutline(buildings));
+
+
+
+
 
         /**
          将表达式转换为逆波兰表达式
