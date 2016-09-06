@@ -5746,9 +5746,34 @@ public class Solutions {
             return 0;
         }
 
+        int maxLevel = triangle.length;
+        int maxWidth = triangle[maxLevel - 1].length;
+        int[] f = new int[maxWidth];
+        int[] lastF = new int[maxWidth];
+        f[0] = triangle[0][0];
 
+        for (int i = 1; i < maxLevel; i++) {
+            for (int j = 0, width = i + 1; j < width; j++) {
+                lastF[j] = f[j];
+                if (j == 0) {
+                    f[j] = lastF[j] + triangle[i][j];
+                }
+                else if (j == i) {
+                    f[j] = lastF[j - 1] + triangle[i][j];
+                }
+                else {
+                    f[j] = Math.min(lastF[j - 1], lastF[j]) + triangle[i][j];
+                }
+            }
+        }
 
-        return 0;
+        int minTotal = Integer.MAX_VALUE;
+        for (int i = 0; i < maxWidth; i++) {
+            if (f[i] < minTotal) {
+                minTotal = f[i];
+            }
+        }
+        return minTotal;
     }
 
 
@@ -5773,14 +5798,13 @@ public class Solutions {
          ]
          从顶到底部的最小路径和为11 ( 2 + 3 + 5 + 1 = 11)。
          */
-        int[][] triangle = {
-                {2},
-                {3,4},
-                {6,5,7},
-                {4,1,8,3}
-        };
-        XYLog.d(triangle);
-
+//        int[][] triangle = {
+//                {2},
+//                {3,4},
+//                {6,5,7},
+//                {4,1,8,3}
+//        };
+//        XYLog.d(triangle, "的最小路径和为：", solutions.minimumTotal(triangle));
 
 
 
