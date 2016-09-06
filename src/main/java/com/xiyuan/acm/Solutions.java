@@ -5987,8 +5987,62 @@ public class Solutions {
     }
 
 
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/minimum-path-sum/
+     * @param grid: a list of lists of integers.
+     * @return: An integer, minimizes the sum of all numbers along its path
+     */
+    public int minPathSum(int[][] grid) {
+        if (grid == null || grid.length == 0) {
+            return 0;
+        }
+
+        int h = grid.length;
+        int w = grid[0].length;
+        int[][] f = new int[h][w];
+        f[0][0] = grid[0][0];
+        for (int i = 0; i < h; i++) {
+            for (int j = 0; j < w; j++) {
+                if (i == 0) {
+                    if (j > 0) {
+                        f[i][j] = f[i][j - 1] + grid[i][j];
+                    }
+                }
+                else {
+                    if (j == 0) {
+                        f[i][j] = f[i - 1][j] + grid[i][j];
+                    }
+                    else {
+                        f[i][j] = Math.min(f[i - 1][j], f[i][j - 1]) + grid[i][j];
+                    }
+                }
+            }
+        }
+        return f[h - 1][w - 1];
+    }
+
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         最小路径和
+         给定一个只含非负整数的m*n网格，找到一条从左上角到右下角的可以使数字和最小的路径
+         注意事项
+         你在同一时间只能向下或者向右移动一步
+
+         样例
+         1  2  3
+         4  5  6
+         7  8  9
+         从左上角1走到右下角的最短路径为1+2+3+6+9=21
+         */
+//        int[][] grid = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+//        XYLog.d("在", grid, "中，从左上角到右下角的最短路径和为：", solutions.minPathSum(grid));
+
+
 
         /**
          表达树构造
