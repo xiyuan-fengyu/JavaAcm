@@ -1,9 +1,7 @@
 package com.xiyuan.acm;
 
-import com.xiyuan.acm.model.ListNode;
-import com.xiyuan.acm.model.RandomListNode;
-import com.xiyuan.acm.model.Sudoku;
-import com.xiyuan.acm.model.TreeNode;
+import com.xiyuan.acm.factory.TreeNodeFactory;
+import com.xiyuan.acm.model.*;
 import com.xiyuan.util.XYLog;
 
 import java.util.*;
@@ -5852,8 +5850,25 @@ public class Solutions {
     }
 
 
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/expression-tree-build/
+     * @param expression: A string array
+     * @return: The root of expression tree
+     */
+    public ExpressionTreeNode build(String[] expression) {
+
+        return null;
+    }
+
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+
+
+
 
         /**
          判断数独是否合法
