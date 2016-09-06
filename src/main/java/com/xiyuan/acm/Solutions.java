@@ -6056,10 +6056,161 @@ public class Solutions {
      * @return: The Reverse Polish notation of this expression
      */
     public ArrayList<String> convertToRPN(String[] expression) {
+        if (expression == null || expression.length == 0) {
+            return null;
+        }
+        List<Object> exps = new ArrayList<Object>();
+        Collections.addAll(exps, expression);
+        Expression exp = buildExpression(exps);
+        return expressionToRpnList(exp);
+    }
 
+    private ArrayList<String> expressionToRpnList(Expression exp) {
+        ArrayList<String> result = new ArrayList<String>();
+        if (exp != null) {
+            if (exp.left != null && exp.right != null) {
+                ArrayList<String> left = expressionToRpnList(exp.left);
+                ArrayList<String> right = expressionToRpnList(exp.right);
+                result.addAll(left);
+                result.addAll(right);
+            }
+            result.add(exp.val);
+        }
+        return result;
+    }
+
+    private Expression buildExpression(List<Object> exps) {
+        int leftBracketIndex = -1;
+        int rightBracketIndex = -1;
+        int leftBracketNum = 0;
+        int rightBracketNum = 0;
+
+        //处理所有的括号
+        for (int i = 0; ; ) {
+            if (i >= exps.size()) {
+                break;
+            }
+
+            Object item = exps.get(i);
+            if (item instanceof String) {
+                String itemStr = (String) item;
+                if (itemStr.equals("(")) {
+                    leftBracketNum++;
+                    if (leftBracketNum == 1) {
+                        leftBracketIndex = i;
+                    }
+                }
+                else if (itemStr.equals(")")) {
+                    rightBracketNum++;
+                    if (rightBracketNum == leftBracketNum) {
+                        rightBracketIndex = i;
+                        //将leftBracketIndex + 1到rightBracketIndex - 1之间的表达式转换为ExpressionTreeNode
+                        List<Object> subExps = exps.subList(leftBracketIndex + 1, rightBracketIndex);
+                        Expression newNode = buildExpression(subExps);
+                        if (exps.size() > leftBracketIndex) {
+                            exps.set(leftBracketIndex, newNode);
+                            exps.remove(leftBracketIndex + 1);
+                            if (newNode != null) {
+                                exps.remove(leftBracketIndex + 1);
+                            }
+                        }
+
+                        i = leftBracketIndex;
+                        leftBracketIndex = -1;
+                        rightBracketIndex = -1;
+                        leftBracketNum = 0;
+                        rightBracketNum = 0;
+                    }
+                }
+            }
+            i++;
+        }
+
+        //处理所有的乘号或除号
+        for (int i = 0; ; ) {
+            if (i >= exps.size()) {
+                break;
+            }
+
+            Object item = exps.get(i);
+            if (item instanceof String) {
+                String itemStr = (String) item;
+                if (itemStr.equals("*") || itemStr.equals("/")) {
+                    exps.set(i - 1, buildSimpleExpression(exps.get(i - 1), itemStr, exps.get(i + 1)));
+                    exps.remove(i);
+                    exps.remove(i);
+                    i = i - 1;
+                }
+            }
+            i++;
+        }
+
+        //处理所有的加号或减号
+        for (int i = 0; ; ) {
+            if (i >= exps.size()) {
+                break;
+            }
+
+            Object item = exps.get(i);
+            if (item instanceof String) {
+                String itemStr = (String) item;
+                if (itemStr.equals("+") || itemStr.equals("-")) {
+                    exps.set(i - 1, buildSimpleExpression(exps.get(i - 1), itemStr, exps.get(i + 1)));
+                    exps.remove(i);
+                    exps.remove(i);
+                    i = i - 1;
+                }
+            }
+
+            i++;
+        }
+
+        if (exps.size() > 0) {
+            Object item0 = exps.get(0);
+            if (item0 instanceof String) {
+                return new Expression((String) item0);
+            }
+            else {
+                return (Expression) exps.get(0);
+            }
+        }
         return null;
     }
 
+    private Expression buildSimpleExpression(Object leftExp, String option, Object rightExp) {
+        Expression left = null;
+        if (leftExp instanceof Expression) {
+            left = (Expression) leftExp;
+        }
+        else {
+            left = new Expression((String) leftExp);
+        }
+
+        Expression right = null;
+        if (rightExp instanceof Expression) {
+            right = (Expression) rightExp;
+        }
+        else {
+            right = new Expression((String) rightExp);
+        }
+        Expression newNode = new Expression(option);
+        newNode.left = left;
+        newNode.right = right;
+        return newNode;
+    }
+
+    private class Expression {
+
+        public Expression left;
+
+        public Expression right;
+
+        public String val;
+
+        public Expression(String val) {
+            this.val = val;
+        }
+    }
 
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
@@ -6071,7 +6222,8 @@ public class Solutions {
          样例
          对于 [3 - 4 + 5]的表达式（该表达式可表示为["3", "-", "4", "+", "5"]），返回 [3 4 - 5 +]（该表达式可表示为 ["3", "4", "-", "5", "+"]）。
          */
-
+//        String[] exps = {"3", "-", "4", "*", "5"};
+//        XYLog.d(solutions.convertToRPN(exps));
 
 
 
