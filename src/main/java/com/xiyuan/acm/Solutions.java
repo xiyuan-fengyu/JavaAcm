@@ -1,7 +1,9 @@
 package com.xiyuan.acm;
 
-import com.xiyuan.acm.factory.TreeNodeFactory;
-import com.xiyuan.acm.model.*;
+import com.xiyuan.acm.model.ExpressionTreeNode;
+import com.xiyuan.acm.model.ListNode;
+import com.xiyuan.acm.model.RandomListNode;
+import com.xiyuan.acm.model.TreeNode;
 import com.xiyuan.util.XYLog;
 
 import java.util.*;
@@ -6233,107 +6235,92 @@ public class Solutions {
     public ArrayList<ArrayList<Integer>> buildingOutline(int[][] buildings) {
         ArrayList<ArrayList<Integer>> result = new ArrayList<ArrayList<Integer>>();
         if (buildings != null && buildings.length > 0) {
-            for (int i = 0, lenI = buildings.length; i< lenI; i++) {
-                result.add(outline(buildings[i][0], buildings[i][1], buildings[i][2]));
-            }
-            mergeOutline(result);
+
         }
         return result;
     }
 
-    private void mergeOutline(ArrayList<ArrayList<Integer>> outlines) {
-        boolean moreMerge = false;
-        ArrayList<ArrayList<Integer>> temp = new ArrayList<ArrayList<Integer>>();
-        do {
-            moreMerge = false;
-            for (ArrayList<Integer> item: outlines) {
-                if (temp.isEmpty()) {
-                    temp.add(item);
-                }
-                else {
-                    for (int i = 0; i < temp.size(); i++) {
-                        ArrayList<Integer> tempItem = temp.get(i);
-                        if (item.get(1) < tempItem.get(0) || item.get(0) > tempItem.get(1)
-                                || ((item.get(1) == tempItem.get(0) || item.get(0) == tempItem.get(1)) && item.get(2) != tempItem.get(2))) {
-                            //不相邻，item 在 tempItem 左边 或 右边
-                            //或者相邻，但高度不同
-                            if (i + 1 == temp.size()) {
-                                temp.add(item);
-                                break;
-                            }
-                        }
-                        else if ((Math.max(item.get(0), tempItem.get(0)) <= Math.min(item.get(1), tempItem.get(1))) && item.get(2) == tempItem.get(2)){
-                            //相邻或相交，且高度相同,直接合并成一个
-                            tempItem.set(0, Math.min(item.get(0), tempItem.get(0)));
-                            tempItem.set(1, Math.max(item.get(1), tempItem.get(1)));
-                            moreMerge = true;
-                            break;
-                        }
-                        else if (item.get(0) <= tempItem.get(0) && item.get(1) >= tempItem.get(1) && item.get(2) >= tempItem.get(2)) {
-                            //item 完全包含 tempItem
-                            tempItem.set(0, item.get(0));
-                            tempItem.set(1, item.get(1));
-                            tempItem.set(2, item.get(2));
-                            moreMerge = true;
-                            break;
-                        }
-                        else if (item.get(0) >= tempItem.get(0) && item.get(1) <= tempItem.get(1) && item.get(2) <= tempItem.get(2)) {
-                            //tempItem 完全包含 item
-                            break;
-                        }
-                        else if (item.get(2) > tempItem.get(2)) {
-                            //item 更高
-                            if (item.get(0) > tempItem.get(0)) {
-                                //item 在右边
-                                tempItem.set(1, item.get(0));
-                            }
-                            else {
-                                //item 在左边
-                                tempItem.set(0, item.get(1));
-                            }
-                            temp.add(item);
-                            moreMerge = true;
-                            break;
-                        }
-                        else {
-                            //tempItem 更高
-                            if (item.get(0) > tempItem.get(0)) {
-                                //item 在右边
-                                item.set(0, tempItem.get(1));
-                            }
-                            else {
-                                //item 在左边
-                                item.set(1, tempItem.get(0));
-                            }
+    private class OutlineHeap {
 
-                            if (i + 1 == temp.size()) {
-                                temp.add(item);
-                                moreMerge = true;
-                                break;
-                            }
-                        }
-                    }
-                }
+        private final ArrayList<Outline> datas = new ArrayList<Outline>();
+
+        public void push(Outline item) {
+            datas.add(item);
+            checkParent(datas.size() - 1);
+        }
+
+        private void checkParent(int index) {
+            Outline cur = datas.get(index);
+            Outline parent = getParent(index);
+            if (parent != null) {
+
             }
+        }
 
-            outlines.clear();
-            outlines.addAll(temp);
-            temp.clear();
-        } while (moreMerge);
+        private int getParentIndex(int index) {
+            if (index == 0) {
+                return -1;
+            }
+            else {
+                return (index - 1) / 2;
+            }
+        }
+
+        private int getLeftChildIndex(int index) {
+            return index * 2 + 1;
+        }
+
+        private int getRightChildIndex(int index) {
+            return index * 2 + 2;
+        }
+
+        private Outline getParent(int index) {
+            int parentIndex = getParentIndex(index);
+            if (parentIndex == -1 || parentIndex >= datas.size()) {
+                return null;
+            }
+            else {
+                return datas.get(index);
+            }
+        }
+
+        private Outline getLeftChild(int index) {
+            int leftIndex = getLeftChildIndex(index);
+            if (leftIndex >= datas.size()) {
+                return null;
+            }
+            else {
+                return datas.get(leftIndex);
+            }
+        }
+
+        private Outline getRightChild(int index) {
+            int rightIndex = getRightChildIndex(index);
+            if (rightIndex >= datas.size()) {
+                return null;
+            }
+            else {
+                return datas.get(rightIndex);
+            }
+        }
+
     }
 
-    private ArrayList<Integer> outline(int xStart, int xEnd, int height) {
-        ArrayList<Integer> result = new ArrayList<Integer>();
-        result.add(xStart);
-        result.add(xEnd);
-        result.add(height);
-        return result;
+    private class Outline {
+        public int start;
+        public int end;
+        public int height;
     }
 
 
 
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+//        ArrayList<ArrayList<Integer>> bs = new ArrayList<ArrayList<Integer>>();
+//        bs.add(solutions.outline(3, 5, 3));
+//        bs.add(solutions.outline(8, 10, 3));
+//        XYLog.d(solutions.findXI(bs,1, 0, bs.size() - 1));
 
         /**
          大楼轮廓
@@ -6356,12 +6343,12 @@ public class Solutions {
          [5, 6, 1]
          ]
          */
-        int[][] buildings = {
-                {1,5,9},{2,10,3},{7,14,9},{12,18,3},{16,20,9}
-        };
-        XYLog.d(buildings, "的外轮廓线为：", solutions.buildingOutline(buildings));
-
-
+        int[][] buildings = {{1,3,3},{2,4,4},{5,6,1},{3,5,8}};
+//        int[][] buildings = {{1,5,9},{2,10,3},{7,14,9},{12,18,3},{16,20,9}};
+//        int[][] buildings = {{2,982,227},{8,517,41},{3,146,173},{10,652,117},{9,743,344},{4,995,104},{1,159,123},{2,535,342},{6,122,57},{6,826,135},{9,748,81},{9,865,140},{3,423,332},{2,92,32},{4,507,252},{5,461,252},{1,74,36},{10,835,264},{2,511,206},{8,695,236},{4,768,354},{2,184,147},{10,564,69},{4,490,196},{2,889,241},{3,102,177},{2,609,251},{5,443,277},{7,39,208},{10,939,129},{6,45,94},{8,301,23},{3,557,89},{3,772,272},{3,637,16},{9,134,95},{9,35,27},{9,38,61},{3,702,307},{5,633,25},{6,567,142},{2,235,309},{2,804,84},{6,279,82},{7,902,12},{3,671,31},{3,269,293},{7,736,46},{2,331,200},{5,564,309},{8,312,221},{4,129,145},{5,655,298},{3,890,110},{5,906,125},{4,960,294},{1,2,347},{7,270,78},{8,132,348},{8,884,285},{10,392,93},{10,230,243},{1,933,119},{4,54,95},{4,649,81},{6,961,76},{8,274,354},{6,218,124},{5,134,347},{4,637,108},{10,126,319},{3,730,30},{2,438,292},{5,342,277},{9,922,270},{2,163,47},{4,874,50},{5,196,277},{10,828,310},{10,121,43},{3,26,93},{5,341,121},{9,925,73},{3,715,160},{3,512,95},{5,631,276},{3,65,288},{3,1000,74},{9,766,352},{4,957,159},{8,406,7},{2,504,242},{8,500,152},{3,238,5},{5,661,339},{9,116,76},{4,506,342},{1,44,354},{8,687,159},{2,270,209},{3,65,106},{5,738,310},{1,329,270},{8,740,328},{5,205,278},{8,584,237},{4,562,79},{2,544,73},{8,694,218},{3,568,210},{5,819,179},{8,952,344},{3,103,3},{10,51,39},{6,582,161},{9,392,260},{5,27,19},{9,207,270},{8,76,287},{4,863,126}};
+        XYLog.d(buildings, "\n的外轮廓线为：", solutions.buildingOutline(buildings));
+//        String arrStr = "[[1,3,3],[2,4,4],[5,6,1]]";
+//        XYLog.d(arrStr.replaceAll("\\[", "{").replaceAll("\\]", "}"));
 
 
 
