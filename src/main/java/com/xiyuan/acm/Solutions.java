@@ -6225,93 +6225,808 @@ public class Solutions {
 
 
 
+    //思路很容易理解，很容易实现，但是数据量很大后会超时
+    /**
+     * http://www.lintcode.com/zh-cn/problem/building-outline/
+     * @param buildings: A list of lists of integers
+     * @return: Find the outline of those buildings
+     */
+    public ArrayList<ArrayList<Integer>> buildingOutline0(int[][] buildings) {
+        ArrayList<ArrayList<Integer>> result = new ArrayList<ArrayList<Integer>>();
+        if (buildings != null && buildings.length > 0) {
+            Set<Integer> xs = new HashSet<Integer>();
+            for (int i = 0, lenI = buildings.length; i< lenI; i++) {
+                int[] building = buildings[i];
+                int startX = building[0];
+                int endX = building[1];
+                xs.add(startX);
+                xs.add(endX);
+            }
+
+            Object[] xsObjs = xs.toArray();
+            Arrays.sort(xsObjs);
+            for (int i = 1, lenI = xsObjs.length; i < lenI; i++) {
+                result.add(outline((Integer) xsObjs[i - 1], (Integer) xsObjs[i], 0));
+            }
+
+            for (int i = 0, lenI = buildings.length; i< lenI; i++) {
+                int[] building = buildings[i];
+                int startX = building[0];
+                int endX = building[1];
+                int h = building[2];
+                for (ArrayList<Integer> item: result) {
+                    if (item.get(1) <= startX) {
+
+                    }
+                    else if (item.get(0) >= startX && item.get(1) <= endX && item.get(2) < h) {
+                        item.set(2, h);
+                    }
+                    else if (item.get(0) >= endX) {
+                        break;
+                    }
+                }
+            }
+
+            for (int i = 1; i < result.size();) {
+                ArrayList<Integer> item1 = result.get(i);
+                if (item1.get(2) == 0) {
+                    result.remove(i);
+                }
+                else {
+                    ArrayList<Integer> item0 = result.get(i - 1);
+                    if (item0.get(1).equals(item1.get(0)) && item0.get(2).equals(item1.get(2))) {
+                        item0.set(1, item1.get(1));
+                        result.remove(i);
+                    }
+                    else {
+                        i++;
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+
+
+
+//    /**
+//     * 仍然超时
+//     * http://www.lintcode.com/zh-cn/problem/building-outline/
+//     * 利用对的思想，实现十分复杂
+//     * @param buildings: A list of lists of integers
+//     * @return: Find the outline of those buildings
+//     */
+//    public ArrayList<ArrayList<Integer>> buildingOutline1(int[][] buildings) {
+//        ArrayList<ArrayList<Integer>> result = new ArrayList<ArrayList<Integer>>();
+//        if (buildings != null && buildings.length > 0) {
+//            int len = buildings.length;
+//            int i = (len - 1) / 2;
+//            int j = i + 1;
+//            OutlineHeap heap = new OutlineHeap();
+//
+//            while (j < len) {
+//                {
+//                    int[] building = buildings[i];
+//                    heap.push(new Outline(building[0], building[1], building[2]));
+//                }
+//
+//                {
+//                    int[] building = buildings[j];
+//                    heap.push(new Outline(building[0], building[1], building[2]));
+//                }
+//                i--;
+//                j++;
+//            }
+//
+//            if (i == 0) {
+//                int[] building = buildings[i];
+//                heap.push(new Outline(building[0], building[1], building[2]));
+//            }
+//
+//            heap.visitAll(result);
+//        }
+//        return result;
+//    }
+//
+//    private class OutlineHeap {
+//
+//        private Outline root = null;
+//
+//        public void visitAll(ArrayList<ArrayList<Integer>> nodes) {
+//            visitAll(nodes, root);
+//            Collections.sort(nodes, new java.util.Comparator<ArrayList<Integer>>() {
+//                public int compare(ArrayList<Integer> o1, ArrayList<Integer> o2) {
+//                    return o1.get(0) - o2.get(0);
+//                }
+//            });
+//        }
+//
+//        private void visitAll(ArrayList<ArrayList<Integer>> nodes, Outline curRoot) {
+//            if (curRoot != null) {
+//                nodes.add(curRoot.toArrayList());
+//                visitAll(nodes, curRoot.left);
+//                visitAll(nodes, curRoot.right);
+//            }
+//        }
+//
+//        private void visitAllOutline(ArrayList<Outline> nodes, Outline curRoot) {
+//            if (curRoot != null) {
+//                nodes.add(curRoot);
+//                Outline left = curRoot.left;
+//                Outline right = curRoot.left;
+//                curRoot.left = null;
+//                curRoot.right = null;
+//                visitAllOutline(nodes, left);
+//                visitAllOutline(nodes, right);
+//            }
+//        }
+//
+//        private int i = 0;
+//
+//        public void push(Outline item) {
+//            XYLog.d("插入：", item);
+//            if (i == 31) {
+//                int ii = 1;
+//            }
+//            if (root == null) {
+//                root = item;
+//            }
+//            else {
+//                push(root, item);
+//            }
+//
+//            ExpressionTreeNode treeRoot = toTreeNode(root);
+//            XYLog.d(i, treeRoot);
+//            i++;
+//        }
+//
+//        private ExpressionTreeNode toTreeNode(Outline node) {
+//            if (node != null) {
+//                ExpressionTreeNode treeNode = new ExpressionTreeNode(" " + node.xStart + "," + node.xEnd + "," + node.height + " ");
+//                ExpressionTreeNode left = toTreeNode(node.left);
+//                ExpressionTreeNode right = toTreeNode(node.right);
+//                treeNode.left = left;
+//                treeNode.right = right;
+//                return  treeNode;
+//            }
+//            else {
+//                return null;
+//            }
+//        }
+//
+//
+//
+//        private void push(Outline curRoot, Outline item) {
+//            if (curRoot.xStart > item.xEnd) {
+//                addToLeft(curRoot, item);
+//            }
+//            else if (curRoot.xEnd < item.xStart) {
+//                addToRight(curRoot, item);
+//            }
+//            else if (curRoot.xStart == item.xEnd) {
+//                if (curRoot.height == item.height) {
+//                    curRoot.xStart = item.xStart;
+//                    //TODO 检测左子树
+//                    checkLeftChild(curRoot);
+//                }
+//                else {
+//                    addToLeft(curRoot, item);
+//                }
+//            }
+//            else if (curRoot.xEnd == item.xStart) {
+//                if (curRoot.height == item.height) {
+//                    curRoot.xEnd = item.xEnd;
+//                    //TODO 检测右子树
+//                    checkRightChild(curRoot);
+//                }
+//                else {
+//                    addToRight(curRoot, item);
+//                }
+//            }
+//            else if (item.xStart < curRoot.xStart && item.xEnd > curRoot.xStart && item.xEnd < curRoot.xEnd) {
+//                //item 在 curRoot 的左边，相交
+//                if (item.height < curRoot.height) {
+//                    item.xEnd = curRoot.xStart;
+//                    addToLeft(curRoot, item);
+//                }
+//                else if (item.height == curRoot.height) {
+//                    curRoot.xStart = item.xStart;
+//                    //TODO 检测左子树
+//                    checkLeftChild(curRoot);
+//
+//                }
+//                else {
+//                    curRoot.xStart = item.xEnd;
+//                    addToLeft(curRoot, item);
+//                }
+//            }
+//            else if (curRoot.xStart < item.xStart && curRoot.xEnd > item.xStart && item.xEnd > curRoot.xEnd) {
+//                //item 在 curRoot 的右边，相交
+//                if (item.height < curRoot.height) {
+//                    item.xStart = curRoot.xEnd;
+//                    addToRight(curRoot, item);
+//                }
+//                else if (item.height == curRoot.height) {
+//                    curRoot.xEnd = item.xEnd;
+//                    //TODO 检测右子树
+//                    checkRightChild(curRoot);
+//
+//                }
+//                else {
+//                    curRoot.xEnd = item.xStart;
+//                    addToRight(curRoot, item);
+//                }
+//            }
+//            else if (item.xStart <= curRoot.xStart && item.xEnd >= curRoot.xEnd) {
+//                //item 在x轴完全包括cur
+//                if (item.height >= curRoot.height) {
+//                    int oldXStart = curRoot.xStart;
+//                    int oldXEnd = curRoot.xEnd;
+//                    curRoot.xStart = item.xStart;
+//                    curRoot.xEnd = item.xEnd;
+//                    curRoot.height = item.height;
+//
+//                    ArrayList<Outline> cutList = new ArrayList<Outline>();
+//                    if (oldXStart > curRoot.xStart) {
+//                        //TODO 检测左子树
+//                        checkLeftChild(curRoot);
+//                        //TODO 检查左子树的右子树中是否有范围冲突的，如果有,则剪枝，并将减下来的重新加入
+//                        Outline tempParent = curRoot;
+//                        Outline tempChild = curRoot.left;
+//                        while (tempChild != null) {
+//                            if (tempChild.xEnd > curRoot.xStart || (tempChild.xEnd == curRoot.xStart && tempChild.height == curRoot.height)) {
+//                                tempParent.right = null;//剪枝
+//                                visitAllOutline(cutList, tempChild);
+//                                break;
+//                            }
+//                            else if (tempChild.right != null) {
+//                                tempParent = tempChild;
+//                                tempChild = tempParent.right;
+//                            }
+//                            else {
+//                                break;
+//                            }
+//                        }
+//
+//                    }
+//                    if (oldXEnd < curRoot.xEnd) {
+//                        //TODO 检测右子树
+//                        checkRightChild(curRoot);
+//                        //TODO 检查右子树的左子树中是否有范围冲突的，如果有,则剪枝，并将减下来的重新加入
+//                        Outline tempParent = curRoot;
+//                        Outline tempChild = curRoot.right;
+//                        while (tempChild != null) {
+//                            if (tempChild.xStart < curRoot.xEnd || (tempChild.xStart == curRoot.xEnd && tempChild.height == curRoot.height)) {
+//                                tempParent.left = null;//剪枝
+//                                visitAllOutline(cutList, tempChild);
+//                                break;
+//                            }
+//                            else if (tempChild.left != null) {
+//                                tempParent = tempChild;
+//                                tempChild = tempParent.left;
+//                            }
+//                            else {
+//                                break;
+//                            }
+//                        }
+//                    }
+//
+//                    if (!cutList.isEmpty()) {
+//                        for (Outline outline: cutList) {
+//                            push(curRoot, outline);
+//                        }
+//                    }
+//                }
+//                else {
+//                    addToLeft(curRoot, new Outline(item.xStart, curRoot.xStart, item.height));
+//                    addToRight(curRoot, new Outline(curRoot.xEnd, item.xEnd, item.height));
+//                }
+//            }
+//            else {
+//                //cur 在x轴完全包括item
+//                if (item.height > curRoot.height) {
+//                    Outline newL = new Outline(curRoot.xStart, item.xStart, curRoot.height);
+//                    Outline newR = new Outline(item.xEnd, curRoot.xEnd, curRoot.height);
+//                    curRoot.xStart = item.xStart;
+//                    curRoot.xEnd = item.xEnd;
+//                    curRoot.height = item.height;
+//                    addToLeft(curRoot, newL);
+//                    addToRight(curRoot, newR);
+//                }
+//            }
+//
+//        }
+//
+//        private void checkLeftChild(Outline curRoot) {
+//            if (curRoot != null && curRoot.left != null) {
+//                Outline leftChild = curRoot.left;
+//                if (leftChild.xEnd < curRoot.xStart) {
+//                    //相离
+//                }
+//                else if (leftChild.xEnd == curRoot.xStart) {
+//                    //相邻
+//                    if (leftChild.height == curRoot.height) {
+//                        //高度相同，将其与父节融合，然后从最左子节点找一个节点替代当前节点，然后检查该节点的左子树
+//                        //TODO 节点替换和检测
+//                        mergeAndReplaceWithChild(curRoot, leftChild);
+//                        checkChild(curRoot);
+//                    }
+//                }
+//                else if (leftChild.xEnd > curRoot.xStart && leftChild.xStart < curRoot.xStart) {
+//                    //相交
+//                    if (leftChild.height == curRoot.height) {
+//                        //高度相同，将其与父节融合，然后从最左子节点找一个节点替代当前节点，然后检查该节点的左子树
+//                        //TODO 节点替换和检测
+//                        mergeAndReplaceWithChild(curRoot, leftChild);
+//                        checkChild(curRoot);
+//                    }
+//                    else if (leftChild.height < curRoot.height) {
+//                        leftChild.xEnd = curRoot.xStart;
+//                    }
+//                    else {
+//                        curRoot.xStart = leftChild.xEnd;
+//                    }
+//                }
+//                else if (leftChild.xStart >= curRoot.xStart) {
+//                    //curRoot 包含 item
+//                    if (leftChild.height <= curRoot.height) {
+//                        //高度相同，将其与父节融合，然后从最左子节点找一个节点替代当前节点，然后检查该节点的左子树
+//                        //TODO 节点替换和检测
+//                        mergeAndReplaceWithChild(curRoot, leftChild);
+//                        checkChild(curRoot);
+//                    }
+//                    else {
+//                        curRoot.xStart = leftChild.xEnd;
+//                        addToLeft(leftChild, new Outline(curRoot.xStart, leftChild.xStart, curRoot.height));
+//                    }
+//                }
+//            }
+//        }
+//
+//        private void checkRightChild(Outline curRoot) {
+//            if (curRoot != null && curRoot.right != null) {
+//                Outline rightChild = curRoot.right;
+//                if (rightChild.xStart > curRoot.xEnd) {
+//                    //相离
+//                }
+//                else if (rightChild.xStart == curRoot.xEnd) {
+//                    //相邻
+//                    if (rightChild.height == curRoot.height) {
+//                        //高度相同，将其与父节融合，然后从最左子节点找一个节点替代当前节点，然后检查该节点的左子树
+//                        //TODO 节点替换和检测
+//                        mergeAndReplaceWithChild(curRoot, rightChild);
+//                        checkChild(curRoot);
+//                    }
+//                }
+//                else if (curRoot.xEnd > rightChild.xStart && rightChild.xEnd > curRoot.xEnd) {
+//                    //相交
+//                    if (rightChild.height == curRoot.height) {
+//                        //高度相同，将其与父节融合，然后从最左子节点找一个节点替代当前节点，然后检查该节点的左子树
+//                        //TODO 节点替换和检测
+//                        mergeAndReplaceWithChild(curRoot, rightChild);
+//                        checkChild(curRoot);
+//                    }
+//                    else if (rightChild.height < curRoot.height) {
+//                        rightChild.xStart = curRoot.xEnd;
+//                    }
+//                    else {
+//                        curRoot.xEnd = rightChild.xStart;
+//                    }
+//                }
+//                else if (rightChild.xEnd <= curRoot.xEnd) {
+//                    //curRoot 包含 item
+//                    if (rightChild.height <= curRoot.height) {
+//                        //高度相同，将其与父节融合，然后从最左子节点找一个节点替代当前节点，然后检查该节点的左子树
+//                        //TODO 节点替换和检测
+//                        mergeAndReplaceWithChild(curRoot, rightChild);
+//                        checkChild(curRoot);
+//                    }
+//                    else {
+//                        curRoot.xEnd = rightChild.xStart;
+//                        addToRight(rightChild, new Outline(rightChild.xEnd, curRoot.xEnd, curRoot.height));
+//                    }
+//                }
+//            }
+//        }
+//
+//        private void checkChild(Outline curRoot) {
+//            if (curRoot != null) {
+//                if (curRoot.left != null) {
+//                    checkLeftChild(curRoot);
+//                }
+//                if (curRoot.right != null) {
+//                    checkRightChild(curRoot);
+//                }
+//            }
+//        }
+//
+//        private void mergeAndReplaceWithChild(Outline curRoot, Outline child) {
+//            curRoot.xStart = Math.min(curRoot.xStart, child.xStart);
+//            curRoot.xEnd = Math.max(curRoot.xEnd, child.xEnd);
+//
+//            Outline tempRoot = null;
+//            Outline tempChild = null;
+//            if (child.left != null) {
+//                tempRoot = child.left;
+//                tempChild = tempRoot.left;
+//            }
+//            else if (child.right != null) {
+//                tempRoot = child.right;
+//                tempChild = tempRoot.left;
+//            }
+//
+//            if (tempRoot != null) {
+//                while (tempChild != null && tempChild.left != null) {
+//                    tempRoot = tempChild;
+//                    tempChild = tempRoot.left;
+//                }
+//
+//                if (tempChild == null) {
+//                    if (curRoot.left == child) {
+//                        curRoot.left = tempRoot;
+//                    }
+//                    else {
+//                        curRoot.right = tempRoot;
+//                    }
+//                }
+//                else {
+//                    tempRoot.left = tempChild.right;
+//
+//                    tempChild.left = child.left;
+//                    tempChild.right = child.right;
+//                    if (curRoot.left == child) {
+//                        curRoot.left = tempChild;
+//                    }
+//                    else {
+//                        curRoot.right = tempChild;
+//                    }
+//                }
+//            }
+//            else {
+//                if (curRoot.left == child) {
+//                    curRoot.left = null;
+//                }
+//                else {
+//                    curRoot.right = null;
+//                }
+//            }
+//        }
+//
+//        private void addToLeft(Outline curRoot, Outline item) {
+//            if (item.xStart >= item.xEnd) {
+//                return;
+//            }
+//            if (curRoot.left == null) {
+//                curRoot.left = item;
+//            }
+//            else {
+//                push(curRoot.left, item);
+//            }
+//        }
+//
+//        private void addToRight(Outline curRoot, Outline item) {
+//            if (item.xStart >= item.xEnd) {
+//                return;
+//            }
+//            if (curRoot.right == null) {
+//                curRoot.right = item;
+//            }
+//            else {
+//                push(curRoot.right, item);
+//            }
+//        }
+//
+//    }
+//
+//    private class Outline {
+//        public int xStart;
+//        public int xEnd;
+//        public int height;
+//
+//        public Outline left;
+//        public Outline right;
+//
+//        public Outline(int xStart, int xEnd, int height) {
+//            this.xEnd = xEnd;
+//            this.xStart = xStart;
+//            this.height = height;
+//        }
+//
+//        public ArrayList<Integer> toArrayList() {
+//            ArrayList<Integer> result = new ArrayList<Integer>();
+//            result.add(xStart);
+//            result.add(xEnd);
+//            result.add(height);
+//            return result;
+//        }
+//
+//        @Override
+//        public String toString() {
+//            return "(" + xStart + "," + xEnd + "," + height + ")";
+//        }
+//    }
+
+
+
 
 
 
     /**
      * http://www.lintcode.com/zh-cn/problem/building-outline/
+     * 利用一个维护x边界和高度的最大堆，用一个整数记录上一次输出轮廓的边界值。当新到来的边界和堆顶元素等高，且该元素是终止边界，则从堆中移除顶部元素，
+     * 之后如果堆顶元素高度小于新元素，则输出一个轮廓，否则不输出；当新元素更高的时候，将新元素添加到堆里面，
+     * 并输出一个轮廓（必须要堆中有元素，否则不输出轮廓）；如果遇到终止边界，且高度小于堆顶元素，则从堆中移除一个和终止边界等高的起始边界。
+     * 可以用一个HashMap来存储对应关系，用高度+边界类型作为key
      * @param buildings: A list of lists of integers
      * @return: Find the outline of those buildings
      */
     public ArrayList<ArrayList<Integer>> buildingOutline(int[][] buildings) {
         ArrayList<ArrayList<Integer>> result = new ArrayList<ArrayList<Integer>>();
         if (buildings != null && buildings.length > 0) {
+            int len = buildings.length;
 
+            ArrayList<Edge> edges = new ArrayList<Edge>();
+            for (int i = 0; i < len; i++) {
+                int[] building = buildings[i];
+                edges.add(new Edge(building[0], building[2], true, i));
+                edges.add(new Edge(building[1], building[2], false, i));
+            }
+            Collections.sort(edges, new java.util.Comparator<Edge>() {
+                public int compare(Edge item1, Edge item2) {
+                    if (item1.x != item2.x) {
+                        return item1.x - item2.x;
+                    }
+                    else if (item1.isStart == item2.isStart) {
+                        return item1.h - item2.h;
+                    }
+                    else {
+                        return item1.isStart? -1: 1;
+                    }
+                }
+            });
+
+            EdgeHeap heap = new EdgeHeap();
+            int lastX = 0;
+            for (Edge item: edges) {
+                if (heap.isEmpty()) {
+                    heap.push(item);
+                    lastX = item.x;
+                }
+                else if (item.isStart) {
+                    Edge top = heap.top();
+                    if (item.h > top.h) {
+                        addOutlineToResult(result, lastX, item.x, top.h);
+                        lastX = item.x;
+                    }
+                    heap.push(item);
+                }
+                else {
+                    heap.remove(item.id);
+                    if (heap.top() == null || item.h > heap.top().h) {
+                        addOutlineToResult(result, lastX, item.x, item.h);
+                        lastX = item.x;
+                    }
+                }
+            }
         }
         return result;
     }
 
-    private class OutlineHeap {
-
-        private Outline root = null;
-
-        public void push(Outline item) {
-            if (root == null) {
-                root = item;
-            }
-            else {
-                push(root, item);
-            }
+    private void addOutlineToResult(ArrayList<ArrayList<Integer>> result, int xStart, int xEnd, int height) {
+        if (xStart != xEnd) {
+            result.add(outline(xStart, xEnd, height));
         }
-
-        private void push(Outline curRoot, Outline item) {
-            if (curRoot.xStart > item.xEnd) {
-                if (curRoot.left == null) {
-                    curRoot.left = item;
-                }
-                else {
-                    push(curRoot.left, item);
-                }
-            }
-            else if (curRoot.xEnd < item.xStart) {
-                if (curRoot.right == null) {
-                    curRoot.right = item;
-                }
-                else {
-                    push(curRoot.right, item);
-                }
-            }
-            else if (curRoot.xStart == item.xEnd) {
-                if (curRoot.height == item.height) {
-                    curRoot.xStart = item.xStart;
-                    //TODO 检测左子树
-                }
-                else {
-                    if (curRoot.left == null) {
-                        curRoot.left = item;
-                    }
-                    else {
-                        push(curRoot.left, item);
-                    }
-                }
-            }
-            else if (curRoot.xEnd == item.xStart) {
-                if (curRoot.height == item.height) {
-                    curRoot.xEnd = item.xEnd;
-                    //TODO 检测右子树
-                }
-                else {
-                    if (curRoot.right == null) {
-                        curRoot.right = item;
-                    }
-                    else {
-                        push(curRoot.right, item);
-                    }
-                }
-            }
-
-
-        }
-
     }
 
-    private class Outline {
-        public int xStart;
-        public int xEnd;
-        public int height;
+    private ArrayList<Integer> outline(int xStart, int xEnd, int height) {
+        ArrayList<Integer> result = new ArrayList<Integer>();
+        result.add(xStart);
+        result.add(xEnd);
+        result.add(height);
+        return result;
+    }
 
-        public Outline left;
-        public Outline right;
+    private class EdgeHeap {
+
+        private ArrayList<Edge> datas = new ArrayList<Edge>();
+        private HashMap<Integer, Edge> edgeMap = new HashMap<Integer, Edge>();
+
+        public void push(Edge item) {
+            datas.add(item);
+            edgeMap.put(item.id, item);
+            checkParent(datas.size() - 1);
+        }
+
+        public Edge pop() {
+            int size = datas.size();
+            if (size == 0) {
+                return null;
+            }
+            else if (size == 1) {
+                return datas.remove(0);
+            }
+            else {
+                swape(0, size - 1);
+                Edge top = datas.remove(size - 1);
+                edgeMap.remove(top.id);
+                checkChild(0);
+                return top;
+            }
+        }
+
+        public Edge remove(int id) {
+            Edge item = edgeMap.get(id);
+            if (item != null) {
+                int size = datas.size();
+                int index = datas.indexOf(item);
+                swape(index, size - 1);
+                datas.remove(size - 1);
+                checkChild(index);
+            }
+            return item;
+        }
+
+        private void checkParent(int childIndex) {
+            if (childIndex != 0) {
+                int parentIndex = parentIndex(childIndex);
+                if (parentIndex > -1) {
+                    Edge child = datas.get(childIndex);
+                    Edge parent = datas.get(parentIndex);
+                    if (gt(child, parent)) {
+                        swape(childIndex, parentIndex);
+                        checkParent(parentIndex);
+                    }
+                }
+            }
+        }
+
+        private void checkChild(int parentIndex) {
+            int size = datas.size();
+            if (parentIndex > -1 && parentIndex < size) {
+                Edge parent = datas.get(parentIndex);
+
+                int lIndex = leftChildIndex(parentIndex);
+                int rIndex = rightChildIndex(parentIndex);
+                int maxIndex = size - 1;
+                if (lIndex <= maxIndex) {
+                    if (rIndex > maxIndex) {
+                        Edge left = datas.get(lIndex);
+                        if (gt(left, parent)) {
+                            swape(lIndex, parentIndex);
+                        }
+                    }
+                    else {
+                        Edge left = datas.get(lIndex);
+                        Edge right = datas.get(rIndex);
+                        if (gt(left, right)) {
+                            if (gt(left, parent)) {
+                                swape(lIndex, parentIndex);
+                                checkChild(lIndex);
+                            }
+                        }
+                        else {
+                            if (gt(right, parent)) {
+                                swape(rIndex, parentIndex);
+                                checkChild(rIndex);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private void swape(int index1, int index2) {
+            Edge item1 = datas.get(index1);
+            Edge item2 = datas.get(index2);
+            datas.set(index1, item2);
+            datas.set(index2, item1);
+        }
+
+        private boolean gt(Edge item1, Edge item2) {
+            if (item1.h != item2.h) {
+                return item1.h > item2.h;
+            }
+            else if (item1.x != item2.x) {
+                return item1.x < item2.x;
+            }
+            else {
+                return item1.isStart;
+            }
+        }
+
+        public Edge top() {
+            if (isEmpty()) {
+                return null;
+            }
+            else {
+                return datas.get(0);
+            }
+        }
+
+        public boolean isEmpty() {
+            return datas.isEmpty();
+        }
+
+        private int parentIndex(int index) {
+            return (index - 1) / 2;
+        }
+
+        private Edge parent(int index) {
+            int tempIndex = parentIndex(index);
+            if (tempIndex < 0 || tempIndex >= datas.size()) {
+                return null;
+            }
+            else {
+                return datas.get(tempIndex);
+            }
+        }
+
+        private int leftChildIndex(int index) {
+            return index * 2 + 1;
+        }
+
+        private Edge leftChild(int index) {
+            int tempIndex = leftChildIndex(index);
+            if (tempIndex < 0 || tempIndex >= datas.size()) {
+                return null;
+            }
+            else {
+                return datas.get(tempIndex);
+            }
+        }
+
+        private int rightChildIndex(int index) {
+            return index * 2 + 2;
+        }
+
+        private Edge rightChild(int index) {
+            int tempIndex = rightChildIndex(index);
+            if (tempIndex < 0 || tempIndex >= datas.size()) {
+                return null;
+            }
+            else {
+                return datas.get(tempIndex);
+            }
+        }
+    }
+
+    private class Edge {
+        public int x;
+        public int h;
+        public boolean isStart;
+        public Integer id;
+
+        public Edge(int x, int h, boolean isStart, int id) {
+            this.h = h;
+            this.isStart = isStart;
+            this.x = x;
+            this.id = id;
+        }
+
+        @Override
+        public String toString() {
+            return " " + x + "," + h + "," + isStart + " id=" + id;
+        }
+    }
+
+    private ExpressionTreeNode edgeHeapToTreeNode(EdgeHeap heap) {
+        if (heap == null || heap.datas.isEmpty()) {
+            return null;
+        }
+
+        return edgeHeapToTreeNode(heap, 0);
+    }
+
+    private ExpressionTreeNode edgeHeapToTreeNode(EdgeHeap heap, int index) {
+        if (index >= heap.datas.size()) {
+            return null;
+        }
+
+        ExpressionTreeNode treeNode = new ExpressionTreeNode(heap.datas.get(index).toString());
+        treeNode.left = edgeHeapToTreeNode(heap, index * 2 + 1);
+        treeNode.right = edgeHeapToTreeNode(heap, index * 2 + 2);
+        return treeNode;
     }
 
 
@@ -6345,12 +7060,16 @@ public class Solutions {
          [5, 6, 1]
          ]
          */
-        int[][] buildings = {{1,3,3},{2,4,4},{5,6,1},{3,5,8}};
+//        int[][] buildings = {{1,3,3},{2,4,4},{5,6,1},{3,5,8}};//
 //        int[][] buildings = {{1,5,9},{2,10,3},{7,14,9},{12,18,3},{16,20,9}};
-//        int[][] buildings = {{2,982,227},{8,517,41},{3,146,173},{10,652,117},{9,743,344},{4,995,104},{1,159,123},{2,535,342},{6,122,57},{6,826,135},{9,748,81},{9,865,140},{3,423,332},{2,92,32},{4,507,252},{5,461,252},{1,74,36},{10,835,264},{2,511,206},{8,695,236},{4,768,354},{2,184,147},{10,564,69},{4,490,196},{2,889,241},{3,102,177},{2,609,251},{5,443,277},{7,39,208},{10,939,129},{6,45,94},{8,301,23},{3,557,89},{3,772,272},{3,637,16},{9,134,95},{9,35,27},{9,38,61},{3,702,307},{5,633,25},{6,567,142},{2,235,309},{2,804,84},{6,279,82},{7,902,12},{3,671,31},{3,269,293},{7,736,46},{2,331,200},{5,564,309},{8,312,221},{4,129,145},{5,655,298},{3,890,110},{5,906,125},{4,960,294},{1,2,347},{7,270,78},{8,132,348},{8,884,285},{10,392,93},{10,230,243},{1,933,119},{4,54,95},{4,649,81},{6,961,76},{8,274,354},{6,218,124},{5,134,347},{4,637,108},{10,126,319},{3,730,30},{2,438,292},{5,342,277},{9,922,270},{2,163,47},{4,874,50},{5,196,277},{10,828,310},{10,121,43},{3,26,93},{5,341,121},{9,925,73},{3,715,160},{3,512,95},{5,631,276},{3,65,288},{3,1000,74},{9,766,352},{4,957,159},{8,406,7},{2,504,242},{8,500,152},{3,238,5},{5,661,339},{9,116,76},{4,506,342},{1,44,354},{8,687,159},{2,270,209},{3,65,106},{5,738,310},{1,329,270},{8,740,328},{5,205,278},{8,584,237},{4,562,79},{2,544,73},{8,694,218},{3,568,210},{5,819,179},{8,952,344},{3,103,3},{10,51,39},{6,582,161},{9,392,260},{5,27,19},{9,207,270},{8,76,287},{4,863,126}};
-        XYLog.d(buildings, "\n的外轮廓线为：", solutions.buildingOutline(buildings));
-//        String arrStr = "[[1,3,3],[2,4,4],[5,6,1]]";
+        int[][] buildings = {{3,7,78},{4,5,313},{5,8,401},{6,10,242},{7,8,600},{8,12,466},{9,14,528},{10,13,370},{11,13,642},{12,15,895},{13,16,733},{14,17,360},{15,16,272},{16,21,22},{17,21,605},{18,19,767},{19,22,901},{20,24,942},{21,25,416},{22,27,704},{23,25,497},{24,27,967},{25,30,459},{26,27,414},{27,28,208},{28,29,327},{29,31,773},{30,34,94},{31,35,409},{32,36,156},{33,35,195},{34,37,666},{35,39,156},{36,37,538},{37,38,777},{38,42,186},{39,41,108},{40,41,998},{41,45,660},{42,46,922},{43,47,978},{44,48,927},{45,48,583},{46,49,802},{47,49,210},{48,52,514},{49,51,580},{50,51,479},{51,56,857},{52,57,242},{53,58,753},{54,56,418},{55,56,440},{56,61,25},{57,62,529},{58,60,249},{59,64,619},{60,65,507},{61,66,682},{62,64,152},{63,66,45},{64,68,867},{65,68,383},{66,70,34},{67,69,678},{68,71,176},{69,73,230},{70,73,292},{71,73,211},{72,74,293},{73,74,27},{74,78,287},{75,77,478},{76,79,145},{77,79,178},{78,82,731},{79,80,702},{80,81,696},{81,85,614},{82,87,887},{83,88,71},{84,86,194},{85,87,244},{86,89,414},{87,89,244},{88,90,828}};
+        XYLog.d(buildings, "\n的外轮廓线为：");
+        XYLog.d(solutions.buildingOutline0(buildings));
+        XYLog.d(solutions.buildingOutline(buildings));
+//        String arrStr = "[[3,7,78],[4,5,313],[5,8,401],[6,10,242],[7,8,600],[8,12,466],[9,14,528],[10,13,370],[11,13,642],[12,15,895],[13,16,733],[14,17,360],[15,16,272],[16,21,22],[17,21,605],[18,19,767],[19,22,901],[20,24,942],[21,25,416],[22,27,704],[23,25,497],[24,27,967],[25,30,459],[26,27,414],[27,28,208],[28,29,327],[29,31,773],[30,34,94],[31,35,409],[32,36,156],[33,35,195],[34,37,666],[35,39,156],[36,37,538],[37,38,777],[38,42,186],[39,41,108],[40,41,998],[41,45,660],[42,46,922],[43,47,978],[44,48,927],[45,48,583],[46,49,802],[47,49,210],[48,52,514],[49,51,580],[50,51,479],[51,56,857],[52,57,242],[53,58,753],[54,56,418],[55,56,440],[56,61,25],[57,62,529],[58,60,249],[59,64,619],[60,65,507],[61,66,682],[62,64,152],[63,66,45],[64,68,867],[65,68,383],[66,70,34],[67,69,678],[68,71,176],[69,73,230],[70,73,292],[71,73,211],[72,74,293],[73,74,27],[74,78,287],[75,77,478],[76,79,145],[77,79,178],[78,82,731],[79,80,702],[80,81,696],[81,85,614],[82,87,887],[83,88,71],[84,86,194],[85,87,244],[86,89,414],[87,89,244],[88,90,828]]";
 //        XYLog.d(arrStr.replaceAll("\\[", "{").replaceAll("\\]", "}"));
+
+
 
 
 
