@@ -7261,8 +7261,66 @@ public class Solutions {
     }
 
 
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/jump-game/
+     * @param arr list of integers
+     * @return: The boolean answer
+     */
+    public boolean canJump(int[] arr) {
+        if (arr == null || arr.length == 0) {
+            return false;
+        }
+        return arr.length == 1 || canJump(arr, 0);
+    }
+
+    private boolean canJump(int[] arr, int startIndex) {
+        int maxStep = arr[startIndex];
+        int lastIndex = arr.length - 1;
+        if (maxStep == 0) {
+            return false;
+        }
+
+        for (int i = maxStep; i > 0; i--) {
+            if (i + startIndex >= lastIndex) {
+                return true;
+            }
+            else {
+                if (canJump(arr, startIndex + i)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         跳跃游戏   [中等]
+         给出一个非负整数数组，你最初定位在数组的第一个位置。　　　
+         数组中的每个元素代表你在那个位置可以跳跃的最大长度。　　　　
+         判断你是否能到达数组的最后一个位置。
+
+         样例
+         arr = [2,3,1,1,4]，返回 true.
+         arr = [3,2,1,0,4]，返回 false.
+         */
+//        int[] arr = {2,3,1,1,4};
+////        int[] arr = {3,2,1,0,4};
+//        XYLog.d("在\n", arr, "\n中，从起点", solutions.canJump(arr)? "": "不", "可以跳到终点");
+
+
+
+
+
 
         /**
          不同的路径 II  [容易]
