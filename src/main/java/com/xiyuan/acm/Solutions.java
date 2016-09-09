@@ -5,6 +5,7 @@ import com.xiyuan.acm.model.ExpressionTreeNode;
 import com.xiyuan.acm.model.ListNode;
 import com.xiyuan.acm.model.RandomListNode;
 import com.xiyuan.acm.model.TreeNode;
+import com.xiyuan.acm.util.DataUtil;
 import com.xiyuan.util.XYLog;
 
 import java.util.*;
@@ -6758,6 +6759,8 @@ public class Solutions {
      * 之后如果堆顶元素高度小于新元素，则输出一个轮廓，否则不输出；当新元素更高的时候，将新元素添加到堆里面，
      * 并输出一个轮廓（必须要堆中有元素，否则不输出轮廓）；如果遇到终止边界，且高度小于堆顶元素，则从堆中移除一个和终止边界等高的起始边界。
      * 可以用一个HashMap来存储对应关系，用高度+边界类型作为key
+     *
+     * Heap的实现上一定要避免递归父子检查，一定要改用循环，否则会超时
      * @param buildings: A list of lists of integers
      * @return: Find the outline of those buildings
      */
@@ -6803,7 +6806,7 @@ public class Solutions {
                 }
                 else {
                     heap.remove(item.id);
-                    if (heap.top() == null || item.h > heap.top().h) {
+                    if (heap.isEmpty() || item.h > heap.top().h) {
                         addOutlineToResult(result, lastX, item.x, item.h);
                         lastX = item.x;
                     }
@@ -6860,40 +6863,50 @@ public class Solutions {
             if (item != null) {
                 int size = datas.size();
                 int index = datas.indexOf(item);
-                swape(index, size - 1);
-                datas.remove(size - 1);
-                checkChild(index);
+                if (index == size - 1) {
+                    datas.remove(size - 1);
+                    edgeMap.remove(item.id);
+                }
+                else {
+                    swape(index, size - 1);
+                    datas.remove(size - 1);
+                    edgeMap.remove(item.id);
+                    checkChild(index);
+                    checkParent(index);
+                }
             }
             return item;
         }
 
         private void checkParent(int childIndex) {
-            if (childIndex != 0) {
-                int parentIndex = parentIndex(childIndex);
-                if (parentIndex > -1) {
-                    Edge child = datas.get(childIndex);
-                    Edge parent = datas.get(parentIndex);
-                    if (gt(child, parent)) {
-                        swape(childIndex, parentIndex);
-                        checkParent(parentIndex);
-                    }
+            int parentIndex = 0;
+            while ((parentIndex = parentIndex(childIndex)) > -1) {
+                Edge child = datas.get(childIndex);
+                Edge parent = datas.get(parentIndex);
+                if (gt(child, parent)) {
+                    swape(childIndex, parentIndex);
                 }
+                else {
+                    break;
+                }
+                childIndex = parentIndex;
             }
         }
 
         private void checkChild(int parentIndex) {
             int size = datas.size();
-            if (parentIndex > -1 && parentIndex < size) {
-                Edge parent = datas.get(parentIndex);
-
-                int lIndex = leftChildIndex(parentIndex);
+            int lIndex;
+            while ((lIndex = leftChildIndex(parentIndex)) < size) {
                 int rIndex = rightChildIndex(parentIndex);
-                int maxIndex = size - 1;
-                if (lIndex <= maxIndex) {
-                    if (rIndex > maxIndex) {
+                if (lIndex < size) {
+                    Edge parent = datas.get(parentIndex);
+                    if (rIndex >= size) {
                         Edge left = datas.get(lIndex);
                         if (gt(left, parent)) {
                             swape(lIndex, parentIndex);
+                        }
+                        else {
+                            break;
                         }
                     }
                     else {
@@ -6902,16 +6915,25 @@ public class Solutions {
                         if (gt(left, right)) {
                             if (gt(left, parent)) {
                                 swape(lIndex, parentIndex);
-                                checkChild(lIndex);
+                                parentIndex = lIndex;
+                            }
+                            else {
+                                break;
                             }
                         }
                         else {
                             if (gt(right, parent)) {
                                 swape(rIndex, parentIndex);
-                                checkChild(rIndex);
+                                parentIndex = rIndex;
+                            }
+                            else {
+                                break;
                             }
                         }
                     }
+                }
+                else {
+                    break;
                 }
             }
         }
@@ -6949,46 +6971,17 @@ public class Solutions {
         }
 
         private int parentIndex(int index) {
-            return (index - 1) / 2;
-        }
-
-        private Edge parent(int index) {
-            int tempIndex = parentIndex(index);
-            if (tempIndex < 0 || tempIndex >= datas.size()) {
-                return null;
-            }
-            else {
-                return datas.get(tempIndex);
-            }
+            return index == 0? -1: (index - 1) / 2;
         }
 
         private int leftChildIndex(int index) {
             return index * 2 + 1;
         }
 
-        private Edge leftChild(int index) {
-            int tempIndex = leftChildIndex(index);
-            if (tempIndex < 0 || tempIndex >= datas.size()) {
-                return null;
-            }
-            else {
-                return datas.get(tempIndex);
-            }
-        }
-
         private int rightChildIndex(int index) {
             return index * 2 + 2;
         }
 
-        private Edge rightChild(int index) {
-            int tempIndex = rightChildIndex(index);
-            if (tempIndex < 0 || tempIndex >= datas.size()) {
-                return null;
-            }
-            else {
-                return datas.get(tempIndex);
-            }
-        }
     }
 
     private class Edge {
@@ -7062,12 +7055,10 @@ public class Solutions {
          */
 //        int[][] buildings = {{1,3,3},{2,4,4},{5,6,1},{3,5,8}};//
 //        int[][] buildings = {{1,5,9},{2,10,3},{7,14,9},{12,18,3},{16,20,9}};
-        int[][] buildings = {{3,7,78},{4,5,313},{5,8,401},{6,10,242},{7,8,600},{8,12,466},{9,14,528},{10,13,370},{11,13,642},{12,15,895},{13,16,733},{14,17,360},{15,16,272},{16,21,22},{17,21,605},{18,19,767},{19,22,901},{20,24,942},{21,25,416},{22,27,704},{23,25,497},{24,27,967},{25,30,459},{26,27,414},{27,28,208},{28,29,327},{29,31,773},{30,34,94},{31,35,409},{32,36,156},{33,35,195},{34,37,666},{35,39,156},{36,37,538},{37,38,777},{38,42,186},{39,41,108},{40,41,998},{41,45,660},{42,46,922},{43,47,978},{44,48,927},{45,48,583},{46,49,802},{47,49,210},{48,52,514},{49,51,580},{50,51,479},{51,56,857},{52,57,242},{53,58,753},{54,56,418},{55,56,440},{56,61,25},{57,62,529},{58,60,249},{59,64,619},{60,65,507},{61,66,682},{62,64,152},{63,66,45},{64,68,867},{65,68,383},{66,70,34},{67,69,678},{68,71,176},{69,73,230},{70,73,292},{71,73,211},{72,74,293},{73,74,27},{74,78,287},{75,77,478},{76,79,145},{77,79,178},{78,82,731},{79,80,702},{80,81,696},{81,85,614},{82,87,887},{83,88,71},{84,86,194},{85,87,244},{86,89,414},{87,89,244},{88,90,828}};
-        XYLog.d(buildings, "\n的外轮廓线为：");
-        XYLog.d(solutions.buildingOutline0(buildings));
+//        int[][] buildings = {{3,7,78},{4,5,313},{5,8,401},{6,10,242},{7,8,600},{8,12,466},{9,14,528},{10,13,370},{11,13,642},{12,15,895},{13,16,733},{14,17,360},{15,16,272},{16,21,22},{17,21,605},{18,19,767},{19,22,901},{20,24,942},{21,25,416},{22,27,704},{23,25,497},{24,27,967},{25,30,459},{26,27,414},{27,28,208},{28,29,327},{29,31,773},{30,34,94},{31,35,409},{32,36,156},{33,35,195},{34,37,666},{35,39,156},{36,37,538},{37,38,777},{38,42,186},{39,41,108},{40,41,998},{41,45,660},{42,46,922},{43,47,978},{44,48,927},{45,48,583},{46,49,802},{47,49,210},{48,52,514},{49,51,580},{50,51,479},{51,56,857},{52,57,242},{53,58,753},{54,56,418},{55,56,440},{56,61,25},{57,62,529},{58,60,249},{59,64,619},{60,65,507},{61,66,682},{62,64,152},{63,66,45},{64,68,867},{65,68,383},{66,70,34},{67,69,678},{68,71,176},{69,73,230},{70,73,292},{71,73,211},{72,74,293},{73,74,27},{74,78,287},{75,77,478},{76,79,145},{77,79,178},{78,82,731},{79,80,702},{80,81,696},{81,85,614},{82,87,887},{83,88,71},{84,86,194},{85,87,244},{86,89,414},{87,89,244},{88,90,828}};
+        int[][] buildings = DataUtil.getTwoDimensArr("data/building-outline-95.in", 3);
+//        XYLog.d(solutions.buildingOutline0(buildings));
         XYLog.d(solutions.buildingOutline(buildings));
-//        String arrStr = "[[3,7,78],[4,5,313],[5,8,401],[6,10,242],[7,8,600],[8,12,466],[9,14,528],[10,13,370],[11,13,642],[12,15,895],[13,16,733],[14,17,360],[15,16,272],[16,21,22],[17,21,605],[18,19,767],[19,22,901],[20,24,942],[21,25,416],[22,27,704],[23,25,497],[24,27,967],[25,30,459],[26,27,414],[27,28,208],[28,29,327],[29,31,773],[30,34,94],[31,35,409],[32,36,156],[33,35,195],[34,37,666],[35,39,156],[36,37,538],[37,38,777],[38,42,186],[39,41,108],[40,41,998],[41,45,660],[42,46,922],[43,47,978],[44,48,927],[45,48,583],[46,49,802],[47,49,210],[48,52,514],[49,51,580],[50,51,479],[51,56,857],[52,57,242],[53,58,753],[54,56,418],[55,56,440],[56,61,25],[57,62,529],[58,60,249],[59,64,619],[60,65,507],[61,66,682],[62,64,152],[63,66,45],[64,68,867],[65,68,383],[66,70,34],[67,69,678],[68,71,176],[69,73,230],[70,73,292],[71,73,211],[72,74,293],[73,74,27],[74,78,287],[75,77,478],[76,79,145],[77,79,178],[78,82,731],[79,80,702],[80,81,696],[81,85,614],[82,87,887],[83,88,71],[84,86,194],[85,87,244],[86,89,414],[87,89,244],[88,90,828]]";
-//        XYLog.d(arrStr.replaceAll("\\[", "{").replaceAll("\\]", "}"));
 
 
 
