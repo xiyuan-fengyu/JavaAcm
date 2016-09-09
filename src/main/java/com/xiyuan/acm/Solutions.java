@@ -1,10 +1,7 @@
 package com.xiyuan.acm;
 
 import com.xiyuan.acm.factory.TreeNodeFactory;
-import com.xiyuan.acm.model.ExpressionTreeNode;
-import com.xiyuan.acm.model.ListNode;
-import com.xiyuan.acm.model.RandomListNode;
-import com.xiyuan.acm.model.TreeNode;
+import com.xiyuan.acm.model.*;
 import com.xiyuan.acm.util.DataUtil;
 import com.xiyuan.util.XYLog;
 
@@ -6998,10 +6995,104 @@ public class Solutions {
         }
 
         @Override
+        public int hashCode() {
+            return id;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == null) {
+                return false;
+            }
+
+            if (this == obj) {
+                return true;
+            }
+            return obj instanceof Edge && ((Edge) obj).id.equals(this.id);
+        }
+
+        @Override
         public String toString() {
             return " " + x + "," + h + "," + isStart + " id=" + id;
         }
     }
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/building-outline/
+     * 使用重新实现的BasicHeap
+     * @param buildings: A list of lists of integers
+     * @return: Find the outline of those buildings
+     */
+    public ArrayList<ArrayList<Integer>> buildingOutline2(int[][] buildings) {
+        ArrayList<ArrayList<Integer>> result = new ArrayList<ArrayList<Integer>>();
+        if (buildings != null && buildings.length > 0) {
+            int len = buildings.length;
+
+            ArrayList<Edge> edges = new ArrayList<Edge>();
+            for (int i = 0; i < len; i++) {
+                int[] building = buildings[i];
+                edges.add(new Edge(building[0], building[2], true, i));
+                edges.add(new Edge(building[1], building[2], false, i));
+            }
+            Collections.sort(edges, new java.util.Comparator<Edge>() {
+                public int compare(Edge item1, Edge item2) {
+                    if (item1.x != item2.x) {
+                        return item1.x - item2.x;
+                    }
+                    else if (item1.isStart == item2.isStart) {
+                        return item1.h - item2.h;
+                    }
+                    else {
+                        return item1.isStart? -1: 1;
+                    }
+                }
+            });
+
+            BasicHeap<Edge> heap = new BasicHeap<>(new java.util.Comparator<Edge>() {
+                @Override
+                public int compare(Edge item1, Edge item2) {
+                    if (item1.h != item2.h) {
+                        return item2.h - item1.h;
+                    }
+                    else if (item1.x != item2.x) {
+                        return item2.x - item1.x;
+                    }
+                    else {
+                        return item1.isStart? 1: -1;
+                    }
+                }
+            });
+            int lastX = 0;
+            for (Edge item: edges) {
+                if (heap.isEmpty()) {
+                    heap.push(item);
+                    lastX = item.x;
+                }
+                else if (item.isStart) {
+                    Edge top = heap.top();
+                    if (item.h > top.h) {
+                        addOutlineToResult(result, lastX, item.x, top.h);
+                        lastX = item.x;
+                    }
+                    heap.push(item);
+                }
+                else {
+                    heap.remove(item);
+                    if (heap.isEmpty() || item.h > heap.top().h) {
+                        addOutlineToResult(result, lastX, item.x, item.h);
+                        lastX = item.x;
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+
+
+
 
     private ExpressionTreeNode edgeHeapToTreeNode(EdgeHeap heap) {
         if (heap == null || heap.datas.isEmpty()) {
@@ -7055,12 +7146,22 @@ public class Solutions {
          */
 ////        int[][] buildings = {{1,3,3},{2,4,4},{5,6,1},{3,5,8}};//
 ////        int[][] buildings = {{1,5,9},{2,10,3},{7,14,9},{12,18,3},{16,20,9}};
-////        int[][] buildings = {{3,7,78},{4,5,313},{5,8,401},{6,10,242},{7,8,600},{8,12,466},{9,14,528},{10,13,370},{11,13,642},{12,15,895},{13,16,733},{14,17,360},{15,16,272},{16,21,22},{17,21,605},{18,19,767},{19,22,901},{20,24,942},{21,25,416},{22,27,704},{23,25,497},{24,27,967},{25,30,459},{26,27,414},{27,28,208},{28,29,327},{29,31,773},{30,34,94},{31,35,409},{32,36,156},{33,35,195},{34,37,666},{35,39,156},{36,37,538},{37,38,777},{38,42,186},{39,41,108},{40,41,998},{41,45,660},{42,46,922},{43,47,978},{44,48,927},{45,48,583},{46,49,802},{47,49,210},{48,52,514},{49,51,580},{50,51,479},{51,56,857},{52,57,242},{53,58,753},{54,56,418},{55,56,440},{56,61,25},{57,62,529},{58,60,249},{59,64,619},{60,65,507},{61,66,682},{62,64,152},{63,66,45},{64,68,867},{65,68,383},{66,70,34},{67,69,678},{68,71,176},{69,73,230},{70,73,292},{71,73,211},{72,74,293},{73,74,27},{74,78,287},{75,77,478},{76,79,145},{77,79,178},{78,82,731},{79,80,702},{80,81,696},{81,85,614},{82,87,887},{83,88,71},{84,86,194},{85,87,244},{86,89,414},{87,89,244},{88,90,828}};
+//        int[][] buildings = {{3,7,78},{4,5,313},{5,8,401},{6,10,242},{7,8,600},{8,12,466},{9,14,528},{10,13,370},{11,13,642},{12,15,895},{13,16,733},{14,17,360},{15,16,272},{16,21,22},{17,21,605},{18,19,767},{19,22,901},{20,24,942},{21,25,416},{22,27,704},{23,25,497},{24,27,967},{25,30,459},{26,27,414},{27,28,208},{28,29,327},{29,31,773},{30,34,94},{31,35,409},{32,36,156},{33,35,195},{34,37,666},{35,39,156},{36,37,538},{37,38,777},{38,42,186},{39,41,108},{40,41,998},{41,45,660},{42,46,922},{43,47,978},{44,48,927},{45,48,583},{46,49,802},{47,49,210},{48,52,514},{49,51,580},{50,51,479},{51,56,857},{52,57,242},{53,58,753},{54,56,418},{55,56,440},{56,61,25},{57,62,529},{58,60,249},{59,64,619},{60,65,507},{61,66,682},{62,64,152},{63,66,45},{64,68,867},{65,68,383},{66,70,34},{67,69,678},{68,71,176},{69,73,230},{70,73,292},{71,73,211},{72,74,293},{73,74,27},{74,78,287},{75,77,478},{76,79,145},{77,79,178},{78,82,731},{79,80,702},{80,81,696},{81,85,614},{82,87,887},{83,88,71},{84,86,194},{85,87,244},{86,89,414},{87,89,244},{88,90,828}};
 //        int[][] buildings = DataUtil.getTwoDimensArr("data/building-outline-95.in", 3);
-////        XYLog.d(solutions.buildingOutline0(buildings));
 //        XYLog.d(solutions.buildingOutline(buildings));
-
-
+//        XYLog.d(solutions.buildingOutline2(buildings));
+        //对比两组结果是否完全一致
+//        ArrayList<ArrayList<Integer>> result = solutions.buildingOutline(buildings);
+//        ArrayList<ArrayList<Integer>> result2 = solutions.buildingOutline2(buildings);
+//        for (int i = 0, size = result.size(); i < size; i++) {
+//            ArrayList<Integer> item = result.get(i);
+//            ArrayList<Integer> item2 = result2.get(i);
+//            if (!item.get(0).equals(item2.get(0))
+//                    || !item.get(1).equals(item2.get(1))
+//                    || !item.get(2).equals(item2.get(2))) {
+//                XYLog.d(i + ": ", item, "\t", item2);
+//            }
+//        }
 
 
 
