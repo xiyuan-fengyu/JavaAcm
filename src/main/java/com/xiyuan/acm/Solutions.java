@@ -7211,24 +7211,12 @@ public class Solutions {
     public int uniquePaths(int m, int n) {
         if (m > 0 && n > 0) {
             int[] f = new int[n];
-            int[] last = new int[n];
             f[0] = 1;
             for (int i = 0; i < m; i ++) {
+                int prev = 0;
                 for (int j = 0; j < n; j++) {
-                    if (i == 0) {
-                        if (j > 0) {
-                            f[j] = f[j - 1];
-                        }
-                    }
-                    else {
-                        if (j == 0) {
-                            f[j] = last[j];
-                        }
-                        else {
-                            f[j] = f[j - 1] + last[j];
-                        }
-                    }
-                    last[j] = f[j];
+                    f[j] += prev;
+                    prev = f[j];
                 }
             }
             return f[n- 1];
@@ -7239,8 +7227,67 @@ public class Solutions {
 
 
 
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/unique-paths-ii/
+     * @param grid: A list of lists of integers
+     * @return: An integer
+     */
+    public int uniquePathsWithObstacles(int[][] grid) {
+        if (grid == null || grid.length == 0) {
+            return 0;
+        }
+
+        int m = grid.length;
+        int n = grid[0].length;
+        if (m > 0 && n > 0) {
+            int[] f = new int[n];
+            f[0] = 1;
+            for (int i = 0; i < m; i ++) {
+                int prev = 0;
+                for (int j = 0; j < n; j++) {
+                    if (grid[i][j] == 1) {
+                        f[j] = 0;
+                    }
+                    else {
+                        f[j] += prev;
+                    }
+                    prev = f[j];
+                }
+            }
+            return f[n- 1];
+        }
+        return 0;
+    }
+
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         不同的路径 II  [容易]
+         "不同的路径" 的跟进问题：
+         现在考虑网格中有障碍物，那样将会有多少条不同的路径？
+         网格中的障碍和空位置分别用 1 和 0 来表示。
+         注意事项
+         m 和 n 均不超过100
+
+         样例
+         如下所示在3x3的网格中有一个障碍物：
+         [
+         [0,0,0],
+         [0,1,0],
+         [0,0,0]
+         ]
+         一共有2条不同的路径从左上角到右下角。
+         */
+//        int[][] grid = DataUtil.getTwoDimensArr("data/unique-paths-ii-test.in", 3);
+//        XYLog.d("在网格\n", grid, "\n从左上角走到右下角一共 ", solutions.uniquePathsWithObstacles(grid) + " 种不同途径");
+
+
+
+
+
 
         /**
          不同的路径  [容易]
