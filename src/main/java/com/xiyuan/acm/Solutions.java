@@ -7152,8 +7152,59 @@ public class Solutions {
     }
 
 
+    /**
+     * http://www.lintcode.com/zh-cn/problem/remove-duplicates-from-sorted-list-ii/
+     * @param head is the head of the linked list
+     * @return: ListNode head of the linked list
+     */
+    public ListNode deleteDuplicatesII(ListNode head) {
+        ListNode newHead = new ListNode(0);
+        if (head != null) {
+            ListNode cur0 = newHead;
+            ListNode cur1 = head;
+            ListNode cur2 = head.next;
+            while (cur1 != null) {
+                if (cur2 == null || cur1.val != cur2.val) {
+                    cur0.next = cur1;
+                    cur0 = cur0.next;
+                    cur1 = cur2;
+                    if (cur2 != null) {
+                        cur2 = cur2.next;
+                    }
+                    cur0.next = null;
+                }
+                else {
+                    int val = cur1.val;
+                    cur1 = cur2.next;
+                    while (cur1 != null && cur1.val == val) {
+                        cur1 = cur1.next;
+                    }
+                    if (cur1 != null) {
+                        cur2 = cur1.next;
+                    }
+                }
+            }
+        }
+        return newHead.next;
+    }
+
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         删除排序链表中的重复数字 II    [中等]
+         给定一个排序链表，删除所有重复的元素只留下原链表中没有重复的元素。
+
+         样例
+         给出 1->2->3->3->4->4->5->null，返回 1->2->5->null
+         给出 1->1->1->2->3->null，返回 2->3->null
+         */
+//        ListNode head = ListNodeFactory.build("1->2->3->3->4->4->5");
+//        XYLog.d(head);
+//        XYLog.d("去重后：", solutions.deleteDuplicatesII(head));
+
+
 
         /**
          删除排序链表中的重复元素   [容易]
