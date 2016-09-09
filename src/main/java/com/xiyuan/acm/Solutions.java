@@ -7152,6 +7152,13 @@ public class Solutions {
     }
 
 
+
+
+
+
+
+
+
     /**
      * http://www.lintcode.com/zh-cn/problem/remove-duplicates-from-sorted-list-ii/
      * @param head is the head of the linked list
@@ -7189,8 +7196,71 @@ public class Solutions {
     }
 
 
+
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/unique-paths/
+     * @param n, m: positive integer (1 <= n ,m <= 100)
+     * @return an integer
+     */
+    public int uniquePaths(int m, int n) {
+        if (m > 0 && n > 0) {
+            int[] f = new int[n];
+            int[] last = new int[n];
+            f[0] = 1;
+            for (int i = 0; i < m; i ++) {
+                for (int j = 0; j < n; j++) {
+                    if (i == 0) {
+                        if (j > 0) {
+                            f[j] = f[j - 1];
+                        }
+                    }
+                    else {
+                        if (j == 0) {
+                            f[j] = last[j];
+                        }
+                        else {
+                            f[j] = f[j - 1] + last[j];
+                        }
+                    }
+                    last[j] = f[j];
+                }
+            }
+            return f[n- 1];
+        }
+        return 0;
+    }
+
+
+
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         不同的路径  [容易]
+         有一个机器人的位于一个M×N个网格左上角（下图中标记为'Start'）。
+         机器人每一时刻只能向下或者向右移动一步。机器人试图达到网格的右下角（下图中标记为'Finish'）。
+         问有多少条不同的路径？
+
+         注意事项
+         n和m均不超过100
+         */
+//        int m = 2;
+//        int n = 62;
+//        XYLog.d(m + " * " + n + " 的网格，从左上角走到右下角一共 ", solutions.uniquePaths(m, n) + " 种不同途径");
+
+
+
+
+
+
+
 
         /**
          删除排序链表中的重复数字 II    [中等]
@@ -7203,6 +7273,7 @@ public class Solutions {
 //        ListNode head = ListNodeFactory.build("1->2->3->3->4->4->5");
 //        XYLog.d(head);
 //        XYLog.d("去重后：", solutions.deleteDuplicatesII(head));
+
 
 
 
