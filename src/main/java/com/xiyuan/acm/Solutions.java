@@ -7300,8 +7300,85 @@ public class Solutions {
     }
 
 
+
+
+
+
+    /**
+     * @param arr: A list of lists of integers
+     * @return: An integer
+     */
+    public int jump(int[] arr) {
+        if (arr == null || arr.length <= 1) {
+            return 0;
+        }
+        return jump(arr, 0);
+    }
+
+    private int jump(int[] arr, int startIndex) {
+        int maxStep = arr[startIndex];
+        int lastIndex = arr.length - 1;
+        if (maxStep == 0) {
+            return -1;
+        }
+
+        if (maxStep + startIndex >= lastIndex) {
+            return 1;
+        }
+        else {
+            ArrayList<CurAndNextStep> steps = new ArrayList<>();
+            for (int i = 1; i <= maxStep; i++) {
+                steps.add(new CurAndNextStep(i, arr[startIndex + i]));
+            }
+            Collections.sort(steps, new java.util.Comparator<CurAndNextStep>() {
+                @Override
+                public int compare(CurAndNextStep o1, CurAndNextStep o2) {
+                    return (o2.cur + o2.next) - (o1.cur + o1.next);
+                }
+            });
+
+            for (int i = 0, size = steps.size(); i< size; i++) {
+                int num = jump(arr, startIndex + steps.get(i).cur);
+                if (num > 0) {
+                    return num + 1;
+                }
+            }
+        }
+
+        return -1;
+    }
+
+    private class CurAndNextStep {
+        public int cur;
+        public int next;
+        public CurAndNextStep(int cur, int next) {
+            this.cur = cur;
+            this.next = next;
+        }
+    }
+
+
+
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         跳跃游戏 II    [中等]
+         给出一个非负整数数组，你最初定位在数组的第一个位置。
+         数组中的每个元素代表你在那个位置可以跳跃的最大长度。　　　
+         你的目标是使用最少的跳跃次数到达数组的最后一个位置。
+
+         样例
+         给出数组A = [2,3,1,1,4]，最少到达数组最后一个位置的跳跃次数是2(从数组下标0跳一步到数组下标1，然后跳3步到数组的最后一个位置，一共跳跃2次)
+         */
+        int[] arr = {2,3,1,1,4};
+//        int[] arr = {3,2,1,0,4};
+        XYLog.d("在\n", arr, "\n中，从起点", "最少跳", solutions.jump(arr), "步可以跳到终点");
+
+
+
+
 
         /**
          跳跃游戏   [中等]
