@@ -1,5 +1,6 @@
 package com.xiyuan.acm;
 
+import com.xiyuan.acm.factory.ListNodeFactory;
 import com.xiyuan.acm.factory.TreeNodeFactory;
 import com.xiyuan.acm.model.*;
 import com.xiyuan.acm.util.DataUtil;
@@ -7115,16 +7116,62 @@ public class Solutions {
 
 
 
+
+
+
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/remove-duplicates-from-sorted-list/
+     * @param head is the head of the linked list
+     * @return: ListNode head of linked list
+     */
+    public ListNode deleteDuplicates(ListNode head) {
+        if (head != null) {
+            ListNode last = head;
+            ListNode cur = head.next;
+            last.next = null;
+            while (cur != null) {
+                if (cur.val == last.val) {
+                    cur = cur.next;
+                }
+                else {
+                    last.next = cur;
+                    cur = cur.next;
+                    last = last.next;
+                    last.next = null;
+                }
+            }
+        }
+
+        return head;
+    }
+
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
 
-//        ArrayList<ArrayList<Integer>> bs = new ArrayList<ArrayList<Integer>>();
-//        bs.add(solutions.outline(3, 5, 3));
-//        bs.add(solutions.outline(8, 10, 3));
-//        XYLog.d(solutions.findXI(bs,1, 0, bs.size() - 1));
+        /**
+         删除排序链表中的重复元素   [容易]
+         给定一个排序链表，删除所有重复的元素每个元素只留下一个。
+
+         样例
+         给出 1->1->2->null，返回 1->2->null
+         给出 1->1->2->3->3->null，返回 1->2->3->null
+         */
+//        ListNode head = ListNodeFactory.build("1->1->2->3->3");
+//        XYLog.d(head);
+//        XYLog.d("去重后：", solutions.deleteDuplicates(head));
+
+
+
 
         /**
-         大楼轮廓
+         大楼轮廓   [超难]
          水平面上有 N 座大楼，每座大楼都是矩阵的形状，可以用三个数字表示 (start, end, height)，分别代表其在x轴上的起点，终点和高度。大楼之间从远处看可能会重叠，求出 N 座大楼的外轮廓线。
          外轮廓线的表示方法为若干三元组，每个三元组包含三个数字 (start, end, height)，代表这段轮廓的起始位置，终止位置和高度。
          注意事项
