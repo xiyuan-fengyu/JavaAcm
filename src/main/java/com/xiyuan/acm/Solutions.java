@@ -7305,6 +7305,7 @@ public class Solutions {
 
 
     /**
+     * http://www.lintcode.com/problem/jump-game-ii
      * @param arr: A list of lists of integers
      * @return: An integer
      */
@@ -7360,8 +7361,75 @@ public class Solutions {
 
 
 
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/distinct-subsequences/
+     * @param s, t: Two string.
+     * @return: Count the number of distinct subsequences
+     */
+    public int numDistinct(String s, String t) {
+        if (s == null || t == null) {
+            return 0;
+        }
+
+        int sLen = s.length();
+        int tLen = t.length();
+        if (sLen < tLen || (sLen == tLen && !s.equals(t))) {
+            return 0;
+        }
+
+        if (tLen == 0) {
+            return 1;
+        }
+
+        int[][] f = new int[sLen][tLen];
+        for (int i = 0; i < sLen; i++) {
+            for (int j = 0; j <= i && j < tLen; j++) {
+                if (i == 0) {
+                    if (s.charAt(i) == t.charAt(j)) {
+                        f[i][j] = 1;
+                    }
+                }
+                else {
+                    if (s.charAt(i) == t.charAt(j)) {
+                        if (j == 0) {
+                            f[i][j] = 1 + f[i - 1][j];
+                        }
+                        else {
+                            f[i][j] = f[i - 1][j - 1];
+                            if (i - 1 >= j) {
+                                f[i][j] += f[i - 1][j];
+                            }
+                        }
+                    }
+                    else if (i - 1 >= j) {
+                        f[i][j] = f[i - 1][j];
+                    }
+                }
+            }
+        }
+
+        return f[sLen - 1][tLen - 1];
+    }
+
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         不同的子序列 [中等]
+         给出字符串S和字符串T，计算S的不同的子序列中T出现的个数。
+         子序列字符串是原始字符串通过删除一些(或零个)产生的一个新的字符串，并且对剩下的字符的相对位置没有影响。(比如，“ACE”是“ABCDE”的子序列字符串,而“AEC”不是)。
+
+         样例
+         给出S = "rabbbit", T = "rabbit"
+         返回 3
+         */
+        String s = "abcbc";
+        String t = "abc";
+        XYLog.d(s, "中有 ", solutions.numDistinct(s, t), " 个 ", t, " 子序列");
+
+
 
         /**
          跳跃游戏 II    [中等]
