@@ -7425,9 +7425,9 @@ public class Solutions {
          给出S = "rabbbit", T = "rabbit"
          返回 3
          */
-        String s = "abcbc";
-        String t = "abc";
-        XYLog.d(s, "中有 ", solutions.numDistinct(s, t), " 个 ", t, " 子序列");
+//        String s = "abcbc";
+//        String t = "abc";
+//        XYLog.d(s, "中有 ", solutions.numDistinct(s, t), " 个 ", t, " 子序列");
 
 
 
