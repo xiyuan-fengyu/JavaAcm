@@ -7413,8 +7413,44 @@ public class Solutions {
     }
 
 
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/edit-distance/
+     * @param word1 & word2: Two string.
+     * @return: The minimum number of steps.
+     */
+    public int minDistance(String word1, String word2) {
+
+        return 0;
+    }
+
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         编辑距离   [中等]
+         给出两个单词word1和word2，计算出将word1 转换为word2的最少操作次数。
+         你总共三种操作方法：
+         插入一个字符
+         删除一个字符
+         替换一个字符
+
+         样例
+         给出 work1="mart" 和 work2="karma"
+         返回 3
+         */
+        String word1 = "mart";
+        String word2 = "karma";
+        XYLog.d(word1, word2, "的编辑距离为：", solutions.minDistance(word1, word2));
+
+
+
+
 
         /**
          不同的子序列 [中等]
