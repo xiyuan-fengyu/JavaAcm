@@ -1,6 +1,7 @@
 package com.xiyuan.acm.util;
 
 import java.io.*;
+import java.util.ArrayList;
 
 /**
  * Created by xiyuan_fengyu on 2016/9/9.
@@ -20,6 +21,22 @@ public class DataUtil {
         }
 
         return strBld.toString();
+    }
+
+    public static ArrayList<String> getStringArr(String path) {
+        String fileContent = getFileContent(path);
+        String[] split = fileContent.split(",");
+        ArrayList<String> result = new ArrayList<>();
+        for (String item: split) {
+            item = item.trim();
+            if (item.startsWith("\"") && item.endsWith("\"")) {
+                result.add(item.substring(1, item.length() - 1));
+            }
+            else {
+                result.add(item);
+            }
+        }
+        return  result;
     }
 
     public static int[][] getTwoDimensArr(String path, int secondDimenLen) {
