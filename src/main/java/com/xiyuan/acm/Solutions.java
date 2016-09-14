@@ -7424,8 +7424,60 @@ public class Solutions {
      * @return: The minimum number of steps.
      */
     public int minDistance(String word1, String word2) {
+        if (word1 == null && word2 == null) {
+            return 0;
+        }
+        else if (word1 == null || word1.isEmpty()) {
+            return word2.length();
+        }
+        else if (word2 == null || word2.isEmpty()) {
+            return word1.length();
+        }
 
-        return 0;
+        int len1 = word1.length();
+        int len2 = word2.length();
+        /**
+         f[i][j]表示word1[0,i]与word2[0,j]的最小编辑距离
+         */
+        int[][] f = new int[len1][len2];
+
+        for (int i = 0; i < len1; i++) {
+            for (int j = 0; j < len2; j++) {
+                if (word1.charAt(i) == word2.charAt(j)) {
+                    if (i == 0 && j == 0) {
+                        f[i][j] = 0;
+                    }
+                    else if (i == 0){
+                        f[i][j] = j;
+                    }
+                    else if (j == 0) {
+                        f[i][j] = i;
+                    }
+                    else {
+                        f[i][j] = f[i - 1][j - 1];
+                    }
+                }
+                else {
+                    if (i == 0 && j == 0) {
+                        f[i][j] = 1;
+                    }
+                    else if (i == 0) {
+                        f[i][j] = f[i][j - 1] + 1;
+                    }
+                    else if (j == 0) {
+                        f[i][j] = f[i - 1][j] + 1;
+                    }
+                    else {
+                        int temp0 = f[i - 1][j - 1] + 1;
+                        int temp1 = f[i][j - 1] + 1;
+                        int temp2 = f[i - 1][j] + 1;
+                        f[i][j] = Math.min(Math.min(temp0, temp1), temp2);
+                    }
+                }
+            }
+        }
+
+        return f[len1 - 1][len2 - 1];
     }
 
 
@@ -7444,9 +7496,9 @@ public class Solutions {
          给出 work1="mart" 和 work2="karma"
          返回 3
          */
-        String word1 = "mart";
-        String word2 = "karma";
-        XYLog.d(word1, word2, "的编辑距离为：", solutions.minDistance(word1, word2));
+//        String word1 = "ab";
+//        String word2 = "a";
+//        XYLog.d("\n", word1, "\n",  word2, "\n编辑距离为：", solutions.minDistance(word1, word2));
 
 
 
