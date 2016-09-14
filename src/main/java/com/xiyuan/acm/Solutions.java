@@ -7649,8 +7649,41 @@ public class Solutions {
     }
 
 
+
+
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/largest-rectangle-in-histogram/
+     * @param height: A list of integer
+     * @return: The area of largest rectangle in the histogram
+     */
+    public int largestRectangleArea(int[] height) {
+
+        return 1;
+    }
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         直方图最大矩形覆盖  [困难]
+         给出的n个非负整数表示每个直方图的高度，每个直方图的宽均为1，在直方图中找到最大的矩形面积。
+         http://www.leetcode.com/wp-content/uploads/2012/04/histogram.png
+         以上直方图宽为1，高度为[2,1,5,6,2,3]。
+         http://www.leetcode.com/wp-content/uploads/2012/04/histogram_area.png
+         最大矩形面积如图阴影部分所示，含有10单位
+         样例
+         给出 height = [2,1,5,6,2,3]，返回 10
+         */
+//        int[] heights = {2,1,5,6,2,3};
+//        XYLog.d("直方图", heights, "的最大单个矩形覆盖面积为：\n", solutions.largestRectangleArea(heights));
+
+
 
         /**
          单词接龙 II   [困难]
@@ -7678,10 +7711,10 @@ public class Solutions {
 //        Set<String> dict = new HashSet<>();
 //        String[] dictArr = {"si","go","se","cm","so","ph","mt","db","mb","sb","kr","ln","tm","le","av","sm","ar","ci","ca","br","ti","ba","to","ra","fa","yo","ow","sn","ya","cr","po","fe","ho","ma","re","or","rn","au","ur","rh","sr","tc","lt","lo","as","fr","nb","yb","if","pb","ge","th","pm","rb","sh","co","ga","li","ha","hz","no","bi","di","hi","qa","pi","os","uh","wm","an","me","mo","na","la","st","er","sc","ne","mn","mi","am","ex","pt","io","be","fm","ta","tb","ni","mr","pa","he","lr","sq","ye"};
 //        dict.addAll(Arrays.asList(dictArr));
-        String start = "cet";
-        String end = "ism";
+        ArrayList<String> strArr = DataUtil.getStringArr("data/word-ladder-ii-83.in");
+        String start = strArr.remove(0);
+        String end = strArr.remove(0);
         Set<String> dict = new HashSet<>();
-        ArrayList<String> strArr = DataUtil.getStringArr("data/word-ladder-ii-68.in");
         dict.addAll(strArr);
         XYLog.d("利用词典", strArr, "\n", start, " 转换到 ", end, " 的最短序列为 ");
         XYLog.d(solutions.findLadders(start, end, dict));
