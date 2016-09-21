@@ -7657,15 +7657,62 @@ public class Solutions {
 
 
 
+//    /**超时
+//     * http://www.lintcode.com/zh-cn/problem/largest-rectangle-in-histogram/
+//     * @param heights: A list of integer
+//     * @return: The area of largest rectangle in the histogram
+//     */
+//    public int largestRectangleArea(int[] heights) {
+//        if (heights == null || heights.length == 0) {
+//            return 0;
+//        }
+//
+//        int maxArea = 0;
+//        int tempArea = 0;
+//        HashMap<Integer, Boolean> isComputed = new HashMap<>();
+//        for (int height: heights) {
+//            if (!isComputed.containsKey(height)) {
+//                isComputed.put(height, true);
+//
+//                tempArea = 0;
+//                for (int h: heights) {
+//                    if (h >= height) {
+//                        tempArea += height;
+//                        if (tempArea > maxArea) {
+//                            maxArea = tempArea;
+//                        }
+//                    }
+//                    else {
+//                        tempArea = 0;
+//                    }
+//                }
+//            }
+//        }
+//
+//        return maxArea;
+//    }
+
     /**
      * http://www.lintcode.com/zh-cn/problem/largest-rectangle-in-histogram/
-     * @param height: A list of integer
+     * @param heights: A list of integer
      * @return: The area of largest rectangle in the histogram
      */
-    public int largestRectangleArea(int[] height) {
+    public int largestRectangleArea(int[] heights) {
+        if (heights == null || heights.length == 0) {
+            return 0;
+        }
 
-        return 1;
+        int maxArea = 0;
+        HashMap<Integer, Integer> heightAndMap = new HashMap<>();
+        for (int i = 0, len = heights.length; i < len; i++) {
+
+        }
+
+        return maxArea;
     }
+
+
+
 
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
@@ -7680,8 +7727,8 @@ public class Solutions {
          样例
          给出 height = [2,1,5,6,2,3]，返回 10
          */
-//        int[] heights = {2,1,5,6,2,3};
-//        XYLog.d("直方图", heights, "的最大单个矩形覆盖面积为：\n", solutions.largestRectangleArea(heights));
+        int[] heights = {2,1,5,6,2,3};
+        XYLog.d("直方图", heights, "的最大单个矩形覆盖面积为：\n", solutions.largestRectangleArea(heights));
 
 
 
