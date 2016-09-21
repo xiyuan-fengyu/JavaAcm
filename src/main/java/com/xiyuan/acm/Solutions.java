@@ -7703,14 +7703,65 @@ public class Solutions {
         }
 
         int maxArea = 0;
-        HashMap<Integer, Integer> heightAndMap = new HashMap<>();
+        ArrayList<HeightAndTotal> heightAndTotals = new ArrayList<>();
         for (int i = 0, len = heights.length; i < len; i++) {
+            int height = heights[i];
+            if (height == 0) {
+                heightAndTotals.clear();
+            }
+            else {
+                if (heightAndTotals.isEmpty()) {
+                    heightAndTotals.add(new HeightAndTotal(height, height));
+                    if (maxArea < height) {
+                        maxArea = height;
+                    }
+                }
+                else {
+                    HeightAndTotal newItem = new HeightAndTotal(height, height);
+
+                    int geNum = 0;
+                    for (int j = heightAndTotals.size() - 1; j > -1; j--) {
+                        HeightAndTotal tempItem = heightAndTotals.get(j);
+                        if (tempItem.height >= height) {
+                            geNum = tempItem.total / tempItem.height;
+                            heightAndTotals.remove(j);
+                        }
+                        else {
+                            tempItem.total += tempItem.height;
+                            if (tempItem.total > maxArea) {
+                                maxArea = tempItem.total;
+                            }
+                        }
+                    }
+
+                    if (geNum > 0) {
+                        newItem.total += height * geNum;
+                    }
+                    if (newItem.total > maxArea) {
+                        maxArea = newItem.total;
+                    }
+                    heightAndTotals.add(newItem);
+                }
+            }
 
         }
 
         return maxArea;
     }
 
+    private class HeightAndTotal {
+        public int height;
+        public int total;
+        public HeightAndTotal(int height, int total) {
+            this.height = height;
+            this.total = total;
+        }
+
+        @Override
+        public String toString() {
+            return height + ", " + total;
+        }
+    }
 
 
 
@@ -7727,8 +7778,8 @@ public class Solutions {
          样例
          给出 height = [2,1,5,6,2,3]，返回 10
          */
-        int[] heights = {2,1,5,6,2,3};
-        XYLog.d("直方图", heights, "的最大单个矩形覆盖面积为：\n", solutions.largestRectangleArea(heights));
+//        int[] heights = {6,4,2,0,3,2,0,3,1,4,5,3,2,7,5,3,0,1,2,1,3,4,6,8,1,3};
+//        XYLog.d("直方图", heights, "的最大单个矩形覆盖面积为：\n", solutions.largestRectangleArea(heights));
 
 
 
