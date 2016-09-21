@@ -7765,8 +7765,111 @@ public class Solutions {
 
 
 
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/word-search/
+     * @param board: A list of lists of character
+     * @param word: A string
+     * @return: A boolean
+     */
+    public boolean exist(char[][] board, String word) {
+        if (board == null || board.length == 0) {
+            return word == null || word.isEmpty();
+        }
+
+        int lenI = board.length;
+        int lenJ = board[0].length;
+        for (int i = 0; i < lenI; i++) {
+            for (int j = 0; j < lenJ; j++) {
+                if (exist(board, word, i, j, 0)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public boolean exist(char[][] board, String word, int i, int j, int index) {
+        int lenI = board.length;
+        int lenJ = board[0].length;
+        if (i < 0 || i >= lenI
+                || j < 0 || j >= lenJ) {
+            return false;
+        }
+
+        char c = board[i][j];
+        if (c == '\0') {
+            return false;
+        }
+
+        int lenW = word.length();
+        if (c == word.charAt(index)) {
+            if (index + 1 == lenW) {
+                return true;
+            }
+
+            board[i][j] = '\0';
+
+            //检查上下左右
+            if (exist(board, word, i - 1, j, index + 1)) {
+                board[i][j] = c;
+                return true;
+            }
+            if (exist(board, word, i + 1, j, index + 1)) {
+                board[i][j] = c;
+                return true;
+            }
+            if (exist(board, word, i, j - 1, index + 1)) {
+                board[i][j] = c;
+                return true;
+            }
+            if (exist(board, word, i, j + 1, index + 1)) {
+                board[i][j] = c;
+                return true;
+            }
+            board[i][j] = c;
+        }
+        return false;
+    }
+
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         单词搜索   [中等]
+         给出一个二维的字母板和一个单词，寻找字母板网格中是否存在这个单词。
+         单词可以由按顺序的相邻单元的字母组成，其中相邻单元指的是水平或者垂直方向相邻。每个单元中的字母最多只能使用一次。
+
+         样例
+         给出board =
+         [
+         "ABCE",
+         "SFCS",
+         "ADEE"
+         ]
+         word = "ABCCED"， ->返回 true,
+         word = "SEE"，-> 返回 true,
+         word = "ABCB"， -> 返回 false.
+         */
+        String[] boardStrs = {
+                "ABCE",
+                "SFCS",
+                "ADEE"
+        };
+        String word = "ABAB";
+        char[][] board = new char[boardStrs.length][];
+        for (int i = 0, len = boardStrs.length; i < len; i++) {
+            board[i] = boardStrs[i].toCharArray();
+        }
+        XYLog.d("在", board, "中\n", solutions.exist(board, word)? "": "不", "可以找到 ", word);
+
+
+
 
         /**
          直方图最大矩形覆盖  [困难]
