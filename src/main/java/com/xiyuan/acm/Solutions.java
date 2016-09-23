@@ -7856,17 +7856,17 @@ public class Solutions {
          word = "SEE"，-> 返回 true,
          word = "ABCB"， -> 返回 false.
          */
-        String[] boardStrs = {
-                "ABCE",
-                "SFCS",
-                "ADEE"
-        };
-        String word = "ABAB";
-        char[][] board = new char[boardStrs.length][];
-        for (int i = 0, len = boardStrs.length; i < len; i++) {
-            board[i] = boardStrs[i].toCharArray();
-        }
-        XYLog.d("在", board, "中\n", solutions.exist(board, word)? "": "不", "可以找到 ", word);
+//        String[] boardStrs = {
+//                "ABCE",
+//                "SFCS",
+//                "ADEE"
+//        };
+//        String word = "ABAB";
+//        char[][] board = new char[boardStrs.length][];
+//        for (int i = 0, len = boardStrs.length; i < len; i++) {
+//            board[i] = boardStrs[i].toCharArray();
+//        }
+//        XYLog.d("在", board, "中\n", solutions.exist(board, word)? "": "不", "可以找到 ", word);
 
 
 
