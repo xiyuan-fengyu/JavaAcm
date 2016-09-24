@@ -7890,8 +7890,67 @@ public class Solutions {
 
 
 
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/backpack-ii/
+     * @param maxW: An integer m denotes the size of a backpack
+     * @param ws & vs: Given n items with size ws[i] and value vs[i]
+     * @return: The maximum value
+     */
+    public int backPackII(int maxW, int[] ws, int[] vs) {
+        if (ws == null || ws.length == 0) {
+            return 0;
+        }
+
+        HashMap<String, Integer> map = new HashMap<>();
+        return backPackMaxVal(map, ws, vs, ws.length - 1, maxW);
+    }
+
+    private int backPackMaxVal(HashMap<String, Integer> map, int[] ws, int[] vs, int i, int j) {
+        String key = i + "," + j;
+        if (map.containsKey(key)) {
+            return map.get(key);
+        }
+
+        int result = 0;
+        if (i < 0 || j == 0) {
+            result = 0;
+        }
+        else if (ws[i] <= j) {
+            int temp0 = backPackMaxVal(map, ws, vs, i - 1, j);
+            int temp1 = backPackMaxVal(map, ws, vs, i - 1, j - ws[i]) + vs[i];
+            result = temp0 >= temp1? temp0: temp1;
+        }
+        else {
+            result = backPackMaxVal(map, ws, vs, i - 1, j);
+        }
+        map.put(key, result);
+        return result;
+    }
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         背包问题 II   [中等]
+         给出n个物品的体积A[i]和其价值V[i]，将他们装入一个大小为m的背包，最多能装入的总价值有多大？
+         注意事项
+         A[i], V[i], n, m均为整数。你不能将物品进行切分。你所挑选的物品总体积需要小于等于给定的m。
+
+         样例
+         对于物品体积[2, 3, 5, 7]和对应的价值[1, 5, 2, 4], 假设背包大小为10的话，最大能够装入的价值为9。
+         */
+        int maxW = 10;
+        int[] ws = {2, 3, 5, 7};
+        int[] vs = {1, 5, 2, 4};
+        XYLog.d("将体积和价值分别为：", ws, vs, "\n的物品装入最大容量为 ",  maxW, " 的背包中，能够装入的最大价值为：", solutions.backPackII(maxW, ws, vs));
+
+
+
+
+
 
         /**
          最长连续序列   [中等]
