@@ -3,6 +3,7 @@ package com.xiyuan.acm;
 import com.xiyuan.acm.factory.ListNodeFactory;
 import com.xiyuan.acm.factory.TreeNodeFactory;
 import com.xiyuan.acm.model.*;
+import com.xiyuan.acm.util.ArrayListUtil;
 import com.xiyuan.acm.util.DataUtil;
 import com.xiyuan.util.XYLog;
 
@@ -7930,8 +7931,52 @@ public class Solutions {
         return result;
     }
 
+
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/topological-sorting/
+     * @param graph: A list of Directed graph node
+     * @return: Any topological order for the given graph.
+     */
+    public ArrayList<DirectedGraphNode> topSort(ArrayList<DirectedGraphNode> graph) {
+
+        return null;
+    }
+
+//    private void directedGraphVisit()
+
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         拓扑排序   [中等]
+         给定一个有向图，图节点的拓扑排序被定义为：
+         对于每条有向边A--> B，则A必须排在B之前　　
+         拓扑排序的第一个节点可以是任何在图中没有其他节点指向它的节点　　
+         找到给定图的任一拓扑排序
+
+         注意事项
+         你可以假设图中至少存在一种拓扑排序
+         */
+        DirectedGraphNode node1 = new DirectedGraphNode(1);
+        DirectedGraphNode node2 = new DirectedGraphNode(1);
+        DirectedGraphNode node3 = new DirectedGraphNode(1);
+        DirectedGraphNode node4 = new DirectedGraphNode(1);
+        DirectedGraphNode node5 = new DirectedGraphNode(1);
+        node1.addNeighbors(node2, node3);
+        node2.addNeighbors(node4);
+        node3.addNeighbors(node2, node5);
+        node4.addNeighbors(node5);
+        ArrayList<DirectedGraphNode> nodes = ArrayListUtil.build(node1, node2, node3, node4, node5);
+        XYLog.d(nodes, "的拓扑排序为：", solutions.topSort(nodes));
+
+
 
         /**
          背包问题 II   [中等]
