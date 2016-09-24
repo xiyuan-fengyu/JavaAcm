@@ -7942,10 +7942,10 @@ public class Solutions {
          样例
          对于物品体积[2, 3, 5, 7]和对应的价值[1, 5, 2, 4], 假设背包大小为10的话，最大能够装入的价值为9。
          */
-        int maxW = 10;
-        int[] ws = {2, 3, 5, 7};
-        int[] vs = {1, 5, 2, 4};
-        XYLog.d("将体积和价值分别为：", ws, vs, "\n的物品装入最大容量为 ",  maxW, " 的背包中，能够装入的最大价值为：", solutions.backPackII(maxW, ws, vs));
+//        int maxW = 10;
+//        int[] ws = {2, 3, 5, 7};
+//        int[] vs = {1, 5, 2, 4};
+//        XYLog.d("将体积和价值分别为：", ws, vs, "\n的物品装入最大容量为 ",  maxW, " 的背包中，能够装入的最大价值为：", solutions.backPackII(maxW, ws, vs));
 
 
 
