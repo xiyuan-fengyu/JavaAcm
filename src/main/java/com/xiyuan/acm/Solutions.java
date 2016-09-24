@@ -7837,8 +7837,77 @@ public class Solutions {
     }
 
 
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/longest-consecutive-sequence/
+     * @param nums: A list of integers
+     * @return an integer
+     */
+    public int longestConsecutive(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+
+        HashMap<Integer, Boolean> map = new HashMap<>();
+        for (int i: nums) {
+            map.put(i, false);
+        }
+
+        int max = 0;
+
+        Set<Map.Entry<Integer, Boolean>> keyVals = map.entrySet();
+        for (Map.Entry<Integer, Boolean> keyVal: keyVals) {
+            if (Boolean.FALSE.equals(keyVal.getValue())) {
+                Integer key = keyVal.getKey();
+                map.put(key, true);
+
+                int tempMax = 1;
+                int tempKey = key - 1;
+                while (Boolean.FALSE.equals(map.get(tempKey))) {
+                    map.put(tempKey, true);
+                    tempMax++;
+                    tempKey--;
+                }
+
+                tempKey = key + 1;
+                while (Boolean.FALSE.equals(map.get(tempKey))) {
+                    map.put(tempKey, true);
+                    tempMax++;
+                    tempKey++;
+                }
+
+                if (tempMax > max) {
+                    max = tempMax;
+                }
+            }
+        }
+        return max;
+    }
+
+
+
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         最长连续序列   [中等]
+         给定一个未排序的整数数组，找出最长连续序列的长度。
+         说明
+         要求你的算法复杂度为O(n)
+
+         样例
+         给出数组[100, 4, 200, 1, 3, 2]，这个最长的连续序列是 [1, 2, 3, 4]，返回所求长度 4
+         */
+//        int[] arr = {100, 4, 200, 1, 3, 2};
+//        XYLog.d(arr, "中最长连续序列的长度为：", solutions.longestConsecutive(arr));
+
+
+
+
 
         /**
          单词搜索   [中等]
