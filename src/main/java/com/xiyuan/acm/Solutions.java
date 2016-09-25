@@ -7989,8 +7989,54 @@ public class Solutions {
     }
 
 
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/hash-function/
+     * @param key: A String you should hash
+     * @param HASH_SIZE: An integer
+     * @return an integer
+     */
+    public int hashCode(char[] key,int HASH_SIZE) {
+        if (key == null || key.length == 0 || HASH_SIZE <= 0) {
+            return 0;
+        }
+
+        //(a + b) % c = (a % c + b % c) % c = (a % c + b) % c
+        //如果不利用这个公式，则很有可能在计算的过程中溢出
+        //hash也必须是long，否则也会溢出
+        long hash = 0;
+        for(int i = 0, len = key.length; i < len; i++) {
+            hash = (hash * 33 + key[i]) % HASH_SIZE;
+        }
+        return (int) hash;
+    }
+
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         哈希函数   [容易]
+         在数据结构中，哈希函数是用来将一个字符串（或任何其他类型）转化为小于哈希表大小且大于等于零的整数。一个好的哈希函数可以尽可能少地产生冲突。一种广泛使用的哈希函数算法是使用数值33，假设任何字符串都是基于33的一个大整数，比如：
+         hashcode("abcd") = (ascii(a) * 33^3 + ascii(b) * 33^2 + ascii(c) *33 + ascii(d)) % HASH_SIZE
+         = (97* 33^3 + 98 * 33^2 + 99 * 33^1 +100 * 33 ^ 0) % HASH_SIZE
+         = 3595978 % HASH_SIZE
+         其中HASH_SIZE表示哈希表的大小(可以假设一个哈希表就是一个索引0 ~ HASH_SIZE-1的数组)。
+         给出一个字符串作为key和一个哈希表的大小，返回这个字符串的哈希值。
+         注意事项
+         对于这个问题你不需要自己设计hash算法，你只需要实现上述描述的hash算法即可。
+
+         样例
+         对于key="abcd" 并且 size=100， 返回 78
+         */
+//        String str = "Wrong answer or accepted?";
+//        int size = 1000000007;
+//        XYLog.d("大小为", size, "的hash表中，", str, "的hash值为：", solutions.hashCode(str.toCharArray(), size));
+
+
+
 
         /**
          拓扑排序   [中等]
