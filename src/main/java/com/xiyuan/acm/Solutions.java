@@ -8109,8 +8109,74 @@ public class Solutions {
     }
 
 
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/word-search-ii/
+     * @param board: A list of lists of character
+     * @param words: A list of string
+     * @return: A list of string
+     */
+    public ArrayList<String> wordSearchII(char[][] board, ArrayList<String> words) {
+
+        return null;
+    }
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         单词搜索 II   [苦难]
+         给出一个由小写字母组成的矩阵和一个字典。找出所有同时在字典和矩阵中出现的单词。一个单词可以从矩阵中的任意位置开始，可以向左/右/上/下四个相邻方向移动。
+         样例
+         给出矩阵：
+         doaf
+         agai
+         dcan
+         和字典：
+         {"dog", "dad", "dgdg", "can", "again"}
+         返回 {"dog", "dad", "can", "again"}
+
+         dog:
+         [d][o]af
+         a[g]ai
+         dcan
+
+         dad:
+         doaf
+         agai
+         dcan
+
+         can:
+         doaf
+         agai
+         dcan
+
+         again:
+         doaf
+         agai
+         dcan
+
+         挑战
+         使用单词查找树来实现你的算法
+          */
+        String[] boardStrs = {
+                "doaf",
+                "agai",
+                "dcan"
+        };
+        char[][] board = new char[boardStrs.length][];
+        for (int i = 0, len = board.length; i < len; i++) {
+            board[i] = boardStrs[i].toCharArray();
+        }
+        ArrayList<String> words = ArrayListUtil.build("dog", "dad", "dgdg", "can", "again");
+        XYLog.d(words, "中出现在矩阵", board, "中的单词有：\n", solutions.wordSearchII(board, words));
+
+
+
 
         /**
          堆化   [中等]
