@@ -8063,8 +8063,74 @@ public class Solutions {
 
 
 
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/heapify/
+     * @param arr: Given an integer array
+     * @return: void
+     */
+    public void heapify(int[] arr) {
+        if (arr != null && arr.length > 0) {
+            for (int i = arr.length / 2; i > -1; i--) {
+                siftdown(arr, i);
+            }
+        }
+    }
+
+    private void swap(int[] arr, int i0, int i1) {
+        int temp = arr[i0];
+        arr[i0] = arr[i1];
+        arr[i1] = temp;
+    }
+
+    private void siftdown(int[] arr, int parent) {
+        int len = arr.length;
+        while (parent < len) {
+            int smallIndex = parent;
+            int lIndex = parent * 2 + 1;
+            int rIndex = parent * 2 + 2;
+            if (lIndex < arr.length && arr[lIndex] < arr[smallIndex]) {
+                smallIndex = lIndex;
+            }
+            if (rIndex < arr.length && arr[rIndex] < arr[smallIndex]) {
+                smallIndex = rIndex;
+            }
+
+            if (smallIndex == parent) {
+                break;
+            }
+
+            swap(arr, parent, smallIndex);
+            parent = smallIndex;
+        }
+    }
+
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         堆化   [中等]
+         给出一个整数数组，堆化操作就是把它变成一个最小堆数组。
+         对于堆数组A，A[0]是堆的根，并对于每个A[i]，A [i * 2 + 1]是A[i]的左儿子并且A[i * 2 + 2]是A[i]的右儿子。
+         什么是堆？
+         堆是一种数据结构，它通常有三种方法：push， pop 和 top。其中，“push”添加新的元素进入堆，“pop”删除堆中最小/最大元素，“top”返回堆中最小/最大元素。
+         什么是堆化？
+         把一个无序整数数组变成一个堆数组。如果是最小堆，每个元素A[i]，我们将得到A[i * 2 + 1] >= A[i]和A[i * 2 + 2] >= A[i]
+         如果有很多种堆化的结果？
+         返回其中任何一个。
+         样例
+         给出 [3,2,1,4,5]，返回[1,2,3,4,5] 或者任何一个合法的堆数组
+         */
+//        int[] arr = {42,30,27,93,8,34,47,64,82,76,70,79};
+//        XYLog.d(arr, "\n堆化之后：");
+//        solutions.heapify(arr);
+//        XYLog.d(arr, "");
+
+
 
         /**
          重哈希   [中等]
