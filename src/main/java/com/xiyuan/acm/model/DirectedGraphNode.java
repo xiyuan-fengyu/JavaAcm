@@ -21,4 +21,8 @@ public class DirectedGraphNode {
         }
     }
 
+    @Override
+    public String toString() {
+        return "" + label;
+    }
 };

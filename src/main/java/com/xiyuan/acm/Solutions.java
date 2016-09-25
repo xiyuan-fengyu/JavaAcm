@@ -7944,11 +7944,49 @@ public class Solutions {
      * @return: Any topological order for the given graph.
      */
     public ArrayList<DirectedGraphNode> topSort(ArrayList<DirectedGraphNode> graph) {
+        ArrayList<DirectedGraphNode> result = new ArrayList<>();
+        if (graph != null && graph.size() != 0) {
+            final HashMap<DirectedGraphNode, Integer> map = new HashMap<>();
+            for (DirectedGraphNode node: graph) {
+                directedGraphVisit(node, map);
+            }
 
-        return null;
+            for(Map.Entry<DirectedGraphNode, Integer> keyVal: map.entrySet()) {
+                result.add(keyVal.getKey());
+            }
+            Collections.sort(result, new java.util.Comparator<DirectedGraphNode>() {
+                @Override
+                public int compare(DirectedGraphNode o1, DirectedGraphNode o2) {
+                    return map.get(o2) - map.get(o1);
+                }
+            });
+        }
+        return result;
     }
 
-//    private void directedGraphVisit()
+    private int directedGraphVisit(DirectedGraphNode node, HashMap<DirectedGraphNode, Integer> map) {
+        if (!map.containsKey(node)) {
+            int index = 0;
+            if (node.neighbors.isEmpty()) {
+                index = 0;
+            }
+            else {
+                for (DirectedGraphNode child: node.neighbors) {
+                    int temp = directedGraphVisit(child, map);
+                    if (index < temp) {
+                        index = temp;
+                    }
+                }
+                index += 1;
+            }
+
+            map.put(node, index);
+            return index;
+        }
+        else {
+            return map.get(node);
+        }
+    }
 
 
     public static void main(String[] args) {
@@ -7964,17 +8002,17 @@ public class Solutions {
          注意事项
          你可以假设图中至少存在一种拓扑排序
          */
-        DirectedGraphNode node1 = new DirectedGraphNode(1);
-        DirectedGraphNode node2 = new DirectedGraphNode(1);
-        DirectedGraphNode node3 = new DirectedGraphNode(1);
-        DirectedGraphNode node4 = new DirectedGraphNode(1);
-        DirectedGraphNode node5 = new DirectedGraphNode(1);
-        node1.addNeighbors(node2, node3);
-        node2.addNeighbors(node4);
-        node3.addNeighbors(node2, node5);
-        node4.addNeighbors(node5);
-        ArrayList<DirectedGraphNode> nodes = ArrayListUtil.build(node1, node2, node3, node4, node5);
-        XYLog.d(nodes, "的拓扑排序为：", solutions.topSort(nodes));
+//        DirectedGraphNode node1 = new DirectedGraphNode(1);
+//        DirectedGraphNode node2 = new DirectedGraphNode(2);
+//        DirectedGraphNode node3 = new DirectedGraphNode(3);
+//        DirectedGraphNode node4 = new DirectedGraphNode(4);
+//        DirectedGraphNode node5 = new DirectedGraphNode(5);
+//        node1.addNeighbors(node2, node3);
+//        node2.addNeighbors(node4);
+//        node3.addNeighbors(node2, node5);
+//        node4.addNeighbors(node5);
+//        ArrayList<DirectedGraphNode> nodes = ArrayListUtil.build(node1, node2, node3, node4, node5);
+//        XYLog.d(nodes, "的拓扑排序为：", solutions.topSort(nodes));
 
 
 
