@@ -8288,8 +8288,75 @@ public class Solutions {
 
     }
 
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/longest-words/
+     * @param dictionary an array of strings
+     * @return
+     */
+    public ArrayList<String> longestWords(String[] dictionary) {
+        ArrayList<String> result = new ArrayList<>();
+
+        if (dictionary != null && dictionary.length > 0) {
+            int maxLen = 0;
+            for (String word: dictionary) {
+                int wLen = word.length();
+                if (wLen > maxLen) {
+                    maxLen = word.length();
+                    result.clear();
+                    result.add(word);
+                }
+                else if (wLen == maxLen) {
+                    result.add(word);
+                }
+            }
+        }
+
+        return result;
+    }
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         最长单词   [容易]
+         给一个词典，找出其中所有最长的单词。
+
+         样例
+         在词典
+         {
+         "dog",
+         "google",
+         "facebook",
+         "internationalization",
+         "blabla"
+         }
+         中, 最长的单词集合为 ["internationalization"]
+
+         在词典
+         {
+         "like",
+         "love",
+         "hate",
+         "yes"
+         }
+         中，最长的单词集合为 ["like", "love", "hate"]
+
+         挑战
+         遍历两次的办法很容易想到，如果只遍历一次你有没有什么好办法？
+         */
+//        String[] strs = {
+//                "dog",
+//                "google",
+//                "facebook",
+//                "internationalization",
+//                "blabla"
+//        };
+//        XYLog.d(strs, "\n中最长的单词是这些：\n", solutions.longestWords(strs));
+
+
+
+
 
         /**
          单词搜索 II   [困难]
