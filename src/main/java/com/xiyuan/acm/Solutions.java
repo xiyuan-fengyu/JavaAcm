@@ -8121,15 +8121,178 @@ public class Solutions {
      * @return: A list of string
      */
     public ArrayList<String> wordSearchII(char[][] board, ArrayList<String> words) {
+        ArrayList<String> result = new ArrayList<>();
+        if (board != null && board.length != 0) {
+            DicTreeNode dicRoot = DicTreeNode.buildFrom(words);
+            int row = board.length;
+            int column = board[0].length;
 
-        return null;
+            HashSet<String> resultSet = new HashSet<>();
+            for (int i = 0; i < row; i++) {
+                for (int j = 0; j < column; j++) {
+                    findWord(dicRoot, dicRoot, board, i, j, resultSet);
+                }
+            }
+
+            for (String word: words) {
+                if (resultSet.contains(word)) {
+                    result.add(word);
+                }
+            }
+        }
+        return result;
+    }
+
+    private void findWord(DicTreeNode dicRoot, DicTreeNode curNode, char[][] board, int i, int j, HashSet<String> result) {
+        if (i >= 0 && j >= 0) {
+            int row = board.length;
+            int column = board[0].length;
+            if (i < row && j < column) {
+                char c = board[i][j];
+
+                if (c != '\0') {
+                    board[i][j] = '\0';
+                    DicTreeNode node = curNode.child(c);
+                    if (node != null) {
+                        if (node.hasTailChild()) {
+                            String word = node.getTailChild().word;
+                            result.add(word);
+                            dicRoot.deleteWord(word);
+                        }
+
+                        //检索上下左右
+                        findWord(dicRoot, node, board, i, j - 1, result);
+                        findWord(dicRoot, node, board, i, j + 1, result);
+                        findWord(dicRoot, node, board, i - 1, j, result);
+                        findWord(dicRoot, node, board, i + 1, j, result);
+                    }
+                    //对矩阵的位置信息进行回溯
+                    board[i][j] = c;
+                }
+
+            }
+        }
+    }
+
+
+    private static class DicTreeNode {
+
+        //0: root
+        //1: normal node
+        //-1: tail
+        private final int nodeType;
+
+        //仅当 nodeType = -1 的时候有值
+        private final String word;
+
+        private final char value;
+
+        private final HashMap<String, DicTreeNode> children = new HashMap<>();
+
+        public static DicTreeNode newRoot() {
+            return new DicTreeNode(0);
+        }
+
+        public static DicTreeNode newNode(char value) {
+            return new DicTreeNode(value);
+        }
+
+        public static DicTreeNode newTail(String word) {
+            return new DicTreeNode(word);
+        }
+
+        private DicTreeNode(int nodeType) {
+            this.nodeType = nodeType;
+            value = '\0';
+            word = null;
+        }
+
+        private DicTreeNode(char value) {
+            nodeType = 1;
+            this.value = value;
+            word = null;
+        }
+
+        private DicTreeNode(String word) {
+            nodeType = -1;
+            value = '\0';
+            this.word = word;
+        }
+
+        public void addChild(DicTreeNode child) {
+            children.put(child.value + "", child);
+        }
+
+        public DicTreeNode child(char value) {
+            String key = value + "";
+            if (children.containsKey(key)) {
+                return children.get(key);
+            }
+            else return null;
+        }
+
+        private DicTreeNode tailChild;
+
+        public boolean hasTailChild() {
+            tailChild = children.get("\0");
+            return tailChild != null;
+        }
+
+        public DicTreeNode getTailChild() {
+            if (tailChild != null) {
+                return tailChild;
+            }
+            else return children.get("\0");
+        }
+
+        public void deleteWord(String word) {
+            checkNode(word, 0);
+        }
+
+        private boolean checkNode(String word, int index) {
+            if (index == word.length()) {
+                children.remove("\0");
+                return children.isEmpty();
+            }
+
+            DicTreeNode child = child(word.charAt(index));
+            if (child != null && child.checkNode(word, index + 1)) {
+                children.remove("" + child.value);
+                return children.isEmpty();
+            }
+            else return false;
+        }
+
+        public static DicTreeNode buildFrom(ArrayList<String> dics) {
+            DicTreeNode root = newRoot();
+
+            for (String dic: dics) {
+                DicTreeNode curNode = root;
+                DicTreeNode temp;
+                for (int i = 0, len = dic.length(); i < len; i++) {
+                    char c = dic.charAt(i);
+                    if ((temp = curNode.child(c)) != null) {
+                        curNode = temp;
+                    }
+                    else {
+                        DicTreeNode newChild = newNode(c);
+                        curNode.addChild(newChild);
+                        curNode = newChild;
+                    }
+                }
+                curNode.addChild(newTail(dic));
+            }
+
+            return root;
+        }
+
     }
 
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
 
         /**
-         单词搜索 II   [苦难]
+         单词搜索 II   [困难]
          给出一个由小写字母组成的矩阵和一个字典。找出所有同时在字典和矩阵中出现的单词。一个单词可以从矩阵中的任意位置开始，可以向左/右/上/下四个相邻方向移动。
          样例
          给出矩阵：
@@ -8160,19 +8323,28 @@ public class Solutions {
          agai
          dcan
 
+         注意
+         每个位置的字母只能使用一次
+
          挑战
          使用单词查找树来实现你的算法
           */
+//        String[] boardStrs = {
+//                "doaf",
+//                "agai",
+//                "dcan"
+//        };
+//        ArrayList<String> words = ArrayListUtil.build("dog", "dad", "dgdg", "can", "again");
         String[] boardStrs = {
-                "doaf",
-                "agai",
-                "dcan"
+                "abce",
+                "sfcs",
+                "adee"
         };
+        ArrayList<String> words = ArrayListUtil.build("abcb","ninechapter","lintcode");
         char[][] board = new char[boardStrs.length][];
         for (int i = 0, len = board.length; i < len; i++) {
             board[i] = boardStrs[i].toCharArray();
         }
-        ArrayList<String> words = ArrayListUtil.build("dog", "dad", "dgdg", "can", "again");
         XYLog.d(words, "中出现在矩阵", board, "中的单词有：\n", solutions.wordSearchII(board, words));
 
 
