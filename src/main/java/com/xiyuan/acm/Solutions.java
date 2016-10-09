@@ -8329,23 +8329,23 @@ public class Solutions {
          挑战
          使用单词查找树来实现你的算法
           */
+////        String[] boardStrs = {
+////                "doaf",
+////                "agai",
+////                "dcan"
+////        };
+////        ArrayList<String> words = ArrayListUtil.build("dog", "dad", "dgdg", "can", "again");
 //        String[] boardStrs = {
-//                "doaf",
-//                "agai",
-//                "dcan"
+//                "abce",
+//                "sfcs",
+//                "adee"
 //        };
-//        ArrayList<String> words = ArrayListUtil.build("dog", "dad", "dgdg", "can", "again");
-        String[] boardStrs = {
-                "abce",
-                "sfcs",
-                "adee"
-        };
-        ArrayList<String> words = ArrayListUtil.build("abcb","ninechapter","lintcode");
-        char[][] board = new char[boardStrs.length][];
-        for (int i = 0, len = board.length; i < len; i++) {
-            board[i] = boardStrs[i].toCharArray();
-        }
-        XYLog.d(words, "中出现在矩阵", board, "中的单词有：\n", solutions.wordSearchII(board, words));
+//        ArrayList<String> words = ArrayListUtil.build("abcb","ninechapter","lintcode");
+//        char[][] board = new char[boardStrs.length][];
+//        for (int i = 0, len = board.length; i < len; i++) {
+//            board[i] = boardStrs[i].toCharArray();
+//        }
+//        XYLog.d(words, "中出现在矩阵", board, "中的单词有：\n", solutions.wordSearchII(board, words));
 
 
 
