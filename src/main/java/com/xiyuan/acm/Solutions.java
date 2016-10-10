@@ -8450,8 +8450,25 @@ public class Solutions {
      * @return: A undirected graph node
      */
     public UndirectedGraphNode cloneGraph(UndirectedGraphNode node) {
+        if (node != null) {
+            HashMap<UndirectedGraphNode, UndirectedGraphNode> existed = new HashMap<>();
+            return cloneGraph(node, existed);
+        }
+        else return null;
+    }
 
-        return null;
+    private UndirectedGraphNode cloneGraph(UndirectedGraphNode node, HashMap<UndirectedGraphNode, UndirectedGraphNode> existed) {
+        UndirectedGraphNode newNode = new UndirectedGraphNode(node.label);
+        existed.put(node, newNode);
+        for (UndirectedGraphNode neighbour: node.neighbors) {
+            if (existed.containsKey(neighbour)) {
+                newNode.neighbors.add(existed.get(neighbour));
+            }
+            else {
+                newNode.neighbors.add(cloneGraph(neighbour, existed));
+            }
+        }
+        return newNode;
     }
 
     private static class UndirectedGraphNode {
@@ -8474,14 +8491,14 @@ public class Solutions {
          数据中如何表示一个无向图？http://www.lintcode.com/help/graph/
          你的程序需要返回一个经过深度拷贝的新图。这个新图和原图具有同样的结构，并且对新图的任何改动不会对原图造成任何影响。
          */
-        UndirectedGraphNode node0 = new UndirectedGraphNode(0);
-        UndirectedGraphNode node1 = new UndirectedGraphNode(1);
-        UndirectedGraphNode node2 = new UndirectedGraphNode(2);
-        ArrayListUtil.addTo(node0.neighbors, node1, node2);
-        ArrayListUtil.addTo(node1.neighbors, node0, node2);
-        ArrayListUtil.addTo(node2.neighbors, node0, node1, node2);
-        UndirectedGraphNode node0Copy = solutions.cloneGraph(node0);
-        System.out.println(node0Copy);
+//        UndirectedGraphNode node0 = new UndirectedGraphNode(0);
+//        UndirectedGraphNode node1 = new UndirectedGraphNode(1);
+//        UndirectedGraphNode node2 = new UndirectedGraphNode(2);
+//        ArrayListUtil.addTo(node0.neighbors, node1, node2);
+//        ArrayListUtil.addTo(node1.neighbors, node0, node2);
+//        ArrayListUtil.addTo(node2.neighbors, node0, node1, node2);
+//        UndirectedGraphNode node0Copy = solutions.cloneGraph(node0);
+//        System.out.println(node0Copy);
 
 
 
