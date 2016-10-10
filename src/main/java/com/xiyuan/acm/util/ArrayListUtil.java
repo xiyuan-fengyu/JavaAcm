@@ -17,4 +17,13 @@ public class ArrayListUtil {
         return result;
     }
 
+    public static <T> void addTo(ArrayList<T> list, T ... ts) {
+        if (list != null && ts != null) {
+            for (T t: ts) {
+                list.add(t);
+            }
+        }
+    }
+
+
 }

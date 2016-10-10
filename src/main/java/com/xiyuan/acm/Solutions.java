@@ -8444,8 +8444,46 @@ public class Solutions {
 
 
 
+    /**
+     * http://www.lintcode.com/zh-cn/problem/clone-graph/
+     * @param node: A undirected graph node
+     * @return: A undirected graph node
+     */
+    public UndirectedGraphNode cloneGraph(UndirectedGraphNode node) {
+
+        return null;
+    }
+
+    private static class UndirectedGraphNode {
+        public int label;
+        public ArrayList<UndirectedGraphNode> neighbors;
+        public UndirectedGraphNode(int label) {
+            this.label = label;
+            this.neighbors = new ArrayList<>();
+        }
+    }
+
+
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         克隆图   [中等]
+         克隆一张无向图，图中的每个节点包含一个 label 和一个列表 neighbors。
+         数据中如何表示一个无向图？http://www.lintcode.com/help/graph/
+         你的程序需要返回一个经过深度拷贝的新图。这个新图和原图具有同样的结构，并且对新图的任何改动不会对原图造成任何影响。
+         */
+        UndirectedGraphNode node0 = new UndirectedGraphNode(0);
+        UndirectedGraphNode node1 = new UndirectedGraphNode(1);
+        UndirectedGraphNode node2 = new UndirectedGraphNode(2);
+        ArrayListUtil.addTo(node0.neighbors, node1, node2);
+        ArrayListUtil.addTo(node1.neighbors, node0, node2);
+        ArrayListUtil.addTo(node2.neighbors, node0, node1, node2);
+        UndirectedGraphNode node0Copy = solutions.cloneGraph(node0);
+        System.out.println(node0Copy);
+
+
 
         /**
          分割回文串   [中等]
