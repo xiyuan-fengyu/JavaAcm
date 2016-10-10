@@ -8482,8 +8482,64 @@ public class Solutions {
 
 
 
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/subarray-sum/
+     * @param nums: A list of integers
+     * @return: A list of integers includes the index of the first number
+     *          and the index of the last number
+     */
+    public ArrayList<Integer> subarraySum(int[] nums) {
+        ArrayList<Integer> result = new ArrayList<>();
+        if (nums != null && nums.length > 0) {
+            HashMap<Integer, Integer> sumMap = new HashMap<>();
+            int sum = 0;
+            for (int i = 0, len = nums.length; i < len; i++) {
+                int num = nums[i];
+                if (num == 0) {
+                    result.add(i);
+                    result.add(i);
+                    return result;
+                }
+                else {
+                    sum += num;
+                    if (sum == 0) {
+                        result.add(0);
+                        result.add(i);
+                        return result;
+                    }
+                    else if (sumMap.containsKey(sum)) {
+                        result.add(sumMap.get(sum) + 1);
+                        result.add(i);
+                        return result;
+                    }
+                    else {
+                        sumMap.put(sum, i);
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         子数组之和   [容易]
+         给定一个整数数组，找到和为零的子数组。你的代码应该返回满足要求的子数组的起始位置和结束位置
+         样例
+         给出 [-3, 1, 2, -3, 4]，返回[0, 2] 或者 [1, 3].
+         */
+//        int[] nums = {-3, 1, 2, -3, 4};
+//        XYLog.d(nums, "中和为0的子数组的其中一个的起始，终止下标为：\n", solutions.subarraySum(nums));
+
+
+
+
 
         /**
          克隆图   [中等]
