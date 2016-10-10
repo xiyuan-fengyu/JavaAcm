@@ -8397,8 +8397,72 @@ public class Solutions {
     }
 
 
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/palindrome-partitioning/
+     * @param str: A string
+     * @return: A list of lists of string
+     */
+    public List<List<String>> partition(String str) {
+        List<List<String>> result = new ArrayList<>();
+        if (str != null && str.length() > 0) {
+            for (int i = 0, len = str.length(); i < len; i++) {
+                if (isSubStrBackWord(str, 0, i)) {
+                    if (i < len - 1) {
+                        List<List<String>> subResult = partition(str.substring(i + 1));
+                        String subStr = str.substring(0, i + 1);
+                        for (List<String> resultItem: subResult) {
+                            resultItem.add(0, subStr);
+                            result.add(resultItem);
+                        }
+                    }
+                    else {
+                        List<String> resultItem = new ArrayList<>();
+                        resultItem.add(str);
+                        result.add(resultItem);
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    private boolean isSubStrBackWord(String str, int start, int end) {
+        for (int i = start, j = end; i < j; i++, j--) {
+            if (str.charAt(i) != str.charAt(j)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         分割回文串   [中等]
+         给定一个字符串s，将s分割成一些子串，使每个子串都是回文串。
+         返回s所有可能的回文串分割方案。
+         样例
+         给出 s = "aab"，返回
+         [
+         ["aa", "b"],
+         ["a", "a", "b"]
+         ]
+         */
+//        String str = "aab";
+//        XYLog.d(str, "的所有回文串分割方案有：\n", solutions.partition(str));
+
+
+
 
         /**
          数字组合   [中等]
