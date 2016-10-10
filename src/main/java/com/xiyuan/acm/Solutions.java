@@ -8324,7 +8324,14 @@ public class Solutions {
          获取数据get(key)：如果缓存中存在key，则获取其数据值（通常是正数），否则返回-1。
          写入数据set(key, value)：如果key还没有在缓存中，则写入其数据值。当缓存达到上限，它应该在写入新数据之前删除最近最少使用的数据用来腾出空闲位置。
          */
-
+//        int capacity = 2;
+//        Lru lru = new Lru(capacity);
+//        lru.set(2, 1);
+//        lru.set(1, 1);
+//        XYLog.d(lru.get(2));
+//        lru.set(4, 1);
+//        XYLog.d(lru.get(1));
+//        XYLog.d(lru.get(2));
 
 
 
