@@ -8315,11 +8315,116 @@ public class Solutions {
         return result;
     }
 
+
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/combination-sum/
+     * @param arr: A list of integers
+     * @param target:An integer
+     * @return: A list of lists of integers
+     */
+    public List<List<Integer>> combinationSum(int[] arr, int target) {
+        List<List<Integer>> result = new ArrayList<>();
+
+        if (arr != null && arr.length != 0) {
+            Arrays.sort(arr);
+            findCombinationSum(arr, target, new Stack<Integer>(), result);
+            HashMap<String, Boolean> existed = new HashMap<>();
+            for (int i = 0; i < result.size();) {
+                List<Integer> resultItem = result.get(i);
+                StringBuilder strBld = new StringBuilder();
+                for(Integer j: resultItem) {
+                    strBld.append(j).append(',');
+                }
+                String key = strBld.toString();
+                if (existed.containsKey(key)) {
+                    result.remove(i);
+                }
+                else {
+                    existed.put(key, true);
+                    i++;
+                }
+            }
+        }
+        return result;
+    }
+
+    private void findCombinationSum(int[] arr, int target, Stack<Integer> stack, List<List<Integer>> result) {
+        if ((stack.isEmpty() || stack.peek() <= target) && binarySearchFrom(arr, target, 0, arr.length - 1)) {
+            stack.push(target);
+            ArrayList<Integer> resultItem = new ArrayList<>();
+            resultItem.addAll(stack);
+            result.add(resultItem);
+            stack.pop();
+        }
+
+        if (target > arr[0]) {
+            for (int i = 0, len = arr.length; i < len; i++) {
+                int item = arr[i];
+                if (item > target) {
+                    break;
+                }
+                else if (stack.isEmpty() || stack.peek() <= item) {
+                    stack.push(item);
+                    findCombinationSum(arr, target - item, stack, result);
+                    stack.pop();
+                }
+            }
+        }
+    }
+
+    private boolean binarySearchFrom(int[] arr, int target, int left, int right) {
+        if (left > right) {
+            return false;
+        }
+
+        int middle = (left + right) / 2;
+        int middleVal = arr[middle];
+        if (middleVal == target) {
+            return true;
+        }
+        else if (middleVal > target) {
+            return binarySearchFrom(arr, target, left, middle - 1);
+        }
+        else {
+            return binarySearchFrom(arr, target, middle + 1, right);
+        }
+    }
+
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
 
         /**
+         数字组合   [中等]
+         给出一组候选数字(C)和目标数字(T),找到C中所有的组合，使找出的数字和为T。C中的数字可以无限制重复被选取。
+         例如,给出候选数组[2,3,6,7]和目标数字7，所求的解为：
+         [7]，
+         [2,2,3]
+         注意事项
+         所有的数字(包括目标数字)均为正整数。
+         元素组合(a1, a2, … , ak)必须是非降序(ie, a1 ≤ a2 ≤ … ≤ ak)。
+         解集不能包含重复的组合。
+         样例
+         给出候选数组[2,3,6,7]和目标数字7
+         返回 [[7],[2,2,3]]
+         */
+//        int[] arr = {2,3,6,7};
+//        int target = 7;
+//        XYLog.d("在\n", arr, "\n中所有和为", target, "的组合有：\n", solutions.combinationSum(arr, target));
+
+
+
+
+
+        /**
          LRU缓存策略   [困难]
+         http://www.lintcode.com/zh-cn/problem/longest-words/
          为最近最少使用（LRU）缓存策略设计一个数据结构，它应该支持以下操作：获取数据（get）和写入数据（set）。
          获取数据get(key)：如果缓存中存在key，则获取其数据值（通常是正数），否则返回-1。
          写入数据set(key, value)：如果key还没有在缓存中，则写入其数据值。当缓存达到上限，它应该在写入新数据之前删除最近最少使用的数据用来腾出空闲位置。
