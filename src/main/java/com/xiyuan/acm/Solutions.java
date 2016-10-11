@@ -8719,8 +8719,79 @@ public class Solutions {
         return totalOf1 == 1;
     }
 
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/sort-colors-ii/
+     * @param colors: A list of integer
+     * @param k: An integer
+     * @return: nothing
+     */
+    public void sortColors2(int[] colors, int k) {
+        int sorted = 0;
+        int start = 0;
+        int end = colors.length - 1;
+        while (sorted < k) {
+            int min = Integer.MAX_VALUE;
+            int max = Integer.MIN_VALUE;
+
+            for (int i = start; i <= end; i++) {
+                min = Math.min(min, colors[i]);
+                max = Math.max(max, colors[i]);
+            }
+
+            int left = start;
+            int right = end;
+            int cur = left;
+            while (cur <= right) {
+                int curColor = colors[cur];
+                if (curColor == min) {
+                    swapColor(colors, left, cur);
+                    cur++;
+                    left++;
+                }
+                else if (curColor == max) {
+                    swapColor(colors, right, cur);
+                    right--;
+                }
+                else {
+                    cur++;
+                }
+            }
+
+            sorted += 2;
+            start = left;
+            end = right;
+        }
+    }
+
+    private void swapColor(int[] colors, int i, int j) {
+        int temp = colors[i];
+        colors[i] = colors[j];
+        colors[j] = temp;
+    }
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         排颜色 II   [中等]
+         给定一个有n个对象（包括k种不同的颜色，并按照1到k进行编号）的数组，将对象进行分类使相同颜色的对象相邻，并按照1,2，...k的顺序进行排序。
+         注意事项
+         不能使用代码库中的排序函数来解决这个问题
+         样例
+         给出colors=[3, 2, 2, 1, 4]，k=4, 你的代码应该在原地操作使得数组变成[1, 2, 2, 3, 4]
+         */
+//        int[] colors = {3, 2, 2, 1, 4};
+//        int k = 4;
+//        XYLog.d(colors);
+//        solutions.sortColors2(colors, k);
+//        XYLog.d("重排序后：");
+//        XYLog.d(colors);
+
 
         /**
          O(1)时间检测2的幂次   [容易]
