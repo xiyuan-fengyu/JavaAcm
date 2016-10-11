@@ -8970,8 +8970,61 @@ public class Solutions {
         return maxDelta;
     }
 
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/combinations/
+     * @param n: Given the range of numbers
+     * @param k: Given the numbers of combinations
+     * @return: All the combinations of k numbers out of 1..n
+     */
+    public List<List<Integer>> combine(int n, int k) {
+        if (k > 0 && n >= k) {
+            return combine(1, n, k);
+        }
+        return new ArrayList<>();
+    }
+
+    public List<List<Integer>> combine(int left, int right, int k) {
+        List<List<Integer>> result = new ArrayList<>();
+        if (k > 0 && right - left + 1 >= k) {
+            List<List<Integer>> tempResult0 = combine(left + 1, right, k - 1);
+            for (List<Integer> resultItem: tempResult0) {
+                resultItem.add(0, left);
+                result.add(resultItem);
+            }
+
+            List<List<Integer>> tempResult1 = combine(left + 1, right, k);
+            if (tempResult1.size() > 0) {
+                result.addAll(tempResult1);
+            }
+        }
+        else if (k == 0) {
+            result.add(new ArrayList<Integer>());
+        }
+        return result;
+    }
+
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         组合  [中等]
+         组给出两个整数n和k，返回从1......n中选出的k个数的组合。
+         样例
+         例如 n = 4 且 k = 2
+         返回的解为：
+         [[2,4],[3,4],[2,3],[1,2],[1,3],[1,4]]
+         */
+//        int n = 4;
+//        int k = 2;
+//        XYLog.d("从 1 到 ", n, " 中取出 ", k, " 个不同数，有这些不同的组合：\n", solutions.combine(n, k));
+
+
+
 
         /**
          买卖股票的最佳时机 III   [中等]
