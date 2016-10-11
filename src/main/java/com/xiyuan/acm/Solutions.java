@@ -8860,8 +8860,47 @@ public class Solutions {
     }
 
 
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/best-time-to-buy-and-sell-stock/
+     * @param prices: Given an integer array
+     * @return: Maximum profit
+     */
+    public int maxProfit(int[] prices) {
+        int maxDelta = 0;
+        if (prices != null && prices.length > 0) {
+            int min = Integer.MAX_VALUE;
+            for (int i = 0, len = prices.length; i < len; i++) {
+                int cur = prices[i];
+
+                if (min > cur) {
+                    min = cur;
+                }
+                if (cur - min > maxDelta) {
+                    maxDelta = cur - min;
+                }
+            }
+        }
+        return maxDelta;
+    }
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         买卖股票的最佳时机   [中等]
+         假设有一个数组，它的第i个元素是一支给定的股票在第i天的价格。如果你最多只允许完成一次交易(例如,一次买卖股票),设计一个算法来找出最大利润。
+         样例
+         给出一个数组样例 [3,2,3,1,2], 返回 1
+         */
+//        int[] prices = {3,1,3,1,4};
+//        XYLog.d(prices, "的最大交易收益为：", solutions.maxProfit(prices));
+
+
 
         /**
          颜色分类   [中等]
