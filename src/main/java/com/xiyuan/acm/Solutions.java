@@ -8525,8 +8525,86 @@ public class Solutions {
         return result;
     }
 
+
+
+
+
+
+    /**
+     * @param nums: A list of integers
+     * @return: A list of integers includes the index of the first number
+     *          and the index of the last number
+     */
+    public int[] subarraySumClosest(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return null;
+        }
+        else if (nums.length == 1) {
+            return new int[]{0, 0};
+        }
+
+        int[] result = {0,0};
+        ArrayList<IndexAndSum> indexAndSumArr = new ArrayList<>();
+        int total = 0;
+        for (int i = 0, len = nums.length; i < len; i++) {
+            total += nums[i];
+            if (total == 0) {
+                result[1] = i;
+                return result;
+            }
+            else {
+                indexAndSumArr.add(new IndexAndSum(i, total));
+            }
+        }
+        Collections.sort(indexAndSumArr, new java.util.Comparator<IndexAndSum>() {
+            @Override
+            public int compare(IndexAndSum o1, IndexAndSum o2) {
+                return o1.sum - o2.sum;
+            }
+        });
+
+        int min = Integer.MAX_VALUE;
+        for (int i = 0, size = indexAndSumArr.size(); i < size - 1; i++) {
+            IndexAndSum cur = indexAndSumArr.get(i);
+            IndexAndSum next = indexAndSumArr.get(i + 1);
+            int temp = Math.abs(cur.sum - next.sum);
+            if (temp < min) {
+                min = temp;
+                result[0] = Math.min(cur.index, next.index) + 1;
+                result[1] = Math.max(cur.index, next.index);
+            }
+        }
+
+        return result;
+    }
+
+    private class IndexAndSum {
+        public final int index;
+        public final int sum;
+        public IndexAndSum(int index, int sum) {
+            this.index = index;
+            this.sum = sum;
+        }
+    }
+
+
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         最接近零的子数组和   [中等]
+         给定一个整数数组，找到一个和最接近于零的子数组。返回第一个和最有一个指数。你的代码应该返回满足要求的子数组的起始位置和结束位置
+         样例
+         给出[-3, 1, 1, -3, 5]，返回[0, 2]，[1, 3]， [1, 1]， [2, 2] 或者 [0, 4]。
+         挑战
+         O(nlogn)的时间复杂度
+         */
+//        int[] nums = {-3, 1, 1, -3, 5};
+//        XYLog.d(nums, "中和最接近0的子数组的其中一个的起始，终止下标为：\n", solutions.subarraySumClosest(nums));
+
+
+
 
         /**
          子数组之和   [容易]
