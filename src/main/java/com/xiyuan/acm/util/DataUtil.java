@@ -39,6 +39,24 @@ public class DataUtil {
         return  result;
     }
 
+    public static int[] getIntArr(String path) {
+        char[] fileContent = getFileContent(path).toCharArray();
+        StringBuilder builder = new StringBuilder();
+        for (char c: fileContent) {
+            if ((c + "").matches("[0-9,-]")) {
+                builder.append(c);
+            }
+        }
+        String dataStr = builder.toString();
+        String[] split = dataStr.split(",");
+        int len = split.length;
+        int[] result = new int[len];
+        for (int i = 0; i < len; i++) {
+            result[i] = Integer.parseInt(split[i]);
+        }
+        return  result;
+    }
+
     public static int[][] getTwoDimensArr(String path, int secondDimenLen) {
         if (path == null || secondDimenLen <= 0) {
             return null;

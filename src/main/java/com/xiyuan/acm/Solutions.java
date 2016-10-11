@@ -8774,8 +8774,67 @@ public class Solutions {
         colors[j] = temp;
     }
 
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/interleaving-positive-and-negative-numbers/
+     * @param arr: An integer array.
+     * @return: void
+     */
+    public void rerange(int[] arr) {
+        if (arr != null && arr.length > 1) {
+            int len = arr.length;
+            for (int i = 0; i < len - 1; i++) {
+                int temp = arr[i + 1];
+                if (!isDiffTag(arr[i], temp)) {
+                    for (int j = i + 2; j < len; j++) {
+                        if (isDiffTag(temp, arr[j])) {
+                            swapRerange(arr, i + 1, j);
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if (!isDiffTag(arr[len - 2], arr[len - 1])) {
+                for (int i = 0; i < len - 2; i++) {
+                    swapRerange(arr, i, i + 1);
+                }
+            }
+        }
+    }
+
+    private boolean isDiffTag(int i, int j) {
+        return (i > 0 && j < 0) || (i <0 && j > 0);
+    }
+
+    private void swapRerange(int[] arr, int i, int j) {
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         交错正负数   [中等]
+         给出一个含有正整数和负整数的数组，重新排列成一个正负数交错的数组。
+         样例
+         给出数组[-1, -2, -3, 4, 5, 6]，重新排序之后，变成[-1, 5, -2, 4, -3, 6]或者其他任何满足要求的答案
+         */
+////        int[] arr = {-33,-19,30,26,21,-9};
+//        int[] arr = DataUtil.getIntArr("./data/interleaving-positive-and-negative-numbers-65.in");
+//        XYLog.d(arr);
+//        solutions.rerange(arr);
+//        XYLog.d("交错重排后：");
+//        XYLog.d(arr);
+
+
 
         /**
          排颜色 II   [中等]
