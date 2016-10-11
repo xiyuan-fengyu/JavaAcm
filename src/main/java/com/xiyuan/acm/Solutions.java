@@ -8589,8 +8589,98 @@ public class Solutions {
 
 
 
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/fast-power/
+     * @param a, b, n: 32bit integers
+     * @return: An integer
+     */
+    public int fastPower(int a, int b, int n) {
+        if (a == 0) {
+            return 0;
+        }
+        else if (n == 0) {
+            return 1 % b;
+        }
+        else if (n == 1) {
+            return a % b;
+        }
+        else {
+            int temp = fastPower(a, b, n / 2);
+            temp = modMult(temp, temp, b);
+            if (n % 2 == 0) {
+                return temp;
+            }
+            else {
+                return modMult(a, temp, b);
+            }
+        }
+    }
+
+    private int modMult(int a, int b, int m) {
+        if (a == 0 || b == 0) {
+            return 0;
+        }
+
+        if (Integer.MAX_VALUE / Math.abs(b) >= Math.abs(a)) {
+            return a * b % m;
+        }
+        else {
+            int temp = modMult(a / 2, b, m);
+            temp = modSum(temp, temp, m);
+            if (a % 2 == 0) {
+                return temp;
+            }
+            else {
+                return modSum(temp, b, m);
+            }
+        }
+    }
+
+    private int modSum(int a, int b, int m) {
+        int tempA = Math.max(a, b);
+        int tempB = Math.min(a, b);
+        int absM = Math.abs(m);
+        a = tempA;
+        b = tempB;
+        if (a >= 0) {
+            while (b > Integer.MAX_VALUE - a) {
+                b -= absM;
+            }
+        }
+        else if (a < 0) {
+            while (b < Integer.MIN_VALUE - a) {
+                b += absM;
+            }
+        }
+        return (a + b) % m;
+    }
+
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         快速幂   [中等]
+         计算a ^ n % b，其中a，b和n都是32位的整数。
+         样例
+         例如 2 ^ 31 % 3 = 2
+         例如 100 ^ 1000 % 1000 = 0
+         挑战
+         O(logn)
+         */
+//        int[] arr = {2147483647, 2147483645, 214748364};
+//        int a = arr[0];
+//        int b = arr[1];
+//        int n = arr[2];
+//        XYLog.d(a + " ^ " + n + " % " + b + " = " + solutions.fastPower(a, b, n));
+
+
+
+
 
         /**
          最接近零的子数组和   [中等]
