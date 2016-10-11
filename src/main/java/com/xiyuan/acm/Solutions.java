@@ -8818,8 +8818,74 @@ public class Solutions {
     }
 
 
+
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/sort-colors/
+     * @param nums: A list of integer which is 0, 1 or 2
+     * @return: nothing
+     */
+    public void sortColors(int[] nums) {
+        if (nums != null && nums.length != 0) {
+            int len = nums.length;
+            int left = 0;
+            int right = len - 1;
+            for (int i = left; i <= right;) {
+                int cur = nums[i];
+                if (cur == 0) {
+                    swapColorI(nums, left, i);
+                    left++;
+                    i++;
+                }
+                else if (cur == 2) {
+                    swapColorI(nums, right, i);
+                    right--;
+                }
+                else {
+                    i++;
+                }
+            }
+        }
+    }
+
+    private void swapColorI(int[] arr, int i, int j) {
+        int temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
+    }
+
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         颜色分类   [中等]
+         给定一个包含红，白，蓝且长度为 n 的数组，将数组元素进行分类使相同颜色的元素相邻，并按照红、白、蓝的顺序进行排序。
+         我们可以使用整数 0，1 和 2 分别代表红，白，蓝。
+         注意事项
+         不能使用代码库中的排序函数来解决这个问题。
+         排序需要在原数组中进行。
+         样例
+         给你数组 [1, 0, 1, 2], 需要将该数组原地排序为 [0, 1, 1, 2]。
+         挑战
+         一个相当直接的解决方案是使用计数排序扫描2遍的算法。
+         首先，迭代数组计算 0,1,2 出现的次数，然后依次用 0,1,2 出现的次数去覆盖数组。
+         你否能想出一个仅使用常数级额外空间复杂度且只扫描遍历一遍数组的算法？
+         */
+//        int[] colors = {2,0,0,1,2,0,2,0,1};
+//        XYLog.d(colors);
+//        solutions.sortColors(colors);
+//        XYLog.d("重排后：");
+//        XYLog.d(colors);
+
+
+
+
 
         /**
          交错正负数   [中等]
@@ -8831,7 +8897,7 @@ public class Solutions {
 //        int[] arr = DataUtil.getIntArr("./data/interleaving-positive-and-negative-numbers-65.in");
 //        XYLog.d(arr);
 //        solutions.rerange(arr);
-//        XYLog.d("交错重排后：");
+//        XYLog.d("交错重后：");
 //        XYLog.d(arr);
 
 
