@@ -9076,9 +9076,73 @@ public class Solutions {
      * @return: A boolean
      */
     public boolean isMatch(String s, String p) {
-        
+        if (s == null || p == null) {
+            return false;
+        }
+        return isMatch(s, 0, p, 0);
+    }
 
+    public boolean isMatch(String s, int sIndex, String p, int pIndex) {
+        int sLen = s.length();
+        int pLen = p.length();
+        if (pIndex == pLen) {
+            return sIndex == sLen;
+        }
+        else if (sIndex == sLen) {
+            return false;
+        }
+
+        String nextP = nextPattern(p, pIndex);
+        int nextPLen = nextP.length();
+        char nextC = nextP.charAt(0);
+        if (nextPLen == 1) {
+            if (nextC == '.') {
+                return isMatch(s, sIndex + 1, p, pIndex + 1);
+            }
+            else {
+                if (s.charAt(sIndex) == nextC) {
+                    return isMatch(s, sIndex + 1, p, pIndex + 1);
+                }
+                else return false;
+            }
+        }
+        else {
+            if (nextC == '.') {
+                for (int i = sIndex; i <= sLen; i++) {
+                    boolean temp = isMatch(s, i, p, pIndex + 2);
+                    if (temp) {
+                        return true;
+                    }
+                }
+            }
+            else {
+                for (int i = sIndex - 1; i < sLen; i++) {
+                    if (i == sIndex - 1 || nextC == s.charAt(i)) {
+                        boolean temp1 = isMatch(s, i + 1, p, pIndex + 2);
+                        if (temp1) {
+                            return true;
+                        }
+                    }
+                    else break;
+                }
+            }
+        }
         return false;
+    }
+
+    private String nextPattern(String p, int start) {
+        int len = p.length();
+        if (start == len - 1) {
+            return p.charAt(start) + "";
+        }
+        else {
+            char curC = p.charAt(start);
+            char next = p.charAt(start + 1);
+            if (next == '*') {
+                return "" + curC + next;
+            }
+            else return "" + curC;
+        }
     }
 
 
@@ -9099,9 +9163,9 @@ public class Solutions {
          isMatch("aa", ".*") → true
          isMatch("ab", "a.*") → true
          */
-        String str = "abc";
-        String regexStr = "ab*c";
-        XYLog.d("isMatch(\"" + str + "\", \"" + regexStr + "\") = ", solutions.isMatch(str, regexStr));
+//        String str = "acaabbaccbbacaabbbb";
+//        String regexStr = "a*.*b*.*a*aa*a*";
+//        XYLog.d("isMatch(\"" + str + "\", \"" + regexStr + "\") = ", solutions.isMatch(str, regexStr));
 
 
 
