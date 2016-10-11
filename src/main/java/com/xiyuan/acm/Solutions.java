@@ -8925,8 +8925,8 @@ public class Solutions {
          样例
          给出一个数组样例[2,1,2,0,1], 返回 2
          */
-        int[] prices = {1,3,2,5,6,1,0,3};
-        XYLog.d(prices, "的最大交易收益为：", solutions.maxProfitII(prices));
+//        int[] prices = {1,3,2,5,6,1,0,3};
+//        XYLog.d(prices, "的最大交易收益为：", solutions.maxProfitII(prices));
 
 
 
