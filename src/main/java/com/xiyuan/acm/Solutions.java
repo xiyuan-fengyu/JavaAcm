@@ -9147,8 +9147,57 @@ public class Solutions {
 
 
 
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/minimum-depth-of-binary-tree/
+     * @param root: The root of binary tree.
+     * @return: An integer.
+     */
+    public int minDepth(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+
+        curMinDepth = Integer.MAX_VALUE;
+        computeMinDepth(root, 1);
+        return curMinDepth;
+    }
+
+    private int curMinDepth = Integer.MAX_VALUE;
+
+    private void computeMinDepth(TreeNode node, int curDepth) {
+        if (node != null && curDepth < curMinDepth) {
+            if (node.left == null && node.right == null) {
+                if (curMinDepth > curDepth) {
+                    curMinDepth = curDepth;
+                }
+            }
+            else {
+                computeMinDepth(node.left, curDepth + 1);
+                computeMinDepth(node.right, curDepth + 1);
+            }
+        }
+    }
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         二叉树的最小深度   [容易]
+         给定一个二叉树，找出其最小深度。
+         二叉树的最小深度为根节点到最近叶子节点的距离。
+         */
+//        TreeNode root = TreeNodeFactory.build("1,2,3,#,#,4,5");
+//        XYLog.d(root, "的最小深度为：\n", solutions.minDepth(root));
+
+
+
+
 
         /**
          正则表达式匹配   [困难]
