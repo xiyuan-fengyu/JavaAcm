@@ -8701,8 +8701,44 @@ public class Solutions {
     }
 
 
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/o1-check-power-of-2/
+     * @param n: An integer
+     * @return: True or false
+     */
+    public boolean checkPowerOf2(int n) {
+        int totalOf1 = 0;
+        while (n > 0) {
+            totalOf1 += n & 1;
+            n >>= 1;
+        }
+        return totalOf1 == 1;
+    }
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         O(1)时间检测2的幂次   [容易]
+         用 O(1) 时间检测整数 n 是否是 2 的幂次。
+         注意事项
+         O(1) 时间复杂度
+
+         样例
+         n=4，返回 true;
+         n=5，返回 false.
+         */
+//        int n = 8;
+//        XYLog.d(n, solutions.checkPowerOf2(n)? "是": "不是", "2的冥次");
+
+
+
+
+
 
         /**
          x的平方根   [容易]
