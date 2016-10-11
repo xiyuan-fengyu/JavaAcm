@@ -9191,6 +9191,57 @@ public class Solutions {
 
 
 
+//    /**
+//     * 采用边界和栈来合并，不满足挑战要求
+//     * http://www.lintcode.com/zh-cn/problem/merge-intervals/
+//     * @param intervals, a collection of intervals
+//     * @return: A new sorted interval list.
+//     */
+//    public List<Interval> merge(List<Interval> intervals) {
+//        if (intervals == null) {
+//            return null;
+//        }
+//
+//        List<IntervalEdge> edges = new ArrayList<>();
+//        for (Interval item: intervals) {
+//            edges.add(new IntervalEdge(item.start, true));
+//            edges.add(new IntervalEdge(item.end, false));
+//        }
+//        Collections.sort(edges, new java.util.Comparator<IntervalEdge>() {
+//            @Override
+//            public int compare(IntervalEdge o1, IntervalEdge o2) {
+//                if (o1.index != o2.index) {
+//                    return o1.index - o2.index;
+//                }
+//                else return o2.isStart? 1: -1;
+//            }
+//        });
+//
+//        Stack<IntervalEdge> stack = new Stack<>();
+//        List<Interval> result = new ArrayList<>();
+//        for (IntervalEdge edge: edges) {
+//            if (edge.isStart) {
+//                stack.push(edge);
+//            }
+//            else {
+//                IntervalEdge top = stack.pop();
+//                if (stack.isEmpty()) {
+//                    result.add(new Interval(top.index, edge.index));
+//                }
+//            }
+//        }
+//        return result;
+//    }
+//
+//    private class IntervalEdge {
+//        public final int index;
+//        public final boolean isStart;
+//        public IntervalEdge(int index, boolean isStart) {
+//            this.index = index;
+//            this.isStart = isStart;
+//        }
+//    }
+
     /**
      * http://www.lintcode.com/zh-cn/problem/merge-intervals/
      * @param intervals, a collection of intervals
@@ -9201,45 +9252,30 @@ public class Solutions {
             return null;
         }
 
-        List<IntervalEdge> edges = new ArrayList<>();
-        for (Interval item: intervals) {
-            edges.add(new IntervalEdge(item.start, true));
-            edges.add(new IntervalEdge(item.end, false));
-        }
-        Collections.sort(edges, new java.util.Comparator<IntervalEdge>() {
+        Collections.sort(intervals, new java.util.Comparator<Interval>() {
             @Override
-            public int compare(IntervalEdge o1, IntervalEdge o2) {
-                if (o1.index != o2.index) {
-                    return o1.index - o2.index;
+            public int compare(Interval o1, Interval o2) {
+                if (o1.start != o2.start) {
+                    return o1.start - o2.start;
                 }
-                else return o2.isStart? 1: -1;
+                else return o2.end - o1.end;
             }
         });
-
-        Stack<IntervalEdge> stack = new Stack<>();
-        List<Interval> result = new ArrayList<>();
-        for (IntervalEdge edge: edges) {
-            if (edge.isStart) {
-                stack.push(edge);
+        for (int i = 1; i < intervals.size();) {
+            Interval last = intervals.get(i - 1);
+            Interval cur = intervals.get(i);
+            if (last.end >= cur.start) {
+                last.end = Math.max(last.end, cur.end);
+                intervals.remove(i);
             }
             else {
-                IntervalEdge top = stack.pop();
-                if (stack.isEmpty()) {
-                    result.add(new Interval(top.index, edge.index));
-                }
+                i++;
             }
         }
-        return result;
+        return intervals;
     }
 
-    private class IntervalEdge {
-        public final int index;
-        public final boolean isStart;
-        public IntervalEdge(int index, boolean isStart) {
-            this.index = index;
-            this.isStart = isStart;
-        }
-    }
+
 
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
@@ -9264,7 +9300,8 @@ public class Solutions {
 //                new Interval(8, 10),
 //                new Interval(5, 18)
 //        );
-//        XYLog.d(intervals, "\n合并之后为：\n", solutions.merge(intervals));
+//        XYLog.d(intervals);
+//        XYLog.d("合并之后为：\n", solutions.merge(intervals));
 
 
 
