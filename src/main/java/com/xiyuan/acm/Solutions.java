@@ -9277,8 +9277,37 @@ public class Solutions {
 
 
 
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/unique-characters/
+     * @param str: a string
+     * @return: a boolean
+     */
+    public boolean isUnique(String str) {
+
+        return false;
+    }
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         判断字符串是否没有重复字符   [容易]
+         实现一个算法确定字符串中的字符是否均唯一出现
+         样例
+         给出"abc"，返回 true
+         给出"aab"，返回 false
+         挑战
+         如果不使用额外的存储空间，你的算法该如何改变？
+         */
+        String str = "abc";
+        XYLog.d(str, "中", solutions.isUnique(str)? "所有字母唯一": "存在字母重复");
+
+
+
 
         /**
          合并区间   [容易]
