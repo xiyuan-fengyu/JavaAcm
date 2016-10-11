@@ -9065,8 +9065,45 @@ public class Solutions {
         return result;
     }
 
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/regular-expression-matching/
+     * @param s: A string
+     * @param p: A string includes "." and "*"
+     * @return: A boolean
+     */
+    public boolean isMatch(String s, String p) {
+        
+
+        return false;
+    }
+
+
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         正则表达式匹配   [困难]
+         实现支持'.'和'*'的正则表达式匹配。
+         '.'匹配任意一个字母。
+         '*'匹配零个或者多个前面的元素。
+         匹配应该覆盖整个输入字符串，而不仅仅是一部分。
+         需要实现的函数是：boolean isMatch(String s, String p)
+         样例
+         isMatch("aa","a") → false
+         isMatch("aa","aa") → true
+         isMatch("aa", ".*") → true
+         isMatch("ab", "a.*") → true
+         */
+        String str = "abc";
+        String regexStr = "ab*c";
+        XYLog.d("isMatch(\"" + str + "\", \"" + regexStr + "\") = ", solutions.isMatch(str, regexStr));
+
+
 
         /**
          数字组合 II  [中等]
