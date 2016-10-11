@@ -9184,8 +9184,89 @@ public class Solutions {
         }
     }
 
+
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/merge-intervals/
+     * @param intervals, a collection of intervals
+     * @return: A new sorted interval list.
+     */
+    public List<Interval> merge(List<Interval> intervals) {
+        if (intervals == null) {
+            return null;
+        }
+
+        List<IntervalEdge> edges = new ArrayList<>();
+        for (Interval item: intervals) {
+            edges.add(new IntervalEdge(item.start, true));
+            edges.add(new IntervalEdge(item.end, false));
+        }
+        Collections.sort(edges, new java.util.Comparator<IntervalEdge>() {
+            @Override
+            public int compare(IntervalEdge o1, IntervalEdge o2) {
+                if (o1.index != o2.index) {
+                    return o1.index - o2.index;
+                }
+                else return o2.isStart? 1: -1;
+            }
+        });
+
+        Stack<IntervalEdge> stack = new Stack<>();
+        List<Interval> result = new ArrayList<>();
+        for (IntervalEdge edge: edges) {
+            if (edge.isStart) {
+                stack.push(edge);
+            }
+            else {
+                IntervalEdge top = stack.pop();
+                if (stack.isEmpty()) {
+                    result.add(new Interval(top.index, edge.index));
+                }
+            }
+        }
+        return result;
+    }
+
+    private class IntervalEdge {
+        public final int index;
+        public final boolean isStart;
+        public IntervalEdge(int index, boolean isStart) {
+            this.index = index;
+            this.isStart = isStart;
+        }
+    }
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         合并区间   [容易]
+         给出若干闭合区间，合并所有重叠的部分。
+         样例
+         给出的区间列表 => 合并后的区间列表：
+         [                     [
+         [1, 3],               [1, 6],
+         [2, 6],      =>       [8, 10],
+         [8, 10],              [15, 18]
+         [15, 18]            ]
+         ]
+         挑战
+         O(n log n) 的时间和 O(1) 的额外空间。
+         */
+//        List<Interval> intervals = ArrayListUtil.build(
+//                new Interval(1, 3),
+//                new Interval(2, 6),
+//                new Interval(8, 10),
+//                new Interval(5, 18)
+//        );
+//        XYLog.d(intervals, "\n合并之后为：\n", solutions.merge(intervals));
+
+
 
         /**
          二叉树的最小深度   [容易]
@@ -11300,7 +11381,7 @@ public class Solutions {
 
         @Override
         public String toString() {
-            return "[" + start + ", " + end + "]";
+            return "(" + start + ", " + end + ")";
         }
     }
 
