@@ -8916,8 +8916,75 @@ public class Solutions {
         return total;
     }
 
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/best-time-to-buy-and-sell-stock-iii/
+     * @param prices: Given an integer array
+     * @return: Maximum profit
+     */
+    public int maxProfitIII(int[] prices) {
+        int max = 0;
+        if (prices != null && prices.length > 0) {
+            int len = prices.length;
+            if (len >= 2) {
+                for (int i = 0; i < len - 1; i++) {
+                    int cur = prices[i];
+                    int next = prices[i + 1];
+                    if (cur > next) {
+                        int temp = maxProfit(prices, 0, i) + maxProfit(prices, i + 1, len - 1);
+                        if (temp > max) {
+                            max = temp;
+                        }
+                    }
+                    else {
+                        int temp = maxProfit(prices, 0, i + 1);
+                        if (temp > max) {
+                            max = temp;
+                        }
+                    }
+                }
+            }
+        }
+        return max;
+    }
+
+    public int maxProfit(int[] prices, int left, int right) {
+        int maxDelta = 0;
+        if (prices != null && prices.length > 0) {
+            int min = Integer.MAX_VALUE;
+            for (int i = left; i <= right; i++) {
+                int cur = prices[i];
+
+                if (min > cur) {
+                    min = cur;
+                }
+                if (cur - min > maxDelta) {
+                    maxDelta = cur - min;
+                }
+            }
+        }
+        return maxDelta;
+    }
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         买卖股票的最佳时机 III   [中等]
+         假设你有一个数组，它的第i个元素是一支给定的股票在第i天的价格。设计一个算法来找到最大的利润。你最多可以完成两笔交易。
+         注意事项
+         你不可以同时参与多笔交易(你必须在再次购买前出售掉之前的股票)
+         样例
+         给出一个样例数组 [4,4,6,1,1,4,2,5], 返回 6
+         */
+//        int[] prices = {1,3,2,1,3,2,5};
+//        XYLog.d(prices, "的最大交易收益为：", solutions.maxProfitIII(prices));
+
+
 
         /**
          买卖股票的最佳时机 II   [中等]
