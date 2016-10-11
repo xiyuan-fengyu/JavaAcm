@@ -8660,8 +8660,63 @@ public class Solutions {
     }
 
 
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/sqrtx/
+     * @param x: An integer
+     * @return: The sqrt of x
+     */
+    public int sqrt(int x) {
+        return findSqrt(x, 0, x);
+    }
+
+    private int findSqrt(int x, int left, int right) {
+        if (left == right) {
+            return left;
+        }
+
+        int middle = (left + right) / 2;
+        if (middle > 0 && Integer.MAX_VALUE / middle < middle) {
+            return findSqrt(x, left, middle - 1);
+        }
+
+        int mm = middle * middle;
+        if (mm == x) {
+            return middle;
+        }
+        else if (mm < x) {
+            if ((middle + 1) * (middle + 1) > x) {
+                return middle;
+            }
+            else return findSqrt(x, middle + 1, right);
+        }
+        else {
+            if ((middle - 1) * (middle - 1) <= x) {
+                return middle - 1;
+            }
+            else return findSqrt(x, left, middle - 1);
+        }
+    }
+
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         x的平方根   [容易]
+         实现 int sqrt(int x) 函数，计算并返回 x 的平方根。
+         样例
+         sqrt(3) = 1
+         sqrt(4) = 2
+         sqrt(5) = 2
+         */
+//        int x = 2147483647;
+//        XYLog.d("sqrt(", x, ") = ", solutions.sqrt(x));
+
+
+
 
         /**
          快速幂   [中等]
