@@ -9302,8 +9302,55 @@ public class Solutions {
         return true;
     }
 
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/two-strings-are-anagrams/
+     * @param a: The first string
+     * @param b: The second string
+     * @return true or false
+     */
+    public boolean anagram(String a, String b) {
+        if (a == null || b == null) {
+            return false;
+        }
+
+        int aLen = a.length();
+        if (aLen != b.length()) {
+            return false;
+        }
+
+        char[] aChars = a.toCharArray();
+        char[] bChars = b.toCharArray();
+        Arrays.sort(aChars);
+        Arrays.sort(bChars);
+        for (int i = 0; i < aLen; i++) {
+            if (aChars[i] != bChars[i]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         两个字符串是变位词   [容易]
+         写出一个函数 anagram(s, t) 判断两个字符串是否可以通过改变字母的顺序变成一样的字符串。
+         样例
+         给出 s = "abcd"，t="dcab"，返回 true.
+         给出 s = "ab", t = "ab", 返回 true.
+         给出 s = "ab", t = "ac", 返回 false.
+         */
+//        String a = "abcd";
+//        String b = "dcab";
+//        XYLog.d(a, " 与 ", b, solutions.anagram(a, b)? "是": "不是", "变位词");
+
+
+
 
         /**
          判断字符串是否没有重复字符   [容易]
