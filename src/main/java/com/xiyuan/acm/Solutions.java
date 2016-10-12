@@ -9424,8 +9424,88 @@ public class Solutions {
         }
     }
 
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/set-matrix-zeroes/
+     * @param matrix: A list of lists of integers
+     * @return: Void
+     */
+    public void setZeroes(int[][] matrix) {
+        if (matrix != null && matrix.length > 0) {
+            boolean firstRowZero = false;
+            boolean firstColumnZero = false;
+            for (int i = 0, lenI = matrix.length; i < lenI; i++) {
+                for (int j = 0, lenJ = matrix[i].length; j < lenJ; j++) {
+                    int item = matrix[i][j];
+                    if (item == 0) {
+                        if (i == 0) {
+                            firstRowZero = true;
+                        }
+                        if (j == 0) {
+                            firstColumnZero = true;
+                        }
+                        matrix[i][0] = 0;
+                        matrix[0][j] = 0;
+                    }
+                }
+            }
+
+            for (int i = 1, lenI = matrix.length; i < lenI; i++) {
+                for (int j = 1, lenJ = matrix[i].length; j < lenJ; j++) {
+                    if (matrix[i][0] == 0 || matrix[0][j] == 0) {
+                        matrix[i][j] = 0;
+                    }
+                }
+            }
+
+            if (firstRowZero) {
+                for (int i = 0, lenI = matrix[0].length; i < lenI; i++) {
+                    matrix[0][i] = 0;
+                }
+            }
+            if (firstColumnZero) {
+                for (int i = 0, lenI = matrix.length; i < lenI; i++) {
+                    matrix[i][0] = 0;
+                }
+            }
+        }
+    }
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         矩阵归零   [中等]
+         给定一个m×n矩阵，如果一个元素是0，则将其所在行和列全部元素变成0。
+         需要在原矩阵上完成操作。
+         样例
+         给出一个矩阵
+         [
+         [1, 2],
+         [0, 3]
+         ]
+         返回
+         [
+         [0, 2],
+         [0, 0]
+         ]
+         挑战
+         你是否使用了额外的空间？
+         一个直接的解决方案是使用 O(MN) 的额外空间，但这并不是一个好的方案。
+         一个简单的改进方案是使用 O(M + N) 的额外空间，但这仍然不是最好的解决方案。
+         你能想出一个常数空间的解决方案吗？
+         */
+//        int[][] matrix = {{0,3}};
+//        XYLog.d(matrix);
+//        solutions.setZeroes(matrix);
+//        XYLog.d("归零后：");
+//        XYLog.d(matrix);
+
 
         /**
          旋转图像   [中等]
