@@ -9287,8 +9287,19 @@ public class Solutions {
      * @return: a boolean
      */
     public boolean isUnique(String str) {
-
-        return false;
+        if (str != null && str.length() > 1) {
+            Set<Character> existed = new HashSet<>();
+            for (int i = 0, len = str.length(); i < len; i++) {
+                Character c = str.charAt(i);
+                if (existed.contains(c)) {
+                    return false;
+                }
+                else {
+                    existed.add(c);
+                }
+            }
+        }
+        return true;
     }
 
     public static void main(String[] args) {
@@ -9303,8 +9314,8 @@ public class Solutions {
          挑战
          如果不使用额外的存储空间，你的算法该如何改变？
          */
-        String str = "abc";
-        XYLog.d(str, "中", solutions.isUnique(str)? "所有字母唯一": "存在字母重复");
+//        String str = "aab";
+//        XYLog.d(str, "中", solutions.isUnique(str)? "所有字母唯一": "存在字母重复");
 
 
 
