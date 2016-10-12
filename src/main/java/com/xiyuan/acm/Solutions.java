@@ -9940,8 +9940,71 @@ public class Solutions {
         return newHead.next;
     }
 
+
+
+
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/remove-nth-node-from-end-of-list/
+     * @param head: The first node of linked list.
+     * @param n: An integer.
+     * @return: The head of linked list.
+     */
+    private ListNode removeNthFromEnd(ListNode head, int n) {
+        if (head == null) {
+            return null;
+        }
+
+        int len = 0;
+        ListNode cur = head;
+        while (cur != null) {
+            cur = cur.next;
+            len++;
+        }
+
+        cur = head;
+        n = len - n;
+        while (n > 1) {
+            cur = cur.next;
+            n--;
+        }
+
+        if (head == cur) {
+            return cur.next;
+        }
+        else if (cur.next != null) {
+            cur.next = cur.next.next;
+        }
+        return head;
+    }
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         删除链表中倒数第n个节点   [容易]
+         给定一个链表，删除链表中倒数第n个节点，返回链表的头节点。
+         注意事项
+         链表中的节点个数大于等于n
+         样例
+         给出链表1->2->3->4->5->null和 n = 2.
+         删除倒数第二个节点之后，这个链表将变成1->2->3->5->null.
+         挑战
+         O(n)时间复杂度
+         */
+        int n = 4;
+        ListNode list = ListNodeFactory.build("1->2->3->4->5");
+        XYLog.d(list, "删除倒数第", n, "个节点之后，这个链表将变成：");
+        XYLog.d(solutions.removeNthFromEnd(list, n));
+
+
+
+
 
         /**
          链表插入排序   [容易]
