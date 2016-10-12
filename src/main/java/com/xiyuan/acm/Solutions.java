@@ -9334,8 +9334,55 @@ public class Solutions {
         return true;
     }
 
+
+
+
+
+
+
+    /**
+     * @param nums: a rotated sorted array
+     * @return: the minimum number in the array
+     */
+    public int findMin(int[] nums) {
+        return findMin(nums, 0, nums.length - 1);
+    }
+
+    private int findMin(int[] nums, int left, int right) {
+        int middle = (left + right) / 2;
+        int mV = nums[middle];
+        int lV = nums[left];
+        int rV = nums[right];
+
+        if (mV > lV && mV > rV) {
+            return findMin(nums, middle + 1, right);
+        }
+        else if (mV < lV && mV < rV) {
+            return findMin(nums, left, middle);
+        }
+        else if (lV <= mV && mV < rV){
+            return lV;
+        }
+        else return rV;
+    }
+
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         寻找旋转排序数组中的最小值   [中等]
+         假设一个旋转排序的数组其起始位置是未知的（比如0 1 2 4 5 6 7 可能变成是4 5 6 7 0 1 2）。
+         你需要找到其中最小的元素。
+         你可以假设数组中不存在重复的元素。
+         样例
+         给出[4,5,6,7,0,1,2]  返回 0
+         */
+//        int[] arr = {4,5,6,7,0,1,2};
+//        XYLog.d(arr, "中最小值为：", solutions.findMin(arr));
+
+
+
 
         /**
          两个字符串是变位词   [容易]
