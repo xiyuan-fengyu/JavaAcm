@@ -9653,8 +9653,157 @@ public class Solutions {
     }
 
 
+
+
+
+
+
+    /**超时
+     * http://www.lintcode.com/zh-cn/problem/burst-balloons/
+     * @param nums a list of integer
+     * @return an integer, maximum coins
+     */
+    public int maxCoins_OverTime(int[] nums) {
+        if (nums == null) {
+            return 0;
+        }
+        int zeroNum = 0;
+        for (int i: nums) {
+            if (i == 0) {
+                zeroNum++;
+            }
+        }
+        return maxCoins_OverTime(nums, zeroNum);
+    }
+
+    public int maxCoins_OverTime(int[] nums, int zeroNum) {
+        StringBuilder strBld = new StringBuilder();
+        for (int i: nums) {
+            strBld.append(i).append(',');
+        }
+        String key = strBld.toString();
+        if (maxCoinsCache.containsKey(key)) {
+            return maxCoinsCache.get(key);
+        }
+
+        int len = nums.length;
+        if (len == 0) {
+            return 0;
+        }
+        else if (len == 1) {
+            return nums[0];
+        }
+        else if (len == 2 + zeroNum) {
+            int a = 0;
+            int b = 0;
+            for (int i: nums) {
+                if (i != 0) {
+                    if (a == 0) {
+                        a = i;
+                    }
+                    else {
+                        b = i;
+                        break;
+                    }
+                }
+            }
+            return a * b + Math.max(a, b);
+        }
+
+        int max = Integer.MIN_VALUE;
+        for (int i = 0; i < len; i++) {
+            int temp = nums[i];
+            if (temp != 0) {
+                nums[i] = 0;
+                int tempScore = maxCoins_OverTime(nums, zeroNum + 1);
+                if (i == 0) {
+                    tempScore += temp * neighbourBalloon(nums, i, 1);
+                }
+                else if (i == len - 1) {
+                    tempScore += neighbourBalloon(nums, i, -1) * temp;
+                }
+                else {
+                    tempScore += neighbourBalloon(nums, i, -1) * temp * neighbourBalloon(nums, i, 1);
+                }
+                if (tempScore > max) {
+                    max = tempScore;
+                }
+                nums[i] = temp;
+            }
+        }
+        maxCoinsCache.put(key, max);
+        return max;
+    }
+
+    private HashMap<String, Integer> maxCoinsCache = new HashMap<>();
+
+    private int neighbourBalloon(int[] nums, int index, int delta) {
+        for (int i = index + delta, len = nums.length; i > -1 && i < len; i += delta) {
+            int item = nums[i];
+            if (item != 0) {
+                return item;
+            }
+        }
+        return 1;
+    }
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/burst-balloons/
+     * @param nums a list of integer
+     * @return an integer, maximum coins
+     */
+    public int maxCoins(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+
+        int len = nums.length;
+        int[][] cache = new int[len][len];
+        for (int subLen = 1; subLen <= len; subLen++) {
+            for (int i = 0; i <= len - subLen; i++) {
+                int start = i;
+                int end = i + subLen - 1;
+                int leftNb = start > 0? nums[start - 1]: 1;
+                int rightNb = end < len - 1? nums[end + 1]: 1;
+                for (int j = start; j <= end; j++) {
+                    int temp = leftNb * nums[j] * rightNb;
+                    if (j > start) {
+                        temp += cache[start][j - 1];
+                    }
+                    if (j < end) {
+                        temp += cache[j + 1][end];
+                    }
+                    cache[start][end] = Math.max(cache[start][end], temp);
+                }
+            }
+        }
+        return cache[0][len - 1];
+    }
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         吹气球   [困难]
+         有n个气球，编号为0到n-1，每个气球都有一个分数，存在nums数组中。每次吹气球i可以得到的分数为 nums[left] * nums[i] * nums[right]，left和right分别表示i气球相邻的两个气球。当i气球被吹爆后，其左右两气球即为相邻。要求吹爆所有气球，得到最多的分数。
+         注意事项
+         你可以假设nums[-1] = nums[n] = 1
+         0 ≤ n ≤ 500, 0 ≤ nums[i] ≤ 100
+         样例
+         给出 [4, 1, 5, 10]
+         返回 270
+         nums = [4, 1, 5, 10] burst 1, 得分 4 * 1 * 5 = 20
+         nums = [4, 5, 10]    burst 5, 得分 4 * 5 * 10 = 200
+         nums = [4, 10]       burst 4, 得分 1 * 4 * 10 = 40
+         nums = [10]          burst 10, 得分 1 * 10 * 1 = 10
+         总共的分数为 20 + 200 + 40 + 10 = 270
+         */
+//        int[] nums = {8,2,6,8,9,8,1,4,1,5,3,0,7,7,0,4,2,2,5,5};
+////        int[] nums = {4, 1, 5, 10};
+//        XYLog.d(nums, "\n吹气球的最大分数为：", solutions.maxCoins_OverTime(nums), "\n", solutions.maxCoins(nums));
+
+
+
 
         /**
          链表求和   [容易]
