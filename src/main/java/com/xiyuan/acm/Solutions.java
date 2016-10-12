@@ -9391,8 +9391,58 @@ public class Solutions {
     }
 
 
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/rotate-image/
+     * @param matrix: A list of lists of integers
+     * @return: Void
+     */
+    public void rotate(int[][] matrix) {
+        if (matrix != null && matrix.length > 1) {
+            int n = matrix.length;
+            int x;
+            int y;
+            int last;
+            int temp;
+            for (int i = 0, lenI = (n - 1) / 2; i <= lenI; i++) {
+                for (int j = 0, lenJ = n / 2; j < lenJ; j++) {
+                    x = j;
+                    y = i;
+                    last = matrix[x][y];
+                    for (int k = 0; k < 4; k++) {
+                        temp = x;
+                        x = y;
+                        y = n - 1 - temp;
+                        temp = matrix[x][y];
+                        matrix[x][y] = last;
+                        last = temp;
+                    }
+                }
+            }
+        }
+    }
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         旋转图像   [中等]
+         给定一个N×N的二维矩阵表示图像，90度顺时针旋转图像。
+         样例
+         给出一个矩形[[1,2],[3,4]]，90度顺时针旋转后，返回[[3,1],[4,2]]
+         挑战
+         能否在原地完成？
+         */
+//        int[][] matrix = {{1,2}, {3,4}};
+//        XYLog.d(matrix);
+//        solutions.rotate(matrix);
+//        XYLog.d("90度顺时针旋转后：");
+//        XYLog.d(matrix);
+
+
+
 
         /**
          寻找旋转排序数组中的最小值   [中等]
