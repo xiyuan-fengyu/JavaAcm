@@ -9515,8 +9515,55 @@ public class Solutions {
 
     private HashMap<Integer, Integer> numTreesCache = new HashMap<>();
 
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/unique-binary-search-trees-ii/
+     * @paramn n: An integer
+     * @return: A list of root
+     */
+    public List<TreeNode> generateTrees(int n) {
+        return generateTrees(1, n);
+    }
+
+    public List<TreeNode> generateTrees(int start, int end) {
+        List<TreeNode> result = new ArrayList<>();
+        if (start > end) {
+            result.add(null);
+        }
+        else {
+            for (int i = start; i <= end; i++) {
+                List<TreeNode> lResult = generateTrees(start, i - 1);
+                List<TreeNode> rResult = generateTrees(i + 1, end);
+                for (TreeNode lResultItem: lResult) {
+                    for (TreeNode rResultItem: rResult) {
+                        TreeNode node = new TreeNode(i);
+                        node.left = lResultItem;
+                        node.right = rResultItem;
+                        result.add(node);
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         不同的二叉查找树 II   [中等]
+         给出n，生成所有由1...n为节点组成的不同的二叉查找树
+         样例
+         给出n = 3，生成所有5种不同形态的二叉查找树：
+         ...(略)
+         */
+//        int n = 3;
+//        XYLog.d("由 1...", n, " 为节点组成的不同的二叉查找树有以下几种：\n", solutions.generateTrees(n));
+
+
 
         /**
          不同的二叉查找树   [中等]
