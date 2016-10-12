@@ -9823,8 +9823,64 @@ public class Solutions {
         return newHead;
     }
 
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/anagrams/
+     * @param strs: A list of strings
+     * @return: A list of strings
+     */
+    public List<String> anagrams(String[] strs) {
+        HashMap<String, List<String>> cache = new HashMap<>();
+        for (String str: strs) {
+            String tempKey = anagramSort(str);
+            if (cache.containsKey(tempKey)) {
+                cache.get(tempKey).add(str);
+            }
+            else {
+                List<String> list = new ArrayList<>();
+                list.add(str);
+                cache.put(tempKey, list);
+            }
+        }
+        List<String> result = new ArrayList<>();
+        for (Map.Entry<String, List<String>> keyVal: cache.entrySet()) {
+            if (keyVal.getValue().size() > 1) {
+                result.addAll(keyVal.getValue());
+            }
+        }
+        return result;
+    }
+
+    private String anagramSort(String str) {
+        if (str == null) {
+            return null;
+        }
+
+        if (str.isEmpty()) {
+            return str;
+        }
+
+        char[] chars = str.toCharArray();
+        Arrays.sort(chars);
+        return String.valueOf(chars);
+    }
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         乱序字符串   [中等]
+         给出一个字符串数组S，找到其中所有的乱序字符串(Anagram)。如果一个字符串是乱序字符串，那么他存在一个字母集合相同，但顺序不同的字符串也在S中。
+         注意事项
+         所有的字符串都只包含小写字母
+         样例
+         对于字符串数组 ["lint","intl","inlt","code"]
+         返回 ["lint","inlt","intl"]
+         */
+//        String[] strs = {"lint","intl","inlt","code"};
+//        XYLog.d(strs, "中的乱序字符串集合为：\n", solutions.anagrams(strs));
+
 
         /**
          旋转链表   [中等]
