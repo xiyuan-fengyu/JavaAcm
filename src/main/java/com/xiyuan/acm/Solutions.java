@@ -9780,8 +9780,67 @@ public class Solutions {
         return cache[0][len - 1];
     }
 
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/rotate-list/
+     * @param head: the List
+     * @param k: rotate to the right k places
+     * @return: the list after rotation
+     */
+    public ListNode rotateRight(ListNode head, int k) {
+        if (head == null) {
+            return null;
+        }
+
+        int len = 0;
+        ListNode cur = head;
+        while (cur != null) {
+            len++;
+            cur = cur.next;
+        }
+
+        k %= len;
+        if (k == 0) {
+            return head;
+        }
+
+        k = len - k;
+        cur = head;
+        while ((k--) > 1) {
+            cur = cur.next;
+        }
+        ListNode newHead = cur.next;
+        cur.next = null;
+        cur = newHead;
+        while (cur.next != null) {
+            cur = cur.next;
+        }
+        cur.next = head;
+        return newHead;
+    }
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         旋转链表   [中等]
+         给定一个链表，旋转链表，使得每个节点向右移动k个位置，其中k是一个非负数
+         样例
+         给出链表1->2->3->4->5->null和k=2
+         返回4->5->1->2->3->null
+         */
+        int k = 2;
+        ListNode list = ListNodeFactory.build("1->2->3->4->5");
+        XYLog.d(list, "向右旋转" + k + "个单位后，变为：");
+        XYLog.d(solutions.rotateRight(list, k));
+
+
+
+
 
         /**
          吹气球   [困难]
