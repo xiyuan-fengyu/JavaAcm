@@ -9866,8 +9866,56 @@ public class Solutions {
         return String.valueOf(chars);
     }
 
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/remove-element/
+     * @param arr: A list of integers
+     * @param elem: An integer
+     * @return: The new length after remove
+     */
+    public int removeElement(int[] arr, int elem) {
+        if (arr == null || arr.length == 0) {
+            return 0;
+        }
+
+        int i = 0;
+        int j = 0;
+        int len = arr.length;
+        while (j < len) {
+            if (arr[j] == elem) {
+                j++;
+            }
+            else {
+                arr[i] = arr[j];
+                i++;
+                j++;
+            }
+        }
+        return i;
+    }
+
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         删除元素   [容易]
+         给定一个数组和一个值，在原地删除与值相同的数字，返回新数组的长度。
+         元素的顺序可以改变，并且对新的数组不会有影响。
+         样例
+         给出一个数组 [0,4,4,0,0,2,4,4]，和值 4
+         返回 4 并且4个元素的新数组为[0,0,0,2]
+         */
+//        int elem = 4;
+//        int[] arr = {0,4,4,0,0,2,4,4};
+//        XYLog.d(arr, "删除所有的", elem, "之后：");
+//        XYLog.d("长度为 ", solutions.removeElement(arr, elem), ", 内容为 ", arr);
+
+
 
         /**
          乱序字符串   [中等]
