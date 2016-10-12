@@ -9833,10 +9833,10 @@ public class Solutions {
          给出链表1->2->3->4->5->null和k=2
          返回4->5->1->2->3->null
          */
-        int k = 2;
-        ListNode list = ListNodeFactory.build("1->2->3->4->5");
-        XYLog.d(list, "向右旋转" + k + "个单位后，变为：");
-        XYLog.d(solutions.rotateRight(list, k));
+//        int k = 2;
+//        ListNode list = ListNodeFactory.build("1->2->3->4->5");
+//        XYLog.d(list, "向右旋转" + k + "个单位后，变为：");
+//        XYLog.d(solutions.rotateRight(list, k));
 
 
 
