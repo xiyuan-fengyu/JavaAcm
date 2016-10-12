@@ -9341,6 +9341,8 @@ public class Solutions {
 
 
     /**
+     * http://www.lintcode.com/zh-cn/problem/find-minimum-in-rotated-sorted-array/
+     * http://www.lintcode.com/zh-cn/problem/find-minimum-in-rotated-sorted-array-ii/
      * @param nums: a rotated sorted array
      * @return: the minimum number in the array
      */
@@ -9363,7 +9365,29 @@ public class Solutions {
         else if (lV <= mV && mV < rV){
             return lV;
         }
-        else return rV;
+        else {
+            if (rV < mV && rV < lV) {
+                return rV;
+            }
+            else {
+                int l;
+                if (middle - 1 >= left) {
+                    l = findMin(nums, left, middle - 1);
+                }
+                else {
+                    l = lV;
+                }
+
+                int r;
+                if (middle + 1 <= right) {
+                    r = findMin(nums, middle + 1, right);
+                }
+                else {
+                    r = rV;
+                }
+                return Math.min(l, r);
+            }
+        }
     }
 
 
