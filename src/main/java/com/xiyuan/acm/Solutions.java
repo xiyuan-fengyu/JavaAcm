@@ -9550,8 +9550,59 @@ public class Solutions {
         return result;
     }
 
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/merge-two-sorted-lists/
+     * @param list1 is the head of the linked list
+     * @param list2 is the head of the linked list
+     * @return: ListNode head of linked list
+     */
+    public ListNode mergeTwoLists(ListNode list1, ListNode list2) {
+        ListNode head = new ListNode(0);
+        ListNode cur = head;
+        while (list1 != null && list2 != null) {
+            if (list1.val < list2.val) {
+                cur.next = list1;
+                list1 = list1.next;
+            }
+            else {
+                cur.next = list2;
+                list2 = list2.next;
+            }
+            cur = cur.next;
+            cur.next = null;
+        }
+
+        if (list1 != null) {
+            cur.next = list1;
+        }
+        else {
+            cur.next = list2;
+        }
+        return head.next;
+    }
+
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         合并两个排序链表   [容易]
+         将两个排序链表合并为一个新的排序链表
+         样例
+         给出 1->3->8->11->15->null，2->null， 返回 1->2->3->8->11->15->null。
+         */
+//        ListNode list1 = ListNodeFactory.build("1->3->8->11->15");
+//        ListNode list2 = ListNodeFactory.build("2");
+//        XYLog.d(list1);
+//        XYLog.d(list2);
+//        XYLog.d("合并之后：");
+//        XYLog.d(solutions.mergeTwoLists(list1, list2));
+
+
 
         /**
          不同的二叉查找树 II   [中等]
