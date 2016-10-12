@@ -9476,8 +9476,65 @@ public class Solutions {
         }
     }
 
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/unique-binary-search-trees/
+     * @paramn n: An integer
+     * @return: An integer
+     */
+    public int numTrees(int n) {
+        if (numTreesCache.containsKey(n)) {
+            return numTreesCache.get(n);
+        }
+
+        int num = 0;
+        if (n <= 1) {
+            num = 1;
+        }
+        else {
+            for (int i = 1; i <= n; i++) {
+                if (i == 1) {
+                    num += numTrees(n - 1);
+                }
+                else if (i == n) {
+                    num += numTrees(n - 1);
+                }
+                else {
+                    num += numTrees(i - 1) * numTrees(n - i);
+                }
+            }
+        }
+
+        numTreesCache.put(n, num);
+        return num;
+    }
+
+    private HashMap<Integer, Integer> numTreesCache = new HashMap<>();
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         不同的二叉查找树   [中等]
+         给出 n，问由 1...n 为节点组成的不同的二叉查找树有多少种？
+         样例
+         给出n = 3，有5种不同形态的二叉查找树：
+           1            3    3       2      1
+            \         /    /       / \       \
+            3      2     1       1   3       2
+          /      /       \                    \
+         2     1          2                    3
+         */
+//        int n = 19;
+//        XYLog.d("由 1...", n, " 为节点组成的不同的二叉查找树有\n", solutions.numTrees(n), " 种");
+
+
+
+
 
         /**
          矩阵归零   [中等]
