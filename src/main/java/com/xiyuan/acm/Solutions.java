@@ -9899,8 +9899,61 @@ public class Solutions {
     }
 
 
+
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/insertion-sort-list/
+     * @param head: The first node of linked list.
+     * @return: The head of linked list.
+     */
+    public ListNode insertionSortList(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+
+        ListNode newHead = new ListNode(Integer.MIN_VALUE);
+        ListNode sort;
+        ListNode cur = head;
+        while (cur != null) {
+            ListNode temp = cur;
+            cur = cur.next;
+            temp.next = null;
+
+            sort = newHead;
+            while (sort.next != null && sort.next.val < temp.val) {
+                sort = sort.next;
+            }
+            if (sort.next == null) {
+                sort.next = temp;
+            }
+            else {
+                ListNode t = sort.next;
+                sort.next = temp;
+                temp.next = t;
+            }
+        }
+        return newHead.next;
+    }
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         链表插入排序   [容易]
+         用插入排序对链表排序
+         样例
+         1->3->2->0->null, return 0->1->2->3->null
+         */
+//        ListNode list = ListNodeFactory.build("1->3->2->0");
+//        XYLog.d(list, "排序后：");
+//        XYLog.d(solutions.insertionSortList(list));
+
+
 
         /**
          删除元素   [容易]
