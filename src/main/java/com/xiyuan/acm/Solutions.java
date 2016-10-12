@@ -9586,8 +9586,48 @@ public class Solutions {
     }
 
 
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/nth-to-last-node-in-list/#
+     * @param head: The first node of linked list.
+     * @param n: An integer.
+     * @return: Nth to last node of a singly linked list.
+     */
+    ListNode nthToLast(ListNode head, int n) {
+        if (n == 0 || head == null) {
+            return null;
+        }
+        ListNode slow = head;
+        ListNode fast = head;
+        while ((n--) > 0) {
+            if (fast == null) {
+                return slow;
+            }
+            fast = fast.next;
+        }
+        while (fast != null) {
+            fast = fast.next;
+            slow = slow.next;
+        }
+        return slow;
+    }
+
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         链表倒数第n个节点   [容易]
+         找到单链表倒数第n个节点，保证链表中节点的最少数量为n。
+         样例
+         给出链表 3->2->1->5->null和n = 2，返回倒数第二个节点的值1.
+         */
+//        ListNode list = ListNodeFactory.build("3->2->1->5");
+//        int n = 2;
+//        XYLog.d(list, "中，倒数第 ", n, " 个节点为：", solutions.nthToLast(list, n));
+
+
 
         /**
          合并两个排序链表   [容易]
