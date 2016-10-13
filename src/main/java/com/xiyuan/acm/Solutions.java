@@ -4,6 +4,7 @@ import com.xiyuan.acm.factory.ListNodeFactory;
 import com.xiyuan.acm.factory.TreeNodeFactory;
 import com.xiyuan.acm.model.*;
 import com.xiyuan.acm.util.ArrayListUtil;
+import com.xiyuan.acm.util.BinaryStrUtil;
 import com.xiyuan.acm.util.DataUtil;
 import com.xiyuan.util.XYLog;
 
@@ -10280,8 +10281,56 @@ public class Solutions {
     }
 
 
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/flip-bits/
+     * @param a, b: Two integer
+     * return: An integer
+     */
+    public int bitSwapRequired(int a, int b) {
+        int temp = a ^ b;
+        int total = 0;
+
+        if (temp >= 0) {
+            while (temp > 0) {
+                total += temp & 1;
+                temp >>= 1;
+            }
+        }
+        else {
+            temp = ~temp;
+            while (temp > 0) {
+                total += temp & 1;
+                temp >>= 1;
+            }
+            total = 32 - total;
+        }
+
+        return total;
+    }
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+
+
+
+        /**
+         将整数A转换为B   [容易]
+         如果要将整数A转换为B，需要改变多少个bit位？
+         样例
+         如把31转换为14，需要改变2个bit位。
+         (31)10=(11111)2
+         (14)10=(01110)2
+         */
+        int a = 8;
+        int b = -2;
+        XYLog.d(a, "变成", b, "需要改变", solutions.bitSwapRequired(a, b), "个bit位");
+
+
 
         /**
          二进制表示   [困难]
