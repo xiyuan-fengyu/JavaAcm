@@ -10032,8 +10032,72 @@ public class Solutions {
         }
     }
 
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/route-between-two-nodes-in-graph/
+     * @param graph: A list of Directed graph node
+     * @param s: the starting Directed graph node
+     * @param t: the terminal Directed graph node
+     * @return: a boolean value
+     */
+    public boolean hasRoute(ArrayList<DirectedGraphNode> graph,
+                            DirectedGraphNode s, DirectedGraphNode t) {
+        if (s != null && t != null) {
+            if (s == t) {
+                return true;
+            }
+
+            if (noRouteCache.containsKey(s)) {
+                return false;
+            }
+
+            for (DirectedGraphNode to: s.neighbors) {
+                if (to == t) {
+                    return true;
+                }
+                else if (hasRoute(graph, to, t)) {
+                    return true;
+                }
+            }
+        }
+        noRouteCache.put(s, false);
+        return false;
+    }
+
+    private HashMap<DirectedGraphNode, Boolean> noRouteCache = new HashMap<>();
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         图中两个点之间的路线   [容易]
+         给出一张有向图，设计一个算法判断两个点 s 与 t 之间是否存在路线。
+         0----->1----->2
+          \     |
+           \    |
+            \   |
+             \  v
+              ->3----->4
+         */
+//        DirectedGraphNode node0 = new DirectedGraphNode(0);
+//        DirectedGraphNode node1 = new DirectedGraphNode(1);
+//        DirectedGraphNode node2 = new DirectedGraphNode(2);
+//        DirectedGraphNode node3 = new DirectedGraphNode(3);
+//        DirectedGraphNode node4 = new DirectedGraphNode(4);
+//        node0.addNeighbors(node1, node3);
+//        node1.addNeighbors(node2, node3);
+//        node3.addNeighbors(node4);
+//        ArrayList<DirectedGraphNode> graph = ArrayListUtil.build(node0, node1, node2, node3, node4);
+//        DirectedGraphNode from = node4;
+//        DirectedGraphNode to = node2;
+//        XYLog.d("节点", from.label, "到节点", to.label, solutions.hasRoute(graph, from, to)? "存在": "不存在", "路径");
+
+
 
         /**
          翻转二叉树   [容易]
