@@ -9998,10 +9998,10 @@ public class Solutions {
          挑战
          O(n)时间复杂度
          */
-        int n = 4;
-        ListNode list = ListNodeFactory.build("1->2->3->4->5");
-        XYLog.d(list, "删除倒数第", n, "个节点之后，这个链表将变成：");
-        XYLog.d(solutions.removeNthFromEnd(list, n));
+//        int n = 4;
+//        ListNode list = ListNodeFactory.build("1->2->3->4->5");
+//        XYLog.d(list, "删除倒数第", n, "个节点之后，这个链表将变成：");
+//        XYLog.d(solutions.removeNthFromEnd(list, n));
 
 
 
