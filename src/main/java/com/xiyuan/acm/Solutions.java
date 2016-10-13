@@ -10330,13 +10330,42 @@ public class Solutions {
 
     /**
      * http://www.lintcode.com/zh-cn/problem/delete-digits/
-     * @param arr: A positive integer which has N digits, A is a string.
+     * @param str: A positive integer which has N digits, A is a string.
      * @param k: Remove k digits.
      * @return: A string
      */
-    public String DeleteDigits(String arr, int k) {
+    public String DeleteDigits(String str, int k) {
+        if (str == null) {
+            return null;
+        }
 
-        return null;
+        if (str.length() <= k) {
+            return "";
+        }
+
+        while ((k--) > 0) {
+            if (str.length() == 1) {
+                return "";
+            }
+            else {
+                int len = str.length();
+                for (int i = 1; i < len; i++) {
+                    if (str.charAt(i - 1) > str.charAt(i)) {
+                        str = str.substring(0, i - 1) + str.substring(i);
+                        break;
+                    }
+                    else if (i == len - 1) {
+                        str = str.substring(0, i);
+                        break;
+                    }
+                }
+            }
+        }
+
+        while (str.length() > 1&& str.charAt(0) == '0') {
+            str = str.substring(1);
+        }
+        return str;
     }
 
 
@@ -10352,10 +10381,9 @@ public class Solutions {
          给出一个字符串代表的正整数 A 和一个整数 k, 其中 A = 178542, k = 4
          返回一个字符串 "12"
          */
-        String str = "178542";
-        int k = 4;
-        XYLog.d(str, "中删除", k, "个数字能得到的最小正整数为：", solutions.DeleteDigits(str, k));
-
+//        String str = "123456789";
+//        int k = 1;
+//        XYLog.d(str, "中删除", k, "个数字能得到的最小正整数为：", solutions.DeleteDigits(str, k));
 
 
 
