@@ -9955,7 +9955,7 @@ public class Solutions {
      * @param n: An integer.
      * @return: The head of linked list.
      */
-    private ListNode removeNthFromEnd(ListNode head, int n) {
+    public ListNode removeNthFromEnd(ListNode head, int n) {
         if (head == null) {
             return null;
         }
@@ -9969,15 +9969,16 @@ public class Solutions {
 
         cur = head;
         n = len - n;
+        if (n == 0) {
+            return head.next;
+        }
+
         while (n > 1) {
             cur = cur.next;
             n--;
         }
 
-        if (head == cur) {
-            return cur.next;
-        }
-        else if (cur.next != null) {
+        if (cur.next != null) {
             cur.next = cur.next.next;
         }
         return head;
