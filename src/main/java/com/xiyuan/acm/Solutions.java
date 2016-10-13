@@ -10173,8 +10173,78 @@ public class Solutions {
     }
 
 
+
+//    /**使用了额外空间
+//     * http://www.lintcode.com/zh-cn/problem/update-bits/
+//     * @param n, m: Two integer
+//     * @param i, j: Two bit positions
+//     *return: An integer
+//     */
+//    public int updateBits(int n, int m, int i, int j) {
+//        int k = 0;
+//        int[] bits = new int[j + 1];
+//        while ((k++) < i) {
+//            bits[k - 1] = n & 1;
+//            n >>= 1;
+//        }
+//
+//        k = 0;
+//        while ((k++) <= j - i) {
+//            bits[k + i - 1] = m & 1;
+//            n >>= 1;
+//            m >>= 1;
+//        }
+//
+//        k = 0;
+//        while ((k++) <= j) {
+//            n <<= 1;
+//            n += bits[j - k + 1];
+//        }
+//        return n;
+//    }
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/update-bits/
+     * @param n, m: Two integer
+     * @param i, j: Two bit positions
+     *return: An integer
+     */
+    public int updateBits(int n, int m, int i, int j) {
+        int max = ~0;
+        if (j == 31) {
+            j = max;
+        }
+        else {
+            j = (1 << (j + 1)) - 1;
+        }
+        int left = max - j;
+        int right = ((1 << i) - 1);
+        int mask = left | right;
+        return ((n & mask) | (m << i));
+    }
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         更新二进制位   [中等]
+         给出两个32位的整数N和M，以及两个二进制位的位置i和j。写一个方法来使得N中的第i到j位等于M（M会是N中从第i为开始到第j位的子串）
+         样例
+         给出N = 10000000000（二进制），M = 10101（二进制）， i = 2, j = 6
+         返回 N = 10001010100（二进制）
+         */
+//        int n = Integer.parseInt("10000000100", 2);
+//        int m = Integer.parseInt("10101", 2);
+//        int i = 2;
+//        int j = 6;
+//        String str0 = Integer.toString(n, 2);
+//        String str1 = Integer.toString(m, 2);
+//        char[] spaces = new char[str0.length() - j - 1];
+//        Arrays.fill(spaces, ' ');
+//        String str2 = String.valueOf(spaces) + str1;
+//        XYLog.d("\n" + str0 + "\n" + str2 + "\n" + Integer.toString(solutions.updateBits(n, m, i, j), 2));
+
+
 
         /**
          图是否是树   [困难]
