@@ -10104,12 +10104,93 @@ public class Solutions {
     }
 
 
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/graph-valid-tree/
+     * 解决思路 http://www.zhimengzhe.com/bianchengjiaocheng/Javabiancheng/66076.html
+     * @param n an integer
+     * @param edges a list of undirected edges
+     * @return true if it's a valid tree, or false
+     */
+    public boolean validTree(int n, int[][] edges) {
+        if (edges == null) {
+            return false;
+        }
+
+        TreeChecker checker = new TreeChecker(n);
+        for (int[] edge: edges) {
+            if (!checker.union(edge[0], edge[1])) {
+                return false;
+            }
+        }
+        return checker.isTree();
+    }
+
+    private class TreeChecker {
+        private int[] father;
+        private int count;
+        public TreeChecker(int n) {
+            count = n;
+            father = new int[n];
+            for (int i = 0; i < n; i++) {
+                father[i] = i;
+            }
+        }
+
+        private boolean isTree() {
+            return count == 1;
+        }
+
+        private int connectToRoot(int node) {
+            int root = father[node];
+            while (root != father[root]) {
+                root = father[root];
+            }
+            while (node != root) {
+                int temp = father[node];
+                father[node] = root;
+                node = temp;
+            }
+            return root;
+        }
+
+        public boolean union(int node0, int node1) {
+            int root0 = connectToRoot(node0);
+            int root1 = connectToRoot(node1);
+            if (root0 == root1) {
+                return false;
+            }
+            else {
+                father[root0] = root1;
+                count--;
+                return true;
+            }
+        }
+    }
+
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
 
         /**
-         图是否是树   [中等]
+         图是否是树   [困难]
+         给出 n 个节点，标号分别从 0 到 n - 1 并且给出一个 无向 边的列表 (给出每条边的两个顶点), 写一个函数去判断这张｀无向｀图是否是一棵树
+         注意事项
+         你可以假设我们不会给出重复的边在边的列表当中. 无向边　[0, 1] 和 [1, 0]　是同一条边， 因此他们不会同时出现在我们给你的边的列表当中。
+         样例
+         给出n = 5 并且 edges = [[0, 1], [0, 2], [0, 3], [1, 4]], 返回 true.
+         给出n = 5 并且 edges = [[0, 1], [1, 2], [2, 3], [1, 3], [1, 4]], 返回 false.
          */
+//        int n = 5;
+//        int[][] edges = {{0, 1}, {0, 2}, {0, 3}, {1, 4} };
+//        XYLog.d(edges, solutions.validTree(n, edges)? "是": "不是", "一个棵树");
+
+
+
 
         /**
          把排序数组转换为高度最小的二叉搜索树   [容易]
