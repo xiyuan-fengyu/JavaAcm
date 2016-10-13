@@ -10223,8 +10223,77 @@ public class Solutions {
         return ((n & mask) | (m << i));
     }
 
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/binary-representation/
+     * @param n: Given a decimal number that is passed in as a string
+     * @return: A string
+     */
+    public String binaryRepresentation(String n) {
+        String[] split = n.split("\\.");
+        long dI = Long.parseLong(split[0]);
+        double dD = 0;
+        if (split.length == 2) {
+            dD = Double.parseDouble("0." + split[1]);
+        }
+        StringBuilder strBld = new StringBuilder();
+        while (dI > 0) {
+            strBld.insert(0, (dI & 1) == 0? '0': '1');
+            dI >>= 1;
+        }
+
+        if (strBld.length() == 0) {
+            strBld.append('0');
+        }
+
+        if (dD != 0) {
+            strBld.append('.');
+
+            int dNum = 0;
+            double temp = 0.5;
+            while (dNum < 32) {
+                if (dD > temp) {
+                    strBld.append('1');
+                    dD -= temp;
+                }
+                else if (dD == temp) {
+                    strBld.append('1');
+                    break;
+                }
+                else {
+                    strBld.append('0');
+                }
+                temp /= 2;
+                dNum++;
+            }
+            if (dNum == 32) {
+                return "ERROR";
+            }
+        }
+
+        return strBld.toString();
+    }
+
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         二进制表示   [困难]
+         给定一个数将其转换为二进制（均用字符串表示），如果这个数的小数部分不能在 32 个字符之内来精确地表示，则返回 "ERROR"。
+         样例
+         n = "3.72", 返回 "ERROR".
+         n = "3.5", 返回 "11.1".
+         */
+//        String n = "28187281.128121212121";
+//        XYLog.d(n, "的二进制表示：", solutions.binaryRepresentation(n));
+
+
 
 
         /**
