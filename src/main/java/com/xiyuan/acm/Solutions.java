@@ -9984,8 +9984,74 @@ public class Solutions {
         return head;
     }
 
+
+
+
+
+
+
+
+
+
+//    /**
+//     * 递归的方式
+//     * http://www.lintcode.com/zh-cn/problem/invert-binary-tree/
+//     * @param root: a TreeNode, the root of the binary tree
+//     * @return: nothing
+//     */
+//    public void invertBinaryTree(TreeNode root) {
+//        if (root != null) {
+//            invertBinaryTree(root.left);
+//            invertBinaryTree(root.right);
+//            TreeNode temp = root.left;
+//            root.left = root.right;
+//            root.right = temp;
+//        }
+//    }
+
+    /**
+     * 非递归的方式,按层遍历
+     * http://www.lintcode.com/zh-cn/problem/invert-binary-tree/
+     * @param root: a TreeNode, the root of the binary tree
+     * @return: nothing
+     */
+    public void invertBinaryTree(TreeNode root) {
+        if (root != null) {
+            ArrayList<TreeNode> nodes = new ArrayList<>();
+            nodes.add(root);
+            for (int i = 0; i < nodes.size(); i++) {
+                TreeNode cur = nodes.get(i);
+                if (cur != null) {
+                    nodes.add(cur.right);
+                    nodes.add(cur.left);
+                    TreeNode newLeft =cur.right;
+                    cur.right = cur.left;
+                    cur.left = newLeft;
+                }
+            }
+        }
+    }
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         翻转二叉树   [容易]
+         翻转一棵二叉树
+         样例
+            1         1
+          / \       / \
+         2   3  => 3   2
+            /       \
+           4         4
+         挑战
+         递归固然可行，能否写个非递归的？
+         */
+//        TreeNode tree = TreeNodeFactory.build("1,2,3,#,#,4");
+//        XYLog.d(tree);
+//        solutions.invertBinaryTree(tree);
+//        XYLog.d("翻转后：", tree);
+
 
         /**
          删除链表中倒数第n个节点   [容易]
