@@ -10226,6 +10226,7 @@ public class Solutions {
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
 
+
         /**
          更新二进制位   [中等]
          给出两个32位的整数N和M，以及两个二进制位的位置i和j。写一个方法来使得N中的第i到j位等于M（M会是N中从第i为开始到第j位的子串）
