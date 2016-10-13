@@ -10071,11 +10071,64 @@ public class Solutions {
 
     private HashMap<DirectedGraphNode, Boolean> noRouteCache = new HashMap<>();
 
+
+
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/convert-sorted-array-to-binary-search-tree-with-minimal-height/
+     * @param arr: an integer array
+     * @return: a tree node
+     */
+    public TreeNode sortedArrayToBST(int[] arr) {
+        if (arr == null || arr.length == 0) {
+            return null;
+        }
+        return sortedArrayToBST(arr, 0, arr.length - 1);
+    }
+
+    private TreeNode sortedArrayToBST(int[] arr, int left, int right) {
+        if (left > right) {
+            return null;
+        }
+
+        int middle = (left + right) / 2;
+        TreeNode root = new TreeNode(arr[middle]);
+        root.left = sortedArrayToBST(arr, left, middle - 1);
+        root.right = sortedArrayToBST(arr, middle+ 1, right);
+        return root;
+    }
+
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
 
         /**
-         图中两个点之间的路线   [容易]
+         图是否是树   [中等]
+         */
+
+        /**
+         把排序数组转换为高度最小的二叉搜索树   [容易]
+         给一个排序数组（从小到大），将其转换为一棵高度最小的排序二叉树。
+         样例
+         给出数组 [1,2,3,4,5,6,7], 返回
+                  4
+               /   \
+              2     6
+            / \    / \
+           1   3  5   7
+         */
+//        int[] arr = {1,2,3,4,5,6,7};
+//        XYLog.d(arr, "转换为高度最小的二叉搜索树：", solutions.sortedArrayToBST(arr));
+
+
+
+        /**
+         图中两个点之间的路线   [中等]
          给出一张有向图，设计一个算法判断两个点 s 与 t 之间是否存在路线。
          0----->1----->2
           \     |
