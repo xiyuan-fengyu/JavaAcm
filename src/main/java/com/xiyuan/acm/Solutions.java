@@ -10284,38 +10284,52 @@ public class Solutions {
 
 
 
+//    /**
+//     * http://www.lintcode.com/zh-cn/problem/flip-bits/
+//     * @param a, b: Two integer
+//     * return: An integer
+//     */
+//    public int bitSwapRequired(int a, int b) {
+//        int temp = a ^ b;
+//        int total = 0;
+//
+//        if (temp >= 0) {
+//            while (temp > 0) {
+//                total += temp & 1;
+//                temp >>= 1;
+//            }
+//        }
+//        else {
+//            temp = ~temp;
+//            while (temp > 0) {
+//                total += temp & 1;
+//                temp >>= 1;
+//            }
+//            total = 32 - total;
+//        }
+//
+//        return total;
+//    }
 
     /**
      * http://www.lintcode.com/zh-cn/problem/flip-bits/
+     * 利用 >>> 更简单
      * @param a, b: Two integer
      * return: An integer
      */
     public int bitSwapRequired(int a, int b) {
-        int temp = a ^ b;
-        int total = 0;
-
-        if (temp >= 0) {
-            while (temp > 0) {
-                total += temp & 1;
-                temp >>= 1;
-            }
-        }
-        else {
-            temp = ~temp;
-            while (temp > 0) {
-                total += temp & 1;
-                temp >>= 1;
-            }
-            total = 32 - total;
-        }
-
-        return total;
+        int count = 0;
+        for (int i = a ^ b; i != 0; count += i & 1, i >>>= 1);
+        return count;
     }
+
 
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
 
-
+        /**
+         删除数字   [中等]
+         */
 
 
         /**
@@ -10329,7 +10343,11 @@ public class Solutions {
 //        int a = 8;
 //        int b = -2;
 //        XYLog.d(a, "变成", b, "需要改变", solutions.bitSwapRequired(a, b), "个bit位");
-
+//        //需要注意>>,>>>,<<三者的区别
+//        XYLog.d(BinaryStrUtil.intToBinaryStr(4 >> 1), " = ", 4 >> 1);//最高位补原最高位的值
+//        XYLog.d(BinaryStrUtil.intToBinaryStr(-1 >> 1), " = ", -1 >> 1);//最高位补元最高位的值
+//        XYLog.d(BinaryStrUtil.intToBinaryStr(-1 >>> 1), " = ", -1 >>> 1);//最高位补0
+//        XYLog.d(BinaryStrUtil.intToBinaryStr(-1 << 1), " = ", -1 << 1);//最低位补0
 
 
         /**
