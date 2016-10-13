@@ -10326,9 +10326,9 @@ public class Solutions {
          (31)10=(11111)2
          (14)10=(01110)2
          */
-        int a = 8;
-        int b = -2;
-        XYLog.d(a, "变成", b, "需要改变", solutions.bitSwapRequired(a, b), "个bit位");
+//        int a = 8;
+//        int b = -2;
+//        XYLog.d(a, "变成", b, "需要改变", solutions.bitSwapRequired(a, b), "个bit位");
 
 
 
