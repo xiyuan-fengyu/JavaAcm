@@ -10369,8 +10369,82 @@ public class Solutions {
     }
 
 
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/wood-cut/
+     * @param woods: Given n pieces of wood with length L[i]
+     * @param k: An integer
+     * return: The maximum length of the small pieces.
+     */
+    public int woodCut(int[] woods, int k) {
+        if (woods == null || (woods.length == 0 && k != 0)) {
+            return 0;
+        }
+
+        Arrays.sort(woods);
+        int len = woods.length;
+        int maxLen = woods[len - 1];
+        int minPerLen = 1;
+        int maxPerLen = maxLen;
+        int curPerLen = 0;
+
+        int result = 0;
+        while (minPerLen < maxPerLen) {
+            int curN = 0;
+            curPerLen = (int) (minPerLen / 2.0 + maxPerLen / 2.0);
+            for (int i = len - 1; i > -1; i--) {
+                int temp = woods[i] / curPerLen;
+                if (temp > 0) {
+                    curN += temp;
+                }
+                else {
+                    break;
+                }
+            }
+            if (curN >= k) {
+                if (result < curPerLen) {
+                    result = curPerLen;
+                }
+                if (result == minPerLen) {
+                    return result;
+                }
+                minPerLen = curPerLen;
+            }
+            else {
+                maxPerLen = curPerLen;
+            }
+        }
+        return result;
+    }
+
     public static void main(String[] args) {
         Solutions solutions = new Solutions();
+
+        /**
+         木材加工   [中等]
+         有一些原木，现在想把这些木头切割成一些长度相同的小段木头，需要得到的小段的数目至少为 k。当然，我们希望得到的小段越长越好，你需要计算能够得到的小段木头的最大长度。
+         注意事项
+         木头长度的单位是厘米。原木的长度都是正整数，我们要求切割得到的小段木头的长度也要求是整数。无法切出要求至少 k 段的,则返回 0 即可。
+         样例
+         有3根木头[232, 124, 456], k=7, 最大长度为114.
+         挑战
+         O(n log Len), Len为 n 段原木中最大的长度
+         */
+////        int[] woods = {232, 124, 456};
+////        int k = 7;
+//        int[] input = DataUtil.getIntArr("./data/wood-cut-76.in");
+//        int[] woods = Arrays.copyOfRange(input, 0, input.length - 1);
+//        int k = input[input.length - 1];
+//        XYLog.d(woods, "切割出最少", k, "根相同长度的小段木头，能得到的最大小段木头长度为：\n", solutions.woodCut(woods, k));
+
+
+
+
 
         /**
          删除数字   [中等]
