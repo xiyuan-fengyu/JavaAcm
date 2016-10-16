@@ -402,9 +402,63 @@ public class Solutions184_564 {
      * @return: A string
      */
     public String largestNumber(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return "0";
+        }
 
-        return null;
+        int len = nums.length;
+        String[] numStrs = new String[len];
+        for (int i = 0; i < len; i++) {
+            numStrs[i] = "" + nums[i];
+        }
+        quickSort(numStrs, 0, len - 1);
+        StringBuilder strBld = new StringBuilder();
+        for (int i = len - 1; i > -1; i--) {
+            if (nums[i] != 0) {
+                strBld.append(nums[i]);
+            }
+        }
+        if (strBld.length() == 0) {
+            strBld.append('0');
+        }
+        return strBld.toString();
     }
+
+    private void quickSort(String[] numStrs, int left, int right) {
+        if (left >= right) {
+            return;
+        }
+
+        String key = numStrs[left];
+        int i = left;
+        int j = right;
+//        while (i < j) {
+//            while (i < j && numStrs[j] >= numStrs) {
+//                j--;
+//            }
+//            nums[i] = nums[j];
+//            firstNums[i] = firstNums[j];
+//
+//            while (i < j && firstNums[i] <= keyFirstNum) {
+//                i++;
+//            }
+//            nums[j] = nums[i];
+//            firstNums[j] = firstNums[i];
+//        }
+//        nums[i] = keyNum;
+//        firstNums[i] = keyFirstNum;
+//
+//        quickSort(nums, firstNums, left, i - 1);
+//        quickSort(nums, firstNums, i + 1, right);
+    }
+
+    private int compare(String str1, String str2) {
+        int len1 = str1.length();
+        int len2 = str2.length();
+        return 0;
+    }
+
+
 
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
@@ -420,7 +474,7 @@ public class Solutions184_564 {
          挑战
          在 O(nlogn) 的时间复杂度内完成。
          */
-        int[] nums = {1, 20, 23, 4, 8};
+        int[] nums = {5, 13};
         XYLog.d(nums, "能拼接成的最大整数为：", solutions.largestNumber(nums));
 
 
