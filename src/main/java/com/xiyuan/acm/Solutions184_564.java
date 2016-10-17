@@ -581,8 +581,65 @@ public class Solutions184_564 {
     }
 
 
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/first-missing-positive/
+     * @param arr: an array of integers
+     * @return: an integer
+     */
+    public int firstMissingPositive(int[] arr) {
+        if (arr == null || arr.length == 0) {
+            return 1;
+        }
+
+        int len = arr.length;
+        for (int i = 0; i < len; i++) {
+            while (arr[i] != i + 1) {
+                if (arr[i] > len || arr[i] <= 0) {
+                    arr[i] = 0;
+                    break;
+                }
+                else {
+                    int temp = arr[arr[i] - 1];
+                    if (temp == arr[i]) {
+                        break;
+                    }
+                    arr[arr[i] - 1] = arr[i];
+                    arr[i] = temp;
+                }
+            }
+        }
+
+        for (int i = 0; i < len; i++) {
+            if (arr[i] != i + 1) {
+                return i + 1;
+            }
+        }
+        return len + 1;
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         丢失的第一个正整数   [中等]
+         http://www.lintcode.com/zh-cn/problem/first-missing-positive/
+         给出一个无序的正数数组，找出其中没有出现的最小正整数。
+         样例
+         如果给出 [1,2,0], return 3
+         如果给出 [3,4,-1,1], return 2
+         挑战
+         只允许时间复杂度O(n)的算法，并且只能使用常数级别的空间。
+         */
+        int[] arr = {1,1};
+        XYLog.d(arr, "\n中丢失的最小正整数为：\n", solutions.firstMissingPositive(arr));
+
+
+
 
         /**
          加油站   [中等]
