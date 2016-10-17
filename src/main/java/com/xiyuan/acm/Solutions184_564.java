@@ -541,8 +541,68 @@ public class Solutions184_564 {
         return max;
     }
 
+
+
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/gas-station/
+     * @param gas: an array of integers
+     * @param cost: an array of integers
+     * @return: an integer
+     */
+    public int canCompleteCircuit(int[] gas, int[] cost) {
+        if (gas == null || gas.length == 0) {
+            return -1;
+        }
+
+        int index = -1;
+        int remainGas = 0;
+        int subRemainGas = 0;
+        for (int i = 0, len = gas.length; i< len; i++) {
+            int delta = gas[i] - cost[i];
+            remainGas += delta;
+            if ((remainGas < 0 && delta > 0) || subRemainGas + delta >= 0) {
+                subRemainGas += delta;
+                if (index == -1) {
+                    index = i;
+                }
+            }
+            else {
+                subRemainGas = 0;
+                index = -1;
+            }
+        }
+        return remainGas >= 0? index: -1;
+    }
+
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         加油站   [中等]
+         http://www.lintcode.com/zh-cn/problem/gas-station/
+         在一条环路上有 N 个加油站，其中第 i 个加油站有汽油gas[i]，并且从第_i_个加油站前往第_i_+1个加油站需要消耗汽油cost[i]。
+         你有一辆油箱容量无限大的汽车，现在要从某一个加油站出发绕环路一周，一开始油箱为空。
+         求可环绕环路一周时出发的加油站的编号，若不存在环绕一周的方案，则返回-1。
+         注意事项
+         数据保证答案唯一。
+         样例
+         现在有4个加油站，汽油量gas[i]=[1, 1, 3, 1]，环路旅行时消耗的汽油量cost[i]=[2, 2, 1, 1]。则出发的加油站的编号为2。
+         */
+//        int[] gas = {1,2,3,4,5};
+//        int[] cost = {3,4,5,1,2};
+//        XYLog.d("gas: ", gas);
+//        XYLog.d("cost: ", cost);
+//        XYLog.d(solutions.canCompleteCircuit(gas, cost));
+
+
+
 
         /**
          最多有多少个点在一条直线上   [中等]
