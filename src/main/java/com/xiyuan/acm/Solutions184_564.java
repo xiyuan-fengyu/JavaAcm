@@ -774,8 +774,57 @@ public class Solutions184_564 {
         }
     }
 
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/find-the-missing-number/
+     * @param nums: an array of integers
+     * @return: an integer
+     */
+    public int findMissing(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+
+        int len = nums.length;
+        for (int i = 0; i < len; i++) {
+            while (nums[i] != i) {
+                if (nums[i] >= len) {
+                    nums[i] = -1;
+                    break;
+                }
+                else {
+                    int temp = nums[nums[i] - 1];
+                    nums[nums[i] - 1] = nums[i];
+                    nums[i] = temp;
+                }
+            }
+        }
+
+        for (int i = 0; i < len; i++) {
+            if (nums[i] == -1) {
+                return i;
+            }
+        }
+        return 0;
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         寻找缺失的数   [中等]
+         http://www.lintcode.com/zh-cn/problem/find-the-missing-number/
+         给出一个包含 0 .. N 中 N 个数的序列，找出0 .. N 中没有出现在序列中的那个数。
+         注意事项
+         可以改变序列中数的位置。
+         样例
+         N = 4 且序列为 [0, 1, 3] 时，缺失的数为2。
+         挑战
+         在数组上原地完成，使用O(1)的额外空间和O(N)的时间。
+         */
+        int[] nums = {0, 1, 3};
+        XYLog.d(nums, "\n中缺少的数为：", solutions.findMissing(nums));
+
 
         /**
          通配符匹配   [困难]
