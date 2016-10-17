@@ -635,8 +635,8 @@ public class Solutions184_564 {
          挑战
          只允许时间复杂度O(n)的算法，并且只能使用常数级别的空间。
          */
-        int[] arr = {1,1};
-        XYLog.d(arr, "\n中丢失的最小正整数为：\n", solutions.firstMissingPositive(arr));
+//        int[] arr = {1,1};
+//        XYLog.d(arr, "\n中丢失的最小正整数为：\n", solutions.firstMissingPositive(arr));
 
 
 
