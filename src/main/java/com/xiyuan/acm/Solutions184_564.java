@@ -622,8 +622,65 @@ public class Solutions184_564 {
         return len + 1;
     }
 
+
+
+
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/next-permutation-ii/
+     * @param nums: an array of integers
+     * @return: return nothing (void), do not return anything, modify nums in-place instead
+     */
+    public void nextPermutation(int[] nums) {
+        if (nums != null && nums.length > 1) {
+            int len = nums.length;
+            for (int i = len - 2; i > -1; i--) {
+                for (int j = len - 1; j > i; j--) {
+                    if (nums[i] < nums[j]) {
+                        int temp = nums[j];
+                        nums[j] = nums[i];
+                        nums[i] = temp;
+                        Arrays.sort(nums, i + 1, len);
+                        return;
+                    }
+                }
+            }
+
+            Arrays.sort(nums, 0, len);
+        }
+    }
+
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         下一个排列   [中等]
+         http://www.lintcode.com/zh-cn/problem/next-permutation-ii/
+         给定一个若干整数的排列，给出按正数大小进行字典序从小到大排序后的下一个排列。
+         如果没有下一个排列，则输出字典序最小的序列。
+         样例
+         左边是原始排列，右边是对应的下一个排列。
+         1,2,3 → 1,3,2
+         3,2,1 → 1,2,3
+         1,1,5 → 1,5,1
+         挑战
+         不允许使用额外的空间。
+         */
+//        int[] arr = {1,2,3,4,5};
+//        XYLog.d(arr, "\n下一个排列：");
+//        for (int i = 0; i < 40; i++) {
+//            solutions.nextPermutation(arr);
+//            XYLog.d(arr);
+//        }
+
+
+
 
         /**
          丢失的第一个正整数   [中等]
