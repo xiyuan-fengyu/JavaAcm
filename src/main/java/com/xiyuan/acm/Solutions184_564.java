@@ -1,6 +1,8 @@
 package com.xiyuan.acm;
 
 import com.xiyuan.acm.model.ExpressionTreeNode;
+import com.xiyuan.acm.model.Point;
+import com.xiyuan.acm.util.DataUtil;
 import com.xiyuan.util.XYLog;
 
 import java.util.*;
@@ -471,8 +473,98 @@ public class Solutions184_564 {
     }
 
 
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/max-points-on-a-line/
+     * @param points an array of point
+     * @return an integer
+     */
+    public int maxPoints(Point[] points) {
+        //直线表达式：ax + by + c = 0;
+        int max = 0;
+        int len;
+        if (points != null && (len= points.length) != 0) {
+            if (len == 1) {
+                return 1;
+            }
+            else {
+                max = 2;
+                HashMap<String, Set<Integer>> linePoints = new HashMap<>();
+                for (int i = 0; i < len - 1; i++) {
+                    for (int j = i + 1; j < len; j++) {
+                        Point p1 = points[i];
+                        Point p2 = points[j];
+
+                        String key;
+                        if (p1.x != p2.x || p1.y != p2.y) {
+                            double a = 0;
+                            double b = 0;
+                            double c = 0;
+                            if (p1.x == p2.x) {
+                                a = 1;
+                                b = 0;
+                                c = -p1.x;
+                            }
+                            else {
+                                b = 1;
+                                c = (p1.y * p2.x - p1.x * p2.y) / (double) (p2.x - p1.x);
+                                a = (p2.y - p1.y) / (double) (p2.x - p1.x);
+                            }
+                            key = a + "," + b + "," + c;
+                        }
+                        else {
+                            key = p1.x + "," + p2.y;
+                        }
+
+                        if (linePoints.containsKey(key)) {
+                            Set<Integer> tempPoints = linePoints.get(key);
+                            tempPoints.add(i);
+                            tempPoints.add(j);
+                        }
+                        else {
+                            Set<Integer> tempPoints = new HashSet<>();
+                            tempPoints.add(i);
+                            tempPoints.add(j);
+                            linePoints.put(key, tempPoints);
+                        }
+                        int temp = linePoints.get(key).size();
+                        if (max < temp) {
+                            max = temp;
+                        }
+
+                    }
+                }
+
+
+            }
+        }
+        return max;
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         最多有多少个点在一条直线上   [中等]
+         http://www.lintcode.com/zh-cn/problem/max-points-on-a-line/
+         给出二维平面上的n个点，求最多有多少点在同一条直线上。
+         样例
+         给出4个点：(1, 2), (3, 6), (0, 0), (1, 3)。
+         一条直线上的点最多有3个。
+         */
+//        int[] nums = DataUtil.getIntArr("./data/max-points-on-a-line-69.in");
+//        Point[] points = new Point[nums.length / 2];
+//        for (int i = 0, len = points.length; i < len; i++) {
+//            points[i] = new Point(nums[i * 2], nums[i * 2 + 1]);
+//        }
+////        Point[] points = new Point[]{
+////                new Point(1, 2),
+////                new Point(3, 6),
+////                new Point(0, 0),
+////                new Point(1, 3)
+////        };
+//        XYLog.d("在点集：\n", points, "\n最多有 ", solutions.maxPoints(points), " 个点共线");
+
 
         /**
          矩阵的之字型遍历   [容易]
