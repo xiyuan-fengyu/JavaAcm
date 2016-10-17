@@ -656,8 +656,59 @@ public class Solutions184_564 {
     }
 
 
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/maximum-product-subarray/
+     * @param nums: an array of integers
+     * @return: an integer
+     */
+    public int maxProduct(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+
+        int len = nums.length;
+        int[] mins = new int[len];
+        int[] maxs = new int[len];
+        mins[0] = nums[0];
+        maxs[0] = nums[0];
+        int result = maxs[0];
+        for (int i = 1; i < len; i++) {
+            if (nums[i] >= 0) {
+                maxs[i] = Math.max(nums[i], maxs[i - 1] * nums[i]);
+                mins[i] = Math.min(nums[i], mins[i - 1] * nums[i]);
+            }
+            else {
+                maxs[i] = Math.max(nums[i], mins[i - 1] * nums[i]);
+                mins[i] = Math.min(nums[i], maxs[i - 1] * nums[i]);
+            }
+            if (maxs[i] > result) {
+                result = maxs[i];
+            }
+        }
+
+        return result;
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         乘积最大子序列   [中等]
+         http://www.lintcode.com/zh-cn/problem/maximum-product-subarray/
+         找出一个序列中乘积最大的连续子序列（至少包含一个数）。
+         样例
+         比如, 序列 [2,3,-2,4] 中乘积最大的子序列为 [2,3] ，其乘积为6。
+         */
+//        int[] nums = {2,3,-2,4};
+//        XYLog.d(nums, "中的最大乘积子序列为：", solutions.maxProduct(nums));
+
+
+
 
         /**
          下一个排列   [中等]
