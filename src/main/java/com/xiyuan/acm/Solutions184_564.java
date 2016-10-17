@@ -431,8 +431,72 @@ public class Solutions184_564 {
         return result.substring(index);
     }
 
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/matrix-zigzag-traversal/
+     * @param matrix: a matrix of integers
+     * @return: an array of integers
+     */
+    public int[] printZMatrix(int[][] matrix) {
+        if (matrix == null || matrix.length == 0) {
+            return new int[]{};
+        }
+
+        int row = matrix.length;
+        int column = matrix[0].length;
+        int[] nums = new int[row * column];
+        int level = 0;
+        int index = 0;
+        int maxIndex = row + column - 2;
+        while (level <= maxIndex) {
+            if (level % 2 == 0) {
+                int iStart = level < row? level: row - 1;
+                int iEnd = level < column? 0: level - column + 1;
+                for (int i = iStart; i >= iEnd; i--) {
+                    nums[index++] = matrix[i][level - i];
+                }
+            }
+            else {
+                int iStart = level < column? 0: level - column + 1;
+                int iEnd = level < row? level: row - 1;
+                for (int i = iStart; i <= iEnd; i++) {
+                    nums[index++] = matrix[i][level - i];
+                }
+            }
+            level++;
+        }
+        return nums;
+    }
+
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         矩阵的之字型遍历   [容易]
+         http://www.lintcode.com/zh-cn/problem/matrix-zigzag-traversal/
+         给你一个包含 m x n 个元素的矩阵 (m 行, n 列), 求该矩阵的之字型遍历。
+         样例
+         对于如下矩阵：
+         [
+         [1, 2,  3,  4],
+         [5, 6,  7,  8],
+         [9,10, 11, 12]
+         ]
+         返回 [1, 2, 5, 9, 6, 3, 4, 7, 10, 11, 8, 12]
+         */
+//        int[][] matrix = {
+//                {1, 2,  3,  4},
+//                {5, 6,  7,  8},
+//                {9,10, 11, 12}
+//        };
+//        XYLog.d(matrix, "的之字形遍历为：\n", solutions.printZMatrix(matrix));
+
+
+
+
 
         /**
          最大数   [中等]
