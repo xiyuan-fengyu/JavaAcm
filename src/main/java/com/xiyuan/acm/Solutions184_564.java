@@ -3,10 +3,7 @@ package com.xiyuan.acm;
 import com.xiyuan.acm.model.ExpressionTreeNode;
 import com.xiyuan.util.XYLog;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by xiyuan_fengyu on 2016/10/14.
@@ -411,54 +408,28 @@ public class Solutions184_564 {
         for (int i = 0; i < len; i++) {
             numStrs[i] = "" + nums[i];
         }
-        quickSort(numStrs, 0, len - 1);
-        StringBuilder strBld = new StringBuilder();
-        for (int i = len - 1; i > -1; i--) {
-            if (nums[i] != 0) {
-                strBld.append(nums[i]);
+        Arrays.sort(numStrs, new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                return (o2 + o1).compareTo(o1 + o2);
             }
-        }
-        if (strBld.length() == 0) {
-            strBld.append('0');
-        }
-        return strBld.toString();
-    }
-
-    private void quickSort(String[] numStrs, int left, int right) {
-        if (left >= right) {
-            return;
+        });
+        StringBuilder strBld = new StringBuilder();
+        for (String str: numStrs) {
+            strBld.append(str);
         }
 
-        String key = numStrs[left];
-        int i = left;
-        int j = right;
-//        while (i < j) {
-//            while (i < j && numStrs[j] >= numStrs) {
-//                j--;
-//            }
-//            nums[i] = nums[j];
-//            firstNums[i] = firstNums[j];
-//
-//            while (i < j && firstNums[i] <= keyFirstNum) {
-//                i++;
-//            }
-//            nums[j] = nums[i];
-//            firstNums[j] = firstNums[i];
-//        }
-//        nums[i] = keyNum;
-//        firstNums[i] = keyFirstNum;
-//
-//        quickSort(nums, firstNums, left, i - 1);
-//        quickSort(nums, firstNums, i + 1, right);
+        String result = strBld.toString();
+        int resultLen = result.length();
+        int index = 0;
+        while (index < resultLen && result.charAt(index) == '0') {
+            index++;
+        }
+        if (index == resultLen) {
+            return "0";
+        }
+        return result.substring(index);
     }
-
-    private int compare(String str1, String str2) {
-        int len1 = str1.length();
-        int len2 = str2.length();
-        return 0;
-    }
-
-
 
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
@@ -474,8 +445,8 @@ public class Solutions184_564 {
          挑战
          在 O(nlogn) 的时间复杂度内完成。
          */
-        int[] nums = {5, 13};
-        XYLog.d(nums, "能拼接成的最大整数为：", solutions.largestNumber(nums));
+//        int[] nums = {41,23,87,55,50,53,18,9,39,63,35,33,54,25,26,49,74,61,32,81,97,99,38,96,22,95,35,57,80,80,16,22,17,13,89,11,75,98,57,81,69,8,10,85,13,49,66,94,80,25,13,85,55,12,87,50,28,96,80,43,10,24,88,52,16,92,61,28,26,78,28,28,16,1,56,31,47,85,27,30,85,2,30,51,84,50,3,14,97,9,91,90,63,90,92,89,76,76,67,55};
+//        XYLog.d(nums, "能拼接成的最大整数为：\n", solutions.largestNumber(nums));
 
 
 
