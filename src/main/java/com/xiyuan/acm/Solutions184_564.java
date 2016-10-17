@@ -5,6 +5,7 @@ import com.xiyuan.acm.model.Point;
 import com.xiyuan.acm.util.DataUtil;
 import com.xiyuan.util.XYLog;
 
+import java.nio.channels.Pipe;
 import java.util.*;
 
 /**
@@ -694,8 +695,109 @@ public class Solutions184_564 {
         return result;
     }
 
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/wildcard-matching/
+     * @param s: A string
+     * @param p: A string includes "?" and "*"
+     * @return: A boolean
+     */
+    public boolean isMatch(String s, String p) {
+        if (s == null || p == null) {
+            return false;
+        }
+        isMatchCache.clear();
+        return isMatch(s, 0, p, 0);
+    }
+
+    private HashMap<String, Boolean> isMatchCache = new HashMap<>();
+
+    public boolean isMatch(String s, int sIndex, String p, int pIndex) {
+        String key = sIndex + "," + pIndex;
+        if (isMatchCache.containsKey(key)) {
+            return false;
+        }
+        isMatchCache.put(key, false);
+
+        int sLen = s.length();
+        int pLen = p.length();
+        if (pIndex == pLen) {
+            return sIndex == sLen;
+        }
+
+        String nextP = nextPattern(p, pIndex);
+        int nextPLen = nextP.length();
+        char nextC = nextP.charAt(0);
+        if (nextC == '?') {
+            return isMatch(s, sIndex + 1, p, pIndex + 1);
+        }
+        else if (nextC == '*') {
+            for (int i = sIndex - 1; i < sLen; i++) {
+                boolean temp1 = isMatch(s, i + 1, p, pIndex + nextPLen);
+                if (temp1) {
+                    return true;
+                }
+            }
+        }
+        else {
+            if (sIndex + nextPLen - 1 < sLen && s.substring(sIndex, sIndex + nextPLen).equals(nextP)) {
+                return isMatch(s, sIndex + nextPLen, p, pIndex + nextPLen);
+            }
+            else return false;
+        }
+        return false;
+    }
+
+    private String nextPattern(String p, int start) {
+        int len = p.length();
+        if (p.charAt(start) == '?') {
+            return "?";
+        }
+        else if (p.charAt(start) == '*') {
+            int index = start + 1;
+            while (index < len && p.charAt(index) == '*') {
+                index++;
+            }
+            return p.substring(start, index);
+        }
+        else {
+            int index = start + 1;
+            while (index < len && p.charAt(index) != '*' && p.charAt(index) != '?') {
+                index++;
+            }
+            return p.substring(start, index);
+        }
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         通配符匹配   [困难]
+         http://www.lintcode.com/zh-cn/problem/wildcard-matching/
+         判断两个可能包含通配符“？”和“*”的字符串是否匹配。匹配规则如下：
+         '?' 可以匹配任何单个字符。
+         '*' 可以匹配任意字符串（包括空字符串）。
+         两个串完全匹配才算匹配成功。
+         样例
+         一些例子：
+         isMatch("aa","a") → false
+         isMatch("aa","aa") → true
+         isMatch("aaa","aa") → false
+         isMatch("aa", "*") → true
+         isMatch("aa", "a*") → true
+         isMatch("ab", "?*") → true
+         isMatch("aab", "c*a*b") → false
+         */
+//        String s = "abbabaaabbabbaababbabbbbbabbbabbbabaaaaababababbbabababaabbababaabbbbbbaaaabababbbaabbbbaabbbbababababbaabbaababaabbbababababbbbaaabbbbbabaaaabbababbbbaababaabbababbbbbababbbabaaaaaaaabbbbbaabaaababaaaabb";
+//        String p = "**aa*****ba*a*bb**aa*ab****a*aaaaaa***a*aaaa**bbabb*b*b**aaaaaaaaa*a********ba*bbb***a*ba*bb*bb**a*b*bb";
+//        XYLog.d("isMatch(\"" + s + ", \"" + p + "\") = " + solutions.isMatch(s, p));
+
 
         /**
          乘积最大子序列   [中等]
