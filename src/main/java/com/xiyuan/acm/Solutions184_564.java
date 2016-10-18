@@ -808,8 +808,37 @@ public class Solutions184_564 {
         return len;
     }
 
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/permutation-index/
+     * @param A an integer array
+     * @return a long integer
+     */
+    public long permutationIndex(int[] A) {
+
+        return 1;
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         排列序号   [容易]
+         http://www.lintcode.com/zh-cn/problem/permutation-index/
+         给出一个不含重复数字的排列，求这些数字的所有排列按字典序排序后该排列的编号。其中，编号从1开始。
+         样例
+         例如，排列 [1,2,4] 是第 1 个排列。
+         */
+        int[] nums = {1,2,4};
+        XYLog.d(nums, "是第", solutions.permutationIndex(nums), "个排列");
+
+
+
 
         /**
          寻找缺失的数   [中等]
