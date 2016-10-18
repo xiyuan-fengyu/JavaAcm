@@ -816,13 +816,47 @@ public class Solutions184_564 {
 
     /**
      * http://www.lintcode.com/zh-cn/problem/permutation-index/
-     * @param A an integer array
+     * @param nums an integer array
      * @return a long integer
      */
-    public long permutationIndex(int[] A) {
+    public long permutationIndex(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 1;
+        }
 
-        return 1;
+        permutationIndexCache.clear();
+        int len = nums.length;
+        int[] copyNums = Arrays.copyOf(nums, len);
+        Arrays.sort(copyNums);
+        long total = 1;
+        for (int i = 0; i < len; i++) {
+            permutationIndexCache.put(copyNums[i], i);
+            total *= (i + 1);
+        }
+        return permutationIndex(nums, 0, total);
     }
+
+    private HashMap<Integer, Integer> permutationIndexCache = new HashMap<>();
+
+    private long permutationIndex(int[] nums, int index, long total) {
+        int len = nums.length;
+        if (index == len - 1) {
+            return 1;
+        }
+        else {
+            int cur = nums[index];
+            long rightTotal = total / (len - index);
+            long temp = permutationIndexCache.get(cur) * rightTotal;
+            for (int i = index; i < len; i++) {
+                int item = nums[i];
+                if (item > cur) {
+                    permutationIndexCache.put(item, permutationIndexCache.get(item) - 1);
+                }
+            }
+            return temp + permutationIndex(nums, index + 1, rightTotal);
+        }
+    }
+
 
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
@@ -834,8 +868,8 @@ public class Solutions184_564 {
          样例
          例如，排列 [1,2,4] 是第 1 个排列。
          */
-        int[] nums = {1,2,4};
-        XYLog.d(nums, "是第", solutions.permutationIndex(nums), "个排列");
+//        int[] nums = {2,3,1};
+//        XYLog.d(nums, "是第", solutions.permutationIndex(nums), "个排列");
 
 
 
