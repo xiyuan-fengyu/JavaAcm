@@ -787,25 +787,25 @@ public class Solutions184_564 {
 
         int len = nums.length;
         for (int i = 0; i < len; i++) {
-            while (nums[i] != i) {
+            while (nums[i] > -1 && nums[i] != i) {
                 if (nums[i] >= len) {
                     nums[i] = -1;
                     break;
                 }
                 else {
-                    int temp = nums[nums[i] - 1];
-                    nums[nums[i] - 1] = nums[i];
+                    int temp = nums[nums[i]];
+                    nums[nums[i]] = nums[i];
                     nums[i] = temp;
                 }
             }
         }
 
         for (int i = 0; i < len; i++) {
-            if (nums[i] == -1) {
+            if (nums[i] != i) {
                 return i;
             }
         }
-        return 0;
+        return len;
     }
 
     public static void main(String[] args) {
@@ -822,8 +822,9 @@ public class Solutions184_564 {
          挑战
          在数组上原地完成，使用O(1)的额外空间和O(N)的时间。
          */
-        int[] nums = {0, 1, 3};
-        XYLog.d(nums, "\n中缺少的数为：", solutions.findMissing(nums));
+//        int[] nums = {9,8,7,6,2,0,1,5,4};
+//        XYLog.d(nums, "\n中缺少的数为：");
+//        XYLog.d(solutions.findMissing(nums));
 
 
         /**
