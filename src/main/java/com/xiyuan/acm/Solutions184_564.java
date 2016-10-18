@@ -858,8 +858,75 @@ public class Solutions184_564 {
     }
 
 
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/permutation-index-ii/
+     * @param nums an integer array
+     * @return a long integer
+     */
+    public long permutationIndexII(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 1;
+        }
+
+        permutationIndexIICache.clear();
+        int len = nums.length;
+        int[] copyNums = Arrays.copyOf(nums, len);
+        Arrays.sort(copyNums);
+        for (int i = 0; i < len; i++) {
+            int num = copyNums[i];
+            if (permutationIndexIICache.containsKey(num)) {
+                permutationIndexIICache.put(num, permutationIndexIICache.get(num) + 1);
+            }
+            else {
+                permutationIndexIICache.put(num, 1);
+            }
+        }
+        return permutationIndexII(nums, 0);
+    }
+
+    private HashMap<Integer, Integer> permutationIndexIICache = new HashMap<>();
+
+    private long permutationIndexII(int[] nums, int index) {
+        int len = nums.length;
+        if (index == len - 1) {
+            return 1;
+        }
+        else {
+            int cur = nums[index];
+            int curI = permutationIndexCache.get(cur);
+            int total = 0;
+            for (int i = 0; i < curI; i++) {
+
+            }
+            for (int i = index; i < len; i++) {
+                int item = nums[i];
+                if (item > cur) {
+                    permutationIndexCache.put(item, permutationIndexCache.get(item) - 1);
+                }
+            }
+            return 0 + permutationIndexII(nums, index + 1);
+        }
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         排列序号II   [中等]
+         http://www.lintcode.com/zh-cn/problem/permutation-index-ii/
+         给出一个可能包含重复数字的排列，求这些数字的所有排列按字典序排序后该排列在其中的编号。编号从1开始。
+         样例
+         给出排列[1, 4, 2, 2]，其编号为3。
+         */
+        int[] nums = {1, 4, 2, 2};
+        XYLog.d(nums, "是第", solutions.permutationIndexII(nums), "个排列");
+
+
 
         /**
          排列序号   [容易]
