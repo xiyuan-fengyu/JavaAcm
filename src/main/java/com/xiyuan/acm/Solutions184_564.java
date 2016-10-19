@@ -873,23 +873,42 @@ public class Solutions184_564 {
             return 1;
         }
 
-        permutationIndexIICache.clear();
+        permutationNumCache.clear();
         int len = nums.length;
         int[] copyNums = Arrays.copyOf(nums, len);
         Arrays.sort(copyNums);
         for (int i = 0; i < len; i++) {
             int num = copyNums[i];
-            if (permutationIndexIICache.containsKey(num)) {
-                permutationIndexIICache.put(num, permutationIndexIICache.get(num) + 1);
+            if (permutationNumCache.containsKey(num)) {
+                permutationNumCache.put(num, permutationNumCache.get(num) + 1);
             }
             else {
-                permutationIndexIICache.put(num, 1);
+                permutationNumCache.put(num, 1);
             }
         }
         return permutationIndexII(nums, 0);
     }
 
-    private HashMap<Integer, Integer> permutationIndexIICache = new HashMap<>();
+    private HashMap<Integer, Integer> permutationNumCache = new HashMap<>();
+
+    private HashMap<Integer, Long> oneTimesToNCache = new HashMap<>();
+
+    private long oneTimesToN(int n) {
+        if (n <= 1) {
+            return 1;
+        }
+        else if (oneTimesToNCache.containsKey(n)) {
+            return oneTimesToNCache.get(n);
+        }
+        else {
+            long result = 1;
+            for (int i = 1; i <= n; i++) {
+                result *= i;
+            }
+            oneTimesToNCache.put(n, result);
+            return result;
+        }
+    }
 
     private long permutationIndexII(int[] nums, int index) {
         int len = nums.length;
@@ -898,18 +917,31 @@ public class Solutions184_564 {
         }
         else {
             int cur = nums[index];
-            int curI = permutationIndexCache.get(cur);
-            int total = 0;
-            for (int i = 0; i < curI; i++) {
-
+            long temp0 = 1;
+            for (Map.Entry<Integer, Integer> keyVal: permutationNumCache.entrySet()) {
+                temp0 *= oneTimesToN(keyVal.getValue());
             }
-            for (int i = index; i < len; i++) {
+
+            long temp1 = oneTimesToN(len - index - 1);
+
+            long total = 0;
+            HashMap<Integer, Boolean> tempCache = new HashMap<>();
+            for (int i = index + 1; i < len; i++) {
                 int item = nums[i];
-                if (item > cur) {
-                    permutationIndexCache.put(item, permutationIndexCache.get(item) - 1);
+                if (item < cur && !tempCache.containsKey(item)) {
+                    tempCache.put(item, true);
+                    total += temp1 / temp0 * permutationNumCache.get(item);
                 }
             }
-            return 0 + permutationIndexII(nums, index + 1);
+
+            int tempNum = permutationNumCache.get(cur);
+            if (tempNum == 1) {
+                permutationNumCache.remove(cur);
+            }
+            else {
+                permutationNumCache.put(cur, tempNum - 1);
+            }
+            return total + permutationIndexII(nums, index + 1);
         }
     }
 
@@ -923,8 +955,14 @@ public class Solutions184_564 {
          样例
          给出排列[1, 4, 2, 2]，其编号为3。
          */
-        int[] nums = {1, 4, 2, 2};
+        int[] nums = {3, 2, 1, 2, 1};
         XYLog.d(nums, "是第", solutions.permutationIndexII(nums), "个排列");
+//        int[] numsTemp = {1,1,2,2,3};
+//        for (int i = 1; i <= 30; i++) {
+//            XYLog.d(numsTemp, "是第", solutions.permutationIndexII(numsTemp), "个排列");
+//            solutions.nextPermutation(numsTemp);
+//        }
+
 
 
 
