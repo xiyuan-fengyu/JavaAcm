@@ -945,8 +945,138 @@ public class Solutions184_564 {
         }
     }
 
+
+
+
+
+
+
+
+
+
+//    /**
+//     * 穷举法：
+//     * 时间复杂度：O(n^3)
+//     *
+//     * 动态规划：
+//     * O(n ^ 2)  f[i][j] = if (char[i] == char[j]) f[i + 1][j - 1] else 0; f[i][i] = 1;
+//     *
+//     * 中间扩撒：
+//     * O(n ^ 2)  以每一个字母为中心（或者中间两个靠左的）向两边扩散判断回文
+//     *
+//     * Manacher算法：
+//     * O(n)
+//     * http://www.lintcode.com/zh-cn/problem/longest-palindromic-substring/
+//     * @param str input string
+//     * @return the longest palindromic substring
+//     */
+//    public String longestPalindrome(String str) {
+//        if (str == null) {
+//            return null;
+//        }
+//
+//        int len = str.length();
+//        if (len < 2) {
+//            return str;
+//        }
+//
+//        int maxLeft = 0;
+//        int maxRight = 0;
+//        for (int i = 0; i < len; i++) {
+//            for (int j = i; j < len; j++) {
+//                if (isBackWord(str, i, j) && j - i > maxRight - maxLeft) {
+//                    maxLeft = i;
+//                    maxRight = j;
+//                }
+//            }
+//        }
+//        return str.substring(maxLeft, maxRight + 1);
+//    }
+//
+//    private boolean isBackWord(String str, int left, int right) {
+//        while (left < right) {
+//            if (str.charAt(left) != str.charAt(right)) {
+//                return false;
+//            }
+//            left++;
+//            right--;
+//        }
+//        return true;
+//    }
+
+    /**
+     * Manacher算法：
+     * O(n)
+     * http://www.lintcode.com/zh-cn/problem/longest-palindromic-substring/
+     * @param str input string
+     * @return the longest palindromic substring
+     */
+    public String longestPalindrome(String str) {
+        if (str == null) {
+            return null;
+        }
+
+        int len = str.length();
+        if (len < 2) {
+            return str;
+        }
+
+        char[] chars = new char[len * 2 + 2];
+        int charsLen = chars.length;
+        chars[0] = '^';
+        chars[charsLen - 1] = '$';
+        for (int i = 0; i < len; i++) {
+            chars[i * 2 + 2] = str.charAt(i);
+        }
+
+        int[] f = new int[charsLen];
+        int index = 0;
+        int maxLen = 0;
+        int maxLenIndex = 0;
+        for (int i = 2; i < charsLen - 1; i++) {
+            if (f[index] + index > i) {
+                f[i] = Math.min(f[index * 2 - i], f[index] + index - i);
+            }
+            else {
+                f[i] = 1;
+            }
+            while (chars[i + f[i]] == chars[i - f[i]]) {
+                ++f[i];
+            }
+            if (f[i] + i > f[index] + index) {
+                index = i;
+            }
+            if (maxLen < f[i]) {
+                maxLen = f[i];
+                maxLenIndex = i;
+            }
+        }
+        StringBuilder strBld = new StringBuilder();
+        for (int i = maxLenIndex - maxLen + 1; i <= maxLenIndex + maxLen - 1; i++) {
+            if (chars[i] != '\0') {
+                strBld.append(chars[i]);
+            }
+        }
+        return strBld.toString();
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         最长回文子串   [中等]
+         http://www.lintcode.com/zh-cn/problem/longest-palindromic-substring/
+         给出一个字符串（假设长度最长为1000），求出它的最长回文子串，你可以假定只有一个满足条件的最长回文串。
+         样例
+         给出字符串 "abcdzdcab"，它的最长回文子串为 "cdzdc"。
+         挑战
+         O(n2) 时间复杂度的算法是可以接受的，如果你能用 O(n) 的算法那自然更好。
+         */
+        String str = "bb";
+        XYLog.d(str, "中最长的回文字串为：\n", solutions.longestPalindrome(str));
+
+
+
 
         /**
          排列序号II   [中等]
