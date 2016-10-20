@@ -930,7 +930,7 @@ public class Solutions184_564 {
                 int item = nums[i];
                 if (item < cur && !tempCache.containsKey(item)) {
                     tempCache.put(item, true);
-                    total += temp1 / temp0 * permutationNumCache.get(item);
+                    total += temp1 * permutationNumCache.get(item) / temp0;
                 }
             }
 
@@ -955,13 +955,13 @@ public class Solutions184_564 {
          样例
          给出排列[1, 4, 2, 2]，其编号为3。
          */
-        int[] nums = {3, 2, 1, 2, 1};
-        XYLog.d(nums, "是第", solutions.permutationIndexII(nums), "个排列");
-//        int[] numsTemp = {1,1,2,2,3};
-//        for (int i = 1; i <= 30; i++) {
-//            XYLog.d(numsTemp, "是第", solutions.permutationIndexII(numsTemp), "个排列");
-//            solutions.nextPermutation(numsTemp);
-//        }
+//        int[] nums = {3, 2, 1, 2, 1};
+//        XYLog.d(nums, "是第", solutions.permutationIndexII(nums), "个排列");
+////        int[] numsTemp = {1,1,2,2,3};
+////        for (int i = 1; i <= 30; i++) {
+////            XYLog.d(numsTemp, "是第", solutions.permutationIndexII(numsTemp), "个排列");
+////            solutions.nextPermutation(numsTemp);
+////        }
 
 
 
