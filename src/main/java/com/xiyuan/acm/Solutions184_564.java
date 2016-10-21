@@ -1297,8 +1297,71 @@ public class Solutions184_564 {
         }
     }
 
+
+
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/space-replacement/
+     * @param chars: An array of Char
+     * @param length: The true length of the string
+     * @return: The true length of new string
+     */
+    public int replaceBlank(char[] chars, int length) {
+        if (chars == null || chars.length == 0) {
+            return 0;
+        }
+
+        int newLen = length;
+        for (int i = 0; i < length; i++) {
+            if (chars[i] == ' ') {
+                newLen += 2;
+            }
+        }
+
+        for (int i = length - 1, j = newLen - 1; i > -1; i--) {
+            char c = chars[i];
+            if (c == ' ') {
+                chars[j--] = '0';
+                chars[j--] = '2';
+                chars[j--] = '%';
+            }
+            else {
+                chars[j--] = c;
+            }
+        }
+        return newLen;
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         空格替换   [容易]
+         http://www.lintcode.com/zh-cn/problem/space-replacement/
+         设计一种方法，将一个字符串中的所有空格替换成 %20 。你可以假设该字符串有足够的空间来加入新的字符，且你得到的是“真实的”字符长度。
+         你的程序还需要返回被替换后的字符串的长度。
+         样例
+         对于字符串"Mr John Smith", 长度为 13
+         替换空格之后，参数中的字符串需要变为"Mr%20John%20Smith"，并且把新长度 17 作为结果返回。
+         挑战
+         在原字符串(字符数组)中完成替换，不适用额外空间
+         */
+//        String str = "Mr John Smith";
+//        int len = str.length();
+//        char[] chars = new char[str.length() * 3];
+//        for (int i = 0; i < len; i++) {
+//            chars[i] = str.charAt(i);
+//        }
+//        int newLen = solutions.replaceBlank(chars, len);
+//        XYLog.d("新的字符串：", String.copyValueOf(chars, 0, newLen), ", 长度：", newLen);
+
+
+
 
         /**
          区间求和 II   [困难]
