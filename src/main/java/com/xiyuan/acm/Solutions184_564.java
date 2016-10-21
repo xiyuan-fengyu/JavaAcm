@@ -1046,7 +1046,7 @@ public class Solutions184_564 {
             if (f[i] + i > f[index] + index) {
                 index = i;
             }
-            if (maxLen < f[i]) {
+            if (maxLen < f[i] || (maxLen == f[i] && chars[i - f[i] + 1] != '\0')) {
                 maxLen = f[i];
                 maxLenIndex = i;
             }
@@ -1072,8 +1072,8 @@ public class Solutions184_564 {
          挑战
          O(n2) 时间复杂度的算法是可以接受的，如果你能用 O(n) 的算法那自然更好。
          */
-        String str = "bb";
-        XYLog.d(str, "中最长的回文字串为：\n", solutions.longestPalindrome(str));
+//        String str = "acaccadacc";
+//        XYLog.d(str, "中最长的回文字串为：\n", solutions.longestPalindrome(str));
 
 
 
