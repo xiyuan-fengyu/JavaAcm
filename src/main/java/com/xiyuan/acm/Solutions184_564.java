@@ -1215,6 +1215,11 @@ public class Solutions184_564 {
                     }
                     return null;
                 }
+
+                @Override
+                public void modify(IntervalTreeNode<Long> root) {
+                    root.data = root.left.data + root.right.data;
+                }
             };
 
             IntervalTreeNode<Long> root = IntervalTreeNode.build(copyArr, actions);
@@ -1225,8 +1230,102 @@ public class Solutions184_564 {
         return result;
     }
 
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/interval-sum-ii/
+     */
+    private static class SolutionIntervalSumII {
+
+        private IntervalTreeNode.Actions<Long> actions;
+
+        private IntervalTreeNode<Long> tree;
+
+        /**
+         * @param arr: An integer array
+         */
+        public SolutionIntervalSumII(int[] arr) {
+            if (arr != null && arr.length > 0) {
+                int len = arr.length;
+                Long[] copyArr = new Long[len];
+                for (int i = 0; i < len; i++) {
+                    copyArr[i] = (long) arr[i];
+                }
+
+                actions = new IntervalTreeNode.Actions<Long>() {
+                    @Override
+                    public void build(IntervalTreeNode<Long> root) {
+                        root.data = root.left.data + root.right.data;
+                    }
+
+                    @Override
+                    public Long query(Long leftData, Long rightData) {
+                        if (leftData != null && rightData != null) {
+                            return leftData + rightData;
+                        }
+                        else if (leftData != null) {
+                            return leftData;
+                        }
+                        else if (rightData != null) {
+                            return rightData;
+                        }
+                        return null;
+                    }
+
+                    @Override
+                    public void modify(IntervalTreeNode<Long> root) {
+                        root.data = root.left.data + root.right.data;
+                    }
+                };
+
+                tree = IntervalTreeNode.build(copyArr, actions);
+            }
+        }
+
+        /**
+         * @param start, end: Indices
+         * @return: The sum from start to end
+         */
+        public long query(int start, int end) {
+            return IntervalTreeNode.query(tree, start, end, actions);
+        }
+
+        /**
+         * @param index, value: modify A[index] to value.
+         */
+        public void modify(int index, int value) {
+            IntervalTreeNode.modify(tree, index, (long) value, actions);
+        }
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         区间求和 II   [困难]
+         http://www.lintcode.com/zh-cn/problem/interval-sum-ii/
+         在类的构造函数中给一个整数数组, 实现两个方法 query(start, end) 和 modify(index, value):
+         对于 query(start, end), 返回数组中下标 start 到 end 的 和。
+         对于 modify(index, value), 修改数组中下标为 index 上的数为 value.
+         样例
+         给定数组 A = [1,2,7,8,5].
+         query(0, 2), 返回 10.
+         modify(0, 4), 将 A[0] 修改为 4.
+         query(0, 1), 返回 6.
+         modify(2, 1), 将 A[2] 修改为 1.
+         query(2, 4), 返回 14.
+         */
+//        int[] arr = {1,2,7,8,5};
+//        SolutionIntervalSumII solution = new SolutionIntervalSumII(arr);
+//        XYLog.d(solution.query(0, 2));
+//        solution.modify(0, 4);
+//        XYLog.d(solution.query(0, 1));
+//        solution.modify(2, 1);
+//        XYLog.d(solution.query(2, 4));
+
+
+
+
+
 
         /**
          区间求和 I   [中等]

@@ -35,6 +35,7 @@ public class IntervalTreeNode<T> extends BasicTreeNode<Interval> {
     public interface Actions <T> {
         void build(IntervalTreeNode<T> root);
         T query(T leftData, T rightData);
+        void modify(IntervalTreeNode<T> root);
     }
 
     public static <T> IntervalTreeNode<T> build(T[] arr, Actions<T> actions) {
@@ -73,6 +74,23 @@ public class IntervalTreeNode<T> extends BasicTreeNode<Interval> {
             }
 
             return actions.query(leftData, rightData);
+        }
+    }
+
+    public static <T> void modify(IntervalTreeNode<T> root, int index, T value, Actions<T> actions) {
+        if (root == null || root.val.start > index || root.val.end < index) {
+        }
+        else if (root.val.start == index && root.val.end == index) {
+            root.data = value;
+        }
+        else {
+            if (root.left.val.end >= index) {
+                modify(root.left, index, value, actions);
+            }
+            else {
+                modify(root.right, index, value, actions);
+            }
+            actions.modify(root);
         }
     }
 
