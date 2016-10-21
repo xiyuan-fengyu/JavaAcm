@@ -2,6 +2,7 @@ package com.xiyuan.acm;
 
 import com.xiyuan.acm.factory.ListNodeFactory;
 import com.xiyuan.acm.factory.SegmentTreeNodeFactory;
+import com.xiyuan.acm.factory.TreeNodeFactory;
 import com.xiyuan.acm.model.*;
 import com.xiyuan.acm.util.ArrayListUtil;
 import com.xiyuan.acm.util.DataUtil;
@@ -1397,11 +1398,75 @@ public class Solutions184_564 {
 
 
 
+
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/subtree/
+     * @param t1, t2: The roots of binary tree.
+     * @return: True if T2 is a subtree of T1, or false.
+     */
+    public boolean isSubtree(TreeNode t1, TreeNode t2) {
+        if (t2 == null) {
+            return true;
+        }
+        return isSubtree(t1, t2, t2);
+    }
+
+    public boolean isSubtree(TreeNode t1, TreeNode t2, TreeNode t2Root) {
+        if (t1 == null && t2 == null) {
+            return true;
+        }
+        else if (t1 == null || t2 == null) {
+            return false;
+        }
+
+        if (t1.val == t2.val) {
+            if (isSubtree(t1.left, t2.left, t2Root) && isSubtree(t1.right, t2.right, t2Root)) {
+                return true;
+            }
+        }
+        return  isSubtree(t1.left, t2Root) || isSubtree(t1.right, t2Root);
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
 
         /**
+         子树   [容易]
+         http://www.lintcode.com/zh-cn/problem/subtree/
+         有两个不同大小的二进制树： T1 有上百万的节点； T2 有好几百的节点。请设计一种算法，判定 T2 是否为 T1的子树。
+         注意事项
+         若 T1 中存在从节点 n 开始的子树与 T2 相同，我们称 T2 是 T1 的子树。也就是说，如果在 T1 节点 n 处将树砍断，砍断的部分将与 T2 完全相同。
+         样例
+         下面的例子中 T2 是 T1 的子树：
+                 1                3
+               / \              /
+         T1 = 2   3      T2 =  4
+                /
+              4
+         下面的例子中 T2 不是 T1 的子树：
+                 1               3
+               / \               \
+         T1 = 2   3       T2 =    4
+                /
+              4
+         */
+//        TreeNode tree1 = TreeNodeFactory.build("1,1,1,2,3,#,2,#,#,4,5,3");
+//        TreeNode tree2 = TreeNodeFactory.build("1,2,3,#,#,4,5");
+//        XYLog.d(tree1, tree2);
+//        XYLog.d(solutions.isSubtree(tree1, tree2));
+
+
+
+
+        /**
          用栈模拟汉诺塔问题  [容易]
+         http://www.lintcode.com/zh-cn/problem/mock-hanoi-tower-by-stacks/
          在经典的汉诺塔问题中，有 3 个塔和 N 个可用来堆砌成塔的不同大小的盘子。要求盘子必须按照从小到大的顺序从上往下堆 （如，任意一个盘子，其必须堆在比它大的盘子上面）。同时，你必须满足以下限制条件：
          (1) 每次只能移动一个盘子。
          (2) 每个盘子从堆的顶部被移动后，只能置放于下一个堆中。
