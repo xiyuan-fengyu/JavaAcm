@@ -1,5 +1,6 @@
 package com.xiyuan.acm;
 
+import com.xiyuan.acm.factory.SegmentTreeNodeFactory;
 import com.xiyuan.acm.model.ExpressionTreeNode;
 import com.xiyuan.acm.model.Point;
 import com.xiyuan.acm.model.SegmentTreeNode;
@@ -1088,8 +1089,68 @@ public class Solutions184_564 {
     }
 
 
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/segment-tree-query/
+     * @param root, start, end: The root of segment tree and an segment / interval
+     * @return: The maximum number in the interval [start, end]
+     */
+    public int query(SegmentTreeNode root, int start, int end) {
+        if (root == null) {
+            return 0;
+        }
+
+        if (root.start == start && root.end == end) {
+            return root.max;
+        }
+        else {
+            int leftMax = Integer.MIN_VALUE;
+            int rightMax = Integer.MIN_VALUE;
+
+            if (start <= root.left.end) {
+                leftMax = query(root.left, start, Math.min(root.left.end, end));
+            }
+            if (end >= root.right.start) {
+                rightMax = query(root.right, Math.max(root.right.start, start), end);
+            }
+            return Math.max(leftMax, rightMax);
+        }
+    }
+
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         线段树的查询   [中等]
+         http://www.lintcode.com/zh-cn/problem/segment-tree-query/
+         对于一个有n个数的整数数组，在对应的线段树中, 根节点所代表的区间为0-n-1, 每个节点有一个额外的属性max，值为该节点所代表的数组区间start到end内的最大值。
+         为SegmentTree设计一个 query 的方法，接受3个参数root, start和end，线段树root所代表的数组中子区间[start, end]内的最大值。
+         样例
+         对于数组 [1, 4, 2, 3], 对应的线段树为：
+                            [0, 3, max=4]
+                          /             \
+                 [0,1,max=4]           [2,3,max=3]
+               /          \          /            \
+         [0,0,max=1] [1,1,max=4] [2,2,max=2], [3,3,max=3]
+         query(root, 1, 1), return 4
+         query(root, 1, 2), return 4
+         query(root, 2, 3), return 3
+         query(root, 0, 2), return 4
+         */
+//        int start = 2;
+//        int end = 2;
+//        int[] arr = {1, 4, 2, 3};
+//        SegmentTreeNode root = SegmentTreeNodeFactory.build(arr);
+//        XYLog.d(root, "这个线段树中，区间[", start, ", ", end, "]的最大值为：", solutions.query(root, start, end));
+
+
+
+
 
         /**
          线段树的构造   [中等]

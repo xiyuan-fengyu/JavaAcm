@@ -9,15 +9,22 @@ public class SegmentTreeNode extends BasicTreeNode<SegmentTreeNode.Segment> {
 
     public int end;
 
+    public int max;
+
     public SegmentTreeNode left;
 
     public SegmentTreeNode right;
 
     public SegmentTreeNode(int start, int end) {
+        this(start, end, 0);
+    }
+
+    public SegmentTreeNode(int start, int end, int max) {
         super(null);
-        val = new Segment(start, end);
+        val = new Segment();
         this.start = start;
         this.end = end;
+        this.max = max;
     }
 
     @Override
@@ -31,15 +38,9 @@ public class SegmentTreeNode extends BasicTreeNode<SegmentTreeNode.Segment> {
     }
 
     class Segment {
-        private int start;
-        private int end;
-        public Segment(int start, int end) {
-            this.start = start;
-            this.end = end;
-        }
         @Override
         public String toString() {
-            return "(" + start + ", " + end + ")";
+            return "(" + start + ", " + end + ", max = " + max + ")";
         }
     }
 
