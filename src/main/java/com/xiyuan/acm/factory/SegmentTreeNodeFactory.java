@@ -63,16 +63,45 @@ public class SegmentTreeNodeFactory {
             return root.max;
         }
         else {
-            int leftMax = Integer.MIN_VALUE;
-            int rightMax = Integer.MIN_VALUE;
+            int leftMax = 0;
+            int rightMax = 0;
 
             if (start <= root.left.end) {
                 leftMax = query(root.left, start, Math.min(root.left.end, end), comparator);
+                if (end >= root.right.start) {
+                    rightMax = query(root.right, Math.max(root.right.start, start), end, comparator);
+                    return comparator.compare(leftMax, rightMax) < 0? leftMax: rightMax;
+                }
+                else {
+                    return leftMax;
+                }
             }
-            if (end >= root.right.start) {
-                rightMax = query(root.right, Math.max(root.right.start, start), end, comparator);
+            else {
+                if (end >= root.right.start) {
+                    return query(root.right, Math.max(root.right.start, start), end, comparator);
+                }
+                else {
+                    return 0;
+                }
             }
-            return comparator.compare(leftMax, rightMax) < 0? leftMax: rightMax;
         }
     }
+
+    public static void modify(SegmentTreeNode root, int index, int value, Comparator<Integer> comparator) {
+        if (root == null || root.start > index || root.end < index) {
+        }
+        else if (root.start == index && root.end == index) {
+            root.max = value;
+        }
+        else {
+            if (root.left.end >= index) {
+                modify(root.left, index, value, comparator);
+            }
+            else {
+                modify(root.right, index, value, comparator);
+            }
+            root.max = comparator.compare(root.left.max, root.right.max) < 0? root.left.max: root.right.max;
+        }
+    }
+
 }

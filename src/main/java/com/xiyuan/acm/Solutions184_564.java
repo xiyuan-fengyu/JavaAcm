@@ -1101,25 +1101,12 @@ public class Solutions184_564 {
      * @return: The maximum number in the interval [start, end]
      */
     public int query(SegmentTreeNode root, int start, int end) {
-        if (root == null) {
-            return 0;
-        }
-
-        if (root.start == start && root.end == end) {
-            return root.max;
-        }
-        else {
-            int leftMax = Integer.MIN_VALUE;
-            int rightMax = Integer.MIN_VALUE;
-
-            if (start <= root.left.end) {
-                leftMax = query(root.left, start, Math.min(root.left.end, end));
+        return SegmentTreeNodeFactory.query(root, start, end, new Comparator<Integer>() {
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                return o2 - o1;
             }
-            if (end >= root.right.start) {
-                rightMax = query(root.right, Math.max(root.right.start, start), end);
-            }
-            return Math.max(leftMax, rightMax);
-        }
+        });
     }
 
 
@@ -1133,20 +1120,12 @@ public class Solutions184_564 {
      * @return: void
      */
     public void modify(SegmentTreeNode root, int index, int value) {
-        if (root == null || root.start > index || root.end < index) {
-        }
-        else if (root.start == index && root.end == index) {
-            root.max = value;
-        }
-        else {
-            if (root.left.end >= index) {
-                modify(root.left, index, value);
+        SegmentTreeNodeFactory.modify(root, index, value, new Comparator<Integer>() {
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                return o2 - o1;
             }
-            else {
-                modify(root.right, index, value);
-            }
-            root.max = Math.max(root.left.max, root.right.max);
-        }
+        });
     }
 
 
@@ -1177,8 +1156,9 @@ public class Solutions184_564 {
 
 
     /**
-     *@param arr, queries: Given an integer array and an query list
-     *@return: The result list
+     * http://www.lintcode.com/zh-cn/problem/interval-minimum-number/
+     * @param arr, queries: Given an integer array and an query list
+     * @return: The result list
      */
     public ArrayList<Integer> intervalMinNumber(int[] arr, ArrayList<Interval> queries) {
         ArrayList<Integer> result = new ArrayList<>();
@@ -1205,7 +1185,7 @@ public class Solutions184_564 {
 
         /**
          区间最小数   [中等]
-
+         http://www.lintcode.com/zh-cn/problem/interval-minimum-number/
          给定一个整数数组（下标由 0 到 n-1，其中 n 表示数组的规模），以及一个查询列表。每一个查询列表有两个整数 [start, end]。 对于每个查询，计算出数组中从下标 start 到 end 之间的数的最小值，并返回在结果列表中。
          注意事项
          在做此题前，建议先完成以下三道题 线段树的构造， 线段树的查询 及 线段树的修改。
@@ -1301,10 +1281,10 @@ public class Solutions184_564 {
          query(root, 2, 3), return 3
          query(root, 0, 2), return 4
          */
-//        int start = 2;
+//        int start = 0;
 //        int end = 2;
 //        int[] arr = {1, 4, 2, 3};
-//        SegmentTreeNode root = SegmentTreeNodeFactory.build(arr);
+//        SegmentTreeNode root = SegmentTreeNodeFactory.build(arr, "max");
 //        XYLog.d(root, "这个线段树中，区间[", start, ", ", end, "]的最大值为：", solutions.query(root, start, end));
 
 
