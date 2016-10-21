@@ -1,5 +1,6 @@
 package com.xiyuan.acm;
 
+import com.xiyuan.acm.factory.ListNodeFactory;
 import com.xiyuan.acm.factory.SegmentTreeNodeFactory;
 import com.xiyuan.acm.model.*;
 import com.xiyuan.acm.util.ArrayListUtil;
@@ -1337,8 +1338,82 @@ public class Solutions184_564 {
         return newLen;
     }
 
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/palindrome-linked-list/
+     * @param head a ListNode
+     * @return a boolean
+     */
+    public boolean isPalindrome(ListNode head) {
+        if (head == null || head.next == null) {
+            return true;
+        }
+
+        //快慢指针找到中间位置
+        ListNode slow = head;
+        ListNode fast = head;
+        while (fast.next != null && fast.next.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+
+        ListNode rightHalf = slow.next;
+        //暂时以slow为截点，将右边斩断
+        slow.next = null;
+        rightHalf = reverse(rightHalf);
+
+        boolean result = true;
+        //将head和fast作为游标
+        fast = rightHalf;
+        while (head != null && fast != null) {
+            if (head.val != fast.val) {
+                result = false;
+                break;
+            }
+            head = head.next;
+            fast = fast.next;
+        }
+        //将rightHalf反转，并拼接到slow后面
+        slow.next = reverse(rightHalf);
+        return result;
+    }
+
+    private ListNode reverse(ListNode head) {
+        ListNode cur = null;
+        ListNode cursor = head;
+        while (cursor != null) {
+            ListNode temp = cursor;
+            cursor = cursor.next;
+
+            temp.next = cur;
+            cur = temp;
+        }
+        return cur;
+    }
+
+
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         回文链表   [中等]
+         http://www.lintcode.com/zh-cn/problem/palindrome-linked-list/
+         设计一种方式检查一个链表是否为回文链表。
+         样例
+         1->2->1 就是一个回文链表。
+         挑战
+         O(n)的时间和O(1)的额外空间。
+         */
+//        ListNode head = ListNodeFactory.build("1->2->2->1");
+//        XYLog.d(head, "\n", solutions.isPalindrome(head));
+
+
+
 
         /**
          空格替换   [容易]
