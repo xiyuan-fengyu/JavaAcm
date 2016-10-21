@@ -1122,8 +1122,68 @@ public class Solutions184_564 {
     }
 
 
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/segment-tree-modify/
+     * @param root, index, value: The root of segment tree and change the node's value with [index, index] to the new given value
+     * @return: void
+     */
+    public void modify(SegmentTreeNode root, int index, int value) {
+        if (root == null || root.start > index || root.end < index) {
+        }
+        else if (root.start == index && root.end == index) {
+            root.max = value;
+        }
+        else {
+            if (root.left.end >= index) {
+                modify(root.left, index, value);
+            }
+            else {
+                modify(root.right, index, value);
+            }
+            root.max = Math.max(root.left.max, root.right.max);
+        }
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         线段树的修改   [中等]
+         http://www.lintcode.com/zh-cn/problem/segment-tree-modify/
+         对于一棵 最大线段树, 每个节点包含一个额外的 max 属性，用于存储该节点所代表区间的最大值。
+         设计一个 modify 的方法，接受三个参数 root、 index 和 value。该方法将 root 为跟的线段树中 [start, end] = [index, index] 的节点修改为了新的 value ，并确保在修改后，线段树的每个节点的 max 属性仍然具有正确的值。
+         样例
+         对于线段树:
+                                [1, 4, max=3]
+                             /                \
+                  [1, 2, max=2]                [3, 4, max=3]
+                /              \             /             \
+         [1, 1, max=2], [2, 2, max=1], [3, 3, max=0], [4, 4, max=3]
+         如果调用 modify(root, 2, 4), 返回:
+                                [1, 4, max=4]
+                             /                \
+                 [1, 2, max=4]                [3, 4, max=3]
+                /              \             /             \
+         [1, 1, max=2]  [2, 2, max=4]  [3, 3, max=0]  [4, 4, max=3]
+         挑战
+         时间复杂度 O(h) , h 是线段树的高度
+         */
+//        int index = 1;
+//        int value = 4;
+//        int[] arr = {2, 1, 0, 3};
+//        SegmentTreeNode root = SegmentTreeNodeFactory.build(arr);
+//        XYLog.d(root);
+//        solutions.modify(root, index, value);
+//        XYLog.d("将[", index, ", ", index, "]的值改为", value, "之后，线段树变为：", root);
+
+
+
+
+
 
         /**
          线段树的查询   [中等]
