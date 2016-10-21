@@ -1,10 +1,7 @@
 package com.xiyuan.acm;
 
 import com.xiyuan.acm.factory.SegmentTreeNodeFactory;
-import com.xiyuan.acm.model.ExpressionTreeNode;
-import com.xiyuan.acm.model.Interval;
-import com.xiyuan.acm.model.Point;
-import com.xiyuan.acm.model.SegmentTreeNode;
+import com.xiyuan.acm.model.*;
 import com.xiyuan.acm.util.ArrayListUtil;
 import com.xiyuan.acm.util.DataUtil;
 import com.xiyuan.util.XYLog;
@@ -1180,8 +1177,73 @@ public class Solutions184_564 {
 
 
 
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/interval-sum/
+     * @param arr, queries: Given an integer array and an query list
+     * @return: The result list
+     */
+    public ArrayList<Long> intervalSum(int[] arr, ArrayList<Interval> queries) {
+        ArrayList<Long> result = new ArrayList<>();
+        if (arr != null && arr.length >= 0) {
+            int len = arr.length;
+            Long[] copyArr = new Long[len];
+            for (int i = 0; i < len; i++) {
+                copyArr[i] = (long) arr[i];
+            }
+
+            IntervalTreeNode.Actions<Long> actions = new IntervalTreeNode.Actions<Long>() {
+                @Override
+                public void build(IntervalTreeNode<Long> root) {
+                    root.data = root.left.data + root.right.data;
+                }
+
+                @Override
+                public Long query(Long leftData, Long rightData) {
+                    if (leftData != null && rightData != null) {
+                        return leftData + rightData;
+                    }
+                    else if (leftData != null) {
+                        return leftData;
+                    }
+                    else if (rightData != null) {
+                        return rightData;
+                    }
+                    return null;
+                }
+            };
+
+            IntervalTreeNode<Long> root = IntervalTreeNode.build(copyArr, actions);
+            for (Interval interval: queries) {
+                result.add(IntervalTreeNode.query(root, interval.start, interval.end, actions));
+            }
+        }
+        return result;
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         区间求和 I   [中等]
+         http://www.lintcode.com/zh-cn/problem/interval-sum/
+         给定一个整数数组（下标由 0 到 n-1，其中 n 表示数组的规模），以及一个查询列表。每一个查询列表有两个整数 [start, end] 。 对于每个查询，计算出数组中从下标 start 到 end 之间的数的总和，并返回在结果列表中。
+         样例
+         对于数组 [1,2,7,8,5]，查询[(1,2),(0,4),(2,4)], 返回 [9,23,20]
+         */
+//        int[] arr = {1,2,7,8,5};
+//        ArrayList<Interval> intervals = ArrayListUtil.build(
+//                new Interval(1, 2),
+//                new Interval(0, 4),
+//                new Interval(2, 4)
+//        );
+//        XYLog.d(solutions.intervalSum(arr, intervals));
+
+
 
         /**
          区间最小数   [中等]
