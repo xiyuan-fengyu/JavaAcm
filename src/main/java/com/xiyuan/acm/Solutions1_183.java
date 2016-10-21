@@ -12547,20 +12547,6 @@ public class Solutions1_183 {
 
     }
 
-    public static class Interval {
-        int start;
-        int end;
-        public Interval(int start, int end) {
-            this.start = start;
-            this.end = end;
-        }
-
-        @Override
-        public String toString() {
-            return "(" + start + ", " + end + ")";
-        }
-    }
-
     public static class Queue {
         private Stack<Integer> stack1;
         private Stack<Integer> stack2;

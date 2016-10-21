@@ -2,12 +2,13 @@ package com.xiyuan.acm;
 
 import com.xiyuan.acm.factory.SegmentTreeNodeFactory;
 import com.xiyuan.acm.model.ExpressionTreeNode;
+import com.xiyuan.acm.model.Interval;
 import com.xiyuan.acm.model.Point;
 import com.xiyuan.acm.model.SegmentTreeNode;
+import com.xiyuan.acm.util.ArrayListUtil;
 import com.xiyuan.acm.util.DataUtil;
 import com.xiyuan.util.XYLog;
 
-import java.nio.channels.Pipe;
 import java.util.*;
 
 /**
@@ -1171,8 +1172,57 @@ public class Solutions184_564 {
         }
     }
 
+
+
+
+
+    /**
+     *@param arr, queries: Given an integer array and an query list
+     *@return: The result list
+     */
+    public ArrayList<Integer> intervalMinNumber(int[] arr, ArrayList<Interval> queries) {
+        ArrayList<Integer> result = new ArrayList<>();
+        if (arr != null && arr.length > 0) {
+            Comparator<Integer> comparator = new Comparator<Integer>() {
+                @Override
+                public int compare(Integer o1, Integer o2) {
+                    return o1 - o2;
+                }
+            };
+            SegmentTreeNode root = SegmentTreeNodeFactory.build(arr, comparator);
+            for (Interval item: queries) {
+                result.add(SegmentTreeNodeFactory.query(root, item.start, item.end, comparator));
+            }
+        }
+        return result;
+    }
+
+
+
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         区间最小数   [中等]
+
+         给定一个整数数组（下标由 0 到 n-1，其中 n 表示数组的规模），以及一个查询列表。每一个查询列表有两个整数 [start, end]。 对于每个查询，计算出数组中从下标 start 到 end 之间的数的最小值，并返回在结果列表中。
+         注意事项
+         在做此题前，建议先完成以下三道题 线段树的构造， 线段树的查询 及 线段树的修改。
+         样例
+         对于数组 [1,2,7,8,5]， 查询 [(1,2),(0,4),(2,4)]，返回 [2,1,5]
+         挑战
+         每次查询在O(logN)的时间内完成
+         */
+//        int[] arr = {1,2,7,8,5};
+//        ArrayList<Interval> intervals = ArrayListUtil.build(
+//                new Interval(1, 2),
+//                new Interval(0, 4),
+//                new Interval(2, 4)
+//        );
+//        XYLog.d(solutions.intervalMinNumber(arr, intervals));
+
+
 
         /**
          单例   [容易]
@@ -1224,7 +1274,7 @@ public class Solutions184_564 {
 //        int index = 1;
 //        int value = 4;
 //        int[] arr = {2, 1, 0, 3};
-//        SegmentTreeNode root = SegmentTreeNodeFactory.build(arr);
+//        SegmentTreeNode root = SegmentTreeNodeFactory.build(arr, "max");
 //        XYLog.d(root);
 //        solutions.modify(root, index, value);
 //        XYLog.d("将[", index, ", ", index, "]的值改为", value, "之后，线段树变为：", root);
