@@ -6,6 +6,7 @@ import com.xiyuan.acm.factory.TreeNodeFactory;
 import com.xiyuan.acm.model.*;
 import com.xiyuan.acm.util.ArrayListUtil;
 import com.xiyuan.acm.util.DataUtil;
+import com.xiyuan.acm.util.RandomUtil;
 import com.xiyuan.util.XYLog;
 
 import java.util.*;
@@ -1596,8 +1597,123 @@ public class Solutions184_564 {
     }
 
 
+
+
+
+
+
+
+
+
+    /**
+     * o(n^k)，在数据随机，数组长度很大的时候，这种算法平均运行时间更短
+     * http://www.lintcode.com/zh-cn/problem/sliding-window-maximum/
+     * @param nums: A list of integers.
+     * @return: The maximum number inside the window at each moving.
+     */
+    public ArrayList<Integer> maxSlidingWindowNK(int[] nums, int k) {
+        ArrayList<Integer> result = new ArrayList<>();
+        int len = nums.length;
+        if (len > 0 && k > 0) {
+            int max = nums[0];
+            for (int i = 1; i < k; i++) {
+                if (nums[i] > max) {
+                    max = nums[i];
+                }
+            }
+
+            result.add(max);
+            for (int i = k; i < len; i++) {
+                if (nums[i] >= max) {
+                    max = nums[i];
+                }
+                else {
+                    if (nums[i - k] == max) {
+                        max = nums[i - k + 1];
+                        for (int j = i - k + 2; j <= i; j++) {
+                            if (max < nums[j]) {
+                                max = nums[j];
+                            }
+                        }
+                    }
+                }
+                result.add(max);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * o(n)
+     * http://www.lintcode.com/zh-cn/problem/sliding-window-maximum/
+     * @param nums: A list of integers.
+     * @return: The maximum number inside the window at each moving.
+     */
+    public ArrayList<Integer> maxSlidingWindow(int[] nums, int k) {
+        ArrayList<Integer> result = new ArrayList<>();
+        int len = nums.length;
+        if (len > 0 && k > 0) {
+            Deque<Integer> deque = new ArrayDeque<>();
+            for (int i = 0; i < len; i++) {
+                int item = nums[i];
+                while (!deque.isEmpty() && deque.peekLast() < item) {
+                    deque.pollLast();
+                }
+                deque.offer(item);
+
+                if (i >= k - 1) {
+                    int first = deque.peekFirst();
+                    result.add(first);
+                    if (first == nums[i - k + 1]) {
+                        deque.pollFirst();
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         滑动窗口的最大值   [超难]
+         http://www.lintcode.com/zh-cn/problem/sliding-window-maximum/
+         给出一个可能包含重复的整数数组，和一个大小为 k 的滑动窗口, 从左到右在数组中滑动这个窗口，找到数组中每个窗口内的最大值。
+         样例
+         给出数组 [1,2,7,7,8], 滑动窗口大小为 k = 3. 返回 [7,7,8].
+         解释：
+         最开始，窗口的状态如下：
+         [|1, 2 ,7| ,7 , 8], 最大值为 7;
+         然后窗口向右移动一位：
+         [1, |2, 7, 7|, 8], 最大值为 7;
+         最后窗口再向右移动一位：
+         [1, 2, |7, 7, 8|], 最大值为 8.
+         挑战
+         O(n)时间，O(k)的额外空间
+         */
+//        int[] nums = {1,3,2,6,5,8,7,4,4,6};
+//        int k = 3;
+//        XYLog.d(solutions.maxSlidingWindow(nums, k));
+//        //两种算法的实际运行时间比较，maxSlidingWindowNK的平均速度更快，后面一种算法没有考虑队列的出入队列的复杂度
+//        int[][] randomArr = RandomUtil.randomArr(1000, 200000, 1000);
+//        int len = randomArr.length;
+//        int[] randomKs = new int[len];
+//        for (int i = 0; i < len; i++) {
+//            randomKs[i] = (int) (Math.random() * randomArr[i].length);
+//        }
+//        long startTime = System.currentTimeMillis();
+//        for (int i = 0; i < len; i++) {
+//            solutions.maxSlidingWindowNK(randomArr[i], randomKs[i]);
+//        }
+//        XYLog.d("maxSlidingWindowNK:", (System.currentTimeMillis() - startTime) / (double) len);
+//        startTime = System.currentTimeMillis();
+//        for (int i = 0; i < len; i++) {
+//            solutions.maxSlidingWindow(randomArr[i], randomKs[i]);
+//        }
+//        XYLog.d("maxSlidingWindow:", (System.currentTimeMillis() - startTime) / (double) len);
+
+
 
         /**
          统计前面比自己小的数的个数   [困难]
