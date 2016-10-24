@@ -16,6 +16,10 @@ public abstract class BasicTreeNode<T> {
 
     public abstract BasicTreeNode<T> right();
 
+    protected String nodeValToStr() {
+        return val.toString();
+    }
+
     @Override
     public String toString() {
         List<PositionChar> chars = toPositionChars();
@@ -78,7 +82,7 @@ public abstract class BasicTreeNode<T> {
 
     private List<PositionChar> toPositionChars() {
         List<PositionChar> result = new ArrayList<PositionChar>();
-        String valStr = val.toString();
+        String valStr = nodeValToStr();
         int valStrLen = valStr.length();
         int offset = 0;
         if (left() != null || right() != null) {
@@ -88,7 +92,7 @@ public abstract class BasicTreeNode<T> {
             Map<Integer, Integer> rightMin = new HashMap<Integer, Integer>();
             if (left() != null) {
                 leftChars = left().toPositionChars();
-                int leftOffset = left().val.toString().length() + 1;
+                int leftOffset = left().nodeValToStr().length() + 1;
                 for (PositionChar item: leftChars) {
                     item.x -= leftOffset;
                     item.y += 2;
@@ -124,7 +128,7 @@ public abstract class BasicTreeNode<T> {
             }
 
             if (leftChars != null && rightChars != null) {
-                boolean isCrossing = true;
+                boolean isCrossing;
                 do {
                     isCrossing = false;
                     Set<Integer> keys = leftMax.keySet();

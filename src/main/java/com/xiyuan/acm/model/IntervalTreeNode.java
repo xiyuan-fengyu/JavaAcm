@@ -23,6 +23,11 @@ public class IntervalTreeNode<T> extends BasicTreeNode<Interval> {
     }
 
     @Override
+    protected String nodeValToStr() {
+        return "(" + val.start + ", " + val.end + ", max=" + data + ")";
+    }
+
+    @Override
     public BasicTreeNode<Interval> left() {
         return left;
     }

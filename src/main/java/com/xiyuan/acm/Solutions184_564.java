@@ -1469,8 +1469,118 @@ public class Solutions184_564 {
         }
     }
 
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/count-of-smaller-number/
+     * @param arr: An integer array
+     * @return: The number of element in the array that
+     *          are smaller that the given integer
+     */
+    public ArrayList<Integer> countOfSmallerNumber(int[] arr, int[] queries) {
+        ArrayList<Integer> result = new ArrayList<>();
+        int lenA = arr.length;
+        int lenQ = queries.length;
+        SegmentTreeNode247 root = SegmentTreeNode247.build(0, 10000);
+
+        for (int i = 0; i < lenA; i++) {
+            root.modify(arr[i], 1);
+        }
+
+        for (int i = 0; i < lenQ; i++) {
+            int item = queries[i];
+            if (item > 0) {
+                result.add(root.query(0, item - 1));
+            }
+            else {
+                result.add(0);
+            }
+        }
+
+        return result;
+    }
+
+    private static class SegmentTreeNode247 {
+        public int start;
+        public int end;
+        public int count;
+        public SegmentTreeNode247 left;
+        public SegmentTreeNode247 right;
+
+        public SegmentTreeNode247(int start, int end, int count) {
+            this.count = count;
+            this.end = end;
+            this.start = start;
+        }
+
+        public static SegmentTreeNode247 build(int start, int end) {
+            SegmentTreeNode247 newNode = new SegmentTreeNode247(start, end, 0);
+            if (start != end) {
+                int mid = (start + end) / 2;
+                newNode.left = build(start, mid);
+                newNode.right = build(mid + 1, end);
+            }
+            return newNode;
+        }
+
+        public int query(int start, int end) {
+            if (start == this.start && end == this.end) {
+                return this.count;
+            }
+            else {
+                int mid = (this.start + this.end) / 2;
+                int leftCount = 0;
+                int rightCount = 0;
+
+                if (start <= mid && left != null) {
+                    leftCount = left.query(start, Math.min(mid, end));
+                    leftCount += 0;
+                }
+                if (mid < end && right != null) {
+                    rightCount = right.query(Math.max(mid + 1, start), end);
+                    rightCount += 0;
+                }
+                return leftCount + rightCount;
+            }
+        }
+
+        public void modify(int index, int value) {
+            if (this.start == index && this.end == index) {
+                this.count += value;
+            }
+            else {
+                int mid = (start + end) / 2;
+                if (this.start <= index && index <= mid) {
+                    left.modify(index, value);
+                }
+                else if (mid < index && index <= this.end) {
+                    right.modify(index, value);
+                }
+                this.count = left.count + right.count;
+            }
+        }
+
+    }
+
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         统计比给定整数小的数的个数   [中等]
+         http://www.lintcode.com/zh-cn/problem/count-of-smaller-number/
+   '    给定一个整数数组 （下标由 0 到 n-1，其中 n 表示数组的规模，数值范围由 0 到 10000），以及一个 查询列表。对于每一个查询，将会给你一个整数，请你返回该数组中小于给定整数的元素的数量。
+         */
+        int[] arr = {1,2,7,8,5};
+        int[] queries = {1,8,5};
+        XYLog.d(solutions.countOfSmallerNumber(arr, queries));
+
+
+
 
         /**
          线段树查询 II   [中等]
