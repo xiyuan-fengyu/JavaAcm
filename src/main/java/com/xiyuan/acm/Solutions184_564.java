@@ -1433,8 +1433,86 @@ public class Solutions184_564 {
         return  isSubtree(t1.left, t2Root) || isSubtree(t1.right, t2Root);
     }
 
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/segment-tree-query-ii/
+     * @param root, start, end: The root of segment tree and an segment / interval
+     * @return: The count number in the interval [start, end]
+     */
+    public int query247(SegmentTreeNode root, int start, int end) {
+        if (root == null || start > end || start > root.end || end < root.start) {
+            return 0;
+        }
+
+        if (root.start == start && root.end == end) {
+            return root.max;
+        }
+        else {
+            int leftCount = 0;
+            if (root.left != null) {
+                leftCount = query247(root.left, start, Math.min(root.left.end, end));
+            }
+            else {
+                return root.max;
+            }
+
+            int rightCount = 0;
+            if (root.right != null) {
+                rightCount = query247(root.right, Math.max(root.right.start, start), end);
+            }
+            return leftCount + rightCount;
+        }
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         线段树查询 II   [中等]
+         http://www.lintcode.com/zh-cn/problem/segment-tree-query-ii/
+         对于一个数组，我们可以对其建立一棵 线段树, 每个结点存储一个额外的值 count 来代表这个结点所指代的数组区间内的元素个数. (数组中并不一定每个位置上都有元素)
+         实现一个 query 的方法，该方法接受三个参数 root, start 和 end, 分别代表线段树的根节点和需要查询的区间，找到数组中在区间[start, end]内的元素个数。
+         样例
+         对于数组 [0, 空，2, 3], 对应的线段树为：
+
+                                [0, 3, count=3]
+                               /             \
+                  [0,1,count=1]             [2,3,count=2]
+                 /         \               /            \
+         [0,0,count=1] [1,1,count=0] [2,2,count=1], [3,3,count=1]
+         query(1, 1), return 0
+         query(1, 2), return 1
+         */
+//        String str = "[0,14,count=3][0,7,count=2][8,14,count=1][0,3,count=2][4,7,count=0][8,11,count=0][12,14,count=1][0,1,count=1][2,3,count=1][4,5,count=0][6,7,count=0][8,9,count=0][10,11,count=0][12,13,count=0][14,14,count=1][0,0,count=1][1,1,count=0][2,2,count=1][3,3,count=0][4,4,count=0][5,5,count=0][6,6,count=0][7,7,count=0][8,8,count=0][9,9,count=0][10,10,count=0][11,11,count=0][12,12,count=0][13,13,count=0]";
+//        String[] split = str.replaceAll("\\[", "").replaceAll("\\]", ";").split(";");
+//        ArrayList<SegmentTreeNode> nodes = new ArrayList<>();
+//        for (int i = 0, len = split.length; i < len; i++) {
+//            String item = split[i];
+//            String[] params = item.split(",");
+//            int start = Integer.parseInt(params[0]);
+//            int end = Integer.parseInt(params[1]);
+//            int count = Integer.parseInt(params[2].replace("count=", ""));
+//            SegmentTreeNode newNode = new SegmentTreeNode(start, end, count);
+//            nodes.add(newNode);
+//            if (i != 0)  {
+//                SegmentTreeNode parent = nodes.get((i - 1) / 2);
+//                if (i % 2 == 1) {
+//                    parent.left = newNode;
+//                }
+//                else {
+//                    parent.right = newNode;
+//                }
+//            }
+//        }
+//        XYLog.d(solutions.query247(nodes.get(0), 1, 16));
+
+
+
 
         /**
          子树   [容易]
