@@ -2101,8 +2101,122 @@ public class Solutions184_564 {
         }
     }
 
+
+
+
+
+
+
+
+//    /**
+//     * 时间复杂度o(n1 + n2),空间复杂度o(n1)
+//     * http://www.lintcode.com/zh-cn/problem/intersection-of-two-linked-lists/
+//     * @param headA: the first list
+//     * @param headB: the second list
+//     * @return: a ListNode
+//     */
+//    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+//        HashMap<ListNode, Boolean> cache = new HashMap<>();
+//        ListNode cursorA = headA;
+//        ListNode cursorB = headB;
+//
+//        while (cursorA != null) {
+//            cache.put(cursorA, true);
+//            cursorA = cursorA.next;
+//        }
+//
+//        while (cursorB != null) {
+//            if (cache.containsKey(cursorB)) {
+//                return cursorB;
+//            }
+//            cursorB = cursorB.next;
+//        }
+//        return null;
+//    }
+
+    /**
+     * 时间复杂度o(n1 + n2),空间复杂度o(1)
+     * http://www.lintcode.com/zh-cn/problem/intersection-of-two-linked-lists/
+     * @param headA: the first list
+     * @param headB: the second list
+     * @return: a ListNode
+     */
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        if (headA == null || headB == null) {
+            return null;
+        }
+
+        ListNode cursor = headA;
+        while (cursor.next != null) {
+            cursor = cursor.next;
+        }
+        cursor.next = headB;
+        ListNode result = cycleNode(headA);
+        cursor.next = null;
+        return result;
+    }
+
+    private ListNode cycleNode(ListNode head) {
+        ListNode slow = head;
+        ListNode fast = head.next;
+
+        while (slow != fast) {
+            if (fast == null || fast.next == null) {
+                return null;
+            }
+
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+
+        slow = head;
+        fast = fast.next;
+        while (slow != fast) {
+            slow = slow.next;
+            fast = fast.next;
+        }
+        return slow;
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         两个链表的交叉   [中等]
+         http://www.lintcode.com/zh-cn/problem/intersection-of-two-linked-lists/
+         请写一个程序，找到两个单链表最开始的交叉节点。
+         注意事项
+         如果两个链表没有交叉，返回null。
+         在返回结果后，两个链表仍须保持原有的结构。
+         可假定整个链表结构中没有循环。
+         样例
+         下列两个链表：
+         A:        a1 → a2
+                           ↘
+                              c1 → c2 → c3
+                           ↗
+         B: b1 → b2 → b3
+         在节点 c1 开始交叉。
+         挑战
+         需满足 O(n) 时间复杂度，且仅用 O(1) 内存。
+         */
+//        ListNode listA = ListNodeFactory.build("1->2");
+//        ListNode listB = ListNodeFactory.build("1->2->3");
+//        ListNode listC = ListNodeFactory.build("4->5->6");
+//        ListNode cursor = listA;
+//        while (cursor.next != null) {
+//            cursor = cursor.next;
+//        }
+//        cursor.next = listC;
+//        cursor = listB;
+//        while (cursor.next != null) {
+//            cursor = cursor.next;
+//        }
+//        cursor.next = listC;
+//        XYLog.d(solutions.getIntersectionNode(listA, listB));
+
+
+
 
         /**
          将数组重新排序以构造最小值   [中等]
