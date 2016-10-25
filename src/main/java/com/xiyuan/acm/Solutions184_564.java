@@ -2536,7 +2536,11 @@ public class Solutions184_564 {
      * @return: Maximum profit
      */
     public int maxProfit(int k, int[] prices) {
+        if (k == 0 || prices.length == 0) {
+            return 0;
+        }
 
+        int len = prices.length;
 
         return 0;
     }
