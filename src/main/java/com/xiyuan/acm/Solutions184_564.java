@@ -1936,8 +1936,48 @@ public class Solutions184_564 {
 
 
 
+    /**
+     * http://www.lintcode.com/zh-cn/problem/partition-array-by-odd-and-even/
+     * @param nums: an array of integers
+     * @return: nothing
+     */
+    public void partitionArray(int[] nums) {
+        int len = nums.length;
+        if (len > 1) {
+            int left = 0;
+            int right = len - 1;
+            while (left < right) {
+                while (left < right && nums[left] % 2 == 1) {
+                    left++;
+                }
+                while (left < right && nums[right] % 2 == 0) {
+                    right--;
+                }
+                int temp = nums[left];
+                nums[left] = nums[right];
+                nums[right] = temp;
+            }
+        }
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         奇偶分割数组   [容易]
+         http://www.lintcode.com/zh-cn/problem/partition-array-by-odd-and-even/
+         分割一个整数数组，使得奇数在前偶数在后。
+         样例
+         给定 [1, 2, 3, 4]，返回 [1, 3, 2, 4]。
+         挑战
+         在原数组中完成，不使用额外空间。
+         */
+//        int[] arr = {1, 2, 3, 4};
+//        solutions.partitionArray(arr);
+//        XYLog.d(arr, "");
+
+
+
 
         /**
          在O(1)时间复杂度删除链表节点   [容易]
