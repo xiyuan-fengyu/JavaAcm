@@ -1673,8 +1673,106 @@ public class Solutions184_564 {
         return result;
     }
 
+
+
+
+
+
+
+//    /**
+//     * 时间复杂度：o(n)，空间复杂度：o(n)
+//     * 先从右往左计算好每个位置右边的最高海拔，然后在从左往右遍历，记录每个位置左边的最高海拔
+//     * 每个位置的出水量 = Math.min(左边最高海拔, 右边最高海拔) - 当前位置的海拔
+//     * http://www.lintcode.com/zh-cn/problem/trapping-rain-water/
+//     * @param heights: an array of integers
+//     * @return: a integer
+//     */
+//    public int trapRainWater_N_N(int[] heights) {
+//        int total = 0;
+//        int len = heights.length;
+//        if (len > 0) {
+//            int[] rightMaxHs = new int[len];
+//            rightMaxHs[len - 1] = heights[len - 1];
+//            for (int i = len - 2; i > -1; i--) {
+//                if (heights[i] > rightMaxHs[i + 1]) {
+//                    rightMaxHs[i] = heights[i];
+//                }
+//                else {
+//                    rightMaxHs[i] = rightMaxHs[i + 1];
+//                }
+//            }
+//            int leftMax = heights[0];
+//            for (int i = 1; i < len; i++) {
+//                int h = heights[i];
+//                if (h >= leftMax) {
+//                    leftMax = h;
+//                }
+//                else if (h < rightMaxHs[i]) {
+//                    total += Math.min(leftMax, rightMaxHs[i]) - h;
+//                }
+//            }
+//        }
+//        return total;
+//    }
+
+    /**
+     * 时间复杂度：o(n)，空间复杂度：o(1)
+     * 思路和 trapRainWater_N_N 类似，只是从左右两边往中间靠拢，在靠弄的过程中计算
+     * http://www.lintcode.com/zh-cn/problem/trapping-rain-water/
+     * @param heights: an array of integers
+     * @return: a integer
+     */
+    public int trapRainWater(int[] heights) {
+        int total = 0;
+        int left = 0;
+        int right = heights.length - 1;
+        if (right > -1) {
+            int leftH = heights[left];
+            int rightH = heights[right];
+            while (left < right) {
+                if (leftH < rightH) {
+                    left++;
+                    if (leftH > heights[left]) {
+                        total += leftH - heights[left];
+                    }
+                    else {
+                        leftH = heights[left];
+                    }
+                }
+                else {
+                    right--;
+                    if (rightH > heights[right]) {
+                        total += rightH - heights[right];
+                    }
+                    else {
+                        rightH = heights[right];
+                    }
+                }
+            }
+        }
+        return total;
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         接雨水   [中等]
+         http://www.lintcode.com/zh-cn/problem/trapping-rain-water/
+         给出 n 个非负整数，代表一张X轴上每个区域宽度为 1 的海拔图, 计算这个海拔图最多能接住多少（面积）雨水。
+         样例
+         如上图所示，海拔分别为 [0,1,0,2,1,0,1,3,2,1,2,1], 返回 6.
+         挑战
+         O(n) 时间, O(1) 空间
+         O(n) 时间, O(n) 空间也可以接受
+         */
+//        int[] heights = {0,1,0,2,1,0,1,3,2,1,2,1};
+//        XYLog.d(solutions.trapRainWater(heights));
+
+
+
+
+
 
         /**
          滑动窗口的最大值   [超难]
