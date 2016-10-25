@@ -1887,8 +1887,46 @@ public class Solutions184_564 {
         }
     }
 
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/print-numbers-by-recursion/
+     * @param n: An integer.
+     * return : An array storing 1 to the largest number with n digits.
+     */
+    public List<Integer> numbersByRecursion(int n) {
+        List<Integer> result = new ArrayList<>();
+        numbersByRecursion(n, result);
+        return result;
+    }
+
+    private void numbersByRecursion(int n, List<Integer> result) {
+        if (n > 0) {
+            int size = result.size();
+            int start = size == 0? 1: result.get(size - 1) + 1;
+            int end = start * 10 - 1;
+            for (int i = start; i <= end; i++) {
+                result.add(i);
+            }
+            numbersByRecursion(n - 1, result);
+        }
+    }
+
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         用递归打印数字   [中等]
+         http://www.lintcode.com/zh-cn/problem/print-numbers-by-recursion/
+         用递归的方法找到从1到最大的N位整数。
+         样例
+         给出 N = 1, 返回[1,2,3,4,5,6,7,8,9].
+         给出 N = 2, 返回[1,2,3,4,5,6,7,8,9,10,11,...,99].
+         */
+//        XYLog.d(solutions.numbersByRecursion(2));
+
+
 
         /**
          表达式求值   [困难]
