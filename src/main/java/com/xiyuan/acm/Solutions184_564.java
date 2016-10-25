@@ -1794,8 +1794,121 @@ public class Solutions184_564 {
         return a;
     }
 
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/expression-evaluation/
+     * @param expression: an array of strings;
+     * @return: an integer
+     */
+    public int evaluateExpression(String[] expression) {
+        int len = expression.length;
+        if (len > 0) {
+            Stack<String> options = new Stack<>();
+            Stack<Integer> params = new Stack<>();
+            for (int i = 0; i < len; i++) {
+                String exp = expression[i];
+                if (exp.equals("(")) {
+                    options.push(exp);
+                }
+                else if (exp.equals("*") || exp.equals("/")) {
+                    if (options.isEmpty()) {
+                        options.push(exp);
+                    }
+                    else {
+                        String lastExp = options.peek();
+                        if (!lastExp.equals("(") && !lastExp.equals("+") && !lastExp.equals("-")) {
+                            options.pop();
+                            int param2 = params.pop();
+                            int param1 = params.pop();
+                            params.push(expResult(param1, lastExp, param2));
+                        }
+                        options.push(exp);
+                    }
+                }
+                else if (exp.equals("+") || exp.equals("-")) {
+                    if (options.isEmpty()) {
+                        options.push(exp);
+                    }
+                    else {
+                        String lastExp = options.peek();
+                        if (!lastExp.equals("(")) {
+                            options.pop();
+                            int param2 = params.pop();
+                            int param1 = params.pop();
+                            params.push(expResult(param1, lastExp, param2));
+                        }
+                        options.push(exp);
+                    }
+                }
+                else if (exp.equals(")")) {
+                    String lastExp = options.peek();
+                    while (!lastExp.equals("(")) {
+                        options.pop();
+                        int param2 = params.pop();
+                        int param1 = params.pop();
+                        params.push(expResult(param1, lastExp, param2));
+                        lastExp = options.peek();
+                    }
+                    options.pop();
+                }
+                else {
+                    params.push(Integer.parseInt(exp));
+                }
+            }
+
+            while (!options.isEmpty()) {
+                String lastExp = options.pop();
+                int param2 = params.pop();
+                int param1 = params.pop();
+                params.push(expResult(param1, lastExp, param2));
+            }
+
+            return params.isEmpty()? 0: params.peek();
+        }
+        return 0;
+    }
+
+    private int expResult(int param1, String option, int param2) {
+        if (option.equals("+")) {
+            return param1 + param2;
+        }
+        else if (option.equals("-")) {
+            return param1 - param2;
+        }
+        else if (option.equals("*")) {
+            return param1 * param2;
+        }
+        else {
+            return param1 / param2;
+        }
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         表达式求值   [困难]
+         http://www.lintcode.com/zh-cn/problem/expression-evaluation/
+         给一个用字符串表示的表达式数组，求出这个表达式的值。
+         注意事项
+         表达式只包含整数, +, -, *, /, (, ).
+         样例
+         对于表达式 (2*6-(23+7)/(1+2)), 对应的数组为：
+         [
+         "2", "*", "6", "-", "(",
+         "23", "+", "7", ")", "/",
+         (", "1", "+", "2", ")"
+         ],
+         其值为 2
+         */
+//        String[] exps = {"(","999","/","3","/","3","/","3",")","+","(","1","+","9","/","3",")"};
+//        XYLog.d(solutions.evaluateExpression(exps));
+
+
 
         /**
          斐波纳契数列   [入门]
