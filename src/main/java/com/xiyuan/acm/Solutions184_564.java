@@ -1913,8 +1913,45 @@ public class Solutions184_564 {
     }
 
 
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/delete-node-in-the-middle-of-singly-linked-list/
+     * @param node: the node in the list should be deleted
+     * @return: nothing
+     */
+    public void deleteNode(ListNode node) {
+        if (node != null && node.next != null) {
+            ListNode next = node.next;
+            node.val = next.val;
+            node.next = next.next;
+        }
+    }
+
+
+
+
+
+
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         在O(1)时间复杂度删除链表节点   [容易]
+         http://www.lintcode.com/zh-cn/problem/delete-node-in-the-middle-of-singly-linked-list/
+         给定一个单链表中的一个等待被删除的节点(非表头或表尾)。请在在O(1)时间复杂度删除该链表节点。
+         样例
+         给定 1->2->3->4，和节点 3，删除 3 之后，链表应该变为 1->2->4。
+         */
+//        ListNode head = ListNodeFactory.build("1->2->3->4");
+//        solutions.deleteNode(head.next.next);
+//        XYLog.d(head);
+
+
+
 
         /**
          用递归打印数字   [中等]
