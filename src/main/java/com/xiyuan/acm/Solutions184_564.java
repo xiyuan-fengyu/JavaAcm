@@ -2541,8 +2541,47 @@ public class Solutions184_564 {
         }
 
         int len = prices.length;
+        int[] oneMaxs = new int[len];
+        int[] oneMaxIndexs = new int[len];
+        int[][] matrix = new int[len][k + 1];
+        oneMaxs[0] = 0;
+        oneMaxIndexs[0] = 0;
+        matrix[0][1] = 0;
+        int minIndex = 0;
+        for (int j = 1; j <= k; j++) {
+            for (int i = 0; i < len; i++) {
+                if (j == 1) {
+                    if (prices[i] < prices[minIndex]) {
+                        minIndex = i;
+                    }
 
-        return 0;
+                    if (i > 0) {
+                        int temp0 = matrix[i - 1][j];
+                        int temp1 = prices[i] - prices[minIndex];
+
+                        if (temp0 > temp1) {
+                            matrix[i][j] = temp0;
+                            oneMaxs[i] = temp0;
+                            oneMaxIndexs[i] = oneMaxIndexs[i - 1];
+                        }
+                        else {
+                            matrix[i][j] = temp1;
+                            oneMaxs[i] = temp1;
+                            oneMaxIndexs[i] = minIndex;
+                        }
+                    }
+                }
+                else {
+                    int temp0 = matrix[i][j - 1];
+                    int temp1 = 0;
+                    if ((oneMaxIndexs[i] - 1) / 2 >= j - 1) {
+                        temp1 = oneMaxs[i] + matrix[oneMaxIndexs[i] - 1][j - 1];
+                    }
+                    matrix[i][j] = Math.max(temp0, temp1);
+                }
+            }
+        }
+        return matrix[len - 1][k];
     }
 
     public static void main(String[] args) {
@@ -2561,7 +2600,7 @@ public class Solutions184_564 {
          O(nk) 时间序列。
          */
         int[] arr = {4,4,6,1,1,4,2,5};
-        int k = 6;
+        int k = 2;
         XYLog.d(solutions.maxProfit(k, arr));
 
 
