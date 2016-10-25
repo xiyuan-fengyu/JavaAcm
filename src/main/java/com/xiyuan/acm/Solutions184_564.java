@@ -2039,8 +2039,92 @@ public class Solutions184_564 {
         return newNode;
     }
 
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/reorder-array-to-construct-the-minimum-number/
+     * @param nums n non-negative integer array
+     * @return a string
+     */
+    public String minNumber(int[] nums) {
+        if (nums.length == 0) {
+            return "0";
+        }
+        else {
+            quickSortNums(nums, 0, nums.length - 1);
+            StringBuilder strBld = new StringBuilder();
+            for (int i: nums) {
+                strBld.append(i);
+            }
+            String num = strBld.toString();
+            int strLen = num.length();
+            int index = 0;
+            while (index < strLen && num.charAt(index) == '0') {
+                index++;
+            }
+            if (index == strLen) {
+                return "0";
+            }
+            return num.substring(index);
+        }
+    }
+
+    private void quickSortNums(int[] nums, int left, int right) {
+        if (left < right) {
+            int key = nums[left];
+            int i = left;
+            int j = right;
+            while (i < j) {
+                while (i < j && compare(nums[j], key) >= 0) {
+                    j--;
+                }
+                nums[i] = nums[j];
+                while (i < j && compare(nums[i], key) <= 0) {
+                    i++;
+                }
+                nums[j] = nums[i];
+            }
+            nums[i] = key;
+            quickSortNums(nums, left, i - 1);
+            quickSortNums(nums, i + 1, right);
+        }
+    }
+
+    private int compare(int i1, int i2) {
+        if (i1 == i2) {
+            return 0;
+        }
+        else {
+            return ("" + i1 + i2).compareTo("" + i2 + i1);
+        }
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         将数组重新排序以构造最小值   [中等]
+         http://www.lintcode.com/zh-cn/problem/reorder-array-to-construct-the-minimum-number/
+         给定一个整数数组，请将其重新排序，以构造最小值。
+         样例
+         给定 [3, 32, 321]，通过将数组重新排序，可构造 6 个可能性数字：
+         3+32+321=332321
+         3+321+32=332132
+         32+3+321=323321
+         32+321+3=323213
+         321+3+32=321332
+         321+32+3=321323
+         其中，最小值为 321323，所以，将数组重新排序后，该数组变为 [321, 32, 3]。
+         挑战
+         在原数组上完成，不使用额外空间。
+         */
+//        int[] nums = {3, 32, 321};
+//        XYLog.d(solutions.minNumber(nums));
+
+
+
 
         /**
          克隆二叉树   [容易]
