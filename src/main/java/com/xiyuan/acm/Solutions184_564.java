@@ -2523,8 +2523,44 @@ public class Solutions184_564 {
         return f[len - 1];
     }
 
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/best-time-to-buy-and-sell-stock-iv/
+     * @param k: An integer
+     * @param prices: Given an integer array
+     * @return: Maximum profit
+     */
+    public int maxProfit(int k, int[] prices) {
+
+        return 0;
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         买卖股票的最佳时机 IV
+         http://www.lintcode.com/zh-cn/problem/best-time-to-buy-and-sell-stock-iv/
+         假设你有一个数组，它的第i个元素是一支给定的股票在第i天的价格。
+         设计一个算法来找到最大的利润。你最多可以完成 k 笔交易。
+         注意事项
+         你不可以同时参与多笔交易(你必须在再次购买前出售掉之前的股票)
+         样例
+         给定价格 = [4,4,6,1,1,4,2,5], 且 k = 2, 返回 6.
+         挑战
+         O(nk) 时间序列。
+         */
+        int[] arr = {4,4,6,1,1,4,2,5};
+        int k = 6;
+        XYLog.d(solutions.maxProfit(k, arr));
+
+
+
 
         /**
          打劫房屋   [中等]
