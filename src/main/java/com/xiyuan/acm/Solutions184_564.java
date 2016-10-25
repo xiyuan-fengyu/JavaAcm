@@ -2019,8 +2019,39 @@ public class Solutions184_564 {
         return result;
     }
 
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/clone-binary-tree/
+     * @param root: The root of binary tree
+     * @return root of new tree
+     */
+    public TreeNode cloneTree(TreeNode root) {
+        if (root == null) {
+            return null;
+        }
+
+        TreeNode newNode = new TreeNode(root.val);
+        newNode.left = cloneTree(root.left);
+        newNode.right = cloneTree(root.right);
+        return newNode;
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         克隆二叉树   [容易]
+         http://www.lintcode.com/zh-cn/problem/clone-binary-tree/
+         深度复制一个二叉树。
+         给定一个二叉树，返回一个他的 克隆品 。
+         */
+//        TreeNode tree = TreeNodeFactory.build("1,2,3,4,5");
+//        XYLog.d(tree);
+//        XYLog.d(solutions.cloneTree(tree));
+
 
         /**
          螺旋矩阵   [中等]
