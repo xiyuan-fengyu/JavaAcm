@@ -1960,8 +1960,91 @@ public class Solutions184_564 {
         }
     }
 
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/spiral-matrix/
+     * @param matrix a matrix of m x n elements
+     * @return an integer list
+     */
+    public List<Integer> spiralOrder(int[][] matrix) {
+        List<Integer> result = new ArrayList<>();
+        int row = matrix.length;
+        if (row > 0) {
+            int column = matrix[0].length;
+            if (column > 0) {
+                int rowS = 0;
+                int rowE = row - 1;
+                int columnS = 0;
+                int columnE = column - 1;
+                int i = 0;
+                int j = 0;
+                int ward = 0;
+                while (rowS <= rowE && columnS <= columnE) {
+                    if (ward % 4 == 0) {
+                        for (j = columnS; j <= columnE; j++) {
+                            result.add(matrix[i][j]);
+                        }
+                        j--;
+                        rowS++;
+                    }
+                    else if (ward % 4 == 1) {
+                        for (i = rowS; i <= rowE; i++) {
+                            result.add(matrix[i][j]);
+                        }
+                        i--;
+                        columnE--;
+                    }
+                    else if (ward % 4 == 2) {
+                        for (j = columnE; j >= columnS; j--) {
+                            result.add(matrix[i][j]);
+                        }
+                        j++;
+                        rowE--;
+                    }
+                    else {
+                        for (i = rowE; i >= rowS; i--) {
+                            result.add(matrix[i][j]);
+                        }
+                        i++;
+                        columnS++;
+                    }
+                    ward++;
+                }
+
+            }
+        }
+        return result;
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         螺旋矩阵   [中等]
+         http://www.lintcode.com/zh-cn/problem/spiral-matrix/
+         给定一个包含 m x n 个要素的矩阵，（m 行, n 列），按照螺旋顺序，返回该矩阵中的所有要素。
+         样例
+         给定如下矩阵：
+         [
+         [ 1, 2, 3 ],
+         [ 4, 5, 6 ],
+         [ 7, 8, 9 ]
+         ]
+         应返回 [1,2,3,6,9,8,7,4,5]。
+         */
+        int[][] matrix = {
+                { 1, 2, 3, 4},
+                { 5, 6, 7, 8}
+//                { 9,10,11,12},
+//                {13,14,15,16}
+        };
+        XYLog.d(solutions.spiralOrder(matrix));
+
+
+
 
         /**
          奇偶分割数组   [容易]
