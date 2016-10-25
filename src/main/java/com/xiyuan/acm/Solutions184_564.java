@@ -2178,8 +2178,85 @@ public class Solutions184_564 {
         return slow;
     }
 
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/spiral-matrix-ii/
+     * @param n an integer
+     * @return a square matrix
+     */
+    public int[][] generateMatrix(int n) {
+        int[][] matrix = new int[n][n];
+        if (n > 0) {
+            int rowS = 0;
+            int rowE = n - 1;
+            int columnS = 0;
+            int columnE = n - 1;
+            int ward = 0;
+            int index = 1;
+            int i = 0;
+            int j = 0;
+            while (rowS <= rowE && columnS <= columnE) {
+                if (ward % 4 == 0) {
+                    for (j = columnS; j <= columnE; j++) {
+                        matrix[i][j] = index++;
+                    }
+                    j--;
+                    rowS++;
+                }
+                else if (ward % 4 == 1) {
+                    for (i = rowS; i <= rowE; i++) {
+                        matrix[i][j] = index++;
+                    }
+                    i--;
+                    columnE--;
+                }
+                else if (ward % 4 == 2) {
+                    for (j = columnE; j >= columnS; j--) {
+                        matrix[i][j] = index++;
+                    }
+                    j++;
+                    rowE--;
+                }
+                else {
+                    for (i = rowE; i >= rowS; i--) {
+                        matrix[i][j] = index++;
+                    }
+                    i++;
+                    columnS++;
+                }
+                ward++;
+            }
+        }
+        return matrix;
+    }
+
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         螺旋矩阵 II   [中等]
+         http://www.lintcode.com/zh-cn/problem/spiral-matrix-ii/
+         给你一个数n生成一个包含1-n^2的螺旋形矩阵
+         样例
+         n = 3
+         矩阵为
+         [
+         [ 1, 2, 3 ],
+         [ 8, 9, 4 ],
+         [ 7, 6, 5 ]
+         ]
+         */
+//        int n = 3;
+//        XYLog.d(solutions.generateMatrix(n), "");
+
+
+
+
+
 
         /**
          两个链表的交叉   [中等]
