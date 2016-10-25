@@ -2285,8 +2285,40 @@ public class Solutions184_564 {
         return max;
     }
 
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/longest-substring-without-repeating-characters/
+     * @param str: a string
+     * @return: an integer
+     */
+    public int lengthOfLongestSubstring(String str) {
+
+        return 0;
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         最长无重复字符的子串   [中等]
+
+         给定一个字符串，请找出其中无重复字符的最长子字符串。
+         样例
+         例如，在"abcabcbb"中，其无重复字符的最长子字符串是"abc"，其长度为 3。
+         对于，"bbbbb"，其无重复字符的最长子字符串为"b"，长度为1。
+         挑战
+         O(n) 时间
+         */
+        String str = "abcabcbb";
+        XYLog.d(solutions.lengthOfLongestSubstring(str));
+
+
+
 
         /**
          装最多水的容器   [中等]
