@@ -2359,8 +2359,67 @@ public class Solutions184_564 {
         return max;
     }
 
+
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/the-smallest-difference/
+     * @param arrA, arrB: Two integer arrays.
+     * @return: Their smallest difference.
+     */
+    public int smallestDifference(int[] arrA, int[] arrB) {
+        Arrays.sort(arrA);
+        Arrays.sort(arrB);
+        int lenA = arrA.length;
+        int lenB = arrB.length;
+        int i = 0;
+        int j = 0;
+        int min = Integer.MAX_VALUE;
+        while (i < lenA && j < lenB) {
+            int a = arrA[i];
+            int b = arrB[j];
+            if (a == b) {
+                return 0;
+            }
+            else if (a > b) {
+                if (min > a - b) {
+                    min = a - b;
+                }
+                j++;
+            }
+            else {
+                if (min > b - a) {
+                    min = b - a;
+                }
+                i++;
+            }
+        }
+        return min;
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         最小差   [中等]
+         http://www.lintcode.com/zh-cn/problem/the-smallest-difference/
+         给定两个整数数组（第一个是数组 A，第二个是数组 B），在数组 A 中取 A[i]，数组 B 中取 B[j]，A[i] 和 B[j]两者的差越小越好(|A[i] - B[j]|)。返回最小差。
+         样例
+         给定数组 A = [3,4,6,7]， B = [2,3,8,9]，返回 0。
+         挑战
+         时间复杂度 O(n log n)
+         */
+//        int[] arrA = {3,4,6,7};
+//        int[] arrB = {2,5,8,9};
+//        XYLog.d(solutions.smallestDifference(arrA, arrB));
+
+
+
+
 
         /**
          最长无重复字符的子串   [中等]
