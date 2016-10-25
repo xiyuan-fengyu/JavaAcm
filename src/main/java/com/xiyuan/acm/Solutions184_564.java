@@ -1774,8 +1774,36 @@ public class Solutions184_564 {
         return count;
     }
 
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/fibonacci/
+     * @param n: an integer
+     * @return an integer f(n)
+     */
+    public int fibonacci(int n) {
+        int a = 0;
+        int b = 1;
+        while (n-- > 1) {
+            b = a + b;
+            a = b - a;
+        }
+        return a;
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         斐波纳契数列   [入门]
+         http://www.lintcode.com/zh-cn/problem/fibonacci/
+         */
+//        XYLog.d(solutions.fibonacci(10));
+
+
 
         /**
          二进制中有多少个1  [中等]
