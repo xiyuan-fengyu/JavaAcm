@@ -2234,8 +2234,71 @@ public class Solutions184_564 {
     }
 
 
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/container-with-most-water/
+     * @param heights: an array of integers
+     * @return: an integer
+     */
+    public int maxArea(int[] heights) {
+        int max = 0;
+        int len = heights.length;
+        if (len > 0) {
+            int left = 0;
+            int right = len - 1;
+            max = (right - left) * Math.min(heights[left], heights[right]);
+            while (left < right) {
+                int temp;
+                if (heights[left] == heights[right]) {
+                    temp = heights[left];
+                    while (left < right && heights[left] <= temp) {
+                        left++;
+                    }
+                    while (left < right && heights[right] <= temp) {
+                        right--;
+                    }
+                }
+                else if (heights[left] > heights[right]) {
+                    temp = heights[right];
+                    while (left < right && heights[right] <= temp) {
+                        right--;
+                    }
+                }
+                else if (heights[left] < heights[right]) {
+                    temp = heights[left];
+                    while (left < right && heights[left] <= temp) {
+                        left++;
+                    }
+                }
+
+                if (left < right) {
+                    temp = (right - left) * Math.min(heights[left], heights[right]);
+                    if (temp > max) {
+                        max = temp;
+                    }
+                }
+            }
+        }
+        return max;
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         装最多水的容器   [中等]
+         http://www.lintcode.com/zh-cn/problem/container-with-most-water/
+         给定 n 个非负整数 a1, a2, ..., an, 每个数代表了坐标中的一个点 (i, ai)。画 n 条垂直线，使得 i 垂直线的两个端点分别为(i, ai)和(i, 0)。找到两条线，使得其与 x 轴共同构成一个容器，以容纳最多水。
+         样例
+         给出[1,3,2], 最大的储水面积是2.
+         */
+//        int[] arr = {1,3,2};
+//        XYLog.d(solutions.maxArea(arr));
+
+
 
         /**
          螺旋矩阵 II   [中等]
