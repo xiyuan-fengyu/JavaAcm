@@ -2035,13 +2035,11 @@ public class Solutions184_564 {
          ]
          应返回 [1,2,3,6,9,8,7,4,5]。
          */
-        int[][] matrix = {
-                { 1, 2, 3, 4},
-                { 5, 6, 7, 8}
-//                { 9,10,11,12},
-//                {13,14,15,16}
-        };
-        XYLog.d(solutions.spiralOrder(matrix));
+//        int[][] matrix = {
+//                { 1, 2, 3, 4},
+//                { 5, 6, 7, 8}
+//        };
+//        XYLog.d(solutions.spiralOrder(matrix));
 
 
 
