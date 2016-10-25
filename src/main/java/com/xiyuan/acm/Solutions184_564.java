@@ -2291,14 +2291,72 @@ public class Solutions184_564 {
 
 
 
+//    /**
+//     * http://www.lintcode.com/zh-cn/problem/longest-substring-without-repeating-characters/
+//     * @param str: a string
+//     * @return: an integer
+//     */
+//    public int lengthOfLongestSubstring(String str) {
+//        if (str == null) {
+//            return 0;
+//        }
+//
+//        int len = str.length();
+//        if (len <= 1) {
+//            return len;
+//        }
+//
+//        HashMap<Character, Integer> cache = new HashMap<>();
+//        int[] nextDupIndexs = new int[len];
+//        Arrays.fill(nextDupIndexs, len);
+//
+//        for (int i = 0; i < len; i++) {
+//            char c = str.charAt(i);
+//            if (cache.containsKey(c)) {
+//                nextDupIndexs[cache.get(c)] = i;
+//            }
+//            cache.put(c, i);
+//        }
+//
+//        int min = nextDupIndexs[len - 1];
+//        for (int i = len - 2; i  > -1; i--) {
+//            if (nextDupIndexs[i] > min) {
+//                nextDupIndexs[i] = min;
+//            }
+//            else {
+//                min = nextDupIndexs[i];
+//            }
+//        }
+//
+//        int max = 0;
+//        for (int  i = 0; i < len; i++) {
+//            int temp = nextDupIndexs[i] - i;
+//            if (temp > max) {
+//                max = temp;
+//            }
+//        }
+//        return max;
+//    }
+
     /**
      * http://www.lintcode.com/zh-cn/problem/longest-substring-without-repeating-characters/
      * @param str: a string
      * @return: an integer
      */
     public int lengthOfLongestSubstring(String str) {
-
-        return 0;
+        int[] map = new int[256];
+        int max = 0;
+        int i = 0;
+        int j = 0;
+        for (int len = str.length(); i < len && j < len; i++) {
+            while (j < len && map[str.charAt(j)] == 0) {
+                map[str.charAt(j)] = 1;
+                max = Math.max(max, j - i + 1);
+                j++;
+            }
+            map[str.charAt(i)] = 0;
+        }
+        return max;
     }
 
     public static void main(String[] args) {
@@ -2314,8 +2372,8 @@ public class Solutions184_564 {
          挑战
          O(n) 时间
          */
-        String str = "abcabcbb";
-        XYLog.d(solutions.lengthOfLongestSubstring(str));
+//        String str = "gehmbfqmozbpripibusbezagafqtypz";
+//        XYLog.d(solutions.lengthOfLongestSubstring(str));
 
 
 
