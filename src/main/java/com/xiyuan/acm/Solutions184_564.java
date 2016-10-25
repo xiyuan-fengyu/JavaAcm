@@ -5,6 +5,7 @@ import com.xiyuan.acm.factory.SegmentTreeNodeFactory;
 import com.xiyuan.acm.factory.TreeNodeFactory;
 import com.xiyuan.acm.model.*;
 import com.xiyuan.acm.util.ArrayListUtil;
+import com.xiyuan.acm.util.BinaryStrUtil;
 import com.xiyuan.acm.util.DataUtil;
 import com.xiyuan.acm.util.RandomUtil;
 import com.xiyuan.util.XYLog;
@@ -1753,8 +1754,43 @@ public class Solutions184_564 {
         return total;
     }
 
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/count-1-in-binary/
+     * @param num: an integer
+     * @return: an integer, the number of ones in num
+     */
+    public int countOnes(int num) {
+        int count = 0;
+        while (num != 0) {
+            count += num & 1;
+            num >>>= 1;//最高位补0，这里不能用>>，否则对于负数，最高位补1,就不正确了
+        }
+        return count;
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         二进制中有多少个1  [中等]
+         http://www.lintcode.com/zh-cn/problem/count-1-in-binary/
+         计算在一个 32 位的整数的二进制表式中有多少个 1.
+         样例
+         给定 32 (100000)，返回 1
+         给定 5 (101)，返回 2
+         给定 1023 (1111111111)，返回 10
+         */
+//        XYLog.d(solutions.countOnes(1023));
+
+
+
+
 
         /**
          接雨水   [中等]
