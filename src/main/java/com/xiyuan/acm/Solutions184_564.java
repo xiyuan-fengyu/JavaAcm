@@ -2541,11 +2541,10 @@ public class Solutions184_564 {
         }
 
         int len = prices.length;
-        int[] oneMaxs = new int[len];
-        int[] oneMaxIndexs = new int[len];
+        if (k > len / 2) {
+            k = len / 2;
+        }
         int[][] matrix = new int[len][k + 1];
-        oneMaxs[0] = 0;
-        oneMaxIndexs[0] = 0;
         matrix[0][1] = 0;
         int minIndex = 0;
         for (int j = 1; j <= k; j++) {
@@ -2561,21 +2560,26 @@ public class Solutions184_564 {
 
                         if (temp0 > temp1) {
                             matrix[i][j] = temp0;
-                            oneMaxs[i] = temp0;
-                            oneMaxIndexs[i] = oneMaxIndexs[i - 1];
                         }
                         else {
                             matrix[i][j] = temp1;
-                            oneMaxs[i] = temp1;
-                            oneMaxIndexs[i] = minIndex;
                         }
                     }
                 }
                 else {
                     int temp0 = matrix[i][j - 1];
                     int temp1 = 0;
-                    if ((oneMaxIndexs[i] - 1) / 2 >= j - 1) {
-                        temp1 = oneMaxs[i] + matrix[oneMaxIndexs[i] - 1][j - 1];
+                    for (int m = i - 1; (m - 1) / 2 >= j - 1; m--) {
+                        int temp = 0;
+                        if (prices[i] > prices[m]) {
+                            temp = prices[i] - prices[m] + matrix[m - 1][j - 1];
+                        }
+                        else {
+                            temp = matrix[m][j];
+                        }
+                        if (temp > temp1) {
+                            temp1 = temp;
+                        }
                     }
                     matrix[i][j] = Math.max(temp0, temp1);
                 }
@@ -2599,8 +2603,8 @@ public class Solutions184_564 {
          挑战
          O(nk) 时间序列。
          */
-        int[] arr = {4,4,6,1,1,4,2,5};
-        int k = 2;
+        int[] arr = {1,2,4,2,5,7,2,4,9,0};
+        int k = 4;
         XYLog.d(solutions.maxProfit(k, arr));
 
 
