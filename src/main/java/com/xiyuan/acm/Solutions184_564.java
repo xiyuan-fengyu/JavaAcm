@@ -2434,8 +2434,86 @@ public class Solutions184_564 {
     }
 
 
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/number-of-airplanes-in-the-sky/
+     * @param airplanes: An interval array
+     * @return: Count of airplanes are in the sky.
+     */
+    public int countOfAirplanes(List<Interval> airplanes) {
+        int size = airplanes.size();
+        if (size <= 1) {
+            return size;
+        }
+
+        int curSize = 0;
+        int maxSize = 0;
+        ArrayList<IntervalEdge> edges = new ArrayList<>();
+        for (Interval item: airplanes) {
+            edges.add(new IntervalEdge(item.start, true));
+            edges.add(new IntervalEdge(item.end, false));
+        }
+        Collections.sort(edges, new Comparator<IntervalEdge>() {
+            @Override
+            public int compare(IntervalEdge o1, IntervalEdge o2) {
+                if (o1.index != o2.index) {
+                    return o1.index - o2.index;
+                }
+                else {
+                    return !o1.isStart? -1: 1;
+                }
+            }
+        });
+
+        for (int i = 0, sizeE = edges.size(); i < sizeE; i++) {
+            IntervalEdge item = edges.get(i);
+            if (item.isStart) {
+                curSize++;
+                if (curSize > maxSize) {
+                    maxSize = curSize;
+                }
+            }
+            else {
+                curSize--;
+            }
+        }
+        return maxSize;
+    }
+
+    private class IntervalEdge {
+        public final int index;
+        public final boolean isStart;
+        public IntervalEdge(int index, boolean isStart) {
+            this.index = index;
+            this.isStart = isStart;
+        }
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         数飞机   [中等]
+         http://www.lintcode.com/zh-cn/problem/number-of-airplanes-in-the-sky/
+         给出飞机的起飞和降落时间的列表，用 interval 序列表示. 请计算出天上同时最多有多少架飞机？
+         注意事项
+         如果多架飞机降落和起飞在同一时刻，我们认为降落有优先权。
+         样例
+         对于每架飞机的起降时间列表：[[1,10],[2,3],[5,8],[4,7]], 返回3。
+         */
+//        ArrayList<Interval> airplanes = ArrayListUtil.build(
+//                new Interval(1, 10),
+//                new Interval(2, 3),
+//                new Interval(5, 8),
+//                new Interval(4, 7)
+//        );
+//        XYLog.d(solutions.countOfAirplanes(airplanes));
+
+
+
 
         /**
          第k个排列   [中等]
@@ -2453,9 +2531,9 @@ public class Solutions184_564 {
          321
          如果 k = 4, 第4个排列为，231.
          */
-        int n = 9;
-        int k = 9 * 8 * 7 * 6 * 5 * 4 * 3 * 2;
-        XYLog.d(solutions.getPermutation(n, k));
+//        int n = 9;
+//        int k = 9 * 8 * 7 * 6 * 5 * 4 * 3 * 2;
+//        XYLog.d(solutions.getPermutation(n, k));
 
 
 
