@@ -2492,8 +2492,56 @@ public class Solutions184_564 {
         }
     }
 
+
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/house-robber/
+     * @param arr: An array of non-negative integers.
+     * return: The maximum amount of money you can rob tonight
+     */
+    public long houseRobber(int[] arr) {
+        int len = arr.length;
+        if (len == 0) {
+            return 0;
+        }
+
+        long[] f = new long[len];
+        f[0] = arr[0];
+        for (int i = 1; i < len; i++) {
+            long temp = 0;
+            if ( i - 2 >= 0) {
+                temp = f[i - 2];
+            }
+            temp += arr[i];
+            f[i] = Math.max(f[i - 1], temp);
+        }
+        return f[len - 1];
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         打劫房屋   [中等]
+         http://www.lintcode.com/zh-cn/problem/house-robber/
+         假设你是一个专业的窃贼，准备沿着一条街打劫房屋。每个房子都存放着特定金额的钱。你面临的唯一约束条件是：相邻的房子装着相互联系的防盗系统，且 当相邻的两个房子同一天被打劫时，该系统会自动报警。
+         给定一个非负整数列表，表示每个房子中存放的钱， 算一算，如果今晚去打劫，你最多可以得到多少钱 在不触动报警装置的情况下。
+         样例
+         给定 [3, 8, 4], 返回 8.
+         挑战
+         O(n) 时间复杂度 且 O(1) 存储。
+         */
+//        int[] arr = {3, 8, 4, 5, 7};
+//        XYLog.d(solutions.houseRobber(arr));
+
+
+
+
 
         /**
          数飞机   [中等]
