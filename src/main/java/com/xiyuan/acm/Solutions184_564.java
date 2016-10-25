@@ -2401,8 +2401,63 @@ public class Solutions184_564 {
         return min;
     }
 
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/permutation-sequence/
+     * @param n: n
+     * @param k: the kth permutation
+     * @return: return the k-th permutation
+     */
+    public String getPermutation(int n, int k) {
+        ArrayList<Integer> arr = new ArrayList<>();
+        int size = 1;
+        for (int i = 0; i < n; i++) {
+            arr.add(i + 1);
+            size *= i + 1;
+        }
+        return getPermutation(arr, k, size);
+    }
+
+    public String getPermutation(ArrayList<Integer> arr, int k, int pSize) {
+        int size = arr.size();
+        if (size == 0) {
+            return "";
+        }
+
+        int subSize = pSize / size;
+        int index = (k - 1) / subSize;
+        return "" + arr.remove(index) + getPermutation(arr, k - subSize * index, subSize);
+    }
+
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         第k个排列   [中等]
+         http://www.lintcode.com/zh-cn/problem/permutation-sequence/
+         给定 n 和 k，求123..n组成的排列中的第 k 个排列。
+         注意事项
+         1 ≤ n ≤ 9
+         样例
+         对于 n = 3, 所有的排列如下：
+         123
+         132
+         213
+         231
+         312
+         321
+         如果 k = 4, 第4个排列为，231.
+         */
+        int n = 9;
+        int k = 9 * 8 * 7 * 6 * 5 * 4 * 3 * 2;
+        XYLog.d(solutions.getPermutation(n, k));
+
+
 
         /**
          最小差   [中等]
