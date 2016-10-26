@@ -2590,8 +2590,56 @@ public class Solutions184_564 {
         return n % 3 != 0;
     }
 
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/coins-in-a-line-ii/
+     * @param values: an array of integers
+     * @return: a boolean which equals to true if the first player will win
+     */
+    public boolean firstWillWin(int[] values) {
+        int len = values.length;
+        if (len == 0) {
+            return false;
+        }
+        else if (len <= 2) {
+            return true;
+        }
+
+        int[][] scores = new int[len][2];
+        scores[len - 1] = new int[]{values[len - 1], 0};
+        scores[len - 2] = new int[]{values[len - 1] + values[len - 2], 0};
+        for (int i = len - 3; i >= 0; --i) {
+            //取一个的价值+上一步的对手最优解>取2个的价值+上2步的对手最优解
+            if (values[i] + scores[i + 1][1] > values[i] + values[i + 1] + scores[i + 2][1]) {
+                scores[i] = new int[]{values[i] + scores[i + 1][1], scores[i + 1][0]};
+            }
+            else {
+                scores[i] = new int[]{values[i] + values[i + 1] + scores[i + 2][1], scores[i + 2][0]};
+            }
+        }
+        return scores[0][0] > scores[0][1];
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         硬币排成线 II   [中等]
+         http://www.lintcode.com/zh-cn/problem/coins-in-a-line-ii/
+         有 n 个不同价值的硬币排成一条线。两个参赛者轮流从左边依次拿走 1 或 2 个硬币，直到没有硬币为止。计算两个人分别拿到的硬币总价值，价值高的人获胜。
+         请判定 第一个玩家 是输还是赢？
+         样例
+         给定数组 A = [1,2,2], 返回 true.
+         给定数组 A = [1,2,4], 返回 false.
+         */
+        int[] arr = {1,2,4,3,4,8,5,6,12};
+        XYLog.d(solutions.firstWillWin(arr));
+
+
 
         /**
          硬币排成线   [中等]
