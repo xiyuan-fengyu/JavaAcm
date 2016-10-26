@@ -2565,8 +2565,54 @@ public class Solutions184_564 {
         }
     }
 
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/coins-in-a-line/
+     * @param n: an integer
+     * @return: a boolean which equals to true if the first player will win
+     */
+    public boolean firstWillWin(int n) {
+        //o(n)
+//        boolean a = true;
+//        boolean b = false;
+//        while (n-- > 0) {
+//            boolean temp = (!a) || (!b);
+//            a = b;
+//            b = temp;
+//        }
+//        return b;
+
+        //o(1)
+        return n % 3 != 0;
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         硬币排成线   [中等]
+         http://www.lintcode.com/zh-cn/problem/coins-in-a-line/
+         有 n 个硬币排成一条线。两个参赛者轮流从右边依次拿走 1 或 2 个硬币，直到没有硬币为止。拿到最后一枚硬币的人获胜。
+         请判定 第一个玩家 是输还是赢？
+         样例
+         n = 1, 返回 true.
+         n = 2, 返回 true.
+         n = 3, 返回 false.
+         n = 4, 返回 true.
+         n = 5, 返回 true.
+         挑战
+         O(1) 时间复杂度且O(1) 存储。
+         */
+//        for (int i = 0; i <= 10; i++) {
+//            XYLog.d(solutions.firstWillWin(i));
+//        }
+
+
+
 
         /**
          买卖股票的最佳时机 IV   [困难]
