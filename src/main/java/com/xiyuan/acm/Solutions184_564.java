@@ -2580,15 +2580,15 @@ public class Solutions184_564 {
          挑战
          O(nk) 时间序列。
          */
-//        int[] arr = {1,2};
-//        int k = 1;
-//        int[] arr = DataUtil.getIntArr("./data/best-time-to-buy-and-sell-stock-iv-45.in");//result 1648961
-//        int k = 1000000000;
-        int[] arr = DataUtil.getIntArr("./data/best-time-to-buy-and-sell-stock-iv-42.in");//result 2818
-        int k = 29;
-//        int[] arr = DataUtil.getIntArr("./data/best-time-to-buy-and-sell-stock-iv-66.in");//result 38011
-//        int k = 56;
-        XYLog.d(solutions.maxProfit(k, arr));
+////        int[] arr = {1,2};
+////        int k = 1;
+////        int[] arr = DataUtil.getIntArr("./data/best-time-to-buy-and-sell-stock-iv-45.in");//result 1648961
+////        int k = 1000000000;
+//        int[] arr = DataUtil.getIntArr("./data/best-time-to-buy-and-sell-stock-iv-42.in");//result 2818
+//        int k = 29;
+////        int[] arr = DataUtil.getIntArr("./data/best-time-to-buy-and-sell-stock-iv-66.in");//result 38011
+////        int k = 56;
+//        XYLog.d(solutions.maxProfit(k, arr));
 
 
 
