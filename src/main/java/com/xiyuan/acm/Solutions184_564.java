@@ -2541,51 +2541,28 @@ public class Solutions184_564 {
         }
 
         int len = prices.length;
-        if (k > len / 2) {
-            k = len / 2;
-        }
-        int[][] matrix = new int[len][k + 1];
-        matrix[0][1] = 0;
-        int minIndex = 0;
-        for (int j = 1; j <= k; j++) {
-            for (int i = 0; i < len; i++) {
-                if (j == 1) {
-                    if (prices[i] < prices[minIndex]) {
-                        minIndex = i;
-                    }
-
-                    if (i > 0) {
-                        int temp0 = matrix[i - 1][j];
-                        int temp1 = prices[i] - prices[minIndex];
-
-                        if (temp0 > temp1) {
-                            matrix[i][j] = temp0;
-                        }
-                        else {
-                            matrix[i][j] = temp1;
-                        }
-                    }
-                }
-                else {
-                    int temp0 = matrix[i][j - 1];
-                    int temp1 = 0;
-                    for (int m = i - 1; (m - 1) / 2 >= j - 1; m--) {
-                        int temp = 0;
-                        if (prices[i] > prices[m]) {
-                            temp = prices[i] - prices[m] + matrix[m - 1][j - 1];
-                        }
-                        else {
-                            temp = matrix[m][j];
-                        }
-                        if (temp > temp1) {
-                            temp1 = temp;
-                        }
-                    }
-                    matrix[i][j] = Math.max(temp0, temp1);
+        if (k >= len / 2) {
+            int max = 0;
+            for (int i = 1; i < len; i++) {
+                int delta = prices[i] - prices[i - 1];
+                if (delta > 0) {
+                    max += delta;
                 }
             }
+            return max;
         }
-        return matrix[len - 1][k];
+        else {
+            int[] local = new int[k + 1];
+            int[] global = new int[k + 1];
+            for (int i = 1; i < len; i++) {
+                int delta = prices[i] - prices[i - 1];
+                for (int j = k; j >= 1; --j) {
+                    local[j] = Math.max(global[j - 1] + Math.max(0, delta), local[j] + delta);
+                    global[j] = Math.max(global[j], local[j]);
+                }
+            }
+            return global[k];
+        }
     }
 
     public static void main(String[] args) {
@@ -2603,8 +2580,14 @@ public class Solutions184_564 {
          挑战
          O(nk) 时间序列。
          */
-        int[] arr = {1,2,4,2,5,7,2,4,9,0};
-        int k = 4;
+//        int[] arr = {1,2};
+//        int k = 1;
+//        int[] arr = DataUtil.getIntArr("./data/best-time-to-buy-and-sell-stock-iv-45.in");//result 1648961
+//        int k = 1000000000;
+        int[] arr = DataUtil.getIntArr("./data/best-time-to-buy-and-sell-stock-iv-42.in");//result 2818
+        int k = 29;
+//        int[] arr = DataUtil.getIntArr("./data/best-time-to-buy-and-sell-stock-iv-66.in");//result 38011
+//        int k = 56;
         XYLog.d(solutions.maxProfit(k, arr));
 
 
