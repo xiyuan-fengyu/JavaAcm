@@ -2802,6 +2802,9 @@ public class Solutions184_564 {
             }
         }
 
+//        PrintUtil.arr(mins, 2, 2);
+//        PrintUtil.arr(maxs, 2, 2);
+
         return result;
     }
 
@@ -2821,8 +2824,8 @@ public class Solutions184_564 {
          挑战
          用排序的方法解决这个问题是比较简单的方法，但是排序的时间复杂度是O(nlogn), 能否使用线性的时间和空间复杂度的方法解决这个问题。
          */
-////        int[] arr = {1,9,2,5,6,7};
-//        int[] arr = DataUtil.getIntArr("./data/maximum-gap-73.in");
+//        int[] arr = {1,9,2,5,6,7,6};
+////        int[] arr = DataUtil.getIntArr("./data/maximum-gap-73.in");
 //        XYLog.d(solutions.maximumGap(arr));
 
 
