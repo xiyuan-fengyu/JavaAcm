@@ -2763,9 +2763,9 @@ public class Solutions184_564 {
 
         int min = nums[0];
         int max = nums[0];
-        for (int i = 0; i < len; ++i) {
-            min = Math.min(min, nums[i]);
-            max = Math.max(max, nums[i]);
+        for (int num: nums) {
+            min = Math.min(min, num);
+            max = Math.max(max, num);
         }
         if (min == max) {
             return 0;
@@ -2776,14 +2776,14 @@ public class Solutions184_564 {
         int[] mins = new int[len];
         Arrays.fill(maxs, 0);
         Arrays.fill(mins, 0);
-        for (int i = 0; i < len; ++i) {
-            int temp = (int) ((nums[i] - min) / avg);
-            maxs[temp] = Math.max(maxs[temp], nums[i]);
+        for (int num: nums) {
+            int temp = (int) ((num - min) / avg);
+            maxs[temp] = Math.max(maxs[temp], num);
             if (mins[temp] == 0) {
                 mins[temp] = maxs[temp];
             }
             else {
-                mins[temp] = Math.min(mins[temp], nums[i]);
+                mins[temp] = Math.min(mins[temp], num);
             }
         }
 
