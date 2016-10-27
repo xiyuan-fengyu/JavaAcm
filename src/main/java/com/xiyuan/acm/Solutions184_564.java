@@ -4,10 +4,7 @@ import com.xiyuan.acm.factory.ListNodeFactory;
 import com.xiyuan.acm.factory.SegmentTreeNodeFactory;
 import com.xiyuan.acm.factory.TreeNodeFactory;
 import com.xiyuan.acm.model.*;
-import com.xiyuan.acm.util.ArrayListUtil;
-import com.xiyuan.acm.util.BinaryStrUtil;
-import com.xiyuan.acm.util.DataUtil;
-import com.xiyuan.acm.util.RandomUtil;
+import com.xiyuan.acm.util.*;
 import com.xiyuan.util.XYLog;
 
 import java.util.*;
@@ -2746,8 +2743,90 @@ public class Solutions184_564 {
         }
     }
 
+
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/maximum-gap/
+     * @param nums: an array of integers
+     * @return: the maximum difference
+     */
+    public int maximumGap(int[] nums) {
+        int len = nums.length;
+        if (len <= 1) {
+            return 0;
+        }
+
+        int min = nums[0];
+        int max = nums[0];
+        for (int i = 0; i < len; ++i) {
+            min = Math.min(min, nums[i]);
+            max = Math.max(max, nums[i]);
+        }
+        if (min == max) {
+            return 0;
+        }
+
+        float avg = (max - min) / (float) (len - 1);
+        int[] maxs = new int[len];
+        int[] mins = new int[len];
+        Arrays.fill(maxs, 0);
+        Arrays.fill(mins, 0);
+        for (int i = 0; i < len; ++i) {
+            int temp = (int) ((nums[i] - min) / avg);
+            maxs[temp] = Math.max(maxs[temp], nums[i]);
+            if (mins[temp] == 0) {
+                mins[temp] = maxs[temp];
+            }
+            else {
+                mins[temp] = Math.min(mins[temp], nums[i]);
+            }
+        }
+
+        int result = 0;
+        for (int i = 1; i < len; i++) {
+            if (mins[i] == 0) {
+                mins[i] = mins[i - 1];
+            }
+            if (maxs[i] == 0) {
+                maxs[i] = maxs[i - 1];
+            }
+
+            int temp = mins[i] - maxs[i - 1];
+            if (temp > result) {
+                result = temp;
+            }
+        }
+
+        return result;
+    }
+
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         最大间距   [困难]
+         http://www.lintcode.com/zh-cn/problem/maximum-gap/
+         给定一个未经排序的数组，请找出其排序表中连续两个要素的最大间距。
+         如果数组中的要素少于 2 个，请返回 0.
+         注意事项
+         可以假定数组中的所有要素都是非负整数，且最大不超过 32 位整数。
+         样例
+         给定数组 [1, 9, 2, 5]，其排序表为 [1, 2, 5, 9]，其最大的间距是在 5 和 9 之间，= 4.
+         挑战
+         用排序的方法解决这个问题是比较简单的方法，但是排序的时间复杂度是O(nlogn), 能否使用线性的时间和空间复杂度的方法解决这个问题。
+         */
+////        int[] arr = {1,9,2,5,6,7};
+//        int[] arr = DataUtil.getIntArr("./data/maximum-gap-73.in");
+//        XYLog.d(solutions.maximumGap(arr));
+
+
+
 
         /**
          Nuts 和 Bolts 的问题   [中等]
