@@ -2629,8 +2629,62 @@ public class Solutions184_564 {
         return scores[0][0] > scores[0][1];
     }
 
+
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/longest-increasing-continuous-subsequence/
+     * @param arr an array of Integer
+     * @return  an integer
+     */
+    public int longestIncreasingContinuousSubsequence(int[] arr) {
+        int len = arr.length;
+        if (len <= 1) {
+            return len;
+        }
+
+        int max = 1;
+        int delta = arr[1] - arr[0];
+        int curNum = delta == 0? 1: 2;
+        for (int i = 2; i < len; i++) {
+            int tempDelta = arr[i] - arr[i - 1];
+            if (tempDelta * delta > 0) {
+                curNum++;
+            }
+            else {
+                curNum = tempDelta == 0? 1: 2;
+                delta = tempDelta;
+            }
+            if (curNum > max) {
+                max = curNum;
+            }
+        }
+        return max;
+    }
+
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         最长上升连续子序列   [容易]
+         http://www.lintcode.com/zh-cn/problem/longest-increasing-continuous-subsequence/
+         给定一个整数数组（下标从 0 到 n-1， n 表示整个数组的规模），请找出该数组中的最长上升连续子序列。（最长上升连续子序列可以定义为从右到左或从左到右的序列。）
+         样例
+         给定 [5, 4, 2, 1, 3], 其最长上升连续子序列（LICS）为 [5, 4, 2, 1], 返回 4.
+         给定 [5, 1, 2, 3, 4], 其最长上升连续子序列（LICS）为 [1, 2, 3, 4], 返回 4.
+         */
+//        int[] arr = {5, 1, 2, 3, 4};
+//        XYLog.d(solutions.longestIncreasingContinuousSubsequence(arr));
+
+
+
+
+
 
         /**
          硬币排成线 II   [中等]
