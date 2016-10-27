@@ -2667,8 +2667,110 @@ public class Solutions184_564 {
     }
 
 
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/nuts-bolts-problem/
+     * @param nuts: an array of integers
+     * @param bolts: an array of integers
+     * @param comparator: a instance of Comparator
+     * @return: nothing
+     */
+    public void sortNutsAndBolts(String[] nuts, String[] bolts, NBComparator comparator) {
+        if (nuts == null || bolts == null || nuts.length != bolts.length) {
+            return;
+        }
+        quickSort(nuts, bolts, 0, nuts.length - 1, comparator);
+    }
+
+    private void quickSort(String[] nuts, String[] bolts, int left, int right, NBComparator comparator) {
+        if (left < right) {
+            int index = partition(nuts, bolts[left], left, right, comparator);
+            partition(bolts, nuts[index], left, right, comparator);
+            quickSort(nuts, bolts, left, index - 1, comparator);
+            quickSort(nuts, bolts, index + 1, right, comparator);
+        }
+    }
+
+    private int partition(String[] strs, String key, int left, int right, NBComparator comparator) {
+        for (int i = left; i <= right; i++) {
+            if (comparator.cmp(strs[i], key) == 0
+                    || comparator.cmp(key, strs[i]) == 0) {
+                swap(strs, i, left);
+                break;
+            }
+        }
+
+        String leftVal = strs[left];
+        int l = left;
+        int r = right;
+        while (l < r) {
+            while (l < r && (
+                    comparator.cmp(strs[r], key) == 1
+                            || comparator.cmp(key, strs[r]) == -1
+                    )) {
+                r--;
+            }
+            strs[l] = strs[r];
+
+            while (l < r && (
+                    comparator.cmp(strs[l], key) == -1
+                            || comparator.cmp(key, strs[l]) == 1
+            )) {
+                l++;
+            }
+            strs[r] = strs[l];
+        }
+        strs[l] = leftVal;
+        return l;
+    }
+
+    private void swap(String[] strs, int i1, int i2) {
+        String temp = strs[i1];
+        strs[i1] = strs[i2];
+        strs[i2] = temp;
+    }
+
+    private static class NBComparator {
+        public int cmp(String a, String b) {
+            if (a == null) {
+                return 1;
+            }
+            else if (b == null) {
+                return -1;
+            }
+            else return a.toLowerCase().compareTo(b.toLowerCase());
+        }
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         Nuts 和 Bolts 的问题   [中等]
+         http://www.lintcode.com/zh-cn/problem/nuts-bolts-problem/
+         给定一组 n 个不同大小的 nuts 和 n 个不同大小的 bolts。nuts 和 bolts 一一匹配。 不允许将 nut 之间互相比较，也不允许将 bolt 之间互相比较。也就是说，只许将 nut 与 bolt 进行比较， 或将 bolt 与 nut 进行比较。请比较 nut 与 bolt 的大小。
+         样例
+         给出 nuts = ['ab','bc','dd','gg'], bolts = ['AB','GG', 'DD', 'BC']
+         你的程序应该找出bolts和nuts的匹配。
+         一组可能的返回结果是：
+         nuts = ['ab','bc','dd','gg'], bolts = ['AB','BC','DD','GG']
+         我们将给你一个匹配的比较函数，如果我们给你另外的比较函数，可能返回的结果是：
+         nuts = ['ab','bc','dd','gg'], bolts = ['BC','AB','DD','GG']
+         因此的结果完全取决于比较函数，而不是字符串本身。
+         因为你必须使用比较函数来进行排序。
+         各自的排序当中nuts和bolts的顺序是无关紧要的，只要他们一一匹配就可以。
+         */
+//        String[] nuts = {"b", "a"};
+//        String[] bolts = {"A", "B"};
+//        solutions.sortNutsAndBolts(nuts, bolts, new NBComparator());
+//        XYLog.d(nuts, "");
+//        XYLog.d(bolts, "");
+
+
 
         /**
          最长上升连续子序列   [容易]
