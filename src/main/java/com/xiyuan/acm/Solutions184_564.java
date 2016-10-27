@@ -2613,7 +2613,12 @@ public class Solutions184_564 {
         scores[len - 1] = new int[]{values[len - 1], 0};
         scores[len - 2] = new int[]{values[len - 1] + values[len - 2], 0};
         for (int i = len - 3; i >= 0; --i) {
-            //取一个的价值+上一步的对手最优解>取2个的价值+上2步的对手最优解
+            // 对于第i步，
+            // 如果当前选手取一个，则对手下一步将从i+1开始取，对手在第i+1步的最优解为score[i+1][0],
+            // 当前选手在第i+1步的最优解为score[i+1][1], 则当前选手在第i步取一个的时候的最优解为values[i] + score[i+1][1]
+            // 如果当前选手取二个，则对手下一步将从i + 2开始取，对手在第i+2步的最优解为score[i+2][0],
+            // 当前选手在第i+2步的最优解为score[i+2][1], 则当前选手在第i步取二个的时候的最优解为values[i] + values[i + 1] + score[i+2][1]
+            // 当前选手会选取以上两种情况中较优的一种
             if (values[i] + scores[i + 1][1] > values[i] + values[i + 1] + scores[i + 2][1]) {
                 scores[i] = new int[]{values[i] + scores[i + 1][1], scores[i + 1][0]};
             }
@@ -2636,8 +2641,8 @@ public class Solutions184_564 {
          给定数组 A = [1,2,2], 返回 true.
          给定数组 A = [1,2,4], 返回 false.
          */
-        int[] arr = {1,2,4,3,4,8,5,6,12};
-        XYLog.d(solutions.firstWillWin(arr));
+//        int[] arr = {1,2,4,3,4,8,5,6,12};
+//        XYLog.d(solutions.firstWillWin(arr));
 
 
 
