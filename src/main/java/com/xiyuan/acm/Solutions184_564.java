@@ -2806,8 +2806,122 @@ public class Solutions184_564 {
     }
 
 
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/kth-smallest-number-in-sorted-matrix/
+     * @param matrix: a matrix of integers
+     * @param k: an integer
+     * @return: the kth smallest number in the matrix
+     */
+    public int kthSmallest(int[][] matrix, int k) {
+        int row = matrix.length;
+        if (row == 0) {
+            return 0;
+        }
+
+        int column = matrix[0].length;
+        if (k >= row * column) {
+            return matrix[row - 1][column - 1];
+        }
+
+        boolean[][] visited = new boolean[row][column];
+        Deque<MatrixPoint> deque = new ArrayDeque<>();
+        deque.offer(new MatrixPoint(0, 0));
+        visited[0][0] = true;
+        for (int i = 1; i <= k; ++i) {
+            MatrixPoint cur = deque.pollFirst();
+            if (i == k) {
+                return matrix[cur.i][cur.j];
+            }
+
+            if (cur.j < column - 1) {
+                if (!visited[cur.i][cur.j + 1]) {
+                    MatrixPoint right = new MatrixPoint(cur.i, cur.j + 1);
+                    visited[right.i][right.j] = addToDeque(deque, right, matrix);
+                }
+            }
+
+            if (cur.i < row - 1) {
+                if (!visited[cur.i + 1][cur.j]) {
+                    MatrixPoint bottom = new MatrixPoint(cur.i + 1, cur.j);
+                    visited[bottom.i][bottom.j] = addToDeque(deque, bottom, matrix);
+                }
+            }
+
+        }
+        return 0;
+    }
+
+    private boolean addToDeque(Deque<MatrixPoint> deque, MatrixPoint cur, int[][] matrix) {
+        if (deque.isEmpty()) {
+            deque.offer(cur);
+            return true;
+        }
+        else {
+            int curVal = matrix[cur.i][cur.j];
+            MatrixPoint first = deque.peekFirst();
+            int firstVal = matrix[first.i][first.j];
+            if (curVal <= firstVal) {
+                deque.offerFirst(cur);
+                return true;
+            }
+            else {
+                MatrixPoint last = deque.peekLast();
+                int lastVal = matrix[last.i][last.j];
+                if (curVal >= lastVal) {
+                    deque.offerLast(cur);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private class MatrixPoint {
+        public int i;
+        public int j;
+        public MatrixPoint(int i, int j) {
+            this.i = i;
+            this.j = j;
+        }
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         排序矩阵中的从小到大第k个数   [中等]
+         http://www.lintcode.com/zh-cn/problem/kth-smallest-number-in-sorted-matrix/
+         在一个排序矩阵中找从小到大的第 k 个整数。
+         排序矩阵的定义为：每一行递增，每一列也递增。
+         样例
+         给出 k = 4 和一个排序矩阵：
+         [
+         [1 ,5 ,7],
+         [3 ,7 ,8],
+         [4 ,8 ,9],
+         ]
+         返回 5。
+         挑战
+         使用O(k log n)的方法，n为矩阵的宽度和高度中的最大值。
+         */
+//        int[][] matrix = {
+//                {1, 2, 3, 4, 5},
+//                {2, 3, 4, 5, 6},
+//                {3, 4, 5, 6, 7},
+//                {4, 5, 6, 7, 8}
+//        };
+//        int k = 19;
+//        XYLog.d(solutions.kthSmallest(matrix, k));
+
+
+
+
 
         /**
          最大间距   [困难]
