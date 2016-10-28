@@ -3530,7 +3530,15 @@ public class Solutions184_564 {
      * @return the nth sequence
      */
     public String countAndSay(int n) {
+        if (n == 0) {
+            return "";
+        }
 
+        ArrayList<Character> chars = new ArrayList<>();
+        chars.add('1');
+        for (int i = 1; i <= n; i++) {
+
+        }
         return "";
     }
 
