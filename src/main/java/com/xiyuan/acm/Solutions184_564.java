@@ -3197,7 +3197,7 @@ public class Solutions184_564 {
         return grayCode(n, highRadix);
     }
 
-    public ArrayList<Integer> grayCode(int n, int highRadix) {
+    private ArrayList<Integer> grayCode(int n, int highRadix) {
         ArrayList<Integer> result = new ArrayList<>();
         if (n == 1) {
             result.add(0);
@@ -3219,8 +3219,60 @@ public class Solutions184_564 {
         return result;
     }
 
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/candy/
+     * @param ratings Children's ratings
+     * @return the minimum candies you must give
+     */
+    public int candy(int[] ratings) {
+        int len = ratings.length;
+        if (len == 0) {
+            return 0;
+        }
+
+        int[] counts = new int[len];
+        Arrays.fill(counts, 1);
+        int sum = 0;
+        for (int i = 1; i < len; ++i) {
+            if (ratings[i] > ratings[i - 1]) {
+                counts[i] = counts[i - 1] + 1;
+            }
+        }
+
+        for (int i = len - 1; i >= 1; --i) {
+            sum += counts[i];
+            if (ratings[i - 1] > ratings[i] && counts[i - 1] <= counts[i]) {
+                counts[i - 1] = counts[i] + 1;
+            }
+        }
+        sum += counts[0];
+
+        return sum;
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         分糖果   [困难]
+         http://www.lintcode.com/zh-cn/problem/candy/
+         有 N 个小孩站成一列。每个小孩有一个评级。
+         按照以下要求，给小孩分糖果：
+         每个小孩至少得到一颗糖果。
+         评级越高的小孩可以得到比左右相邻的孩子（如果有的话）更多的糖果。
+         需最少准备多少糖果？
+         样例
+         给定评级 = [1, 2], 返回 3.
+         给定评级 = [1, 1, 1], 返回 3.
+         给定评级 = [1, 2, 2], 返回 4. ([1,2,1]).
+         */
+//        int[] arr = {1,2,2,2,2};
+//        XYLog.d(solutions.candy(arr));
+
+
+
 
         /**
          格雷编码   [中等]
