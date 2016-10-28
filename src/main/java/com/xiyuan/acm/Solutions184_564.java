@@ -3177,8 +3177,72 @@ public class Solutions184_564 {
         return strBld.toString();
     }
 
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/gray-code/
+     * @param n a number
+     * @return Gray code
+     */
+    public ArrayList<Integer> grayCode(int n) {
+        if (n == 0) {
+            ArrayList<Integer> result = new ArrayList<>();
+            result.add(0);
+            return result;
+        }
+        int highRadix = (int) Math.pow(2, n - 1);
+        return grayCode(n, highRadix);
+    }
+
+    public ArrayList<Integer> grayCode(int n, int highRadix) {
+        ArrayList<Integer> result = new ArrayList<>();
+        if (n == 1) {
+            result.add(0);
+            result.add(1);
+        }
+        else {
+            ArrayList<Integer> subResult = grayCode(n - 1, highRadix / 2);
+            for (Integer item: subResult) {
+                if (result.isEmpty() || result.get(result.size() - 1) < highRadix) {
+                    result.add(item);
+                    result.add(item + highRadix);
+                }
+                else {
+                    result.add(item + highRadix);
+                    result.add(item);
+                }
+            }
+        }
+        return result;
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         格雷编码   [中等]
+         http://www.lintcode.com/zh-cn/problem/gray-code/
+         格雷编码是一个二进制数字系统，在该系统中，两个连续的数值仅有一个二进制的差异。
+         给定一个非负整数 n ，表示该代码中所有二进制的总数，请找出其格雷编码顺序。一个格雷编码顺序必须以 0 开始，并覆盖所有的 2n 个整数。
+         注意事项
+         对于给定的 n，其格雷编码顺序并不唯一。
+         根据以上定义， [0,2,3,1] 也是一个有效的格雷编码顺序。
+         样例
+         给定 n = 2， 返回 [0,1,3,2]。其格雷编码顺序为：
+         00 - 0
+         01 - 1
+         11 - 3
+         10 - 2
+         挑战
+         O(2n) 时间复杂度。
+         */
+//        int n = 3;
+//        XYLog.d(solutions.grayCode(n));
+
+
 
         /**
          二进制求和   [容易]
