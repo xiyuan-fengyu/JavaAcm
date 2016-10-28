@@ -3452,8 +3452,62 @@ public class Solutions184_564 {
         return true;
     }
 
+
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/integer-to-roman/
+     * @param n The integer
+     * @return Roman representation
+     */
+    public String intToRoman(int n) {
+        //    I    V    X    L    C    D     M
+        //    1    5   10   50  100  500  1000
+        String[][] radix = {
+                {"","I","II","III","IV","V","VI","VII","VIII","IX"},//1,2,3,4,5,6,7,8,9
+                {"","X","XX","XXX","XL","L","LX","LXX","LXXX","XC"},//10,20,30,40,50,60,70,80,90
+                {"","C","CC","CCC","CD","D","DC","DCC","DCCC","CM"},//100....900
+                {"","M","MM","MMM"}//1000,2000,3000
+        };
+        StringBuilder strBld = new StringBuilder();
+        strBld.append(radix[3][n / 1000 % 10]);
+        strBld.append(radix[2][n / 100 % 10]);
+        strBld.append(radix[1][n / 10 % 10]);
+        strBld.append(radix[0][n % 10]);
+        return strBld.toString();
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         整数转罗马数字   [中等]
+         http://www.lintcode.com/zh-cn/problem/integer-to-roman/
+         给定一个整数，将其转换成罗马数字。
+         返回的结果要求在1-3999的范围内。
+         说明
+         什么是 罗马数字?
+         https://en.wikipedia.org/wiki/Roman_numerals
+         https://zh.wikipedia.org/wiki/%E7%BD%97%E9%A9%AC%E6%95%B0%E5%AD%97
+         http://baike.baidu.com/view/42061.htm
+         样例
+         4 -> IV
+         12 -> XII
+         21 -> XXI
+         99 -> XCIX
+         更多案例，请戳 http://literacy.kent.edu/Minigrants/Cinci/romanchart.htm
+         */
+//        int n = 99;
+//        XYLog.d(solutions.intToRoman(n));
+
+
+
+
+
 
         /**
          有效数字   [困难]
