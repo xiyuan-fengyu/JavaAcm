@@ -3481,8 +3481,61 @@ public class Solutions184_564 {
         return strBld.toString();
     }
 
+
+
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/roman-to-integer/
+     * @param s Roman representation
+     * @return an integer
+     */
+    public int romanToInt(String s) {
+        if (s == null || s.length()==0) {
+            return 0;
+        }
+        Map<Character, Integer> m = new HashMap<Character, Integer>();
+        m.put('I', 1);
+        m.put('V', 5);
+        m.put('X', 10);
+        m.put('L', 50);
+        m.put('C', 100);
+        m.put('D', 500);
+        m.put('M', 1000);
+        int length = s.length();
+        int result = m.get(s.charAt(length - 1));
+        for (int i = length - 2; i >= 0; i--) {
+            if (m.get(s.charAt(i + 1)) <= m.get(s.charAt(i))) {
+                result += m.get(s.charAt(i));
+            } else {
+                result -= m.get(s.charAt(i));
+            }
+        }
+        return result;
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         罗马数字转整数   [中等]
+         http://www.lintcode.com/zh-cn/problem/roman-to-integer/
+         给定一个罗马数字，将其转换成整数。
+         返回的结果要求在1到3999的范围内。
+         样例
+         IV -> 4
+         XII -> 12
+         XXI -> 21
+         XCIX -> 99
+         */
+//        String s = "XCIX";
+//        XYLog.d(solutions.romanToInt(s));
+
+
 
         /**
          整数转罗马数字   [中等]
