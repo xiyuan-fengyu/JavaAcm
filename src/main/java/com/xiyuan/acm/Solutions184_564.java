@@ -3098,8 +3098,64 @@ public class Solutions184_564 {
         return result == len + 1? -1: result;
     }
 
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/plus-one/
+     * @param digits a number represented as an array of digits
+     * @return the result
+     */
+    public int[] plusOne(int[] digits) {
+        int len = digits.length;
+        if (len == 0) {
+            return new int[]{1};
+        }
+
+        int carry = 1;
+        for (int i = len - 1; i > -1; --i) {
+            int temp = carry + digits[i];
+            digits[i] = temp % 10;
+            carry = temp / 10;
+            if (carry == 0) {
+                break;
+            }
+        }
+
+        if (carry == 0) {
+            return digits;
+        }
+        else {
+            int[] newDigits = new int[len + 1];
+            newDigits[0] = carry;
+            for (int i = 0; i< len; ++i) {
+                newDigits[i + 1] = digits[i];
+            }
+            return newDigits;
+        }
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         加一   [容易]
+         http://www.lintcode.com/zh-cn/problem/plus-one/
+         给定一个非负数，表示一个数字数组，在该数的基础上+1，返回一个新的数组。
+         该数字按照大小进行排列，最大的数在列表的最前面。
+         样例
+         给定 [1,2,3] 表示 123, 返回 [1,2,4].
+         给定 [9,9,9] 表示 999, 返回 [1,0,0,0].
+         */
+////        int[] arr = {1,2,3};
+//        int[] arr = {0};
+//        XYLog.d(solutions.plusOne(arr), "");
+
+
+
+
 
         /**
          和大于S的最小子数组   [中等]
