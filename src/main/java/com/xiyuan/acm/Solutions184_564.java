@@ -3193,7 +3193,7 @@ public class Solutions184_564 {
             result.add(0);
             return result;
         }
-        int highRadix = (int) Math.pow(2, n - 1);
+        int highRadix = 1 << (n - 1);
         return grayCode(n, highRadix);
     }
 
