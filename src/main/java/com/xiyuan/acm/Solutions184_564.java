@@ -3322,8 +3322,76 @@ public class Solutions184_564 {
     }
 
 
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/valid-palindrome/
+     * @param s A string
+     * @return Whether the string is a valid palindrome
+     */
+    public boolean isPalindrome(String s) {
+        if (s == null) {
+            return false;
+        }
+        else if (s.equals("")) {
+            return true;
+        }
+
+        int len = s.length();
+        int i = 0;
+        int j = len - 1;
+        while (i < j) {
+            while (i < j && !isLetterOrNum(s.charAt(i))) {
+                i++;
+            }
+            while (i < j && !isLetterOrNum(s.charAt(j))) {
+                j--;
+            }
+
+            if (i < j) {
+                int delta = s.charAt(i) - s.charAt(j);
+                if (delta < 0) {
+                    delta = -delta;
+                }
+                if (delta == 0 || delta == 32) {
+                    i++;
+                    j--;
+                }
+                else {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private boolean isLetterOrNum(char c) {
+        return (c >= '0' && c <= '9')
+                || (c >= 'a' && c <= 'z')
+                || (c >= 'A' && c <= 'Z');
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         有效回文串   [容易]
+         http://www.lintcode.com/zh-cn/problem/valid-palindrome/
+         给定一个字符串，判断其是否为一个回文串。只包含字母和数字，忽略大小写。
+         注意事项
+         你是否考虑过，字符串有可能是空字符串？这是面试过程中，面试官常常会问的问题。
+         在这个题目中，我们将空字符串判定为有效回文。
+         样例
+         "A man, a plan, a canal: Panama" 是一个回文。
+         "race a car" 不是一个回文。
+         挑战
+         O(n) 时间复杂度，且不占用额外空间。
+         */
+//        String str = ",.";
+//        XYLog.d(solutions.isPalindrome(str));
+
+
 
         /**
          两个整数相除   [中等]
