@@ -2940,8 +2940,148 @@ public class Solutions184_564 {
     }
 
 
+
+
+
+
+//    /**
+//     * o(n^4)
+//     * http://www.lintcode.com/zh-cn/problem/submatrix-sum/
+//     * @param matrix an integer matrix
+//     * @return the coordinate of the left-up and right-down number
+//     */
+//    public int[][] submatrixSum(int[][] matrix) {
+//        int row = matrix.length;
+//        if (row == 0) {
+//            return new int[2][2];
+//        }
+//
+//        int column = matrix[0].length;
+//        int[][] sumMatrix = new int[row][column];
+//        for (int i = 0; i < row; ++i) {
+//            int sum = 0;
+//            for (int j = 0; j < column; ++j) {
+//                sum += matrix[i][j];
+//                if (i == 0) {
+//                    sumMatrix[i][j] = sum;
+//                }
+//                else {
+//                    sumMatrix[i][j] = sum + sumMatrix[i - 1][j];
+//                }
+//                if (sumMatrix[i][j] == 0) {
+//                    return new int[][] {{0, 0}, {i, j}};
+//                }
+//            }
+//        }
+//
+//        for (int i = 0; i < row; ++i) {
+//            for (int j = 0; j < column; ++j) {
+//                for (int k = i; k < row; ++k) {
+//                    for (int l = j; l < column; ++l) {
+//                        if (sumOfSubMatrix(sumMatrix, i, j, k, l) == 0) {
+//                            return new int[][]{{i, j}, {k, l}};
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//
+//        return new int[2][2];
+//    }
+//
+//    private int sumOfSubMatrix(int[][] sumMatrix, int i1, int j1, int i2, int j2) {
+//        int sumLeftTop = 0;
+//        int sumTop = 0;
+//        int sumLeft = 0;
+//        if (i1 != 0 && j1 != 0) {
+//            sumLeftTop = sumMatrix[i1 - 1][j1 - 1];
+//            sumTop = sumMatrix[i1 - 1][j2];
+//            sumLeft = sumMatrix[i2][j1 - 1];
+//        }
+//        else if (i1 != 0) {
+//            sumTop = sumMatrix[i1 - 1][j2];
+//        }
+//        else if (j1 != 0) {
+//            sumLeft = sumMatrix[i2][j1 - 1];
+//        }
+//        int sumTotal = sumMatrix[i2][j2];
+//        return sumTotal - sumLeft - sumTop + sumLeftTop;
+//    }
+
+
+    /**
+     * o(n^3)
+     * http://www.lintcode.com/zh-cn/problem/submatrix-sum/
+     * @param matrix an integer matrix
+     * @return the coordinate of the left-up and right-down number
+     */
+    public int[][] submatrixSum(int[][] matrix) {
+        int row = matrix.length;
+        if (row == 0) {
+            return new int[2][2];
+        }
+
+        int column = matrix[0].length;
+        int[][] sumMatrix = new int[row + 1][column + 1];
+        for (int i = 0; i < row; ++i) {
+            int sum = 0;
+            for (int j = 0; j < column; ++j) {
+                sum += matrix[i][j];
+                sumMatrix[i + 1][j + 1] = sum + sumMatrix[i][j + 1];
+                if (sumMatrix[i + 1][j + 1] == 0) {
+                    return new int[][] {{0, 0}, {i, j}};
+                }
+            }
+        }
+
+        HashMap<Integer, Integer> cache = new HashMap<>();
+        for (int i = 0; i < row; ++i) {
+            for (int j = i + 1; j <= row; ++j) {
+                cache.clear();
+                for (int k = 0; k <= column; ++k) {
+                    int delta = sumMatrix[j][k] - sumMatrix[i][k];
+                    if (cache.containsKey(delta)) {
+                        return new int[][]{{i, cache.get(delta)}, {j - 1, k - 1}};
+                    }
+                    else {
+                        cache.put(delta, k);
+                    }
+                }
+            }
+        }
+
+        return new int[2][2];
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         和为零的子矩阵   [中等]
+         http://www.lintcode.com/zh-cn/problem/submatrix-sum/
+         给定一个整数矩阵，请找出一个子矩阵，使得其数字之和等于0.输出答案时，请返回左上数字和右下数字的坐标。
+         样例
+         给定矩阵
+         [
+         [1 ,5 ,7],
+         [3 ,7 ,-8],
+         [4 ,-8 ,9],
+         ]
+         返回 [(1,1), (2,2)]
+         挑战
+         O(n3) 时间复杂度。
+         */
+//        int[][] matrix = {
+//                {1 , 5 , 7},
+//                {3 , 7 , -8},
+//                {4 , -8 , 9},
+//        };
+////        int[][] matrix = {{1,1,1,1,1,1,1,1,1,1,1,-10,1,1,1,1,1,1,1,1,1,1,1}};
+//        int[][] matrix = {{1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {-10}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}, {1}};
+//        XYLog.d(solutions.submatrixSum(matrix), "");
+
+
+
 
         /**
          连续子数组求和   [中等]
