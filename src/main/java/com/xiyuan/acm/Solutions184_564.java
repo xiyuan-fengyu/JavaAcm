@@ -3137,8 +3137,65 @@ public class Solutions184_564 {
         }
     }
 
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/add-binary/
+     * @param a a number
+     * @param b a number
+     * @return the result
+     */
+    public String addBinary(String a, String b) {
+        if (a == null || a.equals("")) {
+            if (b == null || b.equals("")) {
+                return "0";
+            }
+            else return b;
+        }
+        else if (b == null || b.equals("")) {
+            return a;
+        }
+
+        int lenA = a.length();
+        int lenB = b.length();
+        int carry = 0;
+        StringBuilder strBld = new StringBuilder();
+        for (int i = 0, max = Math.max(lenA, lenB); i < max; ++i) {
+            char cA = i < lenA? a.charAt(lenA - i - 1): '0';
+            char cB = i < lenB? b.charAt(lenB - i - 1): '0';
+            int temp = carry + (cA - '0') + (cB - '0');
+            strBld.insert(0, temp % 2);
+            carry = temp / 2;
+        }
+        if (carry != 0) {
+            strBld.insert(0, carry);
+        }
+        return strBld.toString();
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         二进制求和   [容易]
+         http://www.lintcode.com/zh-cn/problem/add-binary/
+         给定两个二进制字符串，返回他们的和（用二进制表示）。
+         样例
+         a = 11
+         b = 1
+         返回 100
+         */
+//        String a = "11";
+//        String b = "1";
+//        XYLog.d(solutions.addBinary(a, b));
+
+
+
+
 
         /**
          加一   [容易]
