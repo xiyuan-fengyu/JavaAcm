@@ -3054,8 +3054,68 @@ public class Solutions184_564 {
         return new int[2][2];
     }
 
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/minimum-size-subarray-sum/
+     * @param nums: an array of integers
+     * @param s: an integer
+     * @return: an integer representing the minimum size of subarray
+     */
+    public int minimumSize(int[] nums, int s) {
+        int len = nums.length;
+        if (len == 0) {
+            return -1;
+        }
+
+        int result = len + 1;
+        int sum = 0;
+        for (int i = 0, j = 0; j < len;) {
+            sum += nums[j];
+            if (sum >= s) {
+                if (j - i + 1 < result) {
+                    result = j - i + 1;
+                }
+                for (; i <= j;) {
+                    sum -= nums[i];
+                    i++;
+                    if (sum >= s) {
+                        if (j - i + 1 < result) {
+                            result = j - i + 1;
+                        }
+                    }
+                    else {
+                        break;
+                    }
+                }
+            }
+            j++;
+        }
+        return result == len + 1? -1: result;
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         和大于S的最小子数组   [中等]
+         http://www.lintcode.com/zh-cn/problem/minimum-size-subarray-sum/
+         给定一个由 n 个整数组成的数组和一个正整数 s ，请找出该数组中满足其和 ≥ s 的最小长度子数组。如果无解，则返回 -1。
+         样例
+         给定数组 [2,3,1,2,4,3] 和 s = 7, 子数组 [4,3] 是该条件下的最小长度子数组。
+         挑战
+         如果你已经完成了O(n)时间复杂度的编程，请再试试 O(n log n)时间复杂度。
+         */
+//        int[] arr = {100,50,99,50,100,50,100,50,100,50};
+//        int s = 250;
+//        XYLog.d(solutions.minimumSize(arr, s));
+
+
+
 
         /**
          和为零的子矩阵   [中等]
