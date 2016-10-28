@@ -3276,8 +3276,68 @@ public class Solutions184_564 {
         return reverse;
     }
 
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/divide-two-integers/
+     * @param dividend the dividend
+     * @param divisor the divisor
+     * @return the result
+     */
+    public int divide(int dividend, int divisor) {
+        if (divisor == 0) {
+            return dividend >= 0? Integer.MAX_VALUE : Integer.MIN_VALUE;
+        }
+        else if (dividend == 0) {
+            return 0;
+        }
+        else if (divisor == 1) {
+            return  dividend;
+        }
+        else if (dividend == Integer.MIN_VALUE && divisor == -1) {
+            return Integer.MAX_VALUE;
+        }
+
+        int result = 0;
+        long absA = dividend > 0? dividend: - (long) dividend;
+        long absB = divisor > 0? divisor: -(long) divisor;
+        while (absA >= absB) {
+            int shift = 0;
+            while (absA >= (absB << shift)) {
+                shift++;
+            }
+            absA -= absB << (shift - 1);
+            result += 1 << (shift - 1);
+        }
+
+        if ((dividend >= 0 && divisor >= 0)
+                || (dividend < 0 && divisor < 0)) {
+            return result;
+        }
+        else return -result;
+    }
+
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         两个整数相除   [中等]
+         http://www.lintcode.com/zh-cn/problem/divide-two-integers/
+         将两个整数相除，要求不使用乘法、除法和 mod 运算符。
+         如果溢出，返回 2147483647 。
+         样例
+         给定被除数 = 100 ，除数 = 9，返回 11。
+         */
+//        int a = -2147483648;
+//        int b = -2;
+//        XYLog.d(solutions.divide(a, b));
+
+
 
 
         /**
