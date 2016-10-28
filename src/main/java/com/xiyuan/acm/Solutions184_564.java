@@ -3372,8 +3372,145 @@ public class Solutions184_564 {
                 || (c >= 'A' && c <= 'Z');
     }
 
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/valid-number/
+     * @param s the string that represents a number
+     * @return whether the string is a valid number
+     */
+    public boolean isNumberTest(String s) {
+        int len = s.length();
+        int i = 0, e = len - 1;
+        while (i <= e && Character.isWhitespace(s.charAt(i))) i++;
+        if (i > len - 1) return false;
+        while (e >= i && Character.isWhitespace(s.charAt(e))) e--;
+        // skip leading +/-
+        if (s.charAt(i) == '+' || s.charAt(i) == '-') i++;
+        boolean num = false; // is a digit
+        boolean dot = false; // is a '.'
+        boolean exp = false; // is a 'e'
+        while (i <= e) {
+            char c = s.charAt(i);
+            if (Character.isDigit(c)) {
+                num = true;
+            }
+            else if (c == '.') {
+                if(exp || dot) return false;
+                dot = true;
+            }
+            else if (c == 'e') {
+                if(exp || num == false) return false;
+                exp = true;
+                num = false;
+            }
+            else if (c == '+' || c == '-') {
+                if (s.charAt(i - 1) != 'e') return false;
+            }
+            else {
+                return false;
+            }
+            i++;
+        }
+        return num;
+    }
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/valid-number/
+     * @param s the string that represents a number
+     * @return whether the string is a valid number
+     */
+    public boolean isNumber(String s) {
+        if (s == null || s.equals("")) {
+            return false;
+        }
+
+        int len = s.length();
+        int start = 0;
+        int end = len - 1;
+        while (start < len && s.charAt(start) == ' ') {
+            start++;
+        }
+        while (end > -1 && s.charAt(end) == ' ') {
+            end--;
+        }
+
+        if (start > end) {
+            return false;
+        }
+        else if (start == end) {
+            char c = s.charAt(start);
+            return c >= '0' && c <= '9';
+        }
+
+        int dotNum = 0;
+        int plusSubNum = 0;
+        int eNum = 0;
+        for (int i = start; i <= end; i++) {
+            char c = s.charAt(i);
+            if (c == '+' || c == '-') {
+                plusSubNum++;
+                if (plusSubNum > 2) {
+                    return false;
+                }
+                else if (i != start && (s.charAt(i - 1) != 'e' || i == end)) {
+                    return false;
+                }
+            }
+            else if (c == '.') {
+                dotNum++;
+                if (dotNum > 1 || eNum == 1) {
+                    return false;
+                }
+                else if (i == start) {
+                    char next = s.charAt(i + 1);
+                    if (next < '0' || next > '9') {
+                        return false;
+                    }
+                }
+                else if (i == end) {
+                    char prev = s.charAt(i - 1);
+                    if (prev < '0' || prev > '9') {
+                        return false;
+                    }
+                }
+            }
+            else if (c == 'e') {
+                eNum++;
+                if (eNum > 1 || i == start || i == end) {
+                    return false;
+                }
+            }
+            else if (c >= '0' && c <= '9') {
+            }
+            else {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         有效数字   [困难]
+         http://www.lintcode.com/zh-cn/problem/valid-number/
+         给定一个字符串，验证其是否为数字。
+         样例
+         "0" => true
+         " 0.1 " => true
+         "abc" => false
+         "1 a" => false
+         "2e10" => true
+         */
+//        String str = "2e10";
+//        XYLog.d(solutions.isNumber(str));
+
 
         /**
          有效回文串   [容易]
