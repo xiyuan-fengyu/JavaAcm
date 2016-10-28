@@ -2891,8 +2891,75 @@ public class Solutions184_564 {
         }
     }
 
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/continuous-subarray-sum/
+     * @param arr an integer array
+     * @return  A list of integers includes the index of the first number and the index of the last number
+     */
+    public ArrayList<Integer> continuousSubarraySum(int[] arr) {
+        ArrayList<Integer> result = new ArrayList<>();
+        int len = arr.length;
+        if (len == 0) {
+            return result;
+        }
+
+        int[] maxs = new int[len];
+        maxs[0] = arr[0];
+        int max = arr[0];
+        int maxIndex = 0;
+        for (int i = 1; i < len; ++i) {
+            int cur = arr[i];
+            int temp = Math.max(maxs[i - 1] + cur, cur);
+            maxs[i] = temp;
+            if (temp > max) {
+                max = temp;
+                maxIndex = i;
+            }
+        }
+
+        if (maxIndex == 0) {
+            result.add(0);
+            result.add(0);
+        }
+        else {
+            int i = maxIndex - 1;
+            for (; i > -1; --i) {
+                if (maxs[i] <= 0) {
+                    break;
+                }
+            }
+            result.add(i + 1);
+            result.add(maxIndex);
+        }
+        return result;
+    }
+
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         连续子数组求和   [中等]
+         http://www.lintcode.com/zh-cn/problem/continuous-subarray-sum/
+         给定一个整数数组，请找出一个连续子数组，使得该子数组的和最大。输出答案时，请分别返回第一个数字和最后一个数字的下标。（如果两个相同的答案，请返回其中任意一个）
+         样例
+         给定 [-3, 1, 3, -3, 4], 返回[1,4].
+         */
+//        int[] arr = {1, 1, 3, -3, 4};
+//        XYLog.d(solutions.continuousSubarraySum(arr));
+
+
+
+
+
+
+
+
 
         /**
          排序矩阵中的从小到大第k个数   [中等]
