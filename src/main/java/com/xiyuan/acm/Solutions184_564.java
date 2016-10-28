@@ -3536,10 +3536,27 @@ public class Solutions184_564 {
 
         ArrayList<Character> chars = new ArrayList<>();
         chars.add('1');
-        for (int i = 1; i <= n; i++) {
-
+        for (int i = 1; i < n; i++) {
+            for (int j = 0; j < chars.size(); j+= 2) {
+                if (chars.get(j) == '2') {
+                    chars.set(j, '1');
+                    chars.add(j + 1, '2');
+                }
+                else {
+                    if (j == chars.size() - 1 || chars.get(j + 1) != '1') {
+                        chars.add(j + 1, '1');
+                    }
+                    else {
+                        chars.set(j, '2');
+                    }
+                }
+            }
         }
-        return "";
+        StringBuilder strBld = new StringBuilder();
+        for (Character c: chars) {
+            strBld.append(c);
+        }
+        return strBld.toString();
     }
 
     public static void main(String[] args) {
