@@ -3252,8 +3252,48 @@ public class Solutions184_564 {
         return sum;
     }
 
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/reverse-integer/
+     * @param n the integer to be reversed
+     * @return the reversed integer
+     */
+    public int reverseInteger(int n) {
+        int reverse = 0;
+        while (n != 0) {
+            int temp = reverse * 10 + n % 10;
+            if (temp / 10 != reverse) {
+                return 0;
+            }
+            reverse = temp;
+            n = n / 10;
+        }
+        return reverse;
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+
+        /**
+         反转整数   [容易]
+         http://www.lintcode.com/zh-cn/problem/reverse-integer/
+         将一个整数中的数字进行颠倒，当颠倒后的整数溢出时，返回 0 (标记为 32 位整数)。
+         样例
+         给定 x = 123，返回 321
+         给定 x = -123，返回 -321
+         */
+//        int n = -123;
+//        XYLog.d(solutions.reverseInteger(n));
+
+
+
+
 
         /**
          分糖果   [困难]
