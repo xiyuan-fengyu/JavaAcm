@@ -3039,6 +3039,7 @@ public class Solutions184_564 {
             for (int j = i + 1; j <= row; ++j) {
                 cache.clear();
                 for (int k = 0; k <= column; ++k) {
+                    //和之前一道题的思想一样：以o(n)的时间复杂度求和为0的连续子数组
                     int delta = sumMatrix[j][k] - sumMatrix[i][k];
                     if (cache.containsKey(delta)) {
                         return new int[][]{{i, cache.get(delta)}, {j - 1, k - 1}};
