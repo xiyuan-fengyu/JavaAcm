@@ -3630,8 +3630,53 @@ public class Solutions184_564 {
         }
     }
 
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/length-of-last-word/
+     * @param s A string
+     * @return the length of last word
+     */
+    public int lengthOfLastWord(String s) {
+        if (s == null) {
+            return 0;
+        }
+
+        int result = 0;
+        int len = s.length();
+        int j = len - 1;
+        while (j > -1 && s.charAt(j) == ' ') {
+            j--;
+        }
+        result = j;
+        while (j > -1 && s.charAt(j) != ' ') {
+            j--;
+        }
+        result -= j;
+        return result;
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         最后一个单词的长度   [中等]
+         http://www.lintcode.com/zh-cn/problem/length-of-last-word/
+         给定一个字符串， 包含大小写字母、空格' '，请返回其最后一个单词的长度。
+         如果不存在最后一个单词，请返回 0 。
+         注意事项
+         一个单词的界定是，由字母组成，但不包含任何的空格。
+         样例
+         给定 s = "Hello World"，返回 5。
+         */
+//        String s = "s sssss s";
+//        XYLog.d(solutions.lengthOfLastWord(s));
+
+
+
+
 
         /**
          简化路径   [中等]
