@@ -3658,8 +3658,70 @@ public class Solutions184_564 {
         return result;
     }
 
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/valid-parentheses/
+     * @param s A string
+     * @return whether the string is a valid parentheses
+     */
+    public boolean isValidParentheses(String s) {
+        Stack<Character> brackets = new Stack<>();
+        for (int i = 0, len = s.length(); i< len; i++) {
+            char c = s.charAt(i);
+            if (c == '(' || c == '[' || c == '{') {
+                if (brackets.isEmpty()) {
+                    brackets.push(c);
+                }
+                else {
+                    Character top = brackets.peek();
+                    if (top == ')' || top == ']' || top == '}') {
+                        return false;
+                    }
+                    else {
+                        brackets.push(c);
+                    }
+                }
+            }
+            else {
+                if (brackets.isEmpty()) {
+                    return false;
+                }
+                else {
+                    Character top = brackets.peek();
+                    if ((top == '(' && c != ')')
+                            || (top == '[' && c != ']')
+                            || (top == '{' && c != '}')) {
+                        return false;
+                    }
+                    else {
+                        brackets.pop();
+                    }
+                }
+            }
+        }
+        return brackets.isEmpty();
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         有效的括号序列   [容易]
+         http://www.lintcode.com/zh-cn/problem/valid-parentheses/
+         给定一个字符串所表示的括号序列，包含以下字符： '(', ')', '{', '}', '[' and ']'， 判定是否是有效的括号序列。
+         样例
+         括号必须依照 "()" 顺序表示， "()[]{}" 是有效的括号，但 "([)]"则是无效的括号。
+         挑战
+         O(n)的时间，n为括号的个数
+         */
+//        String s = "([{}])";
+//        XYLog.d(solutions.isValidParentheses(s));
+
+
 
         /**
          最后一个单词的长度   [中等]
