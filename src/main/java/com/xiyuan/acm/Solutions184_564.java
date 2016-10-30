@@ -3751,8 +3751,72 @@ public class Solutions184_564 {
         return params.pop();
     }
 
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/letter-combinations-of-a-phone-number/
+     * @param digits A digital string
+     * @return all posible letter combinations
+     */
+    public ArrayList<String> letterCombinations(String digits) {
+        ArrayList<String> result = new ArrayList<>();
+        int len = digits.length();
+        if (len > 0) {
+            char[][] boards = new char[8][];
+            boards[0] = new char[]{'a', 'b', 'c'};
+            boards[1] = new char[]{'d', 'e', 'f'};
+            boards[2] = new char[]{'g', 'h', 'i'};
+            boards[3] = new char[]{'j', 'k', 'l'};
+
+            boards[4] = new char[]{'m', 'n', 'o'};
+            boards[5] = new char[]{'p', 'q', 'r', 's'};
+            boards[6] = new char[]{'t', 'u', 'v'};
+            boards[7] = new char[]{'w', 'x', 'y', 'z'};
+            for (int i = len - 1; i > -1; i--) {
+                int index = digits.charAt(i) - '0';
+                char[] board = boards[index - 2];
+                if (result.isEmpty()) {
+                    for (char c: board) {
+                        result.add("" + c);
+                    }
+                }
+                else {
+                    for (int j = result.size() - 1; j > -1; j--) {
+                        String strJ = result.get(j);
+                        result.remove(j);
+                        for (int k = board.length - 1; k > -1; k--) {
+                            result.add(j, board[k] + strJ);
+                        }
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         电话号码的字母组合   [中等]
+         http://www.lintcode.com/zh-cn/problem/letter-combinations-of-a-phone-number/
+         给一个不包含01的数字字符串，每个数字代表一个字母，请返回其所有可能的字母组合。
+         下图的手机按键图，就表示了每个数字可以代表的字母。
+         http://www.lintcode.com/media/problem/200px-Telephone-keypad2.svg.png
+         注意事项
+         以上的答案是按照词典编撰顺序进行输出的，不过，在做本题时，你也可以任意选择你喜欢的输出顺序。
+         样例
+         给定 "23"
+         返回 ["ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"]
+         */
+//        String digits = "23";
+//        XYLog.d(solutions.letterCombinations(digits));
+
+
 
         /**
          逆波兰表达式求值   [中等]
