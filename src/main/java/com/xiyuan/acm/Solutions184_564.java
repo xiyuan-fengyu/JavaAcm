@@ -3798,8 +3798,67 @@ public class Solutions184_564 {
         return result;
     }
 
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/restore-ip-addresses/
+     * @param s the IP string
+     * @return All possible valid IP addresses
+     */
+    public ArrayList<String> restoreIpAddresses(String s) {
+        ArrayList<String> result = new ArrayList<>();
+        int len = s.length();
+        if (len >= 4) {
+            int[] mins = {0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 2, 3};
+            int[] maxs = {0, 0, 0, 0, 1, 2, 3, 3, 3, 3, 3, 3, 3};
+            int min = mins[len];
+            int max = maxs[len];
+            for (int i = Math.max(min, len - 3 * max), endI = Math.min(max, len - 3 * min); i <= endI; i++) {
+                int node1 = Integer.parseInt(s.substring(0, i));
+                if (node1 <= 255 && (s.charAt(0) != '0' || i == 1)) {
+                    for (int j = Math.max(i + min, len - 2 * max), endJ = Math.min(i + max, len - 2 * min); j <= endJ; j++) {
+                        int node2 = Integer.parseInt(s.substring(i, j));
+                        if (node2 <= 255 && (s.charAt(i) != '0' || j - i == 1)) {
+                            for (int k = Math.max(j + min, len - max), endK = Math.min(j + max, len - min); k <= endK; k++) {
+                                int node3 = Integer.parseInt(s.substring(j, k));
+                                if (node3 <= 255 && (s.charAt(j) != '0' || k - j == 1)) {
+                                    int node4 = Integer.parseInt(s.substring(k));
+                                    if (node4 <= 255 && (s.charAt(k) != '0' || len - k == 1)) {
+                                        result.add(node1 + "." + node2 + "." + node3 + "." + node4);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         恢复IP地址   [中等]
+         http://www.lintcode.com/zh-cn/problem/restore-ip-addresses/
+         给一个由数字组成的字符串。求出其可能恢复为的所有IP地址。
+         样例
+         给出字符串 "25525511135"，所有可能的IP地址为：
+         [
+         "255.255.11.135",
+         "255.255.111.35"
+         ]
+         （顺序无关紧要）
+         */
+//        String ip = "010010";
+//        XYLog.d(solutions.restoreIpAddresses(ip));
+
+
 
         /**
          电话号码的字母组合   [中等]
