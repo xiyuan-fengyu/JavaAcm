@@ -3533,21 +3533,38 @@ public class Solutions184_564 {
         if (n == 0) {
             return "";
         }
+        else if (n == 1) {
+            return "1";
+        }
 
         ArrayList<Character> chars = new ArrayList<>();
         chars.add('1');
-        for (int i = 1; i < n; i++) {
-            for (int j = 0; j < chars.size(); j+= 2) {
-                if (chars.get(j) == '2') {
-                    chars.set(j, '1');
-                    chars.add(j + 1, '2');
+        chars.add('1');
+        for (int i = 2; i < n; i++) {
+            int sameCharCount = 1;
+            for (int j = 1; j < chars.size();) {
+                char cur = chars.get(j);
+                char last = chars.get(j - 1);
+                if (cur == last) {
+                    sameCharCount++;
+                    chars.remove(j);
                 }
                 else {
-                    if (j == chars.size() - 1 || chars.get(j + 1) != '1') {
-                        chars.add(j + 1, '1');
+                    String numStr = "" + sameCharCount;
+                    for (int k = 0, len = numStr.length(); k < len; k++) {
+                        chars.add(j - 1, numStr.charAt(k));
+                        j++;
                     }
-                    else {
-                        chars.set(j, '2');
+
+                    sameCharCount = 1;
+                    j++;
+                }
+
+                if (j == chars.size()) {
+                    String numStr = "" + sameCharCount;
+                    for (int k = 0, len = numStr.length(); k < len; k++) {
+                        chars.add(j - 1, numStr.charAt(k));
+                        j++;
                     }
                 }
             }
@@ -3576,8 +3593,11 @@ public class Solutions184_564 {
          样例
          给定 n = 5, 返回 "111221".
          */
-        int n = 5;
-        XYLog.d(solutions.countAndSay(n));
+////        int n = 6;
+////        XYLog.d(solutions.countAndSay(n));
+//        for (int i = 0; i < 10; i++) {
+//            XYLog.d(solutions.countAndSay(i));
+//        }
 
 
 
