@@ -6,6 +6,7 @@ import com.xiyuan.acm.factory.TreeNodeFactory;
 import com.xiyuan.acm.model.*;
 import com.xiyuan.acm.util.*;
 import com.xiyuan.util.XYLog;
+import javafx.beans.binding.StringBinding;
 
 import java.util.*;
 
@@ -3576,8 +3577,88 @@ public class Solutions184_564 {
         return strBld.toString();
     }
 
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/simplify-path/
+     * @param path the original path
+     * @return the simplified path
+     */
+    public String simplifyPath(String path) {
+        ArrayList<String> pathNodes = new ArrayList<>();
+        int len = path.length();
+        int i = 0;
+        int j = 0;
+        while (i < len && j < len) {
+            while (i < len && path.charAt(i) == '/') {
+                i++;
+            }
+            j = i;
+            while (j < len && path.charAt(j) != '/') {
+                j++;
+            }
+            if (i < len) {
+                String pathNode = path.substring(i, j);
+                if (pathNode.equals(".")) {
+                }
+                else if (pathNode.equals("..")) {
+                    if (pathNodes.size() > 0) {
+                        pathNodes.remove(pathNodes.size() - 1);
+                    }
+                }
+                else {
+                    pathNodes.add(pathNode);
+                }
+            }
+            i = j;
+        }
+
+
+        if (pathNodes.isEmpty()) {
+            return "/";
+        }
+        else {
+            StringBuilder strBld = new StringBuilder();
+            for (String pathNode: pathNodes) {
+                strBld.append('/').append(pathNode);
+            }
+            return strBld.toString();
+        }
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         简化路径   [中等]
+         http://www.lintcode.com/zh-cn/problem/simplify-path/
+         给定一个文档(Unix-style)的完全路径，请进行路径简化。
+         样例
+         "/home/", => "/home"
+         "/a/./b/../../c/", => "/c"
+         挑战
+         你是否考虑了 路径 = "/../" 的情况？
+         在这种情况下，你需返回"/"。
+         此外，路径中也可能包含双斜杠'/'，如 "/home//foo/"。
+         在这种情况下，可忽略多余的斜杠，返回 "/home/foo"。
+         */
+//        String[] paths = {
+//                "/home/",
+//                "/a/./b/../../c/",
+//                "/../",
+//                "/home//foo/"
+//        };
+//        for (String str: paths) {
+//            XYLog.d(str, " => ", solutions.simplifyPath(str));
+//        }
+
+
+
+
 
         /**
          报数   [中等]
