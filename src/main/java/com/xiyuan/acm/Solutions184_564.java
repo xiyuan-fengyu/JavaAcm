@@ -3706,8 +3706,72 @@ public class Solutions184_564 {
         return brackets.isEmpty();
     }
 
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/evaluate-reverse-polish-notation/
+     * @param tokens The Reverse Polish Notation
+     * @return the value
+     */
+    public int evalRPN(String[] tokens) {
+        if (tokens.length == 0) {
+            return 0;
+        }
+
+        Stack<Integer> params = new Stack<>();
+        for (String token: tokens) {
+            if (token.equals("+")) {
+                int param2 = params.pop();
+                int param1 = params.pop();
+                params.push(param1 + param2);
+            }
+            else if (token.equals("-")) {
+                int param2 = params.pop();
+                int param1 = params.pop();
+                params.push(param1 - param2);
+            }
+            else if (token.equals("*")) {
+                int param2 = params.pop();
+                int param1 = params.pop();
+                params.push(param1 * param2);
+            }
+            else if (token.equals("/")) {
+                int param2 = params.pop();
+                int param1 = params.pop();
+                params.push(param1 / param2);
+            }
+            else {
+                Integer i = Integer.parseInt(token);
+                params.push(i);
+            }
+        }
+        return params.pop();
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         逆波兰表达式求值   [中等]
+         http://www.lintcode.com/zh-cn/problem/evaluate-reverse-polish-notation/
+         求逆波兰表达式的值。
+         在逆波兰表达法中，其有效的运算符号包括 +, -, *, / 。每个运算对象可以是整数，也可以是另一个逆波兰计数表达。
+         说明
+         什么是逆波兰表达式？
+         http://en.wikipedia.org/wiki/Reverse_Polish_notation
+         样例
+         ["2", "1", "+", "3", "*"] -> ((2 + 1) * 3) -> 9
+         ["4", "13", "5", "/", "+"] -> (4 + (13 / 5)) -> 6
+         */
+//        String[] tokens = {"4", "13", "5", "/", "+"};
+//        XYLog.d(solutions.evalRPN(tokens));
+
+
+
+
 
         /**
          有效的括号序列   [容易]
