@@ -3916,8 +3916,51 @@ public class Solutions184_564 {
     }
 
 
+
+
+
+
+    /**
+     * @param s1 A string
+     * @param s2 Another string
+     * @return whether s2 is a scrambled string of s1
+     */
+    public boolean isScramble(String s1, String s2) {
+        int len1 = s1.length();
+        int len2 = s2.length();
+        if (len1 != len2) {
+            return false;
+        }
+        else if (len1 == 0) {
+            return true;
+        }
+        return isScramble(s1, 0, len1 - 1, s2, 0, len2 - 1);
+    }
+
+    private boolean isScramble(String s1, int left1, int right1, String s2, int left2, int right2) {
+        if (s1.substring(left1, right1 + 1).equals(s2.substring(left2, right2 + 1))) {
+            return true;
+        }
+        else if (left1 == right1) {
+            return s1.charAt(left1) == s2.charAt(left2);
+        }
+        else {
+            int mid = (left1 + right1 - 1) / 2;
+            return (isScramble(s1, left1, mid, s2, left2, left2 - left1 + mid) && isScramble(s1, mid + 1, right1, s2, left2 - left1 + mid + 1, right2))
+                    || (isScramble(s1, left1, mid, s2, right2 - mid + left1, right2) && isScramble(s1, mid + 1, right1, s2, left2, right2 - mid + left1 - 1));
+        }
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         攀爬字符串   [困难]
+         http://www.lintcode.com/zh-cn/problem/scramble-string/
+         */
+        XYLog.d(solutions.isScramble("abb", "bab"));
+
+
 
         /**
          x的n次幂   [中等]
