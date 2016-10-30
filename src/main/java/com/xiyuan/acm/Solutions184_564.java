@@ -3840,8 +3840,39 @@ public class Solutions184_564 {
         return result;
     }
 
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/generate-parentheses/
+     * @param n n pairs
+     * @return All combinations of well-formed parentheses
+     */
+    public ArrayList<String> generateParenthesis(int n) {
+        ArrayList<String> result = new ArrayList<>();
+        if (n > 0) {
+
+        }
+        return result;
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         生成括号   [中等]
+         http://www.lintcode.com/zh-cn/problem/generate-parentheses/
+         给定 n 对括号，请写一个函数以将其生成新的括号组合，并返回所有组合结果。
+         样例
+         给定 n = 3, 可生成的组合如下:
+         "((()))", "(()())", "(())()", "()(())", "()()()"
+         */
+        int n = 3;
+        XYLog.d(solutions.generateParenthesis(n));
+
+
 
         /**
          恢复IP地址   [中等]
