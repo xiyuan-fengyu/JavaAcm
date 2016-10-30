@@ -3853,10 +3853,31 @@ public class Solutions184_564 {
     public ArrayList<String> generateParenthesis(int n) {
         ArrayList<String> result = new ArrayList<>();
         if (n > 0) {
-
+            StringBuilder strBld = new StringBuilder();
+            generateParenthesis(n, 0, 0, strBld, result);
         }
         return result;
     }
+
+    private void generateParenthesis(int n, int leftNum, int rightNum, StringBuilder strBld, ArrayList<String> result) {
+        if (leftNum < n) {
+            strBld.append('(');
+            generateParenthesis(n, leftNum + 1, rightNum, strBld, result);
+            strBld.deleteCharAt(strBld.length() - 1);
+        }
+
+        if (leftNum > rightNum) {
+            strBld.append(')');
+            if (leftNum == rightNum + 1 && n == leftNum) {
+                result.add(strBld.toString());
+            }
+            else {
+                generateParenthesis(n, leftNum, rightNum + 1, strBld, result);
+            }
+            strBld.deleteCharAt(strBld.length() - 1);
+        }
+    }
+
 
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
@@ -3869,8 +3890,8 @@ public class Solutions184_564 {
          给定 n = 3, 可生成的组合如下:
          "((()))", "(()())", "(())()", "()(())", "()()()"
          */
-        int n = 3;
-        XYLog.d(solutions.generateParenthesis(n));
+//        int n = 4;
+//        XYLog.d(solutions.generateParenthesis(n));
 
 
 
