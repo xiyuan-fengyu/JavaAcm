@@ -3921,6 +3921,7 @@ public class Solutions184_564 {
 
 
     /**
+     * http://www.lintcode.com/zh-cn/problem/scramble-string/
      * @param s1 A string
      * @param s2 Another string
      * @return whether s2 is a scrambled string of s1
@@ -3935,34 +3936,63 @@ public class Solutions184_564 {
             return true;
         }
 
-        int[][][] cache = new int[len1][len1][len1];
+        int[][][] cache = new int[len1][len1][len1 + 1];
         return isScramble(s1, 0, s2, 0, len1, cache);
     }
 
     private boolean isScramble(String s1, int start1, String s2, int start2, int subLen, int[][][] cache) {
-        if (cache[start1][start2][subLen] == -1) {
-            return false;
+        int cacheResult = cache[start1][start2][subLen];
+        if (cacheResult != 0) {
+            return cacheResult == 1;
         }
 
+        boolean flag = false;
+        int equalType = isSortedSubStrEqual(s1, start1, s2, start2, subLen);
+        if (equalType == 1) {
+            flag = true;
+        }
+        else if (equalType == 0) {
+            for (int i = 1; i < subLen; i++) {
+                if (isScramble(s1, start1, s2, start2, i, cache) && isScramble(s1, start1 + i, s2, start2 + i, subLen - i, cache)) {
+                    flag = true;
+                    break;
+                }
 
-
-
-        return false;
+                if (isScramble(s1, start1, s2, start2 + subLen - i, i, cache) && isScramble(s1, start1 + i, s2, start2, subLen - i, cache)) {
+                    flag = true;
+                    break;
+                }
+            }
+        }
+        cache[start1][start2][subLen] = flag? 1: -1;
+        return flag;
     }
 
-    private boolean isSortedSubStrEqual(String s1, int start1, String s2, int start2, int subLen) {
+    private int isSortedSubStrEqual(String s1, int start1, String s2, int start2, int subLen) {
         char[] chars1 = new char[subLen];
         char[] chars2 = new char[subLen];
         s1.getChars(start1, start1 + subLen, chars1, 0);
         s2.getChars(start2, start2 + subLen, chars2, 0);
+
+        int flag = 1;
+        for (int i = 0; i < subLen; i ++) {
+            if (chars1[i] != chars2[i]) {
+                flag = -1;
+            }
+        }
+
+        if (flag == 1) {
+            return 1;
+        }
+
         Arrays.sort(chars1);
         Arrays.sort(chars2);
         for (int i = 0; i < subLen; i ++) {
             if (chars1[i] != chars2[i]) {
-                return false;
+                return -1;
             }
         }
-        return true;
+        return 0;
     }
 
     public static void main(String[] args) {
@@ -3973,7 +4003,7 @@ public class Solutions184_564 {
          http://www.lintcode.com/zh-cn/problem/scramble-string/
          */
 //        XYLog.d(solutions.isScramble("greet", "regte"));
-        XYLog.d(solutions.isScramble("abcda", "daabc"));
+//        XYLog.d(solutions.isScramble("greet", "regte"));
 
 
 
