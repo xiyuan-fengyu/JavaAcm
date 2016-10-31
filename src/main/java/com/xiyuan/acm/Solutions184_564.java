@@ -3931,24 +3931,38 @@ public class Solutions184_564 {
         if (len1 != len2) {
             return false;
         }
-        else if (len1 == 0) {
+        else if (len1 == 0 || s1.equals(s2)) {
             return true;
         }
-        return isScramble(s1, 0, len1 - 1, s2, 0, len2 - 1);
+
+        int[][][] cache = new int[len1][len1][len1];
+        return isScramble(s1, 0, s2, 0, len1, cache);
     }
 
-    private boolean isScramble(String s1, int left1, int right1, String s2, int left2, int right2) {
-        if (s1.substring(left1, right1 + 1).equals(s2.substring(left2, right2 + 1))) {
-            return true;
+    private boolean isScramble(String s1, int start1, String s2, int start2, int subLen, int[][][] cache) {
+        if (cache[start1][start2][subLen] == -1) {
+            return false;
         }
-        else if (left1 == right1) {
-            return s1.charAt(left1) == s2.charAt(left2);
+
+
+
+
+        return false;
+    }
+
+    private boolean isSortedSubStrEqual(String s1, int start1, String s2, int start2, int subLen) {
+        char[] chars1 = new char[subLen];
+        char[] chars2 = new char[subLen];
+        s1.getChars(start1, start1 + subLen, chars1, 0);
+        s2.getChars(start2, start2 + subLen, chars2, 0);
+        Arrays.sort(chars1);
+        Arrays.sort(chars2);
+        for (int i = 0; i < subLen; i ++) {
+            if (chars1[i] != chars2[i]) {
+                return false;
+            }
         }
-        else {
-            int mid = (left1 + right1 - 1) / 2;
-            return (isScramble(s1, left1, mid, s2, left2, left2 - left1 + mid) && isScramble(s1, mid + 1, right1, s2, left2 - left1 + mid + 1, right2))
-                    || (isScramble(s1, left1, mid, s2, right2 - mid + left1, right2) && isScramble(s1, mid + 1, right1, s2, left2, right2 - mid + left1 - 1));
-        }
+        return true;
     }
 
     public static void main(String[] args) {
@@ -3958,7 +3972,9 @@ public class Solutions184_564 {
          攀爬字符串   [困难]
          http://www.lintcode.com/zh-cn/problem/scramble-string/
          */
-        XYLog.d(solutions.isScramble("abb", "bab"));
+//        XYLog.d(solutions.isScramble("greet", "regte"));
+        XYLog.d(solutions.isScramble("abcda", "daabc"));
+
 
 
 
