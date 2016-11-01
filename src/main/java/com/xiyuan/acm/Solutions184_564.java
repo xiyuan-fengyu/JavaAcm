@@ -3995,8 +3995,99 @@ public class Solutions184_564 {
         return 0;
     }
 
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/number-of-islands/
+     * @param grid a boolean 2D matrix
+     * @return an integer
+     */
+    public int numIslands(boolean[][] grid) {
+        int row = grid.length;
+        if (row == 0) {
+            return 0;
+        }
+        int column = grid[0].length;
+
+        int num = 0;
+        boolean[][] visited = new boolean[row][column];
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < column; j++) {
+                if (grid[i][j] && !visited[i][j]) {
+                    num++;
+                    visitGrid(grid, i, j, visited);
+                }
+            }
+        }
+        return num;
+    }
+
+    private void visitGrid(boolean[][] grid, int x, int y, boolean[][] visited) {
+        int row = grid.length;
+        int column = grid[0].length;
+        if (x < 0 || x >= row || y < 0 || y >= column || visited[x][y]) {
+            return;
+        }
+
+        visited[x][y] = true;
+
+        if (grid[x][y]) {
+            if (x > 0) {
+                visitGrid(grid, x - 1, y, visited);
+            }
+            if (x < row) {
+                visitGrid(grid, x + 1, y, visited);
+            }
+            if (y > 0) {
+                visitGrid(grid, x, y - 1, visited);
+            }
+            if (y < column) {
+                visitGrid(grid, x, y + 1, visited);
+            }
+        }
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         岛屿的个数   [容易]
+         http://www.lintcode.com/zh-cn/problem/number-of-islands/
+         给一个01矩阵，求不同的岛屿的个数。
+         0代表海，1代表岛，如果两个1相邻，那么这两个1属于同一个岛。我们只考虑上下左右为相邻。
+         样例
+         在矩阵：
+         [
+         [1, 1, 0, 0, 0],
+         [0, 1, 0, 0, 1],
+         [0, 0, 0, 1, 1],
+         [0, 0, 0, 0, 0],
+         [0, 0, 0, 0, 1]
+         ]
+         中有 3 个岛.
+         */
+        int[][] matrix = {
+                {1, 1, 0, 0, 0},
+                {0, 1, 0, 0, 1},
+                {0, 0, 0, 1, 1},
+                {0, 0, 0, 0, 0},
+                {0, 0, 0, 0, 1}
+        };
+        boolean[][] grid = new boolean[matrix.length][matrix.length == 0? 0: matrix[0].length];
+        for (int i = 0, lenI = matrix.length; i < lenI; i++) {
+            for (int j = 0, lenJ = matrix[0].length; j < lenJ; j++) {
+                grid[i][j] = matrix[i][j] == 1;
+            }
+        }
+        XYLog.d(solutions.numIslands(grid));
+
+
+
+
 
         /**
          攀爬字符串   [困难]
