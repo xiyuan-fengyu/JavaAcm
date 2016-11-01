@@ -4070,20 +4070,20 @@ public class Solutions184_564 {
          ]
          中有 3 个岛.
          */
-        int[][] matrix = {
-                {1, 1, 0, 0, 0},
-                {0, 1, 0, 0, 1},
-                {0, 0, 0, 1, 1},
-                {0, 0, 0, 0, 0},
-                {0, 0, 0, 0, 1}
-        };
-        boolean[][] grid = new boolean[matrix.length][matrix.length == 0? 0: matrix[0].length];
-        for (int i = 0, lenI = matrix.length; i < lenI; i++) {
-            for (int j = 0, lenJ = matrix[0].length; j < lenJ; j++) {
-                grid[i][j] = matrix[i][j] == 1;
-            }
-        }
-        XYLog.d(solutions.numIslands(grid));
+//        int[][] matrix = {
+//                {1, 1, 0, 0, 0},
+//                {0, 1, 0, 0, 1},
+//                {0, 0, 0, 1, 1},
+//                {0, 0, 0, 0, 0},
+//                {0, 0, 0, 0, 1}
+//        };
+//        boolean[][] grid = new boolean[matrix.length][matrix.length == 0? 0: matrix[0].length];
+//        for (int i = 0, lenI = matrix.length; i < lenI; i++) {
+//            for (int j = 0, lenJ = matrix[0].length; j < lenJ; j++) {
+//                grid[i][j] = matrix[i][j] == 1;
+//            }
+//        }
+//        XYLog.d(solutions.numIslands(grid));
 
 
 
