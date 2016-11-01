@@ -4051,8 +4051,66 @@ public class Solutions184_564 {
         }
     }
 
+
+
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/maximal-square/
+     * @param matrix: a matrix of 0 and 1
+     * @return: an integer
+     */
+    public int maxSquare(int[][] matrix) {
+        int row = matrix.length;
+        if (row == 0) {
+            return 0;
+        }
+
+        int column = matrix[0].length;
+        int[][] sumMatrix = new int[row + 1][column + 1];
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < column; j++) {
+                sumMatrix[i][j] = sumMatrix[i - 1][j] + sumMatrix[i][j - 1] - sumMatrix[i - 1][j - 1] + matrix[i][j];
+            }
+        }
+
+        int result = sumMatrix[row][column] > 0? 1: 0;
+        if (result == 0) {
+            return 0;
+        }
+        else {
+
+        }
+        return 0;
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         最大正方形   [中等]
+         http://www.lintcode.com/zh-cn/problem/maximal-square/
+         在一个二维01矩阵中找到全为1的最大正方形
+         样例
+         1 0 1 0 0
+         1 0 1 1 1
+         1 1 1 1 1
+         1 0 0 1 0
+         返回 4
+         */
+        int[][] matrix = {
+                {1, 0, 1, 0, 0},
+                {1, 0, 1, 1, 1},
+                {1, 1, 1, 1, 1},
+                {1, 0, 0, 1, 0}
+        };
+        XYLog.d(solutions.maxSquare(matrix));
+
+
 
         /**
          岛屿的个数   [容易]
