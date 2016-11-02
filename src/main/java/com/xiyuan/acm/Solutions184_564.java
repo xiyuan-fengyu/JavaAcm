@@ -4266,8 +4266,64 @@ public class Solutions184_564 {
         return newHead.next;
     }
 
+
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/swap-nodes-in-pairs/
+     * @param head a ListNode
+     * @return a ListNode
+     */
+    public ListNode swapPairs(ListNode head) {
+        if (head == null) {
+            return null;
+        }
+
+        ListNode newHead = new ListNode(0);
+        ListNode cur = newHead;
+        ListNode slow = head;
+        ListNode fast = head;
+        while (slow != null) {
+            if (fast.next == null) {
+                cur.next = slow;
+                slow = null;
+            }
+            else {
+                fast = fast.next;
+                slow.next = null;
+                cur.next = fast;
+                fast = fast.next;
+                cur.next.next = slow;
+                cur = slow;
+                slow = fast;
+            }
+        }
+        return newHead.next;
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         两两交换链表中的节点   [容易]
+         http://www.lintcode.com/zh-cn/problem/swap-nodes-in-pairs/
+         给一个链表，两两交换其中的节点，然后返回交换后的链表。
+         样例
+         给出 1->2->3->4, 你应该返回的链表是 2->1->4->3。
+         挑战
+         你的算法只能使用常数的额外空间，并且不能只是单纯的改变节点内部的值，而是需要实际的进行节点交换。
+         */
+//        ListNode head = ListNodeFactory.build("1->2->3->4");
+//        XYLog.d(solutions.swapPairs(head));
+
+
+
+
+
 
         /**
          K组翻转链表   [困难]
