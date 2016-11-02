@@ -4072,18 +4072,32 @@ public class Solutions184_564 {
 
         int column = matrix[0].length;
         int[][] sumMatrix = new int[row + 1][column + 1];
-        for (int i = 0; i < row; i++) {
-            for (int j = 0; j < column; j++) {
-                sumMatrix[i][j] = sumMatrix[i - 1][j] + sumMatrix[i][j - 1] - sumMatrix[i - 1][j - 1] + matrix[i][j];
+        for (int i = 1; i <= row; i++) {
+            for (int j = 1; j <= column; j++) {
+                sumMatrix[i][j] = sumMatrix[i - 1][j] + sumMatrix[i][j - 1] - sumMatrix[i - 1][j - 1] + matrix[i - 1][j - 1];
             }
         }
 
-        int result = sumMatrix[row][column] > 0? 1: 0;
-        if (result == 0) {
-            return 0;
+        int sum = sumMatrix[row][column];
+        if (sum <= 1) {
+            return sum;
+        }
+        else if (row == column && sum == row * row) {
+            return sum;
         }
         else {
-
+            int maxLen = Math.min(row, column);
+            for (int i = maxLen; i >= 1; i--) {
+                int ii = i * i;
+                for (int j = i; j <= row; j++) {
+                    for (int k = i; k <= column; k++) {
+                        int temp = sumMatrix[j][k] - sumMatrix[j][k - i] - sumMatrix[j - i][k] + sumMatrix[j - i][k - i];
+                        if (temp == ii) {
+                            return ii;
+                        }
+                    }
+                }
+            }
         }
         return 0;
     }
@@ -4102,13 +4116,13 @@ public class Solutions184_564 {
          1 0 0 1 0
          返回 4
          */
-        int[][] matrix = {
-                {1, 0, 1, 0, 0},
-                {1, 0, 1, 1, 1},
-                {1, 1, 1, 1, 1},
-                {1, 0, 0, 1, 0}
-        };
-        XYLog.d(solutions.maxSquare(matrix));
+//        int[][] matrix = {
+//                {1, 0, 1, 0, 0},
+//                {1, 0, 1, 1, 1},
+//                {1, 1, 1, 1, 1},
+//                {1, 0, 0, 1, 0}
+//        };
+//        XYLog.d(solutions.maxSquare(matrix));
 
 
 
