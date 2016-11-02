@@ -4305,8 +4305,51 @@ public class Solutions184_564 {
         return newHead.next;
     }
 
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/remove-linked-list-elements/
+     * @param head a ListNode
+     * @param val an integer
+     * @return a ListNode
+     */
+    public ListNode removeElements(ListNode head, int val) {
+        if (head == null) {
+            return null;
+        }
+
+        ListNode cur = head;
+        ListNode next = cur.next;
+        while (next != null) {
+            if (next.val == val) {
+                cur.next = next.next;
+            }
+            else {
+                cur = next;
+            }
+            next = next.next;
+        }
+        return head.val == val? head.next: head;
+    }
+
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         删除链表中的元素   [入门]
+         http://www.lintcode.com/zh-cn/problem/remove-linked-list-elements/
+         删除链表中等于给定值val的所有节点。
+         样例
+         给出链表 1->2->3->3->4->5->3, 和 val = 3, 你需要返回删除3之后的链表：1->2->4->5。
+         */
+//        ListNode head = ListNodeFactory.build("1->2->3->3->4->5->3");
+//        int val = 3;
+//        XYLog.d(solutions.removeElements(head, val));
+
+
 
         /**
          两两交换链表中的节点   [容易]
