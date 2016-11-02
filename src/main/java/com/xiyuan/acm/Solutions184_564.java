@@ -4494,6 +4494,22 @@ public class Solutions184_564 {
         Solutions184_564 solutions = new Solutions184_564();
 
         /**
+         单词的添加与查找   [中等]
+         http://www.lintcode.com/zh-cn/problem/add-and-search-word/
+         设计一个包含下面两个操作的数据结构：addWord(word), search(word)
+         addWord(word)会在数据结构中添加一个单词。而search(word)则支持普通的单词查询或是只包含.和a-z的简易正则表达式的查询。
+         */
+//        WordDictionary dictionary = new WordDictionary();
+//        dictionary.addWord("word");
+//        XYLog.d(dictionary.search("word"));
+//        XYLog.d(dictionary.search("wordd"));
+//        XYLog.d(dictionary.search("wor"));
+//        XYLog.d(dictionary.search("wo.d"));
+//        XYLog.d(dictionary.search("..rd"));
+
+
+
+        /**
          等价二叉树   [容易]
          http://www.lintcode.com/zh-cn/problem/identical-binary-tree/
          检查两棵二叉树是否等价。等价的意思是说，首先两棵二叉树必须拥有相同的结构，并且每个对应位置上的节点上的数都相等。
