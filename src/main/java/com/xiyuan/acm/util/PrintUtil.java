@@ -30,4 +30,34 @@ public class PrintUtil {
         System.out.println(strBld.toString());
     }
 
+    public static void matrix(int[][] matrix, int perNumLen, int gap) {
+        StringBuilder strBld = new StringBuilder();
+        String gapStr = "";
+        for (int i = 0; i < gap; ++i) {
+            gapStr += " ";
+        }
+        for (int is[]: matrix) {
+            for (int i: is) {
+                strBld.append(String.format("%" + perNumLen + "d", i)).append(gapStr);
+            }
+            strBld.append('\n');
+        }
+        System.out.println(strBld.toString());
+    }
+
+    public static void matrix(char[][] matrix, int gap) {
+        StringBuilder strBld = new StringBuilder();
+        String gapStr = "";
+        for (int i = 0; i < gap; ++i) {
+            gapStr += " ";
+        }
+        for (char is[]: matrix) {
+            for (char i: is) {
+                strBld.append(i).append(gapStr);
+            }
+            strBld.append('\n');
+        }
+        System.out.println(strBld.toString());
+    }
+
 }

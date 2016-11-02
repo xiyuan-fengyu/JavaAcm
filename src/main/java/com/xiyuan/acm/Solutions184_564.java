@@ -3,6 +3,7 @@ package com.xiyuan.acm;
 import com.xiyuan.acm.factory.SegmentTreeNodeFactory;
 import com.xiyuan.acm.factory.TreeNodeFactory;
 import com.xiyuan.acm.model.*;
+import com.xiyuan.acm.util.PrintUtil;
 import com.xiyuan.util.XYLog;
 
 import java.util.*;
@@ -4490,8 +4491,112 @@ public class Solutions184_564 {
         return a.val.equals(b.val) && isIdentical(a.left, b.left) && isIdentical(a.right, b.right);
     }
 
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/surrounded-regions/
+     * @param board a 2D board containing 'X' and 'O'
+     * @return void
+     */
+    public void surroundedRegions(char[][] board) {
+        int row = board.length;
+        if (row == 0) {
+            return;
+        }
+
+        int column = board[0].length;
+        if (row <= 2 || column <= 2) {
+            return;
+        }
+
+        for (int i = 0; i < row; i++) {
+            if (board[i][0] == charO && board[i][1] == charO) {
+                visitBoard(board, i, 1);
+            }
+            if (board[i][column - 1] == charO && board[i][column - 2] == charO) {
+                visitBoard(board, i, column - 2);
+            }
+        }
+        for (int j = 0; j < column; j++) {
+            if (board[0][j] == charO && board[1][j] == charO) {
+                visitBoard(board, 1, j);
+            }
+            if (board[row - 1][j] == charO && board[row - 2][j] == charO) {
+                visitBoard(board, row - 2, j);
+            }
+        }
+
+        for (int i = 1; i < row - 1; i++) {
+            for (int j = 1; j < column - 1; j++) {
+                if (board[i][j] == charO) {
+                    board[i][j] = 'X';
+                }
+                else if (board[i][j] == '1') {
+                    board[i][j] = charO;
+                }
+            }
+        }
+    }
+
+    private static final char charO = 'O';
+
+    private void visitBoard(char[][] board, int i, int j) {
+        int row = board.length;
+        int column = board[0].length;
+        if (i == 0 || i == row - 1 || j == 0 || j == column - 1) {
+            return;
+        }
+
+        board[i][j] = '1';
+        if (i - 1 > 0 && board[i - 1][j] == charO) {
+            visitBoard(board, i - 1, j);
+        }
+        if (i + 1 < row - 1 && board[i + 1][j] == charO) {
+            visitBoard(board, i + 1, j);
+        }
+        if (j - 1 > 0 && board[i][j - 1] == charO) {
+            visitBoard(board, i, j - 1);
+        }
+        if (j + 1 < column - 1 && board[i][j + 1] == charO) {
+            visitBoard(board, i, j + 1);
+        }
+    }
+
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         被围绕的区域   [中等]
+         http://www.lintcode.com/zh-cn/problem/surrounded-regions/
+         给一个二维的矩阵，包含 'X' 和 'O', 找到所有被 'X' 围绕的区域，并用 'X' 填充满。
+         样例
+         给出二维矩阵：
+         X X X X
+         X O O X
+         X X O X
+         X O X X
+         把被 'X' 围绕的区域填充之后变为：
+         X X X X
+         X X X X
+         X X X X
+         X O X X
+         */
+//        String[] boardStrs = {"XOOXXXOXOO","XOXXXXXXXX","XXXXOXXXXX","XOXXXOXXXO","OXXXOXOXOX","XXOXXOOXXX","OXXOOXOXXO","OXXXXXOXXX","XOOXXOXXOO","XXXOOXOXXO"};
+//        char[][] board = new char[boardStrs.length][];
+//        for (int i = 0, len = board.length; i < len; i++) {
+//            board[i] = boardStrs[i].toCharArray();
+//        }
+//        PrintUtil.matrix(board, 2);
+//        solutions.surroundedRegions(board);
+//        PrintUtil.matrix(board, 2);
+
+
+
 
         /**
          单词的添加与查找   [中等]
