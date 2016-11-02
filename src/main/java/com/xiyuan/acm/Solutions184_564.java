@@ -4181,8 +4181,58 @@ public class Solutions184_564 {
         return newNode;
     }
 
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/cosine-similarity/
+     * @param arrA: An integer array.
+     * @param arrB: An integer array.
+     * @return: Cosine similarity.
+     */
+    public double cosineSimilarity(int[] arrA, int[] arrB) {
+        int len = arrA.length;
+        if (len != arrB.length || len == 0) {
+            return 2.0;
+        }
+
+        long totalAB = 0;
+        long totalAA = 0;
+        long totalBB = 0;
+        for (int i = 0; i < len; i++) {
+            int a = arrA[i];
+            int b = arrB[i];
+            totalAB += a * b;
+            totalAA += a * a;
+            totalBB += b * b;
+        }
+
+        if (totalAA == 0 || totalBB == 0) {
+            return 2.0;
+        }
+        else return totalAB / (Math.pow(totalAA * totalBB, 0.5));
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         余弦相似度   [容易]
+         http://www.lintcode.com/zh-cn/problem/cosine-similarity/
+         公式：http://www.lintcode.com/media/problem/cosine-similarity.png
+         给你两个相同大小的向量 A B，求出他们的余弦相似度
+         如果余弦相似不合法 (比如 A = [0] B = [0])，返回 2.0000
+         样例
+         给出 A = [1, 2, 3], B = [2, 3 ,4]. 返回 0.9926.
+         给出 A = [0], B = [0]. 返回 2.0000
+         */
+//        int[] arrA = {1,2,3};
+//        int[] arrB = {2,3,4};
+//        XYLog.d(solutions.cosineSimilarity(arrA, arrB));
+
+
 
         /**
          实现 Trie   [中等]
