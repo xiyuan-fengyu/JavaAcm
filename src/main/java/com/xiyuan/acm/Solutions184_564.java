@@ -4153,8 +4153,53 @@ public class Solutions184_564 {
         return dp[k][len - 1];
     }
 
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/segment-tree-build-ii/
+     * @param arr: a list of integer
+     * @return: The root of Segment Tree
+     */
+    public SegmentTreeNode build(int[] arr) {
+        int len = arr.length;
+        if (len == 0) {
+            return null;
+        }
+        return build(arr, 0, len - 1);
+    }
+
+    private SegmentTreeNode build(int[] arr, int left, int right) {
+        SegmentTreeNode newNode = new SegmentTreeNode(left, right, arr[left]);
+        if (left < right)  {
+            int mid = (left + right) / 2;
+            newNode.left = build(arr, left, mid);
+            newNode.right = build(arr, mid + 1, right);
+            newNode.max = Math.max(newNode.left.max, newNode.right.max);
+        }
+        return newNode;
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         线段树的构造 II   [中等]
+         http://www.lintcode.com/zh-cn/problem/segment-tree-build-ii/
+         线段树是一棵二叉树，他的每个节点包含了两个额外的属性start和end用于表示该节点所代表的区间。start和end都是整数，并按照如下的方式赋值:
+         根节点的 start 和 end 由 build 方法所给出。
+         对于节点 A 的左儿子，有 start=A.left, end=(A.left + A.right) / 2。
+         对于节点 A 的右儿子，有 start=(A.left + A.right) / 2 + 1, end=A.right。
+         如果 start 等于 end, 那么该节点是叶子节点，不再有左右儿子。
+         对于给定数组设计一个build方法，构造出线段树
+         */
+//        int[] arr = {3,2,1,4};
+//        XYLog.d(solutions.build(arr));
+
+
+
+
 
         /**
          书籍复印   [困难]
