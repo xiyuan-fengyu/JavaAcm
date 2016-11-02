@@ -4471,8 +4471,40 @@ public class Solutions184_564 {
     }
 
 
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/identical-binary-tree/
+     * @param a, b, the root of binary trees.
+     * @return true if they are identical, or false.
+     */
+    public boolean isIdentical(TreeNode a, TreeNode b) {
+        if (a == null || b == null) {
+            return a == b;
+        } else if (a == b) {
+            return true;
+        }
+
+        return a.val.equals(b.val) && isIdentical(a.left, b.left) && isIdentical(a.right, b.right);
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         等价二叉树   [容易]
+         http://www.lintcode.com/zh-cn/problem/identical-binary-tree/
+         检查两棵二叉树是否等价。等价的意思是说，首先两棵二叉树必须拥有相同的结构，并且每个对应位置上的节点上的数都相等。
+         */
+//        TreeNode tree1 = TreeNodeFactory.build("1,2,3,4");
+//        TreeNode tree2 = TreeNodeFactory.build("1,2,3,4");
+//        TreeNode tree3 = TreeNodeFactory.build("1,2,3,#,4");
+//        XYLog.d(solutions.isIdentical(tree1, tree2));
+//        XYLog.d(solutions.isIdentical(tree1, tree3));
+
+
 
         /**
          整数排序 II   [入门]
