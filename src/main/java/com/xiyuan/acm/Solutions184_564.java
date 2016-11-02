@@ -4395,8 +4395,95 @@ public class Solutions184_564 {
         }
     }
 
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/sort-integers-ii/
+     * @param arr an integer array
+     * @return void
+     */
+    public void sortIntegers2(int[] arr) {
+        int len = arr.length;
+        if (len > 1) {
+//            quickSort(arr, 0, len - 1);
+            mergeSort(arr, 0, len - 1);
+        }
+    }
+
+    private void quickSort(int[] arr, int left, int right) {
+        if (left < right) {
+            int key = arr[left];
+            int l = left;
+            int r = right;
+            while (l < r) {
+                while (l < r && arr[r] >= key) {
+                    r--;
+                }
+                arr[l] = arr[r];
+
+                while (l < r && arr[l] <= key) {
+                    l++;
+                }
+                arr[r] = arr[l];
+            }
+            arr[l] = key;
+            quickSort(arr, left, l - 1);
+            quickSort(arr, l + 1, right);
+        }
+    }
+
+    private void mergeSort(int arr[], int left, int right) {
+        if (left < right) {
+            int mid = (left + right) / 2;
+            mergeSort(arr, left, mid);
+            mergeSort(arr, mid + 1, right);
+            int i = left;
+            int j = mid + 1;
+            int index = 0;
+            int[] cache = new int[right - left + 1];
+            while (i <= mid && j <= right) {
+                if (arr[i] < arr[j]) {
+                    cache[index++] = arr[i++];
+                }
+                else {
+                    cache[index++] = arr[j++];
+                }
+            }
+            if (i <= mid) {
+                while (i <= mid) {
+                    cache[index++] = arr[i++];
+                }
+            }
+            else {
+                while (j <= right) {
+                    cache[index++] = arr[j++];
+                }
+            }
+
+            for (int k = 0, len = cache.length; k < len; k++) {
+                arr[left + k] = cache[k];
+            }
+        }
+    }
+
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         整数排序 II   [入门]
+         http://www.lintcode.com/zh-cn/problem/sort-integers-ii/
+         给一组整数，按照升序排序。使用归并排序，快速排序，堆排序或者任何其他 O(n log n) 的排序算法。
+         */
+//        int[] arr = {3,2,1,4,5};
+//        solutions.sortIntegers2(arr);
+//        XYLog.d(arr);
+
+
 
         /**
          整数排序   [入门]
