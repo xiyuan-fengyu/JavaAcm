@@ -4215,8 +4215,78 @@ public class Solutions184_564 {
         else return totalAB / (Math.pow(totalAA * totalBB, 0.5));
     }
 
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/reverse-nodes-in-k-group/
+     * @param head a ListNode
+     * @param k an integer
+     * @return a ListNode
+     */
+    public ListNode reverseKGroup(ListNode head, int k) {
+        if (head == null || k <= 1) {
+            return head;
+        }
+
+        ListNode newHead = new ListNode(0);
+        ListNode cur = newHead;
+        ListNode slow = head;
+        ListNode fast = head;
+        while (slow != null) {
+            int tempK = k;
+            while (tempK-- > 1 && fast != null) {
+                fast = fast.next;
+            }
+            if (fast == null) {
+                //剩余长度不够k
+                cur.next = slow;
+                slow = null;
+            }
+            else {
+                fast = fast.next;
+                ListNode tempHead = null;
+                ListNode temp = slow;
+                while (temp != fast) {
+                    ListNode next = temp.next;
+                    temp.next = null;
+                    temp.next = tempHead;
+                    tempHead = temp;
+                    temp = next;
+                }
+                cur.next = tempHead;
+                cur = slow;
+                slow = fast;
+            }
+        }
+
+        return newHead.next;
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         K组翻转链表   [困难]
+         http://www.lintcode.com/zh-cn/problem/reverse-nodes-in-k-group/
+         给你一个链表以及一个k,将这个链表从头指针开始每k个翻转一下。
+         链表元素个数不是k的倍数，最后剩余的不用翻转。
+         样例
+         给出链表 1->2->3->4->5
+         k = 2, 返回 2->1->4->3->5
+         k = 3, 返回 3->2->1->4->5
+         */
+//        ListNode head = ListNodeFactory.build("1->2->3->4->5");
+//        int k = 3;
+//        XYLog.d(solutions.reverseKGroup(head, k));
+
+
+
+
+
 
         /**
          余弦相似度   [容易]
