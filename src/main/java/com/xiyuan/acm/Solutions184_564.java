@@ -1,12 +1,9 @@
 package com.xiyuan.acm;
 
-import com.xiyuan.acm.factory.ListNodeFactory;
 import com.xiyuan.acm.factory.SegmentTreeNodeFactory;
 import com.xiyuan.acm.factory.TreeNodeFactory;
 import com.xiyuan.acm.model.*;
-import com.xiyuan.acm.util.*;
 import com.xiyuan.util.XYLog;
-import javafx.beans.binding.StringBinding;
 
 import java.util.*;
 
@@ -4335,8 +4332,55 @@ public class Solutions184_564 {
     }
 
 
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/flatten-binary-tree-to-linked-list/
+     * @param root: a TreeNode, the root of the binary tree
+     * @return: nothing
+     */
+    public void flatten(TreeNode root) {
+        if (root != null) {
+            TreeNode left = root.left;
+            TreeNode right = root.right;
+            if (left != null) {
+                flatten(left);
+                root.left = null;
+                root.right = left;
+            }
+
+            if (right != null) {
+                flatten(right);
+                if (left != null) {
+                    while (left.right != null) {
+                        left = left.right;
+                    }
+                    left.right = right;
+                }
+                else {
+                    root.right = right;
+                }
+            }
+        }
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         将二叉树拆成链表   [容易]
+         http://www.lintcode.com/zh-cn/problem/flatten-binary-tree-to-linked-list/
+         将一棵二叉树按照前序遍历拆解成为一个假链表。所谓的假链表是说，用二叉树的 right 指针，来表示链表中的 next 指针。
+         注意事项
+         不要忘记将左儿子标记为 null，否则你可能会得到空间溢出或是时间溢出。
+         */
+//        TreeNode tree = TreeNodeFactory.build("1,2,5,3,4,#,6");
+//        XYLog.d(tree);
+//        solutions.flatten(tree);
+//        XYLog.d(tree);
+
 
         /**
          删除链表中的元素   [入门]
