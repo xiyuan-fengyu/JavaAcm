@@ -4185,6 +4185,21 @@ public class Solutions184_564 {
         Solutions184_564 solutions = new Solutions184_564();
 
         /**
+         实现 Trie   [中等]
+         http://www.lintcode.com/zh-cn/problem/implement-trie/
+         实现一个 Trie，包含 insert, search, 和 startsWith 这三个方法。
+         注意事项
+         你可以假设所有的输入都是小写字母a-z。
+         */
+//        Trie trie = new Trie();
+//        trie.insert("lintcode");
+//        XYLog.d(trie.search("lint"));
+//        XYLog.d(trie.startsWith("lint"));
+
+
+
+
+        /**
          线段树的构造 II   [中等]
          http://www.lintcode.com/zh-cn/problem/segment-tree-build-ii/
          线段树是一棵二叉树，他的每个节点包含了两个额外的属性start和end用于表示该节点所代表的区间。start和end都是整数，并按照如下的方式赋值:
