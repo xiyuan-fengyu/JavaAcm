@@ -4102,8 +4102,78 @@ public class Solutions184_564 {
         return 0;
     }
 
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/copy-books/
+     * @param pages: an array of integers
+     * @param k: an integer
+     * @return: an integer
+     */
+    public int copyBooks(int[] pages, int k) {
+        int len = pages.length;
+        if (len == 0) {
+            return 0;
+        }
+
+        int[][] dp = new int[k + 1][len];
+        for (int i = 0; i < len; i++) {
+            dp[1][i] = i == 0? pages[0]: dp[1][i - 1] + pages[i];
+        }
+
+        for (int i = 2; i <= k; i++) {
+            dp[i][1] = dp[1][1];
+            int left = 0;
+            int right = 1;
+            while (right < len) {
+                int delta = dp[1][right] - dp[1][left];
+                int temp = Math.max(delta, dp[i - 1][left]);
+                if (dp[i][right] == 0) {
+                    dp[i][right] = temp;
+                }
+                else {
+                    dp[i][right] = Math.min(temp, dp[i][right]);
+                }
+
+                if (left < right && dp[i - 1][left] < delta) {
+                    left++;
+                }
+                else {
+                    right++;
+                    if (left > 0) {
+                        left--;
+                    }
+                }
+            }
+        }
+        return dp[k][len - 1];
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         书籍复印   [困难]
+         http://www.lintcode.com/zh-cn/problem/copy-books/
+         给出一个数组A包含n个元素，表示n本书以及各自的页数。现在有个k个人复印书籍，每个人只能复印连续一段编号的书，比如A[1],A[2]由第一个人复印，但是不能A[1],A[3]由第一个人复印，求最少需要的时间复印所有书。
+         样例
+         A = [3,2,4],k = 2
+         返回5，第一个人复印前两本书
+         挑战
+         时间复杂度 O(nk)
+         */
+//        int[] pages = {3,6};
+//        int k = 2;
+//        XYLog.d(solutions.copyBooks(pages, k));
+
+
+
+
+
 
         /**
          最大正方形   [中等]
