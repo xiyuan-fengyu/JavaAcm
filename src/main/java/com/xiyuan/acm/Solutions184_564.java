@@ -4567,8 +4567,52 @@ public class Solutions184_564 {
     }
 
 
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/binary-tree-paths/
+     * @param root the root of the binary tree
+     * @return all root-to-leaf paths
+     */
+    public List<String> binaryTreePaths(TreeNode root) {
+        List<String> result = new ArrayList<>();
+        if (root != null) {
+            visiteTree(root, "", result);
+        }
+        return result;
+    }
+
+    private void visiteTree(TreeNode node, String str, List<String> result) {
+        str += str.equals("")? node.val: "->" + node.val;
+        if (node.left == null && node.right == null) {
+            result.add(str);
+        }
+        else {
+            if (node.left != null) {
+                visiteTree(node.left, str, result);
+            }
+
+            if (node.right != null) {
+                visiteTree(node.right, str, result);
+            }
+        }
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         二叉树的所有路径   [容易]
+         http://www.lintcode.com/zh-cn/problem/binary-tree-paths/
+         给一棵二叉树，找出从根节点到叶子节点的所有路径。
+         */
+//        TreeNode tree = TreeNodeFactory.build("1,2,3,#,5");
+//        XYLog.d(tree);
+//        XYLog.d(solutions.binaryTreePaths(tree));
+
+
 
         /**
          被围绕的区域   [中等]
