@@ -4366,8 +4366,51 @@ public class Solutions184_564 {
         }
     }
 
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/sort-integers/
+     * @param arr an integer array
+     * @return void
+     */
+    public void sortIntegers(int[] arr) {
+        int len = arr.length;
+        if (len > 1) {
+            for (int i = 0; i < len - 1; i++) {
+                int minI = i;
+                for (int j = i + 1; j < len; j++) {
+                    if (arr[minI] > arr[j]) {
+                        minI = j;
+                    }
+                }
+                if (minI > i) {
+                    int temp = arr[minI];
+                    arr[minI] = arr[i];
+                    arr[i] = temp;
+                }
+            }
+        }
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         整数排序   [入门]
+         http://www.lintcode.com/zh-cn/problem/sort-integers/
+         给一组整数，按照升序排序，使用选择排序，冒泡排序，插入排序或者任何 O(n2) 的排序算法。
+         样例
+         对于数组 [3, 2, 1, 4, 5], 排序后为：[1, 2, 3, 4, 5]。
+         */
+//        int[] arr = {3,2,1,4,5};
+//        solutions.sortIntegers(arr);
+//        XYLog.d(arr);
+
+
+
 
         /**
          将二叉树拆成链表   [容易]
