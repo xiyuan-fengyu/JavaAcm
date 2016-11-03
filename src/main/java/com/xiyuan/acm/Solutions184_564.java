@@ -4633,7 +4633,15 @@ public class Solutions184_564 {
         Solutions184_564 solutions = new Solutions184_564();
 
         /**
-         停车场   [困难]
+         单词计数 (Map Reduce版本)   [容易]
+         http://www.lintcode.com/zh-cn/problem/word-count-map-reduce/
+         */
+//        new WordCount();
+
+
+
+        /**
+         停车场   [困难]   [未通过]   [很可能时数据问题]
          http://www.lintcode.com/zh-cn/problem/parking-lot/
          设计一个停车场
          1. 一共有n层，每层m列，每列k个位置
