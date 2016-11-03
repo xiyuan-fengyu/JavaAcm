@@ -2,6 +2,7 @@ package com.xiyuan.acm.util;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by xiyuan_fengyu on 2016/9/9.
@@ -10,17 +11,24 @@ public class DataUtil {
 
     public static String getFileContent(String path) {
         StringBuilder strBld = new StringBuilder();
+        for (String line: getFileLines(path)) {
+            strBld.append(line).append('\n');
+        }
+        return strBld.toString();
+    }
+
+    public static List<String> getFileLines(String path) {
+        List<String> lines = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(path), "utf-8"))) {
             String line = null;
             while ((line = reader.readLine()) != null) {
-                strBld.append(line).append('\n');
+                lines.add(line);
             }
         }
         catch (Exception e) {
             e.printStackTrace();
         }
-
-        return strBld.toString();
+        return lines;
     }
 
     public static ArrayList<String> getStringArr(String path) {

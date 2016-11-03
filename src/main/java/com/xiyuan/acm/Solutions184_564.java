@@ -4644,7 +4644,7 @@ public class Solutions184_564 {
          6.一辆汽车可以停在一个汽车位或者大型停车位
          7.一辆公交车可以停在一列里的连续5个大型停车位。
          */
-        ParkingLot.test();
+//        ParkingLot.test();
 
 
 
