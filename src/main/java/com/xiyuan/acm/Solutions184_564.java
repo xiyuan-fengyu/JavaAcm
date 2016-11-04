@@ -4737,7 +4737,7 @@ public class Solutions184_564 {
 //        int[] nums = {1, 3, 2, 2, 3, 1};
 //        int[] nums = {1, 5, 1, 1, 6, 4};
 //        int[] nums = {2, 8, 4, 2, 1, 2, 6, 3, 1, 5, 7, 3, 4};
-        int[] nums = {1,3,2,2,3,1};
+        int[] nums = {1,3,2,2,3,1,1};
         solutions.wiggleSort(nums);
         XYLog.d(nums);
 
