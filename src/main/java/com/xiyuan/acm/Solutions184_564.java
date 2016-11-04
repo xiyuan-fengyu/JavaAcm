@@ -4629,8 +4629,123 @@ public class Solutions184_564 {
         return total;
     }
 
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/wiggle-sort-ii/
+     * @param nums a list of integer
+     * @return void
+     */
+    public void wiggleSort(int[] nums) {
+        int len = nums.length;
+        if (len > 1) {
+            findMid(nums, 0, len - 1);
+
+            int mid = (len - 1) / 2;
+            int key = nums[mid];
+
+            XYLog.d("len=" + len);
+            XYLog.d("mid=" + mid);
+            XYLog.d("midVal=" + key);
+
+            int[] cache = new int[len];
+            int leftMinIndex = 0;
+            int rightMaxIndex = 0;
+            int rightMinStart = (len - 1) / 2 * 2;
+            for (int i = 0; i <= mid; i++) {
+                if (nums[i] == key) {
+                    cache[leftMinIndex] = key;
+                    leftMinIndex += 2;
+                }
+                else {
+                    cache[rightMinStart - i * 2] = nums[i];
+                }
+
+                int rI = len - 1 - i;
+                if (rI > mid) {
+                    if (nums[rI] == key) {
+                        cache[rightMaxIndex] = key;
+                        rightMaxIndex -= 2;
+                    }
+                    else {
+                        cache[1 + i * 2] = nums[rI];
+                    }
+                }
+            }
+
+            System.arraycopy(cache, 0, nums, 0, len);
+
+
+
+
+
+        }
+    }
+
+    private void findMid(int[] nums, int left, int right) {
+        if (left < right) {
+            int len = nums.length;
+            int mid = (len - 1) / 2;
+
+            int key = nums[left];
+            int l = left;
+            int r = right;
+            while (l < r) {
+                while (l < r && nums[r] >= key) {
+                    r--;
+                }
+                nums[l] = nums[r];
+
+                while (l < r && nums[l] <= key) {
+                    l++;
+                }
+                nums[r] = nums[l];
+            }
+            nums[l] = key;
+
+            if (l < mid) {
+                findMid(nums, l + 1, right);
+            }
+            else if (l > mid) {
+                findMid(nums, left, l - 1);
+            }
+        }
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         摆动排序 II   [中等]
+         http://www.lintcode.com/zh-cn/problem/wiggle-sort-ii/
+         给你一个数组nums，将它重排列如下形式
+         nums[0] < nums[1] > nums[2] < nums[3]....
+         注意事项
+         你可以认为每个输入都有合法解
+         样例
+         给出 nums = [1, 5, 1, 1, 6, 4],一种方案为 [1, 4, 1, 5, 1, 6].
+         给出 nums = [1, 3, 2, 2, 3, 1],一种方案为 [2, 3, 1, 3, 1, 2].
+         挑战
+         O(N)时间复杂度 O(1)额外空间
+         */
+//        int[] nums = {1,2,1,2,1,1,2,2,1};
+//        int[] nums = {1, 3, 2, 2, 3, 1};
+//        int[] nums = {1, 5, 1, 1, 6, 4};
+//        int[] nums = {2, 8, 4, 2, 1, 2, 6, 3, 1, 5, 7, 3, 4};
+        int[] nums = {10,1,7,2,10,5,8,4,9,4,10,8,8,1,5,6,8,9,2,1};
+        solutions.wiggleSort(nums);
+        XYLog.d(nums);
+
+//        int[] arr0 = new int[]{10,1,7,2,10,5,8,4,9,4,10,8,8,1,5,6,8,9,2,1};
+//        int[] arr1 = new int[]{6, 10, 5, 10, 4, 9, 5, 8, 4, 8, 4, 9, 2, 10, 1, 8, 1, 8, 1, 7};
+//        Arrays.sort(arr0);
+//        Arrays.sort(arr1);
+//        XYLog.d(arr0);
+//        XYLog.d(arr1);
+
 
         /**
          迷你推特   [中等]
