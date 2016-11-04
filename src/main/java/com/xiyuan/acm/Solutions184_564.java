@@ -4651,9 +4651,11 @@ public class Solutions184_564 {
             XYLog.d("mid=" + mid);
             XYLog.d("midVal=" + key);
 
+            XYLog.d(nums);
+
             int[] cache = new int[len];
             int leftMinIndex = 0;
-            int rightMaxIndex = 0;
+            int rightMaxIndex = len / 2 * 2 - 1;
             int rightMinStart = (len - 1) / 2 * 2;
             for (int i = 0; i <= mid; i++) {
                 if (nums[i] == key) {
@@ -4735,7 +4737,7 @@ public class Solutions184_564 {
 //        int[] nums = {1, 3, 2, 2, 3, 1};
 //        int[] nums = {1, 5, 1, 1, 6, 4};
 //        int[] nums = {2, 8, 4, 2, 1, 2, 6, 3, 1, 5, 7, 3, 4};
-        int[] nums = {10,1,7,2,10,5,8,4,9,4,10,8,8,1,5,6,8,9,2,1};
+        int[] nums = {1,3,2,2,3,1};
         solutions.wiggleSort(nums);
         XYLog.d(nums);
 
