@@ -30,6 +30,18 @@ public class PrintUtil {
         System.out.println(strBld.toString());
     }
 
+    public static void arr(String[] arr, int perNumLen, int gap) {
+        StringBuilder strBld = new StringBuilder();
+        String gapStr = "";
+        for (int i = 0; i < gap; ++i) {
+            gapStr += " ";
+        }
+        for (String i: arr) {
+            strBld.append(String.format("%" + perNumLen + "s", i)).append(gapStr);
+        }
+        System.out.println(strBld.toString());
+    }
+
     public static void matrix(int[][] matrix, int perNumLen, int gap) {
         StringBuilder strBld = new StringBuilder();
         String gapStr = "";

@@ -3,6 +3,7 @@ package com.xiyuan.acm;
 import com.xiyuan.acm.factory.SegmentTreeNodeFactory;
 import com.xiyuan.acm.factory.TreeNodeFactory;
 import com.xiyuan.acm.model.*;
+import com.xiyuan.acm.util.DataUtil;
 import com.xiyuan.acm.util.PrintUtil;
 import com.xiyuan.util.XYLog;
 
@@ -4651,40 +4652,81 @@ public class Solutions184_564 {
             XYLog.d("mid=" + mid);
             XYLog.d("midVal=" + key);
 
-            XYLog.d(nums);
+            PrintUtil.arr(Arrays.copyOfRange(nums, 0, (len - 1) / 2 + 1), 2, 1);
+            PrintUtil.arr(Arrays.copyOfRange(nums, (len - 1) / 2 + 1, len), 2, 1);
 
-            int[] cache = new int[len];
-            int leftMinIndex = 0;
-            int rightMaxIndex = len / 2 * 2 - 1;
-            int rightMinStart = (len - 1) / 2 * 2;
-            for (int i = 0; i <= mid; i++) {
-                if (nums[i] == key) {
-                    cache[leftMinIndex] = key;
-                    leftMinIndex += 2;
+
+            //使用了o(n)的额外空间
+//            int[] cache = new int[len];
+//            int leftMinIndex = 0;
+//            int rightMinIndex = (len - 1) / 2 * 2;
+//            int leftMaxIndex = 1;
+//            int rightMaxIndex = len / 2 * 2 - 1;
+//            for (int i = 0; i <= mid; i++) {
+//                if (nums[i] == key) {
+//                    cache[leftMinIndex] = key;
+//                    leftMinIndex += 2;
+//                }
+//                else {
+//                    cache[rightMinIndex] = nums[i];
+//                    rightMinIndex -= 2;
+//                }
+//
+//                int rI = len - 1 - i;
+//                if (rI > mid) {
+//                    if (nums[rI] == key) {
+//                        cache[rightMaxIndex] = key;
+//                        rightMaxIndex -= 2;
+//                    }
+//                    else {
+//                        cache[leftMaxIndex] = nums[rI];
+//                        leftMaxIndex += 2;
+//                    }
+//                }
+//            }
+//            System.arraycopy(cache, 0, nums, 0, len);
+
+
+
+            //不使用额外空间
+            int i = 0;
+            int j = 0;
+            int k = len - 1;
+            while (j <= k) {
+                int sJ = (1 + j * 2) % (len | 1);
+                if (nums[sJ] > key) {
+                    specialSwap(nums, i++, j++);
+                }
+                else if (nums[sJ] < key) {
+                    specialSwap(nums, j, k--);
                 }
                 else {
-                    cache[rightMinStart - i * 2] = nums[i];
-                }
-
-                int rI = len - 1 - i;
-                if (rI > mid) {
-                    if (nums[rI] == key) {
-                        cache[rightMaxIndex] = key;
-                        rightMaxIndex -= 2;
-                    }
-                    else {
-                        cache[1 + i * 2] = nums[rI];
-                    }
+                    j++;
                 }
             }
-
-            System.arraycopy(cache, 0, nums, 0, len);
-
 
 
 
 
         }
+    }
+
+    private void specialSwap(int[] nums, int i, int j) {
+//        PrintUtil.arr(nums, 1, 2);
+
+        int len = nums.length;
+        int sI = (1 + i * 2) % (len | 1);
+        int sJ = (1 + j * 2) % (len | 1);
+        int temp = nums[sI];
+        nums[sI] = nums[sJ];
+        nums[sJ] = temp;
+
+//        String[] tempArr = new String[len];
+//        Arrays.fill(tempArr, " ");
+//        tempArr[sI] = "" + nums[sI];
+//        tempArr[sJ] = "" + nums[sJ];
+//        PrintUtil.arr(tempArr, 1, 2);
+//        System.out.println();
     }
 
     private void findMid(int[] nums, int left, int right) {
@@ -4723,6 +4765,7 @@ public class Solutions184_564 {
         /**
          摆动排序 II   [中等]
          http://www.lintcode.com/zh-cn/problem/wiggle-sort-ii/
+         答案参考：http://bookshadow.com/weblog/2015/12/31/leetcode-wiggle-sort-ii/
          给你一个数组nums，将它重排列如下形式
          nums[0] < nums[1] > nums[2] < nums[3]....
          注意事项
@@ -4733,20 +4776,26 @@ public class Solutions184_564 {
          挑战
          O(N)时间复杂度 O(1)额外空间
          */
-//        int[] nums = {1,2,1,2,1,1,2,2,1};
+        int[] nums = {1,2,1,2,1,1,2,2,1};
 //        int[] nums = {1, 3, 2, 2, 3, 1};
 //        int[] nums = {1, 5, 1, 1, 6, 4};
 //        int[] nums = {2, 8, 4, 2, 1, 2, 6, 3, 1, 5, 7, 3, 4};
-        int[] nums = {1,3,2,2,3,1,1};
+//        int[] nums = {1,2,1,2,1,2,1,2,1,2};
+//        int[] nums = DataUtil.getIntArr("data/wiggle-sort-ii-66.in");
+        int[] arr0 = new int[nums.length];
+        System.arraycopy(nums, 0, arr0, 0, nums.length);
         solutions.wiggleSort(nums);
         XYLog.d(nums);
 
-//        int[] arr0 = new int[]{10,1,7,2,10,5,8,4,9,4,10,8,8,1,5,6,8,9,2,1};
-//        int[] arr1 = new int[]{6, 10, 5, 10, 4, 9, 5, 8, 4, 8, 4, 9, 2, 10, 1, 8, 1, 8, 1, 7};
-//        Arrays.sort(arr0);
-//        Arrays.sort(arr1);
-//        XYLog.d(arr0);
-//        XYLog.d(arr1);
+        int[] arr1 = nums;
+        Arrays.sort(arr0);
+        Arrays.sort(arr1);
+        XYLog.d(arr0);
+        XYLog.d(arr1);
+
+
+
+
 
 
         /**
