@@ -4648,12 +4648,12 @@ public class Solutions184_564 {
             int mid = (len - 1) / 2;
             int key = nums[mid];
 
-            XYLog.d("len=" + len);
-            XYLog.d("mid=" + mid);
-            XYLog.d("midVal=" + key);
-
-            PrintUtil.arr(Arrays.copyOfRange(nums, 0, (len - 1) / 2 + 1), 2, 1);
-            PrintUtil.arr(Arrays.copyOfRange(nums, (len - 1) / 2 + 1, len), 2, 1);
+//            XYLog.d("len=" + len);
+//            XYLog.d("mid=" + mid);
+//            XYLog.d("midVal=" + key);
+//
+//            PrintUtil.arr(Arrays.copyOfRange(nums, 0, (len - 1) / 2 + 1), 2, 1);
+//            PrintUtil.arr(Arrays.copyOfRange(nums, (len - 1) / 2 + 1, len), 2, 1);
 
 
             //使用了o(n)的额外空间
@@ -4776,22 +4776,22 @@ public class Solutions184_564 {
          挑战
          O(N)时间复杂度 O(1)额外空间
          */
-        int[] nums = {1,2,1,2,1,1,2,2,1};
-//        int[] nums = {1, 3, 2, 2, 3, 1};
-//        int[] nums = {1, 5, 1, 1, 6, 4};
-//        int[] nums = {2, 8, 4, 2, 1, 2, 6, 3, 1, 5, 7, 3, 4};
-//        int[] nums = {1,2,1,2,1,2,1,2,1,2};
-//        int[] nums = DataUtil.getIntArr("data/wiggle-sort-ii-66.in");
-        int[] arr0 = new int[nums.length];
-        System.arraycopy(nums, 0, arr0, 0, nums.length);
-        solutions.wiggleSort(nums);
-        XYLog.d(nums);
-
-        int[] arr1 = nums;
-        Arrays.sort(arr0);
-        Arrays.sort(arr1);
-        XYLog.d(arr0);
-        XYLog.d(arr1);
+//        int[] nums = {1,2,1,2,1,1,2,2,1};
+////        int[] nums = {1, 3, 2, 2, 3, 1};
+////        int[] nums = {1, 5, 1, 1, 6, 4};
+////        int[] nums = {2, 8, 4, 2, 1, 2, 6, 3, 1, 5, 7, 3, 4};
+////        int[] nums = {1,2,1,2,1,2,1,2,1,2};
+////        int[] nums = DataUtil.getIntArr("data/wiggle-sort-ii-66.in");
+//        int[] arr0 = new int[nums.length];
+//        System.arraycopy(nums, 0, arr0, 0, nums.length);
+//        solutions.wiggleSort(nums);
+//        XYLog.d(nums);
+//
+//        int[] arr1 = nums;
+//        Arrays.sort(arr0);
+//        Arrays.sort(arr1);
+//        XYLog.d(arr0);
+//        XYLog.d(arr1);
 
 
 
