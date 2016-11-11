@@ -4759,8 +4759,59 @@ public class Solutions184_564 {
         }
     }
 
+
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/wiggle-sort/
+     * @param nums a list of integer
+     * @return void
+     */
+    public void wiggleSortI(int[] nums) {
+        int len = nums.length;
+        for (int i = 0; i < len - 1; i++) {
+            if (i % 2 == 0) {
+                if (nums[i] > nums[i + 1]) {
+                    wiggleSortSwap(nums, i, i + 1);
+                }
+            }
+            else {
+                if (nums[i] < nums[i + 1]) {
+                    wiggleSortSwap(nums, i, i + 1);
+                }
+            }
+        }
+    }
+
+    private void wiggleSortSwap(int[] nums, int i1, int i2) {
+        int temp = nums[i1];
+        nums[i1] = nums[i2];
+        nums[i2] = temp;
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         摆动排序   [中等]
+         http://www.lintcode.com/zh-cn/problem/wiggle-sort/
+         给你一个没有排序的数组，请将原数组就地重新排列满足如下性质
+         nums[0] <= nums[1] >= nums[2] <= nums[3]....
+         注意事项
+         请就地排序数组，也就是不需要额外数组
+         样例
+         给出数组为 nums = [3, 5, 2, 1, 6, 4] 一种输出方案为 [1, 6, 2, 5, 3, 4]
+         */
+        int[] nums = {3, 5, 2, 1, 6, 4};
+        solutions.wiggleSortI(nums);
+        XYLog.d(nums);
+
+
+
 
         /**
          摆动排序 II   [中等]
