@@ -4806,9 +4806,9 @@ public class Solutions184_564 {
          样例
          给出数组为 nums = [3, 5, 2, 1, 6, 4] 一种输出方案为 [1, 6, 2, 5, 3, 4]
          */
-        int[] nums = {3, 5, 2, 1, 6, 4};
-        solutions.wiggleSortI(nums);
-        XYLog.d(nums);
+//        int[] nums = {3, 5, 2, 1, 6, 4};
+//        solutions.wiggleSortI(nums);
+//        XYLog.d(nums);
 
 
 
