@@ -4793,8 +4793,94 @@ public class Solutions184_564 {
         nums[i2] = temp;
     }
 
+
+
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/maximal-rectangle/
+     * @param matrix a boolean 2D matrix
+     * @return an integer
+     */
+    public int maximalRectangle(boolean[][] matrix) {
+        int row = matrix.length;
+        if (row == 0) {
+            return 0;
+        }
+
+        int result = 0;
+        int column = matrix[0].length;
+        int[][] columnSum = new int[row][column];
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < column; j++) {
+                if (i == 0) {
+                    columnSum[i][j] = matrix[i][j]? 1: 0;
+                }
+                else {
+                    columnSum[i][j] = matrix[i][j]? 1 + columnSum[i - 1][j]: 0;
+                }
+            }
+        }
+
+        for (int i = 0; i < row; i++) {
+            result = Math.max(result, largestRectangleArea(columnSum[i]));
+        }
+        return result;
+    }
+
+
+    private int largestRectangleArea(int[] arr) {
+        int result = 0;
+        Stack<Integer> cache = new Stack<>();
+        for (int i = 0, len = arr.length; i <= len; i++) {
+            int height = i == len? 0: arr[i];
+
+            if (cache.isEmpty() || arr[cache.peek()] < height) {
+                cache.push(i);
+            }
+            else {
+                int topIndex = cache.pop();
+                result = Math.max(result, arr[topIndex] * (cache.isEmpty()? i: (i - cache.peek() - 1)));
+                i--;
+            }
+        }
+        return result;
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         最大矩形   [困难]
+         http://www.lintcode.com/zh-cn/problem/maximal-rectangle/
+         给你一个二维矩阵，权值为False和True，找到一个最大的矩形，使得里面的值全部为True，输出它的面积
+         样例
+         给你一个矩阵如下
+         [
+         [1, 1, 0, 0, 1],
+         [0, 1, 0, 0, 1],
+         [0, 0, 1, 1, 1],
+         [0, 0, 1, 1, 1],
+         [0, 0, 0, 0, 1]
+         ]
+         输出6
+         */
+//        boolean[][] matrix = {
+//                {true, true, false, true, true},
+//                {false, true, true, true, true},
+//                {true, true, true, true, true},
+//                {true, true, true, true, true},
+//                {true, true, true, true, false}
+//        };
+////        boolean[][] matrix = {{true, true, true, true, true, true, true, true, true, true, true, true, true, true, false, true, false, false, true, true, true, true, true, true, true, true, false, false, true, true, true, false, true, true, true, true, true, true, true, true}, {true, true, true, true, false, true, true, false, true, true, true, true, true, true, true, true, true, false, true, true, false, true, true, true, true, true, false, true, true, true, true, true, true, true, true, true, true, true, true, true}, {false, true, true, true, true, false, true, false, true, true, true, true, true, true, false, true, true, false, true, true, false, true, true, false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true}, {false, true, false, true, true, false, true, false, true, true, true, true, true, true, true, true, true, true, true, true, false, true, true, true, true, true, true, true, false, true, false, true, true, false, true, true, true, true, true, true}, {true, true, true, true, true, true, true, true, true, true, true, true, false, true, true, true, true, true, false, true, true, false, false, true, false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true}, {true, true, true, true, true, true, true, true, true, false, true, true, false, true, false, true, true, true, true, true, true, true, true, true, true, true, false, true, false, true, true, true, true, true, true, false, true, true, true, true}, {false, true, true, false, true, true, false, true, false, true, true, true, false, false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, false, true, true, true, true, true, false, true, false, true}, {false, true, true, true, true, true, true, true, true, true, true, true, true, true, false, false, true, true, true, true, true, true, true, false, false, true, true, false, false, true, true, false, true, true, false, true, false, true, false, true}, {true, true, true, true, false, true, true, true, true, false, true, true, true, true, true, true, true, true, true, false, true, true, false, true, true, false, true, true, true, true, false, true, false, true, true, false, true, false, true, true}, {true, true, true, true, true, true, true, true, true, false, true, true, true, true, true, true, true, true, true, true, false, true, true, false, true, true, false, true, true, true, false, true, true, true, true, false, true, true, true, true}, {true, true, true, false, true, true, false, false, true, true, true, true, true, true, true, true, true, true, true, true, false, false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true}, {true, false, true, true, true, true, true, true, true, false, true, true, true, true, false, true, true, true, true, false, false, true, true, true, false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true}, {false, true, true, false, true, true, true, true, true, true, true, true, true, true, true, true, true, false, true, true, true, true, true, true, false, true, true, true, false, true, true, true, true, true, false, true, true, true, true, true}, {true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, false, true, true, true, true, true, true, true, true, true, true, true, true, true, false, true, true, true, true, true, true, false, true, true}, {true, true, true, true, true, false, false, true, true, true, true, true, true, true, true, false, true, false, true, true, false, false, true, true, true, true, true, true, true, true, true, true, true, true, true, false, true, true, true, true}, {true, true, true, true, true, false, true, true, true, true, true, true, true, true, true, false, true, true, true, true, true, true, false, true, true, true, true, true, true, true, true, true, true, true, false, true, true, true, true, true}, {true, true, true, true, true, false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, false, true, true, false, false, true, true, true, true, true, true, false, false, true, true, true, true, true}, {true, true, true, true, true, true, false, true, true, true, true, true, true, true, true, true, false, true, true, true, true, true, true, true, true, true, true, true, true, true, false, true, true, true, true, true, false, true, true, true}, {true, false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, false, true, false, true, true, true, true, true, false, false, true, false, true, true, true, true, true, false, true, true, true, true, true, true}, {true, true, true, true, true, true, false, false, true, true, true, true, true, true, true, true, true, true, true, true, true, false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, false, true, true}, {true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, false, true, true, true, false, true, true, true, true, true, false, true, true, true, true, true, false, true, true, false, true, true}, {true, true, false, false, false, true, true, false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, false, true, true, true, true, true, false, true, true, true, true, true, true, true, true, true, true, true}, {true, true, true, true, true, false, true, false, true, true, true, true, true, true, true, true, true, true, true, true, false, true, true, false, false, true, false, true, true, true, false, false, true, true, true, true, true, true, true, true}, {true, true, true, false, false, true, false, true, true, true, true, true, true, true, true, true, true, true, true, false, true, true, false, true, true, true, true, false, true, true, true, true, false, true, true, true, true, true, false, true}, {true, true, true, true, true, true, true, true, true, true, true, true, true, true, false, true, true, false, true, true, true, true, true, true, true, true, true, true, true, false, true, true, true, true, true, true, true, true, true, true}, {true, true, true, true, true, true, true, false, true, true, true, true, true, true, false, true, true, true, true, false, true, true, true, true, true, true, true, true, true, true, true, true, true, false, true, true, true, true, true, true}, {true, true, true, false, false, true, true, true, true, true, true, true, true, true, true, false, true, true, true, false, true, true, true, true, true, true, true, true, true, true, false, true, true, true, true, true, false, true, true, true}, {true, true, true, true, true, true, true, true, true, true, true, true, true, true, false, false, true, true, true, true, true, true, false, true, false, true, true, true, true, true, true, true, true, true, true, true, false, true, true, true}, {true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, false, false, false, true, true, true, true, true, true, true, true, true, false, true, true, true, false, true}, {true, true, true, true, true, true, false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, false, true, true, false, false, true, true, true, false, true, true, false, true, true}, {true, true, true, true, false, true, true, false, true, true, true, true, true, true, false, true, true, false, true, true, false, true, true, true, true, true, true, false, true, true, true, true, true, true, true, false, true, true, true, true}, {true, true, true, true, true, true, true, true, true, true, false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true}, {true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true}, {true, true, false, false, false, true, true, true, true, true, true, true, true, true, true, false, true, true, true, true, true, true, true, true, true, true, true, true, true, false, true, true, true, true, true, true, true, false, true, true}, {true, true, true, true, true, false, true, true, true, true, true, true, true, true, false, true, true, true, true, false, true, false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true}, {false, true, true, true, true, true, true, true, true, true, true, true, false, false, true, true, true, true, true, true, true, true, true, true, false, true, false, true, false, true, true, false, true, true, true, true, true, true, true, true}, {true, false, true, true, false, true, true, true, true, true, true, false, true, true, true, true, true, true, true, true, true, true, true, false, true, true, true, true, true, true, true, true, true, true, true, true, false, false, true, true}, {true, false, true, false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, false, false, true, true, true, true, true}, {false, true, true, true, true, false, true, true, true, true, false, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, true, false, true, true, true, true, true, true, true, true, true}, {false, true, true, true, true, true, true, false, true, true, true, true, true, true, true, true, false, true, true, true, false, true, true, true, true, false, true, true, true, false, true, true, true, true, true, true, true, true, true, true}, {false, true, true, true, true, true, true, true, true, true, true, true, false, true, false, true, true, true, true, false, true, true, true, true, true, true, false, true, false, true, true, false, false, true, true, true, true, false, true, true}, {true, true, true, true, true, true, true, true, true, true, true, true, true, false, true, true, true, true, false, true, true, true, true, true, true, true, false, true, true, true, true, true, true, true, true, false, true, true, true, false}, {true, true, true, true, true, false, true, true, true, true, true, true, true, true, false, false, true, true, true, true, true, true, true, true, true, true, true, false, true, true, true, true, true, true, false, false, true, true, true, true}, {true, true, false, true, true, false, true, true, true, true, true, true, false, true, false, true, true, true, true, true, false, true, true, true, true, true, true, true, true, false, false, true, true, true, false, true, false, true, false, false}, {false, true, true, false, true, true, true, true, true, true, true, false, false, true, true, true, true, true, false, false, true, false, true, true, true, true, true, false, true, true, true, false, true, true, false, true, true, true, false, true}};
+//        XYLog.d(solutions.maximalRectangle(matrix));
+
+
+
 
         /**
          摆动排序   [中等]

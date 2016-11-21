@@ -57,6 +57,25 @@ public class PrintUtil {
         System.out.println(strBld.toString());
     }
 
+    public static <T> void matrix(T[][] matrix, int gap, ToStr<T> translator) {
+        StringBuilder strBld = new StringBuilder();
+        String gapStr = "";
+        for (int i = 0; i < gap; ++i) {
+            gapStr += " ";
+        }
+        for (T is[]: matrix) {
+            for (T i: is) {
+                strBld.append(translator.translate(i)).append(gapStr);
+            }
+            strBld.append('\n');
+        }
+        System.out.println(strBld.toString());
+    }
+
+    public interface ToStr<T> {
+        String translate(T t);
+    }
+
     public static void matrix(char[][] matrix, int gap) {
         StringBuilder strBld = new StringBuilder();
         String gapStr = "";
