@@ -5185,9 +5185,86 @@ public class Solutions184_564 {
         return false;
     }
 
+    public boolean isUgly(int num, int[] primes) {
+        if (num == 0) {
+            return false;
+        }
+        else if (num == 1) {
+            return true;
+        }
+
+        for (int i: primes) {
+            if (num % i == 0) {
+                return isUgly(num / i, primes);
+            }
+        }
+
+        return false;
+    }
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/super-ugly-number/
+     * @param n a positive integer
+     * @param primes the given prime list
+     * @return the nth super ugly number
+     */
+    public int nthSuperUglyNumber(int n, int[] primes) {
+        if (n <= 1) {
+            return 1;
+        }
+
+        Arrays.sort(primes);
+        int len = primes.length;
+        ArrayList<Integer> nums = new ArrayList<>();
+        nums.add(1);
+        nums.add(primes[0]);
+        while (nums.size() < n) {
+            int size = nums.size();
+            int top = nums.get(size - 1);
+            int min = Integer.MAX_VALUE;
+
+            for (Integer num : nums) {
+                for (int j = len - 1; j > -1; j--) {
+                    long temp = num * (long) primes[j];
+                    if (temp > top) {
+                        if (temp < min) {
+                            min = (int) temp;
+                        }
+                    } else {
+                        break;
+                    }
+                }
+            }
+            nums.add(min);
+        }
+
+        return nums.get(n - 1);
+    }
 
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         超级丑数   [中等]
+         http://www.lintcode.com/zh-cn/problem/super-ugly-number/
+         写一个程序来找第 n 个超级丑数。
+         超级丑数的定义是正整数并且所有的质数因子都在所给定的一个大小为 k 的质数集合内。
+         比如给你 4 个质数的集合 [2, 7, 13, 19], 那么 [1, 2, 4, 7, 8, 13, 14, 16, 19, 26, 28, 32] 是前 12 个超级丑数。
+         注意事项
+         1 永远都是超级丑数不管给的质数集合是什么。
+         给你的质数集合已经按照升序排列(你TM在逗我，实际给的输入并没有升序排序)。
+         0 < k ≤ 100, 0 < n ≤ 10^6, 0 < primes[i] < 1000
+         */
+        int k = 299;//15145219
+        int[] primes = {89,449,499,79,457,311,281,181,271,419,379,347,131};
+//        int k = 12;//32
+//        int[] primes = {2, 7, 13, 19};
+        XYLog.d(solutions.nthSuperUglyNumber(k, primes));
+
+
 
         /**
          丑数   [容易]
