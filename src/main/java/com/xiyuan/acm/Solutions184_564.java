@@ -4908,8 +4908,88 @@ public class Solutions184_564 {
         return newHead.next;
     }
 
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/decode-ways/
+     * @param str a string,  encoded message
+     * @return an integer, the number of ways decoding
+     */
+    public int numDecodings(String str) {
+        if (str.isEmpty()) return 0;
+        else return numDecodings(str, 0);
+    }
+
+    private HashMap<String, Integer> newDecodingCache = new HashMap<>();
+
+    private int numDecodings(String str, int index) {
+        String key = str + "_" + index;
+        if (newDecodingCache.containsKey(key)) {
+            return newDecodingCache.get(key);
+        }
+
+        int result;
+
+        int len = str.length();
+        if (index >= len) {
+            result = 1;
+        }
+        else if (index + 1 == len) {
+            result = str.charAt(index) == '0'? 0: 1;
+        }
+        else {
+            char c1 = str.charAt(index);
+            char c2 = str.charAt(index + 1);
+            if (c1 == '0') {
+                result = 0;
+            }
+            else if (c1 == '1') {
+                result = numDecodings(str, index + 1) + numDecodings(str, index + 2);
+            }
+            else if (c1 == '2') {
+                if (c2 <= '6') {
+                    result = numDecodings(str, index + 1) + numDecodings(str, index + 2);
+                }
+                else {
+                    result =  numDecodings(str, index + 1);
+                }
+            }
+            else {
+                result = numDecodings(str, index + 1);
+            }
+        }
+
+        newDecodingCache.put(key, result);
+        return result;
+    }
+
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         解码方法   [中等]
+         http://www.lintcode.com/zh-cn/problem/decode-ways/
+         有一个消息包含A-Z通过以下规则编码
+         'A' -> 1
+         'B' -> 2
+         ...
+         'Z' -> 26
+         现在给你一个加密过后的消息，问有几种解码的方式
+         样例
+         给你的消息为12，有两种方式解码 AB(12) 或者 L(12). 所以返回 2
+         */
+//        String str = "123";
+//        XYLog.d(solutions.numDecodings(str));
+
+
+
+
+
 
         /**
          交换链表当中两个节点   [中等]
