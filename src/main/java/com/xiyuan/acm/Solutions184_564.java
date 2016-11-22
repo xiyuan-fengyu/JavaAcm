@@ -5065,32 +5065,92 @@ public class Solutions184_564 {
         }
 
         int k = costs[0].length;
-        //f[i][j] 表示前i个房子中，第i个房子组成第j种颜色的最小费用
-        int[][] f = new int[n][k];
+        //f[j] 表示前i个房子中，第i个房子组成第j种颜色的最小费用
+        int[] f = new int[k];
         for (int i = 0; i < k; i++) {
-            f[0][i] = costs[0][i];
+            f[i] = costs[0][i];
         }
 
+        int min = Integer.MAX_VALUE;
+        int[] tempF = new int[k];
+        Arrays.fill(tempF, Integer.MAX_VALUE);
         for (int i = 1; i < n; i++) {
             for (int j = 0; j < k; j++) {
                 for (int m = 0; m < k; m++) {
                     if (j != m) {
-                        if (f[i][j] == 0) {
-                            f[i][j] = f[i - 1][m];
-                        }
-                        else {
-                            f[i][j] = Math.min(f[i][j], f[i - 1][m]);
-                        }
+                        tempF[j] = Math.min(tempF[j], f[m]);
                     }
                 }
-                f[i][j] += costs[i][j];
+                tempF[j] += costs[i][j];
+            }
+
+            if (i == n - 1) {
+                for (int j = 0; j < k; j++) {
+                    if (min > tempF[j]) {
+                        min = tempF[j];
+                    }
+                }
+            }
+            else {
+                for (int j = 0; j < k; j++) {
+                    f[j] = tempF[j];
+                    tempF[j] = Integer.MAX_VALUE;
+                }
             }
         }
+        return min;
+    }
 
-        int min = f[n - 1][0];
-        for (int i = 1; i < k; i++) {
-            if (min > f[n - 1][i]) {
-                min = f[n - 1][i];
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/paint-house-ii/
+     * @param costs n x k cost matrix
+     * @return an integer, the minimum cost to paint all houses
+     */
+    public int minCostII(int[][] costs) {
+        int n = costs.length;
+        if (n == 0) {
+            return 0;
+        }
+
+        int k = costs[0].length;
+        int min = Integer.MAX_VALUE;
+
+        //f[j] 表示前i个房子中，第i个房子组成第j种颜色的最小费用
+        int[] f = new int[k];
+        int[] leftMins = new int[k];
+        int[] rightMins = new int[k];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < k; j++) {
+                if (j == 0) {
+                    f[j] = costs[i][j] + rightMins[j + 1];
+                }
+                else if (j == k - 1) {
+                    f[j] = costs[i][j] + leftMins[j - 1];
+                }
+                else {
+                    f[j] = costs[i][j] + Math.min(leftMins[j - 1], rightMins[j + 1]);
+                }
+            }
+
+            if (i == n - 1) {
+                for (int j = 0; j < k; j++) {
+                    if (min > f[j]) {
+                        min = f[j];
+                    }
+                }
+            }
+            else {
+                leftMins[0] = f[0];
+                rightMins[k - 1] = f[k - 1];
+                for (int j = 1; j < k - 1; j++) {
+                    leftMins[j] = Math.min(leftMins[j - 1], f[j]);
+                    rightMins[k - j - 1] = Math.min(rightMins[k - j], f[k - j - 1]);
+                }
             }
         }
         return min;
@@ -5100,11 +5160,25 @@ public class Solutions184_564 {
         Solutions184_564 solutions = new Solutions184_564();
 
         /**
+         房屋染色II   [困难]
+         http://www.lintcode.com/zh-cn/problem/paint-house-ii/
+         挑战
+         用O(nk)的时间复杂度解决
+         */
+//        int[][] costs = {{7, 14, 9, 12}, {10, 14, 2, 9}, {5, 9, 7, 9}, {5, 6, 17, 6}, {9, 14, 9, 17}, {1, 17, 17, 5}, {15, 16, 11, 15}, {5, 19, 15, 1}, {19, 1, 17, 6}, {9, 8, 9, 6}, {8, 11, 6, 1}, {11, 7, 18, 8}, {4, 5, 18, 7}, {15, 18, 19, 12}, {1, 12, 13, 10}, {18, 3, 14, 17}};
+////        int[][] costs = {{1, 2, 11}, {22, 14, 5}, {14, 3, 10}};
+//        XYLog.d(solutions.minCostII(costs));
+
+
+
+
+
+        /**
          房屋染色   [中等]
          http://www.lintcode.com/zh-cn/problem/paint-house/
-         这里有n个房子在一列直线上，现在我们需要给房屋染色，分别有红色蓝色和绿色。
+         这里有n个房子在一列直线上，现在我们需要给房屋染色，分别有k种颜色。
          每个房屋染不同的颜色费用也不同，你需要设计一种染色方案使得相邻的房屋颜色不同，并且费用最小。
-         费用通过一个nx3 的矩阵给出，比如cost[0][0]表示房屋0染红色的费用，cost[1][2]表示房屋1染绿色的费用。
+         费用通过一个nx3 的矩阵给出，比如cost[0][0]表示房屋0染第0种颜色的费用，cost[1][2]表示房屋1染第2种颜色的费用。
          注意事项
          所有费用都是正整数
          样例
