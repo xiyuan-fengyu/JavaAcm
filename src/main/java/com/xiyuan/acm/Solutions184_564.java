@@ -4968,8 +4968,66 @@ public class Solutions184_564 {
     }
 
 
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/perfect-squares/
+     * @param n a positive integer
+     * @return an integer
+     */
+    public int numSquares(int n) {
+        if (n <= 3) {
+            return n;
+        }
+
+        if (numSquaresCache.containsKey(n)) {
+            return numSquaresCache.get(n);
+        }
+
+        int startIndex = (int) Math.pow(n, 0.5);
+        int endIndex = (int) Math.pow(startIndex, 0.5);
+        int min = n;
+        for (int i = startIndex; i >= endIndex; i--) {
+            int temp = numSquares(n - i * i);
+            if (temp <= 1) {
+                min = temp;
+                break;
+            }
+            else {
+                min = Math.min(min, temp);
+            }
+        }
+        numSquaresCache.put(n, min + 1);
+        return min + 1;
+    }
+
+    private HashMap<Integer, Integer> numSquaresCache = new HashMap<>();
+
+
+
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+
+
+        /**
+         完美平方   [中等]
+         http://www.lintcode.com/zh-cn/problem/perfect-squares/
+         给一个正整数 n, 找到若干个完全平方数(比如1, 4, 9, ... )使得他们的和等于 n。你需要让平方数的个数最少。
+         样例
+         给出 n = 12, 返回 3 因为 12 = 4 + 4 + 4。
+         给出 n = 13, 返回 2 因为 13 = 4 + 9。
+         */
+//        int n = 24;
+//        XYLog.d(solutions.numSquares(n));
+
+
+
 
         /**
          解码方法   [中等]
