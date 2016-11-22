@@ -5010,8 +5010,59 @@ public class Solutions184_564 {
 
 
 
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/paint-fence/
+     * @param n non-negative integer, n posts
+     * @param k non-negative integer, k colors
+     * @return an integer, the total number of ways
+     */
+    public int numWays(int n, int k) {
+        if (n <= 1) {
+            return n * k;
+        }
+        else if (k == 1) {
+            return  n == 2? 1: 0;
+        }
+        return (numWaysIt(n - 1, k - 1) + numWaysIt(n - 2, k - 1)) * k;
+    }
+
+    private int numWaysIt(int n, int k) {
+        if (n == 1) {
+            return k;
+        }
+        else if (n == 0) {
+            return 1;
+        }
+
+        String key = n + "_" + k;
+        if (numWaysCache.containsKey(key)) {
+            return numWaysCache.get(key);
+        }
+
+        int result = k * numWaysIt(n - 1, k) + k * numWaysIt(n - 2, k);
+        numWaysCache.put(key, result);
+        return result;
+    }
+
+    private HashMap<String, Integer> numWaysCache = new HashMap<>();
+
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         栅栏染色   [容易]
+         http://www.lintcode.com/zh-cn/problem/paint-fence/
+         我们有一个栅栏，它有n个柱子，现在要给柱子染色，有k种颜色可以染。
+         最多有两个连续柱子染同样颜色，求有多少种染色方案。
+         注意事项
+         n和k都是非负整数
+         */
+//        int n = 2;
+//        int k = 11;
+//        XYLog.d(solutions.numWays(n, k));
 
 
 
