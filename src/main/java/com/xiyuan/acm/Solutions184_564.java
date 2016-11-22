@@ -5197,8 +5197,8 @@ public class Solutions184_564 {
          注意事项
          可以认为 1 是一个特殊的丑数。
          */
-        int n = 14;
-        XYLog.d(solutions.isUgly(n));
+//        int n = 14;
+//        XYLog.d(solutions.isUgly(n));
 
 
 
