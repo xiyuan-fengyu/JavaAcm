@@ -1,5 +1,6 @@
 package com.xiyuan.acm;
 
+import com.xiyuan.acm.factory.ListNodeFactory;
 import com.xiyuan.acm.factory.SegmentTreeNodeFactory;
 import com.xiyuan.acm.factory.TreeNodeFactory;
 import com.xiyuan.acm.model.*;
@@ -4851,8 +4852,81 @@ public class Solutions184_564 {
         return result;
     }
 
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/swap-two-nodes-in-linked-list/
+     * @param head a ListNode
+     * @oaram v1 an integer
+     * @param v2 an integer
+     * @return a new head of singly-linked list
+     */
+    public ListNode swapNodes(ListNode head, int v1, int v2) {
+        if (head == null || head.next == null || v1 == v2) {
+            return head;
+        }
+
+        ListNode newHead = new ListNode(0);
+        newHead.next = head;
+        ListNode cur = newHead;
+        ListNode beforeV1 = null;
+        ListNode beforeV2 = null;
+        while (cur.next != null) {
+            int nextVal = cur.next.val;
+            if (nextVal == v1 || nextVal == v2) {
+                if (beforeV1 == null) {
+                    beforeV1 = cur;
+                }
+                else {
+                    beforeV2 = cur;
+                    break;
+                }
+            }
+            cur = cur.next;
+        }
+
+        if (beforeV1 != null && beforeV2 != null) {
+            ListNode nodeV1 = beforeV1.next;
+            ListNode nodeV2 = beforeV2.next;
+            ListNode afterV1 = nodeV1.next;
+            ListNode afterV2 = nodeV2.next;
+            if (nodeV1 != beforeV2) {
+                beforeV1.next = nodeV2;
+                nodeV2.next = afterV1;
+                beforeV2.next = nodeV1;
+                nodeV1.next = afterV2;
+            }
+            else {
+                beforeV1.next = afterV1;
+                afterV1.next = nodeV1;
+                nodeV1.next = afterV2;
+            }
+        }
+        return newHead.next;
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         交换链表当中两个节点   [中等]
+         http://www.lintcode.com/zh-cn/problem/swap-two-nodes-in-linked-list/
+         给你一个链表以及两个权值v1和v2，交换链表中权值为v1和v2的这两个节点。保证链表中节点权值各不相同，如果没有找到对应节点，那么什么也不用做。
+         注意事项
+         你需要交换两个节点而不是改变节点的权值
+         样例
+         给出链表 1->2->3->4->null ，以及 v1 = 2 ， v2 = 4
+         返回结果 1->4->3->2->null。
+         */
+//        ListNode head = ListNodeFactory.build("1->2->3->4->null");
+//        XYLog.d(solutions.swapNodes(head, 2, 3));
+
+
+
+
 
         /**
          最大矩形   [困难]
