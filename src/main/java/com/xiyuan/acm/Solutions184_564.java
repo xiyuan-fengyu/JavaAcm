@@ -5368,8 +5368,71 @@ public class Solutions184_564 {
         return max;
     }
 
+
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/house-robber-iii/
+     * @param root: The root of binary tree.
+     * @return: The maximum amount of money you can rob tonight
+     */
+    public int houseRobber3(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        else {
+            if (houseRobber3Cache.containsKey(root)) {
+                return houseRobber3Cache.get(root);
+            }
+
+            int temp0 = root.val;
+            if (root.left != null) {
+                temp0 += houseRobber3(root.left.left) + houseRobber3(root.left.right);
+            }
+            if (root.right != null) {
+                temp0 += houseRobber3(root.right.left) + houseRobber3(root.right.right);
+            }
+
+            int temp1 = houseRobber3(root.left) + houseRobber3(root.right);
+            int result = Math.max(temp0, temp1);
+            houseRobber3Cache.put(root, result);
+            return result;
+        }
+    }
+
+    private HashMap<TreeNode, Integer> houseRobber3Cache = new HashMap<>();
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         打劫房屋 III   [中等]
+         http://www.lintcode.com/zh-cn/problem/house-robber-iii/
+         在上次打劫完一条街道之后和一圈房屋之后，窃贼又发现了一个新的可以打劫的地方，但这次所有的房子组成的区域比较奇怪，聪明的窃贼考察地形之后，发现这次的地形是一颗二叉树。与前两次偷窃相似的是每个房子都存放着特定金额的钱。你面临的唯一约束条件是：相邻的房子装着相互联系的防盗系统，且当相邻的两个房子同一天被打劫时，该系统会自动报警。
+         算一算，如果今晚去打劫，你最多可以得到多少钱，当然在不触动报警装置的情况下。
+         注意事项
+         这题是House Robber和House Robber II的扩展，只不过这次地形由直线和圈变成了二叉树
+         样例
+               3
+             / \
+            4   5
+          / \   \
+         1   3   1
+         窃贼最多能偷窃的金钱数是 4 + 5 = 9.
+         */
+////        TreeNode root = TreeNodeFactory.build("3,2,3,#,3,#,1");
+//        TreeNode root = TreeNodeFactory.build("3,4,5,1,3,#,1");
+//        XYLog.d(root);
+//        XYLog.d(solutions.houseRobber3(root));
+
+
+
+
+
 
         /**
          打劫房屋 II   [中等]
