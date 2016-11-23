@@ -5284,8 +5284,66 @@ public class Solutions184_564 {
         return uglys[n - 1];
     }
 
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/reverse-pairs/
+     * @param arr an array
+     * @return total of reverse pairs
+     */
+    public long reversePairs(int[] arr) {
+        long count = 0;
+        int len = arr.length;
+        if (len > 1) {
+            int[] rightMaxs = new int[len];
+            int[] rightMins = new int[len];
+            rightMaxs[len - 1] = rightMins[len - 1] = arr[len - 1];
+            for (int i = len - 2; i > -1; i--) {
+                rightMaxs[i] = Math.max(rightMaxs[i + 1], arr[i]);
+                rightMins[i] = Math.min(rightMins[i + 1], arr[i]);
+            }
+
+            for (int i = 0; i < len - 1; i++) {
+                int arrI = arr[i];
+                if (arrI <= rightMins[i + 1]) {
+                }
+                else if (arrI > rightMaxs[i + 1]) {
+                    count += len - i - 1;
+                }
+                else {
+                    for (int j = i + 1; j < len; j++) {
+                        if (arrI > arr[j]) {
+                            count++;
+                        }
+                    }
+                }
+            }
+        }
+        return count;
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         逆序对   [中等]
+         http://www.lintcode.com/zh-cn/problem/reverse-pairs/
+         在数组中的两个数字如果前面一个数字大于后面的数字，则这两个数字组成一个逆序对。给你一个数组，求出这个数组中逆序对的总数。
+         概括：如果a[i] > a[j] 且 i < j， a[i] 和 a[j] 构成一个逆序对。
+         样例
+         序列 [2, 4, 1, 3, 5] 中，有 3 个逆序对 (2, 1), (4, 1), (4, 3)，则返回 3 。
+         */
+////        int[] arr = {2, 4, 1, 3, 5};
+//        int[] arr = {2,3,1,55,6,4,7,3,0};
+//        XYLog.d(solutions.reversePairs(arr));
+
+
+
+
 
         /**
          摊平嵌套的列表   [中等]
