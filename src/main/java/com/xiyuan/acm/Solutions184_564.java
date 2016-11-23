@@ -5467,8 +5467,68 @@ public class Solutions184_564 {
         return result;
     }
 
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/intersection-of-two-arrays-ii/
+     * @param nums1 an integer array
+     * @param nums2 an integer array
+     * @return an integer array
+     */
+    public int[] intersectionII(int[] nums1, int[] nums2) {
+        HashMap<Integer, Integer> existed = new HashMap<>();
+        for (int i: nums1) {
+            Integer count = existed.get(i);
+            if (count != null) {
+                existed.put(i, count + 1);
+            }
+            else {
+                existed.put(i, 1);
+            }
+        }
+
+        ArrayList<Integer> interArr = new ArrayList<>();
+        for (int i: nums2) {
+            Integer count = existed.get(i);
+            if (count != null) {
+                interArr.add(i);
+                if (count > 1) {
+                    existed.put(i, count - 1);
+                }
+                else {
+                    existed.remove(i);
+                }
+            }
+        }
+        int size = interArr.size();
+        int[] result = new int[size];
+        for (int i = 0; i < size; i++) {
+            result[i] = interArr.get(i);
+        }
+        return result;
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         两数组的交 II   [容易]
+         http://www.lintcode.com/zh-cn/problem/intersection-of-two-arrays-ii/
+         计算两个数组的交
+         注意事项
+         每个元素出现次数得和在数组里一样
+         答案可以以任意顺序给出
+         样例
+         nums1 = [1, 2, 2, 1], nums2 = [2, 2], 返回 [2, 2].
+         */
+//        int[] nums1 = {1, 2, 2, 1};
+//        int[] nums2 = {2, 2};
+//        XYLog.d(solutions.intersectionII(nums1, nums2));
+
+
+
 
         /**
          两数组的交   [容易]
