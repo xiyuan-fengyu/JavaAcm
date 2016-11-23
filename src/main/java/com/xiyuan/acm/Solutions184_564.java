@@ -6,6 +6,7 @@ import com.xiyuan.acm.factory.TreeNodeFactory;
 import com.xiyuan.acm.model.*;
 import com.xiyuan.acm.util.DataUtil;
 import com.xiyuan.acm.util.PrintUtil;
+import com.xiyuan.acm.util.StringUtil;
 import com.xiyuan.util.XYLog;
 
 import java.util.*;
@@ -5285,6 +5286,26 @@ public class Solutions184_564 {
 
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         左填充   [容易]
+         http://www.lintcode.com/zh-cn/problem/left-pad/
+         实现一个leftpad库，如果不知道什么是leftpad可以看样例
+         样例
+         leftpad("foo", 5)
+         >> "  foo"
+         leftpad("foobar", 6)
+         >> "foobar"
+         leftpad("1", 2, "0")
+         >> "01"
+         */
+//        XYLog.d(StringUtil.leftPad("foo", 5));
+//        XYLog.d(StringUtil.leftPad("foobar", 6));
+//        XYLog.d(StringUtil.leftPad("1", 2, '0'));
+
+
+
+
 
         /**
          超级丑数   [中等]
