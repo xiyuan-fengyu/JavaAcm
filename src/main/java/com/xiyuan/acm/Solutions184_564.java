@@ -2504,22 +2504,34 @@ public class Solutions184_564 {
      * return: The maximum amount of money you can rob tonight
      */
     public long houseRobber(int[] arr) {
-        int len = arr.length;
-        if (len == 0) {
-            return 0;
-        }
+//        int len = arr.length;
+//        if (len == 0) {
+//            return 0;
+//        }
+//
+//        long[] f = new long[len];
+//        f[0] = arr[0];
+//        for (int i = 1; i < len; i++) {
+//            long temp = 0;
+//            if ( i - 2 >= 0) {
+//                temp = f[i - 2];
+//            }
+//            temp += arr[i];
+//            f[i] = Math.max(f[i - 1], temp);
+//        }
+//        return f[len - 1];
 
-        long[] f = new long[len];
-        f[0] = arr[0];
-        for (int i = 1; i < len; i++) {
-            long temp = 0;
-            if ( i - 2 >= 0) {
-                temp = f[i - 2];
+
+        int len = arr.length;
+        int max = 0;
+        if (len > 0) {
+            int[] dpToRight = new int[len + 3];
+            for (int i = 0; i < len; i++) {
+                dpToRight[i + 3] = Math.max(dpToRight[i], dpToRight[i + 1]) + arr[i];
+                max = Math.max(max, dpToRight[i + 3]);
             }
-            temp += arr[i];
-            f[i] = Math.max(f[i - 1], temp);
         }
-        return f[len - 1];
+        return max;
     }
 
 
