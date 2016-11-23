@@ -5206,6 +5206,7 @@ public class Solutions184_564 {
 
 
     /**
+     * o(n^3 * k)
      * http://www.lintcode.com/zh-cn/problem/super-ugly-number/
      * @param n a positive integer
      * @param primes the given prime list
@@ -5244,6 +5245,44 @@ public class Solutions184_564 {
         return nums.get(n - 1);
     }
 
+    /**
+     * o(n^2 * k)
+     */
+    public int nthSuperUglyNumberI(int n, int[] primes) {
+        if (n <= 1) {
+            return 1;
+        }
+
+        int len = primes.length;
+        int[] indexs = new int[len];
+        int[] uglys = new int[n];
+        uglys[0] = 1;
+
+        int index = 0;
+        while (++index < n) {
+            int  min = Integer.MAX_VALUE;
+            for (int i = 0; i < len; i++) {
+                min = Math.min(uglys[indexs[i]] * primes[i], min);
+            }
+            uglys[index] = min;
+
+            for (int i = 0; i < len; i++) {
+                while (primes[i] * uglys[indexs[i]] <= min) indexs[i]++;
+            }
+//            PrintUtil.arr(uglys, 2, 2);
+//            PrintUtil.arr(indexs, 2, 2);
+//            int[] tempArr = new int[len];
+//            for (int i = 0; i < len; i++) {
+//                tempArr[i] = uglys[indexs[i]];
+//            }
+//            PrintUtil.arr(tempArr, 2, 2);
+//            PrintUtil.arr(primes, 2, 2);
+//            System.out.println();
+        }
+
+        return uglys[n - 1];
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
 
@@ -5258,11 +5297,12 @@ public class Solutions184_564 {
          给你的质数集合已经按照升序排列(你TM在逗我，实际给的输入并没有升序排序)。
          0 < k ≤ 100, 0 < n ≤ 10^6, 0 < primes[i] < 1000
          */
-        int k = 299;//15145219
-        int[] primes = {89,449,499,79,457,311,281,181,271,419,379,347,131};
+////        int k = 299;//15145219
+////        int[] primes = {89,449,499,79,457,311,281,181,271,419,379,347,131};
 //        int k = 12;//32
 //        int[] primes = {2, 7, 13, 19};
-        XYLog.d(solutions.nthSuperUglyNumber(k, primes));
+//        XYLog.d(solutions.nthSuperUglyNumber(k, primes));
+//        XYLog.d(solutions.nthSuperUglyNumberI(k, primes));
 
 
 
