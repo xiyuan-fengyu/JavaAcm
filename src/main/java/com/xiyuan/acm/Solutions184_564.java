@@ -5406,8 +5406,54 @@ public class Solutions184_564 {
 
     private HashMap<TreeNode, Integer> houseRobber3Cache = new HashMap<>();
 
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/move-zeroes/
+     * @param nums an integer array
+     * @return nothing, do this in-place
+     */
+    public void moveZeroes(int[] nums) {
+        int len = nums.length;
+        int i = 0;
+        int j = 1;
+        int temp;
+        while (i < len && j < len) {
+            while (j < len && nums[j] == 0) j++;
+            while (i < len && nums[i] != 0) i++;
+            if (j < len && i < len) {
+                if (i > j) {
+                    j = i + 1;
+                }
+                else {
+                    temp = nums[j];
+                    nums[j] = nums[i];
+                    nums[i] = temp;
+                }
+            }
+        }
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         移动零   [容易]
+         http://www.lintcode.com/zh-cn/problem/move-zeroes/
+         给一个数组 nums 写一个函数将 0 移动到数组的最后面，非零元素保持原数组的顺序
+         注意事项
+         1.必须在原数组上操作
+         2.最小化操作数
+         样例
+         给出 nums = [0, 1, 0, 3, 12], 调用函数之后, nums = [1, 3, 12, 0, 0].
+         */
+//        int[] nums = {5,4,0,2,1};
+//        solutions.moveZeroes(nums);
+//        XYLog.d(nums);
+
+
+
+
 
         /**
          打劫房屋 III   [中等]
