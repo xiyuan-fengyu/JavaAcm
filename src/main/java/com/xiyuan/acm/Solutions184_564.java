@@ -5288,6 +5288,20 @@ public class Solutions184_564 {
         Solutions184_564 solutions = new Solutions184_564();
 
         /**
+         摊平嵌套的列表   [中等]
+         http://www.lintcode.com/zh-cn/problem/flatten-nested-list-iterator/
+         给你一个嵌套的列表，实现一个迭代器将其摊平。
+         一个列表的每个元素可能是整数或者一个列表。
+         样例
+         给出列表 [[1,1],2,[1,1]]，经过迭代器之后返回 [1,1,2,1,1]。
+         给出列表 [1,[4,[6]]]，经过迭代器之后返回 [1,4,6]。
+         */
+//        NestedIterator.test();
+
+
+
+
+        /**
          左填充   [容易]
          http://www.lintcode.com/zh-cn/problem/left-pad/
          实现一个leftpad库，如果不知道什么是leftpad可以看样例
