@@ -5434,8 +5434,55 @@ public class Solutions184_564 {
         }
     }
 
+
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/intersection-of-two-arrays/
+     * @param nums1 an integer array
+     * @param nums2 an integer array
+     * @return an integer array
+     */
+    public int[] intersection(int[] nums1, int[] nums2) {
+        HashMap<Integer, Boolean> existed = new HashMap<>();
+        for (int i: nums1) {
+            existed.put(i, true);
+        }
+
+        ArrayList<Integer> interArr = new ArrayList<>();
+        for (int i: nums2) {
+            if (existed.containsKey(i)) {
+                interArr.add(i);
+                existed.remove(i);
+            }
+        }
+        int size = interArr.size();
+        int[] result = new int[size];
+        for (int i = 0; i < size; i++) {
+            result[i] = interArr.get(i);
+        }
+        return result;
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         两数组的交   [容易]
+         http://www.lintcode.com/zh-cn/problem/intersection-of-two-arrays/
+         返回两个数组的交
+         样例
+         nums1 = [1, 2, 2, 1], nums2 = [2, 2], 返回 [2].
+         */
+//        int[] nums1 = {1, 2, 2, 1};
+//        int[] nums2 = {2, 2};
+//        XYLog.d(solutions.intersection(nums1, nums2));
+
+
+
 
         /**
          移动零   [容易]
