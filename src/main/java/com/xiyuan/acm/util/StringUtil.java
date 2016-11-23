@@ -1,5 +1,7 @@
 package com.xiyuan.acm.util;
 
+import java.util.Arrays;
+
 /**
  * Created by xiyuan_fengyu on 2016/11/23.
  * http://www.lintcode.com/zh-cn/problem/left-pad/
@@ -24,17 +26,13 @@ public class StringUtil {
     public static String leftPad(String originalStr, int size, char padChar) {
         int oldLen = originalStr.length();
         int newLen = Math.max(oldLen, size);
-        int padSize = newLen - oldLen;
-        char[] chars = new char[newLen];
-        for (int i = 0; i < newLen; i++) {
-            if (i < padSize) {
-                chars[i] = padChar;
-            }
-            else {
-                chars[i] = originalStr.charAt(i - padSize);
-            }
+        if (oldLen == newLen) {
+            return originalStr;
         }
-        return String.valueOf(chars);
+
+        char[] pads = new char[newLen - oldLen];
+        Arrays.fill(pads, padChar);
+        return String.valueOf(pads) + originalStr;
     }
 
 }
