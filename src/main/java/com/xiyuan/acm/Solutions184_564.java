@@ -5648,8 +5648,72 @@ public class Solutions184_564 {
     }
 
 
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/backpack-vi/
+     * @param nums an integer array and all positive numbers, no duplicates
+     * @param target an integer
+     * @return an integer
+     */
+    public int backPackVI(int[] nums, int target) {
+        Arrays.sort(nums);
+        backPackVICache = new int[target + 1];
+        Arrays.fill(backPackVICache, -1);
+        return backPackVI1(nums, target);
+    }
+
+    private int[] backPackVICache;
+
+    private int backPackVI1(int[] nums, int target) {
+        if (backPackVICache[target] != -1) {
+            return backPackVICache[target];
+        }
+
+        int count = 0;
+        for (int i = 0, len = nums.length; i < len; i++) {
+            if (nums[i] < target) {
+                count += backPackVI1(nums, target - nums[i]);
+            }
+            else if (nums[i] == target) {
+                count += 1;
+            }
+            else break;
+        }
+        backPackVICache[target] = count;
+        return count;
+    }
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         Backpack VI   [中等]
+         http://www.lintcode.com/zh-cn/problem/backpack-vi/
+         Given an integer array nums with all positive numbers and no duplicates, find the number of possible combinations that add up to a positive integer target.
+         注意事项
+         The different sequences are counted as different combinations.
+         样例
+         Given nums = [1, 2, 4], target = 4
+         The possible combination ways are:
+         [1, 1, 1, 1]
+         [1, 1, 2]
+         [1, 2, 1]
+         [2, 1, 1]
+         [2, 2]
+         [4]
+         return 6
+         */
+//        int[] nums = {37,40,28,39,36,20,23,25,31,1,2,3,4};
+//        int k = 31;
+//        XYLog.d(solutions.backPackVI(nums, k));
+
+
+
+
 
         /**
          创建最大数   [困难]
