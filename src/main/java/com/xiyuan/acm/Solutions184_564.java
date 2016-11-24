@@ -5510,8 +5510,222 @@ public class Solutions184_564 {
         return result;
     }
 
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/create-maximum-number/
+     * @param nums1 an integer array of length m with digits 0-9
+     * @param nums2 an integer array of length n with digits 0-9
+     * @param k an integer and k <= m + n
+     * @return an integer array
+     */
+    public int[] maxNumber(int[] nums1, int[] nums2, int k) {
+        chooseFromCache.clear();
+
+        int len1 = nums1.length;
+        int len2 = nums2.length;
+
+        int[] result = new int[k];
+
+        int count = 0;
+        int rK = len1 + len2 - k;
+        int index1 = 0;
+        int index2 = 0;
+        while (count < k) {
+            int[] choose = chooseFrom(nums1, index1, nums2, index2, rK);
+            int tempIndex = choose[1];
+            if (choose[0] == 1) {
+                result[count++] = nums1[tempIndex];
+                rK -= tempIndex - index1;
+                index1 = tempIndex + 1;
+            }
+            else {
+                result[count++] = nums2[tempIndex];
+                rK -= tempIndex - index2;
+                index2 = tempIndex + 1;
+            }
+        }
+        return result;
+    }
+
+    private HashMap<String, int[]> chooseFromCache = new HashMap<>();
+
+    private int[] chooseFrom(int[] nums1, int start1, int[] nums2, int start2, int k) {
+        String key = start1 + "_" + start2 + "_" + k;
+        if (chooseFromCache.containsKey(key)) {
+            return chooseFromCache.get(key);
+        }
+
+        int len1 = nums1.length;
+        int len2 = nums2.length;
+
+        int max1 = -1;
+        int maxIndex1 = -1;
+        if (start1 < len1) {
+            max1 = nums1[start1];
+            maxIndex1 = start1;
+            for (int i = start1, end = Math.min(start1 + k + 1, len1); i< end; i++) {
+                if (nums1[i] > max1) {
+                    max1 = nums1[i];
+                    maxIndex1 = i;
+                }
+            }
+        }
+
+        int max2 = -1;
+        int maxIndex2 = -1;
+        if (start2 < len2) {
+            max2 = nums2[start2];
+            maxIndex2 = start2;
+            for (int i = start2, end = Math.min(start2 + k + 1, len2); i< end; i++) {
+                if (nums2[i] > max2) {
+                    max2 = nums2[i];
+                    maxIndex2 = i;
+                }
+            }
+        }
+
+        int[] result;
+        if (max1 > max2) {
+            result = new int[]{1, maxIndex1};
+        }
+        else if (max1 < max2) {
+            result = new int[]{2, maxIndex2};
+        }
+        else {
+            int[][] tempStarts = {
+                    {maxIndex1 + 1, start2},
+                    {start1, maxIndex2 + 1}
+            };
+            int[] rKs = {k - (maxIndex1 - start1), k - (maxIndex2 - start2)};
+
+            while (true) {
+                int[] temp1 = chooseFrom(nums1, tempStarts[0][0], nums2, tempStarts[0][1], rKs[0]);
+                int[] temp2 = chooseFrom(nums1, tempStarts[1][0], nums2, tempStarts[1][1], rKs[1]);
+                int tempMax1 = temp1[0] == 1? nums1[temp1[1]]: nums2[temp1[1]];
+                int tempMax2 = temp2[0] == 1? nums1[temp2[1]]: nums2[temp2[1]];
+                if (tempMax1 > tempMax2) {
+                    result = new int[]{1, maxIndex1};
+                    break;
+                }
+                else if (tempMax1 < tempMax2) {
+                    result = new int[]{2, maxIndex2};
+                    break;
+                }
+                else {
+                    if (temp1[0] == 1) {
+                        rKs[0] -= temp1[1] - tempStarts[0][0];
+                        tempStarts[0][0] = temp1[1] + 1;
+                    }
+                    else {
+                        rKs[0] -= temp1[1] - tempStarts[0][1];
+                        tempStarts[0][1] = temp1[1] + 1;
+                    }
+
+                    if (temp2[0] == 1) {
+                        rKs[1] -= temp2[1] - tempStarts[1][0];
+                        tempStarts[1][0] = temp2[1] + 1;
+                    }
+                    else {
+                        rKs[1] -= temp2[1] - tempStarts[1][1];
+                        tempStarts[1][1] = temp2[1] + 1;
+                    }
+
+                    if (tempStarts[0][0] == tempStarts[1][0]
+                            && tempStarts[0][1] == tempStarts[1][1]
+                            && rKs[0] == rKs[1]) {
+                        result = new int[]{1, maxIndex1};
+                        break;
+                    }
+                }
+            }
+        }
+        chooseFromCache.put(key, result);
+        return result;
+    }
+
+
     public static void main(String[] args) {
         Solutions184_564 solutions = new Solutions184_564();
+
+        /**
+         创建最大数   [困难]
+         http://www.lintcode.com/zh-cn/problem/create-maximum-number/
+         给出两个长度分别是m和n的数组来表示两个大整数，数组的每个元素都是数字0-9。从这两个数组当中选出k个数字来创建一个最大数，其中k满足k <= m + n。选出来的数字在创建的最大数里面的位置必须和在原数组内的相对位置一致。返回k个数的数组。你应该尽可能的去优化算法的时间复杂度和空间复杂度。
+         样例
+         给出 nums1 = [3, 4, 6, 5], nums2 = [9, 1, 2, 5, 8, 3], k = 5
+         返回 [9, 8, 6, 5, 3]
+         给出 nums1 = [6, 7], nums2 = [6, 0, 4], k = 5
+         返回 [6, 7, 6, 0, 4]
+         给出 nums1 = [3, 9], nums2 = [8, 9], k = 3
+         返回 [9, 8, 9]
+         */
+//        class TempData {
+//            int[] nums1;
+//            int[] nums2;
+//            int k;
+//            int[] result;
+//        }
+//        ArrayList<TempData> datas = new ArrayList<>();
+//
+//        TempData tempData;
+//
+//        tempData = new TempData();
+//        tempData.nums1 = new int[]{3, 4, 6, 5};
+//        tempData.nums2 = new int[]{9, 1, 2, 5, 8, 3};
+//        tempData.k = 5;
+//        tempData.result = new int[]{9, 8, 6, 5, 3};
+//        datas.add(tempData);
+//
+//        tempData = new TempData();
+//        tempData.nums1 = new int[]{3,9};
+//        tempData.nums2 = new int[]{8,9};
+//        tempData.k = 3;
+//        tempData.result = new int[]{9,8,9};
+//        datas.add(tempData);
+//
+//        tempData = new TempData();
+//        tempData.nums1 = new int[]{5,0,2,1,0,1,0,3,9,1,2,8,0,9,8,1,4,7,3};
+//        tempData.nums2 = new int[]{7,6,7,1,0,1,0,5,6,0,5,0};
+//        tempData.k = 31;
+//        tempData.result = new int[]{7,6,7,5,1,0,2,1,0,1,0,5,6,0,5,0,1,0,3,9,1,2,8,0,9,8,1,4,7,3,0};
+//        datas.add(tempData);
+//
+//        tempData = new TempData();
+//        tempData.nums1 = new int[]{1,5,8,1,4,0,8,5,0,7,0,5,7,6,0,5,5,2,4,3,6,4,6,6,3,8,1,1,3,1,3,5,4,3,9,5,0,3,8,1,4,9,8,8,3,4,6,2,5,4,1,1,4,6,5,2,3,6,3,5,4,3,0,7,2,5,1,5,3,3,8,2,2,7,6,7,5,9,1,2};
+//        tempData.nums2 = new int[]{7,8,5,8,0,1,1,6,1,7,6,9,6,6,0,8,5,8,6,3,4,0,4,6,7,8,7,7,7,5,7,2,5,2,1,9,5,9,3,7,3,9,9,3,1,4,3,3,9,7,1,4,4,1,4,0,2,3,1,3,2,0,2,4,0,9,2,0,1,3,9,1,2,2,6,6,9,3,6,0};
+//        tempData.k = 80;
+//        tempData.result = new int[]{9,9,9,9,9,9,9,9,9,8,8,7,7,6,6,5,5,4,3,6,4,6,6,3,8,1,1,3,1,3,5,4,3,9,5,0,3,8,1,4,9,8,8,3,4,6,2,5,4,1,1,4,6,5,2,3,6,3,5,4,3,0,7,2,5,1,5,3,3,8,2,2,7,6,7,5,9,1,2,0};
+//        datas.add(tempData);
+//
+//        tempData = new TempData();
+//        tempData.nums1 = new int[]{5,7,7,0,1,6,7,2,2,4,6,8,9,2,0,9,8,7,6,3,9,4,8,8,4,5,3,3,7,4,3,2,8,9,8,4,0,2,0,2,2,0,4,2,2,8,6,7,1,0,8,7,5,4,6,4,1,7,4,4,3,7,5,8,8,0,3,1,3,4,6,0,6,9,6,6,4,2,1,9,3,7,4,4,4,2,1,9,5,2,1,7,6,0,1,3,5,3,7,7};
+//        tempData.nums2 = new int[]{8,3,7,8,6,9,1,5,5,0,5,2,8,7,8,3,3,7,9,2};
+//        tempData.k = 100;
+//        tempData.result = new int[]{9,9,9,8,8,8,7,8,6,9,4,5,3,3,7,4,3,2,8,9,8,4,1,5,5,0,5,2,8,7,8,3,3,7,9,2,0,2,0,2,2,0,4,2,2,8,6,7,1,0,8,7,5,4,6,4,1,7,4,4,3,7,5,8,8,0,3,1,3,4,6,0,6,9,6,6,4,2,1,9,3,7,4,4,4,2,1,9,5,2,1,7,6,0,1,3,5,3,7,7};
+//        datas.add(tempData);
+//
+//        tempData = new TempData();
+//        tempData.nums1 = new int[]{4,6,7,8,9,4,2,1,6,9,8};
+//        tempData.nums2 = new int[]{5,5,8,7,9,3,5,6,5,4,9};
+//        tempData.k = 6;
+//        tempData.result = new int[]{9,9,9,8,6,9};
+//        datas.add(tempData);
+//
+//        for (TempData item: datas) {
+//            XYLog.d(solutions.maxNumber(item.nums1, item.nums2, item.k), "");
+//            XYLog.d(item.result, "");
+//            System.out.println();
+//        }
+
+
+
+
+
+
 
         /**
          两数组的交 II   [容易]
@@ -5525,7 +5739,7 @@ public class Solutions184_564 {
          */
 //        int[] nums1 = {1, 2, 2, 1};
 //        int[] nums2 = {2, 2};
-//        XYLog.d(solutions.intersectionII(nums1, nums2));
+//        XYLog.d(solutions.intersectionII(nums1, nums2), "");
 
 
 
