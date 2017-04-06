@@ -2,6 +2,7 @@ package com.xiyuan.acm;
 
 import com.xiyuan.acm.factory.TreeNodeFactory;
 import com.xiyuan.acm.model.DoublyListNode;
+import com.xiyuan.acm.model.Heap;
 import com.xiyuan.acm.model.LFUCache;
 import com.xiyuan.acm.model.TreeNode;
 import com.xiyuan.util.XYLog;
@@ -225,8 +226,101 @@ public class Solution3 {
     }
 
 
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/sliding-window-median/
+     * @param nums: A list of integers.
+     * @return: The median of the element inside the window at each moving.
+     */
+    public ArrayList<Integer> medianSlidingWindow(int[] nums, int k) {
+        ArrayList<Integer> result = new ArrayList<>();
+        if (k == 0) {
+            //
+        }
+        else if (k == 1) {
+            for (int num : nums) {
+                result.add(num);
+            }
+        }
+        else {
+            int len = nums.length;
+            if (k > len) {
+                k = len;
+            }
+
+            //最小堆，用来存储较大的一半， k为偶数时最大堆堆顶为中位数， k为奇数时最小堆堆顶为中位数， （最小堆的元素个数 - 最大堆的元素个数） >= 0 且 <= 1
+            Heap<Integer> minHeap = new Heap<>(new Comparator<Integer>() {
+                @Override
+                public int compare(Integer o1, Integer o2) {
+                    return o1 - o2;
+                }
+            });
+
+            //最大堆，用来存储较小的一半
+            Heap<Integer> maxHeap = new Heap<>(new Comparator<Integer>() {
+                @Override
+                public int compare(Integer o1, Integer o2) {
+                    return o2 - o1;
+                }
+            });
+
+            Heap<Integer> resultHeap = k % 2 == 0? maxHeap : minHeap;
+
+            for (int i = 0; i < len; i++) {
+                if (i >= k) {
+                    int remove = nums[i - k];
+                    Integer maxTop = maxHeap.top();
+                    if (maxTop != null && remove <= maxTop) {
+                        maxHeap.remove(remove);
+                    }
+                    else {
+                        minHeap.remove(remove);
+                    }
+                }
+
+                Integer minTop = minHeap.top();
+                if (minTop == null || minTop <= nums[i]) {
+                    minHeap.push(nums[i]);
+                }
+                else {
+                    maxHeap.push(nums[i]);
+                }
+
+                int numDiff = minHeap.size() - maxHeap.size();
+                while (numDiff < 0 || numDiff > 1) {
+                    if (numDiff < 0) {
+                        minHeap.push(maxHeap.pop());
+                    }
+                    else {
+                        maxHeap.push(minHeap.pop());
+                    }
+                    numDiff = minHeap.size() - maxHeap.size();
+                }
+
+                if (i + 1 >= k) {
+                    result.add(resultHeap.top());
+                }
+            }
+        }
+        return result;
+    }
+
     public static void main(String[] args) {
         Solution3 solution = new Solution3();
+
+        /*
+        http://www.lintcode.com/zh-cn/problem/sliding-window-median/
+        滑动窗口的中位数(题目的中文描述有误)
+         */
+//        int[] arr = {1,2,7,8,5};
+//        int k = 3;
+        int[] arr = {76,132,106,88,187,22,76,121,187,84,53,176,9,192,22,126,127,178,26,195,142,141,4,33,112,154,127,58,90,194,80,152,178,144,110,166,169,104,120,187,89,134,118,69,5};
+        int k = 36;
+        System.out.println(solution.medianSlidingWindow(arr, k));
+
+
+
 
         /*
         http://www.lintcode.com/zh-cn/problem/convert-binary-search-tree-to-doubly-linked-list/
