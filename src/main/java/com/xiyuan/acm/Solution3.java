@@ -2,6 +2,8 @@ package com.xiyuan.acm;
 
 import com.xiyuan.acm.model.LFUCache;
 
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -79,8 +81,83 @@ public class Solution3 {
     }
 
 
+
+
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/string-permutation/
+     * @param strA a string
+     * @param strB a string
+     * @return a boolean
+     */
+    public boolean stringPermutation(String strA, String strB) {
+        if (strA == null || strB == null) {
+            return false;
+        }
+
+        int len = strA.length();
+        if (len != strB.length()) {
+            return false;
+        }
+
+        //9329 ms
+//        char[] charsA = strA.toCharArray();
+//        char[] charsB = strB.toCharArray();
+//
+//        Arrays.sort(charsA);
+//        Arrays.sort(charsB);
+//
+//        for (int i = 0; i < len; i++) {
+//            if (charsA[i] != charsB[i]) {
+//                return false;
+//            }
+//        }
+//        return true;
+
+        //总耗时: 8554 ms
+        HashMap<Character, Integer> charCountA = new HashMap<>();
+        HashMap<Character, Integer> charCountB = new HashMap<>();
+        for (int i = 0; i < len; i++) {
+            char charA = strA.charAt(i);
+            Integer countA = charCountA.get(charA);
+            charCountA.put(charA, countA == null ? 1 : countA + 1);
+
+            char charB = strB.charAt(i);
+            Integer countB = charCountB.get(charB);
+            charCountB.put(charB, countB == null ? 1 : countB + 1);
+        }
+
+        if (charCountA.size() != charCountB.size()) {
+            return false;
+        }
+
+        for (Character character : charCountA.keySet()) {
+            if (!charCountA.get(character).equals(charCountB.get(character))) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+
     public static void main(String[] args) {
         Solution3 solution = new Solution3();
+
+        /*
+        字符串置换
+        给定两个字符串，请设计一个方法来判定其中一个字符串是否为另一个字符串的置换。
+        置换的意思是，通过改变顺序可以使得两个字符串相等。
+        样例
+        "abc" 为 "cba" 的置换。
+        "aabc" 不是 "abcc" 的置换。
+         */
+        String str1 = "abc";
+        String str2 = "cba";
+        System.out.println(solution.stringPermutation(str1, str2));
+
 
         /*
         http://www.lintcode.com/zh-cn/problem/lfu-cache/
@@ -88,23 +165,23 @@ public class Solution3 {
         LFU是一个著名的缓存算法
         实现LFU中的set 和 get（set和get操作都增加一个访问次数）
          */
-        String str = "3, [set(1,10),set(2,20),set(3,30),get(1),set(4,40),get(4),get(3),get(2),get(1),set(5,50),get(1),get(2),get(3),get(4),get(5)]";
-        int capacity = Integer.parseInt(str.substring(0, str.indexOf(",")));
-        String options = str.substring(str.indexOf("[") + 1, str.indexOf("]"));
-        Pattern pattern = Pattern.compile("(set\\(([0-9]+),([0-9]+)\\))|(get\\(([0-9]+)\\))");
-        Matcher matcher = pattern.matcher(options);
-        LFUCache lfuCache = new LFUCache(capacity);
-        while (matcher.find()) {
-            if (matcher.group(1) != null) {
-                //set
-                int key = Integer.parseInt(matcher.group(2));
-                int value = Integer.parseInt(matcher.group(3));
-                lfuCache.set(key, value);
-            }
-            else {
-                System.out.println(lfuCache.get(Integer.parseInt(matcher.group(5))));
-            }
-        }
+//        String str = "3, [set(1,10),set(2,20),set(3,30),get(1),set(4,40),get(4),get(3),get(2),get(1),set(5,50),get(1),get(2),get(3),get(4),get(5)]";
+//        int capacity = Integer.parseInt(str.substring(0, str.indexOf(",")));
+//        String options = str.substring(str.indexOf("[") + 1, str.indexOf("]"));
+//        Pattern pattern = Pattern.compile("(set\\(([0-9]+),([0-9]+)\\))|(get\\(([0-9]+)\\))");
+//        Matcher matcher = pattern.matcher(options);
+//        LFUCache lfuCache = new LFUCache(capacity);
+//        while (matcher.find()) {
+//            if (matcher.group(1) != null) {
+//                //set
+//                int key = Integer.parseInt(matcher.group(2));
+//                int value = Integer.parseInt(matcher.group(3));
+//                lfuCache.set(key, value);
+//            }
+//            else {
+//                System.out.println(lfuCache.get(Integer.parseInt(matcher.group(5))));
+//            }
+//        }
 
 
         /*
