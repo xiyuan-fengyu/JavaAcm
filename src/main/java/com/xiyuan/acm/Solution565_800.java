@@ -26,6 +26,10 @@ public class Solution565_800 {
 
     private boolean findMissing2(int n, String str, int curIndex, boolean[] existed) {
         int num1 = str.charAt(curIndex) - '0';
+        if (num1 == 0) {
+            return false;
+        }
+
         int len = str.length();
         if (curIndex == len - 1) {
             if (!existed[num1]) {
@@ -40,20 +44,13 @@ public class Solution565_800 {
             int num2 = str.charAt(curIndex + 1) - '0';
 
             //分开
-            if (num1 > 0 && num2 > 0 && !existed[num1] && !existed[num2]) {
+            if (num1 > 0 && num2 > 0 && !existed[num1]) {
                 existed[num1] = true;
-                existed[num2] = true;
-                if (curIndex == len - 2) {
-                    return true;
+                boolean temp = findMissing2(n, str, curIndex + 1, existed);
+                if (!temp) {
+                    existed[num1] = false;
                 }
-                else {
-                    boolean temp = findMissing2(n, str, curIndex + 2, existed);
-                    if (!temp) {
-                        existed[num1] = false;
-                        existed[num2] = false;
-                    }
-                    else return true;
-                }
+                else return true;
             }
 
             //合在一起
@@ -90,11 +87,11 @@ public class Solution565_800 {
         给出 n = 20, str = 19201234567891011121314151618
         丢失的数是 17 ，返回这个数。
          */
-        int n = 20;
-        String str = "19201234567891011121314151618";
-//        int n = 12;
-//        String str = "1245678931012";
-        System.out.println(solution.findMissing2(n, str));
+//        int n = 11;
+//        String str = "111098765432";
+////        int n = 12;
+////        String str = "1245678931012";
+//        System.out.println(solution.findMissing2(n, str));
 
     }
 
