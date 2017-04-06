@@ -1,9 +1,14 @@
 package com.xiyuan.acm;
 
+import com.xiyuan.acm.model.LFUCache;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * Created by xiyuan_fengyu on 2017/4/5.
  */
-public class Solution565_800 {
+public class Solution3 {
 
     /**
      * http://www.lintcode.com/zh-cn/problem/find-the-missing-number-ii/
@@ -75,7 +80,32 @@ public class Solution565_800 {
 
 
     public static void main(String[] args) {
-        Solution565_800 solution = new Solution565_800();
+        Solution3 solution = new Solution3();
+
+        /*
+        http://www.lintcode.com/zh-cn/problem/lfu-cache/
+        LFU缓存
+        LFU是一个著名的缓存算法
+        实现LFU中的set 和 get（set和get操作都增加一个访问次数）
+         */
+        String str = "3, [set(1,10),set(2,20),set(3,30),get(1),set(4,40),get(4),get(3),get(2),get(1),set(5,50),get(1),get(2),get(3),get(4),get(5)]";
+        int capacity = Integer.parseInt(str.substring(0, str.indexOf(",")));
+        String options = str.substring(str.indexOf("[") + 1, str.indexOf("]"));
+        Pattern pattern = Pattern.compile("(set\\(([0-9]+),([0-9]+)\\))|(get\\(([0-9]+)\\))");
+        Matcher matcher = pattern.matcher(options);
+        LFUCache lfuCache = new LFUCache(capacity);
+        while (matcher.find()) {
+            if (matcher.group(1) != null) {
+                //set
+                int key = Integer.parseInt(matcher.group(2));
+                int value = Integer.parseInt(matcher.group(3));
+                lfuCache.set(key, value);
+            }
+            else {
+                System.out.println(lfuCache.get(Integer.parseInt(matcher.group(5))));
+            }
+        }
+
 
         /*
          http://www.lintcode.com/zh-cn/problem/find-the-missing-number-ii/

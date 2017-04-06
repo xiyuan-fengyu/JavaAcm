@@ -1,20 +1,14 @@
 package com.xiyuan.acm;
 
-import com.xiyuan.acm.factory.ListNodeFactory;
 import com.xiyuan.acm.factory.SegmentTreeNodeFactory;
-import com.xiyuan.acm.factory.TreeNodeFactory;
 import com.xiyuan.acm.model.*;
-import com.xiyuan.acm.util.DataUtil;
-import com.xiyuan.acm.util.PrintUtil;
-import com.xiyuan.acm.util.StringUtil;
-import com.xiyuan.util.XYLog;
 
 import java.util.*;
 
 /**
  * Created by xiyuan_fengyu on 2016/10/14.
  */
-public class Solutions184_564 {
+public class Solutions2 {
 
     /**
      * http://www.lintcode.com/zh-cn/problem/expression-tree-build/
@@ -5688,7 +5682,7 @@ public class Solutions184_564 {
     }
 
     public static void main(String[] args) {
-        Solutions184_564 solutions = new Solutions184_564();
+        Solutions2 solutions = new Solutions2();
 
         /**
          Backpack VI   [中等]

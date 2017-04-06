@@ -7,7 +7,7 @@ import java.util.*;
 /**
  * Created by xiyuan_fengyu on 2016/8/4.
  */
-public class Solutions1_183 {
+public class Solutions1 {
 
     public int sumOfArray(int[] nums)
     {
@@ -10047,7 +10047,7 @@ public class Solutions1_183 {
     }
 
     public static void main(String[] args) {
-        Solutions1_183 solutions = new Solutions1_183();
+        Solutions1 solutions = new Solutions1();
 
         /**
          木材加工   [中等]
