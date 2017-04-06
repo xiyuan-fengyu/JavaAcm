@@ -1,9 +1,11 @@
 package com.xiyuan.acm;
 
+import com.xiyuan.acm.factory.TreeNodeFactory;
 import com.xiyuan.acm.model.LFUCache;
+import com.xiyuan.acm.model.TreeNode;
+import com.xiyuan.util.XYLog;
 
-import java.util.Arrays;
-import java.util.HashMap;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -143,8 +145,62 @@ public class Solution3 {
     }
 
 
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/binary-tree-path-sum/
+     * @param root the root of binary tree
+     * @param target an integer
+     * @return all valid paths
+     */
+    public List<List<Integer>> binaryTreePathSum(TreeNode root, int target) {
+        if (root == null) {
+            return new ArrayList<>();
+        }
+
+        return visiteTree(root, target, 0);
+    }
+
+    private List<List<Integer>> visiteTree(TreeNode curNode, int target, int sum) {
+        List<List<Integer>> result = new ArrayList<>();
+        if (curNode.left == null && curNode.right == null) {
+            if (sum + curNode.val == target) {
+                result.add(new ArrayList<Integer>());
+            }
+        }
+        else {
+            if (curNode.left != null) {
+                result.addAll(visiteTree(curNode.left, target, sum + curNode.val));
+            }
+
+            if (curNode.right != null) {
+                result.addAll(visiteTree(curNode.right, target, sum + curNode.val));
+            }
+        }
+
+        for (List<Integer> list : result) {
+            list.add(0, curNode.val);
+        }
+
+        return result;
+    }
+
+
     public static void main(String[] args) {
         Solution3 solution = new Solution3();
+
+        /*
+        http://www.lintcode.com/zh-cn/problem/binary-tree-path-sum/
+         二叉树的路径和
+         给定一个二叉树，找出所有路径中各节点相加总和等于给定 目标值 的路径。
+         一个有效的路径，指的是从根节点到叶节点的路径。
+         */
+        TreeNode tree = TreeNodeFactory.build("1, 2, 4, 2, 3");
+        System.out.println(tree);
+        int target = 5;
+        XYLog.d(solution.binaryTreePathSum(tree, target));
+
+
 
         /*
         字符串置换
@@ -154,9 +210,9 @@ public class Solution3 {
         "abc" 为 "cba" 的置换。
         "aabc" 不是 "abcc" 的置换。
          */
-        String str1 = "abc";
-        String str2 = "cba";
-        System.out.println(solution.stringPermutation(str1, str2));
+//        String str1 = "abc";
+//        String str2 = "cba";
+//        System.out.println(solution.stringPermutation(str1, str2));
 
 
         /*
