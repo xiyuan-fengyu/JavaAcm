@@ -1,6 +1,7 @@
 package com.xiyuan.acm;
 
 import com.xiyuan.acm.factory.TreeNodeFactory;
+import com.xiyuan.acm.model.DoublyListNode;
 import com.xiyuan.acm.model.LFUCache;
 import com.xiyuan.acm.model.TreeNode;
 import com.xiyuan.util.XYLog;
@@ -186,8 +187,55 @@ public class Solution3 {
     }
 
 
+
+
+
+    /**
+     * http://www.lintcode.com/zh-cn/problem/convert-binary-search-tree-to-doubly-linked-list/
+     * @param root: The root of tree
+     * @return: the head of doubly list node
+     */
+    public DoublyListNode bstToDoublyList(TreeNode root) {
+        if (root == null) {
+            return null;
+        }
+
+        DoublyListNode curNode = new DoublyListNode(root.val);
+        DoublyListNode head = curNode;
+        if (root.left != null) {
+            DoublyListNode subRes = bstToDoublyList(root.left);
+            head = subRes;
+            while (subRes.next != null) {
+                subRes = subRes.next;
+            }
+            subRes.next = curNode;
+            curNode.prev = subRes;
+        }
+
+        if (root.right != null) {
+            DoublyListNode subRes = bstToDoublyList(root.right);
+            while (subRes.prev != null) {
+                subRes = subRes.prev;
+            }
+            subRes.prev = curNode;
+            curNode.next = subRes;
+        }
+
+        return head;
+    }
+
+
     public static void main(String[] args) {
         Solution3 solution = new Solution3();
+
+        /*
+        http://www.lintcode.com/zh-cn/problem/convert-binary-search-tree-to-doubly-linked-list/
+        将二叉查找树转换成双链表
+         */
+//        TreeNode tree = TreeNodeFactory.build("4, 2, 5, 1, 3");
+//        System.out.println(solution.bstToDoublyList(tree));
+
+
 
         /*
         http://www.lintcode.com/zh-cn/problem/binary-tree-path-sum/
@@ -195,10 +243,10 @@ public class Solution3 {
          给定一个二叉树，找出所有路径中各节点相加总和等于给定 目标值 的路径。
          一个有效的路径，指的是从根节点到叶节点的路径。
          */
-        TreeNode tree = TreeNodeFactory.build("1, 2, 4, 2, 3");
-        System.out.println(tree);
-        int target = 5;
-        XYLog.d(solution.binaryTreePathSum(tree, target));
+//        TreeNode tree = TreeNodeFactory.build("1, 2, 4, 2, 3");
+//        System.out.println(tree);
+//        int target = 5;
+//        XYLog.d(solution.binaryTreePathSum(tree, target));
 
 
 
