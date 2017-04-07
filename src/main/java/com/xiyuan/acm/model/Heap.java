@@ -1,6 +1,8 @@
 package com.xiyuan.acm.model;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 
 /**
@@ -37,8 +39,8 @@ public class Heap<T> {
 
     private void checkChild(int index) {
         int len = datas.size();
-        int childIndex = index * 2 + 1;
-        while (childIndex < len) {
+        int childIndex;
+        while ((childIndex = index * 2 + 1) < len) {
             if (childIndex + 1 < len) {
                 if (comparator.compare(datas.get(childIndex), datas.get(childIndex + 1)) > 0) {
                     childIndex++;
@@ -83,10 +85,10 @@ public class Heap<T> {
             return null;
         }
 
-        for (int i = 0; i < datas.size(); i++) {
+        for (int i = 0, size = datas.size(); i < size; i++) {
             T temp = datas.get(i);
             if (t.equals(temp)) {
-                int lastIndex = datas.size() - 1;
+                int lastIndex = size - 1;
                 if (i == lastIndex) {
                     return datas.remove(lastIndex);
                 }
@@ -110,4 +112,15 @@ public class Heap<T> {
         return datas.isEmpty();
     }
 
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0, size = datas.size(); i < size; i++) {
+            builder.append(datas.get(i));
+            if (i + 1 < size) {
+                builder.append(", ");
+            }
+        }
+        return builder.toString();
+    }
 }

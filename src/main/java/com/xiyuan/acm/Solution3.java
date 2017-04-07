@@ -2,6 +2,7 @@ package com.xiyuan.acm;
 
 import com.xiyuan.acm.factory.TreeNodeFactory;
 import com.xiyuan.acm.model.DoublyListNode;
+import com.xiyuan.acm.model.Heap;
 import com.xiyuan.acm.model.LFUCache;
 import com.xiyuan.acm.model.TreeNode;
 import com.xiyuan.util.XYLog;
@@ -317,8 +318,6 @@ public class Solution3 {
 //        int[] arr = {603,1882,1565,307,1458,578,253,515,1938,853,1295,238,1184,1109,1048,1680,1507,310,884,854,1109,278,648,1286,1428,200,1534,855,1021,999,258,129,1877,690,988,871,1253,1372,855,1481,1965,525,749,1909,522,1579,1198,724,1495,1496,783,1714,1214,1957,1798,1423,932,1559,1249,978,634,1648,108,812,1163,1712,1671,735,719,1272,720,732,507,115,1644,413,1111,552,144,353,1515,614,1050,39,40,354,1042,599,1548,1946,1671,1339,1250,907,1305,1164,898,36,1001,446};
 //        int k = 84;
 //        System.out.println(solution.medianSlidingWindow(arr, k));
-
-
 
 
         /*
