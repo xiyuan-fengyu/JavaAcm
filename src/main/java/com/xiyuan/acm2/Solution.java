@@ -1,5 +1,8 @@
 package com.xiyuan.acm2;
 
+import com.xiyuan.acm.factory.TreeNodeFactory;
+import com.xiyuan.acm.model.TreeNode;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -105,7 +108,144 @@ public class Solution {
     }
 
 
+
+
+    public int kthLargestElement(int k, int[] nums) {
+        int len = nums.length;
+        return kthLargestElement(len - k, nums, 0, len - 1);
+    }
+
+    private int kthLargestElement(int k, int[] nums, int left, int right) {
+        if (left == right) {
+            return nums[left];
+        }
+        else {
+            int key = nums[left];
+            int l = left;
+            int r = right;
+
+            while (l < r) {
+                while (l < r && nums[r] >= key) {
+                    r--;
+                }
+                nums[l] = nums[r];
+
+                while (l < r && nums[l] <= key) {
+                    l++;
+                }
+                nums[r] = nums[l];
+            }
+            nums[l] = key;
+
+            if (l == k){
+                return nums[l];
+            }
+            else if (l > k) {
+                return kthLargestElement(k, nums, left, l - 1);
+            }
+            else {
+                return kthLargestElement(k, nums, l + 1, right);
+            }
+        }
+    }
+
+
+
+
+    public int[] mergeSortedArray(int[] arrA, int[] arrB) {
+        int lenA = arrA.length;
+        int lenB = arrB.length;
+        int[] result = new int[lenA + lenB];
+
+        int i = 0;
+        int j = 0;
+        int k = 0;
+        for (; i < lenA && j < lenB;) {
+            if (arrA[i] <= arrB[j]) {
+                result[k++] = arrA[i++];
+            }
+            else {
+                result[k++] = arrB[j++];
+            }
+        }
+
+        if (i < lenA) {
+            for (; i < lenA;) {
+                result[k++] = arrA[i++];
+            }
+        }
+        else {
+            for (; j < lenB;) {
+                result[k++] = arrB[j++];
+            }
+        }
+
+        return result;
+    }
+
+
+
+
+    public String serialize(TreeNode root) {
+        ArrayList<TreeNode> nodes = new ArrayList<>();
+        nodes.add(root);
+        for (int i = 0; i < nodes.size(); i++) {
+            TreeNode cur = nodes.get(i);
+            if (cur != null) {
+                nodes.add(cur.left);
+                nodes.add(cur.right);
+            }
+        }
+
+        int size;
+        while ((size = nodes.size()) > 0 && nodes.get(size - 1) == null) {
+            nodes.remove(size - 1);
+        }
+
+        StringBuilder builder = new StringBuilder();
+        for (TreeNode node : nodes) {
+            builder.append(node == null ? "#" : node.val).append(',');
+        }
+        if (builder.length() > 0) {
+            builder.deleteCharAt(builder.length() - 1);
+        }
+        return builder.toString();
+    }
+
+    public TreeNode deserialize(String data) {
+        if (data == null) {
+            return null;
+        }
+
+        String[] split = data.split(",");
+        ArrayList<TreeNode> nodes = new ArrayList<>();
+        for (int i = 0, j = 0; i < split.length;) {
+            String value = split[i];
+            if (value.equals("#")) {
+
+            }
+            else {
+
+            }
+        }
+
+        return null;
+    }
+
+
     private void test() {
+
+        TreeNode treeNode = TreeNodeFactory.build("3,9,20,#,#,15,7");
+        System.out.println(treeNode);
+        String treeNodeStr = serialize(treeNode);
+        System.out.println(treeNodeStr);
+
+
+//        System.out.println(Arrays.toString(mergeSortedArray(new int[] {1,2,3,4}, new int[] {2,4,5,6})));
+
+
+//        System.out.println(kthLargestElement(3, new int[] {9,3,2,4,8}));
+
 
 //        System.out.println(nthUglyNumber(10));
 
