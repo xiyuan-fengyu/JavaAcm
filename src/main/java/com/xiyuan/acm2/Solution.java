@@ -235,6 +235,7 @@ public class Solution {
 
     private void test() {
 
+        //TODO 7
         TreeNode treeNode = TreeNodeFactory.build("3,9,20,#,#,15,7");
         System.out.println(treeNode);
         String treeNodeStr = serialize(treeNode);
