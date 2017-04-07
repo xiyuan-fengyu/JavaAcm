@@ -2,7 +2,6 @@ package com.xiyuan.acm;
 
 import com.xiyuan.acm.factory.TreeNodeFactory;
 import com.xiyuan.acm.model.DoublyListNode;
-import com.xiyuan.acm.model.Heap;
 import com.xiyuan.acm.model.LFUCache;
 import com.xiyuan.acm.model.TreeNode;
 import com.xiyuan.util.XYLog;
@@ -250,7 +249,7 @@ public class Solution3 {
             }
 
             //最小堆，用来存储较大的一半， k为偶数时最大堆堆顶为中位数， k为奇数时最小堆堆顶为中位数， （最小堆的元素个数 - 最大堆的元素个数） >= 0 且 <= 1
-            Heap<Integer> minHeap = new Heap<>(new Comparator<Integer>() {
+            PriorityQueue<Integer> minHeap = new PriorityQueue<>((k + 1) / 2, new Comparator<Integer>() {
                 @Override
                 public int compare(Integer o1, Integer o2) {
                     return o1 - o2;
@@ -258,19 +257,19 @@ public class Solution3 {
             });
 
             //最大堆，用来存储较小的一半
-            Heap<Integer> maxHeap = new Heap<>(new Comparator<Integer>() {
+            PriorityQueue<Integer> maxHeap = new PriorityQueue<>((k + 1) / 2, new Comparator<Integer>() {
                 @Override
                 public int compare(Integer o1, Integer o2) {
                     return o2 - o1;
                 }
             });
 
-            Heap<Integer> resultHeap = k % 2 == 0? maxHeap : minHeap;
+            PriorityQueue<Integer> resultHeap = k % 2 == 0? maxHeap : minHeap;
 
             for (int i = 0; i < len; i++) {
                 if (i >= k) {
                     int remove = nums[i - k];
-                    Integer maxTop = maxHeap.top();
+                    Integer maxTop = maxHeap.peek();
                     if (maxTop != null && remove <= maxTop) {
                         maxHeap.remove(remove);
                     }
@@ -279,27 +278,27 @@ public class Solution3 {
                     }
                 }
 
-                Integer minTop = minHeap.top();
+                Integer minTop = minHeap.peek();
                 if (minTop == null || minTop <= nums[i]) {
-                    minHeap.push(nums[i]);
+                    minHeap.offer(nums[i]);
                 }
                 else {
-                    maxHeap.push(nums[i]);
+                    maxHeap.offer(nums[i]);
                 }
 
                 int numDiff = minHeap.size() - maxHeap.size();
                 while (numDiff < 0 || numDiff > 1) {
                     if (numDiff < 0) {
-                        minHeap.push(maxHeap.pop());
+                        minHeap.offer(maxHeap.poll());
                     }
                     else {
-                        maxHeap.push(minHeap.pop());
+                        maxHeap.offer(minHeap.poll());
                     }
                     numDiff = minHeap.size() - maxHeap.size();
                 }
 
                 if (i + 1 >= k) {
-                    result.add(resultHeap.top());
+                    result.add(resultHeap.peek());
                 }
             }
         }
@@ -313,11 +312,11 @@ public class Solution3 {
         http://www.lintcode.com/zh-cn/problem/sliding-window-median/
         滑动窗口的中位数(题目的中文描述有误)
          */
-//        int[] arr = {1,2,7,8,5};
-//        int k = 3;
-        int[] arr = {76,132,106,88,187,22,76,121,187,84,53,176,9,192,22,126,127,178,26,195,142,141,4,33,112,154,127,58,90,194,80,152,178,144,110,166,169,104,120,187,89,134,118,69,5};
-        int k = 36;
-        System.out.println(solution.medianSlidingWindow(arr, k));
+////        int[] arr = {1,2,7,8,5};
+////        int k = 3;
+//        int[] arr = {603,1882,1565,307,1458,578,253,515,1938,853,1295,238,1184,1109,1048,1680,1507,310,884,854,1109,278,648,1286,1428,200,1534,855,1021,999,258,129,1877,690,988,871,1253,1372,855,1481,1965,525,749,1909,522,1579,1198,724,1495,1496,783,1714,1214,1957,1798,1423,932,1559,1249,978,634,1648,108,812,1163,1712,1671,735,719,1272,720,732,507,115,1644,413,1111,552,144,353,1515,614,1050,39,40,354,1042,599,1548,1946,1671,1339,1250,907,1305,1164,898,36,1001,446};
+//        int k = 84;
+//        System.out.println(solution.medianSlidingWindow(arr, k));
 
 
 

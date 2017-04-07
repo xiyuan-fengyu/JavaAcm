@@ -87,10 +87,16 @@ public class Heap<T> {
             T temp = datas.get(i);
             if (t.equals(temp)) {
                 int lastIndex = datas.size() - 1;
-                swap(i, lastIndex);
-                datas.remove(lastIndex);
-                checkChild(i);
-                return temp;
+                if (i == lastIndex) {
+                    return datas.remove(lastIndex);
+                }
+                else {
+                    swap(i, lastIndex);
+                    datas.remove(lastIndex);
+                    checkChild(i);
+                    checkParent(i);
+                    return temp;
+                }
             }
         }
         return null;
