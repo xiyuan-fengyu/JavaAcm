@@ -507,7 +507,7 @@ public class Solution {
         for (int i = 2; i <= n; i++) {
             cache[i] = new double[6 * i + 1];
             for (int j = i, last = 6 * i; j <= last; j++) {
-                for (int k = 1; k <= 6 && j - k > i - 1 && j - k <= 6 * (i - 1); k++) {
+                for (int k = Math.max(1, j - 6 * (i - 1)), maxK = Math.min(6, j - i + 1); k <= maxK; k++) {
                     cache[i][j] += cache[i - 1][j - k] / 6.0;
                 }
             }
@@ -524,8 +524,7 @@ public class Solution {
 
     private void test() {
 
-        //http://www.lintcode.com/zh-cn/problem/dices-sum/
-        XYLog.d(dicesSum(2));
+//        XYLog.d(dicesSum(15));
 
 
 
