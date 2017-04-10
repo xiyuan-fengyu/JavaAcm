@@ -388,7 +388,34 @@ public class Solution {
         return next;
     }
 
+
+
+
+    public int binarySearch(int[] nums, int target) {
+        if (nums == null || nums.length == 0) {
+            return -1;
+        }
+        else return binarySearch(nums, target, 0, nums.length - 1);
+    }
+
+    private int binarySearch(int[] nums, int target, int left, int right) {
+        if (left >= right) {
+            return nums[left] == target ? left : -1;
+        }
+
+        int midI = (left + right) / 2;
+        int midV = nums[midI];
+        if (midV >= target) {
+            int temp = binarySearch(nums, target, left, midI - 1);
+            return temp == -1 ? (midV == target ? midI : -1) : temp;
+        }
+        else return binarySearch(nums, target, midI + 1, right);
+    }
+
     private void test() {
+
+//        int[] nums = {1, 4, 4, 4, 7, 8, 9};
+//        System.out.println(binarySearch(nums, 9));
 
 //        String source = "abcdabcdefg";
 //        String target = "abcdabcd";
