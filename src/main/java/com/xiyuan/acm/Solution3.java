@@ -1,15 +1,9 @@
 package com.xiyuan.acm;
 
-import com.xiyuan.acm.factory.TreeNodeFactory;
 import com.xiyuan.acm.model.DoublyListNode;
-import com.xiyuan.acm.model.Heap;
-import com.xiyuan.acm.model.LFUCache;
 import com.xiyuan.acm.model.TreeNode;
-import com.xiyuan.util.XYLog;
 
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by xiyuan_fengyu on 2017/4/5.

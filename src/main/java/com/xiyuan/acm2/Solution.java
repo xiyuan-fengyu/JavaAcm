@@ -2,6 +2,7 @@ package com.xiyuan.acm2;
 
 import com.xiyuan.acm.factory.TreeNodeFactory;
 import com.xiyuan.acm.model.TreeNode;
+import com.xiyuan.acm2.model.MinStack;
 import com.xiyuan.util.XYLog;
 
 import java.util.ArrayList;
@@ -313,7 +314,98 @@ public class Solution {
     }
 
 
+
+
+
+
+    public int strStr(String source, String target) {
+        if (source == null || target == null) {
+            return -1;
+        }
+
+        int lenS = source.length();
+        int lenT = target.length();
+        if (lenT == 0) {
+            return 0;
+        }
+        else if (lenS < lenT) {
+            return -1;
+        }
+
+        for (int i = 0; i <= lenS - lenT; i++) {
+            for (int j = 0; j < lenT; j++) {
+                if (source.charAt(i + j) == target.charAt(j)) {
+                    if (j + 1 == lenT) {
+                        return i;
+                    }
+                }
+                else {
+                    break;
+                }
+            }
+        }
+
+        return -1;
+    }
+
+
+
+
+    public int strStrKMP(String source, String target) {
+        if (source == null || target == null) {
+            return -1;
+        }
+
+        int lenS = source.length();
+        int lenT = target.length();
+        if (lenT == 0) {
+            return 0;
+        }
+        else if (lenS < lenT) {
+            return -1;
+        }
+
+        int[] next = getNext(target);
+        for (int i = 0, j = 0; i < lenS; i++) {
+            while (j > 0 && source.charAt(i) != target.charAt(j)) j = next[j];
+            if (source.charAt(i) == target.charAt(j)) j++;
+            if (j == lenT) {
+                return i - lenT + 1;
+            }
+        }
+        return -1;
+    }
+
+    private int[] getNext(String str) {
+        int len = str.length();
+        int[] next = new int[len + 1];
+        next[0] = next[1] = 0;
+        for (int i = 1, j = 0; i < len; i++) {
+            while (j > 0 && str.charAt(i) != str.charAt(j)) j = next[j];
+            if (str.charAt(i) == str.charAt(j)) j++;
+            next[i + 1] = j;
+        }
+        return next;
+    }
+
     private void test() {
+
+//        String source = "abcdabcdefg";
+//        String target = "abcdabcd";
+////        System.out.println(strStr(source, target));
+//        System.out.println(strStrKMP(source, target));
+
+
+//        MinStack minStack = new MinStack();
+//        minStack.push(1);
+//        System.out.println(minStack.pop());
+//        minStack.push(2);
+//        minStack.push(3);
+//        System.out.println(minStack.min());
+//        minStack.push(1);
+//        System.out.println(minStack.min());
+
+
 
 //        TreeNode treeNode = TreeNodeFactory.build("20,8,22,4,12");
 //        System.out.println(treeNode);
