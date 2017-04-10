@@ -5,10 +5,7 @@ import com.xiyuan.acm.model.TreeNode;
 import com.xiyuan.acm2.model.MinStack;
 import com.xiyuan.util.XYLog;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
+import java.util.*;
 
 /**
  * Created by xiyuan_fengyu on 2017/4/7.
@@ -412,10 +409,49 @@ public class Solution {
         else return binarySearch(nums, target, midI + 1, right);
     }
 
+
+
+
+    public List<List<Integer>> permute(int[] nums) {
+        List<List<Integer>> result = new ArrayList<>();
+        if (nums != null) {
+            Arrays.sort(nums);
+            do {
+                ArrayList<Integer> temp = new ArrayList<>();
+                for (int num : nums) {
+                    temp.add(num);
+                }
+                result.add(temp);
+            } while (nextPermute(nums));
+        }
+        return result;
+    }
+
+    private boolean nextPermute(int[] nums) {
+        int len = nums.length;
+        for (int i = len - 2; i > -1; i--) {
+            for (int j = len - 1; j > i; j--) {
+                if (nums[j] > nums[i]) {
+                    int temp = nums[j];
+                    nums[j] = nums[i];
+                    nums[i] = temp;
+                    Arrays.sort(nums, i + 1, len);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     private void test() {
+
+//        int[] nums = {5,4,6,2};
+//        XYLog.d(permute(nums));
+
 
 //        int[] nums = {1, 4, 4, 4, 7, 8, 9};
 //        System.out.println(binarySearch(nums, 9));
+
 
 //        String source = "abcdabcdefg";
 //        String target = "abcdabcd";
