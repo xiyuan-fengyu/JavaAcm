@@ -524,6 +524,7 @@ public class Solution {
 
     private void test() {
 
+        //http://www.lintcode.com/zh-cn/problem/dices-sum/
         XYLog.d(dicesSum(2));
 
 
