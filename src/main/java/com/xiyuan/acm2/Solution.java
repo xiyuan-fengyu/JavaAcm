@@ -2,9 +2,11 @@ package com.xiyuan.acm2;
 
 import com.xiyuan.acm.factory.TreeNodeFactory;
 import com.xiyuan.acm.model.TreeNode;
+import com.xiyuan.util.XYLog;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 
 /**
@@ -250,7 +252,79 @@ public class Solution {
     }
 
 
+
+
+    public void rotateString(char[] str, int offset) {
+        if (str != null && offset != 0) {
+            int len = str.length;
+            if (len > 0) {
+                offset %= len;
+
+                char last;
+                char temp;
+                for (int i = 0, j = 0; i < offset && j < len; i++) {
+                    last = str[i];
+                    for (int k = i + offset; ;) {
+                        temp = str[k];
+                        str[k] = last;
+                        last = temp;
+                        j++;
+
+                        k += offset;
+                        k %= len;
+
+                        if (k == i) {
+                            str[i] = last;
+                            j++;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+
+
+
+    public ArrayList<Integer> searchRange(TreeNode root, int k1, int k2) {
+        ArrayList<Integer> result = searchRangeNoSort(root, k1, k2);
+        Collections.sort(result);
+        return result;
+    }
+
+    private ArrayList<Integer> searchRangeNoSort(TreeNode root, int k1, int k2) {
+        ArrayList<Integer> result = new ArrayList<>();
+        if (root != null) {
+            if (root.val >= k1 && root.val <= k2) {
+                result.add(root.val);
+            }
+
+            if (root.left != null && root.val > k1) {
+                result.addAll(searchRangeNoSort(root.left, k1, k2));
+            }
+
+            if (root.right != null && root.val < k2) {
+                result.addAll(searchRangeNoSort(root.right, k1, k2));
+            }
+        }
+        return result;
+    }
+
+
     private void test() {
+
+//        TreeNode treeNode = TreeNodeFactory.build("20,8,22,4,12");
+//        System.out.println(treeNode);
+//        XYLog.d(searchRange(treeNode, 10, 22));
+
+
+
+//        char[] str = "abcdefg".toCharArray();
+//        rotateString(str, 6);
+//        System.out.println(Arrays.toString(str));
+
 
 //        TreeNode treeNode = TreeNodeFactory.build("3,9,20,#,#,15,7,#,12,1,#,#,4");
 //        String treeNodeStr = serialize(treeNode);
