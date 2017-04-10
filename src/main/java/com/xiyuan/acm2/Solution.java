@@ -219,27 +219,43 @@ public class Solution {
 
         String[] split = data.split(",");
         ArrayList<TreeNode> nodes = new ArrayList<>();
-        for (int i = 0, j = 0; i < split.length;) {
-            String value = split[i];
-            if (value.equals("#")) {
-
-            }
-            else {
-
+        int len = split.length;
+        if (len > 0) {
+            nodes.add(parseNode(split[0]));
+            for (int i = 0, j = 1; j < len && i < j; i++) {
+                TreeNode curNode = nodes.get(i);
+                if (curNode != null) {
+                    if (j < len) {
+                        TreeNode node = parseNode(split[j++]);
+                        curNode.left = node;
+                        nodes.add(node);
+                    }
+                    if (j < len) {
+                        TreeNode node = parseNode(split[j++]);
+                        curNode.right = node;
+                        nodes.add(node);
+                    }
+                }
             }
         }
 
-        return null;
+        return nodes.size() == 0 ? null : nodes.get(0);
+    }
+
+    private TreeNode parseNode(String node) {
+        if (node.matches("[0-9]+")) {
+            return new TreeNode(Integer.parseInt(node));
+        }
+        else return null;
     }
 
 
     private void test() {
 
-        //TODO 7
-        TreeNode treeNode = TreeNodeFactory.build("3,9,20,#,#,15,7");
-        System.out.println(treeNode);
-        String treeNodeStr = serialize(treeNode);
-        System.out.println(treeNodeStr);
+//        TreeNode treeNode = TreeNodeFactory.build("3,9,20,#,#,15,7,#,12,1,#,#,4");
+//        String treeNodeStr = serialize(treeNode);
+//        System.out.println(treeNodeStr);
+//        System.out.println(deserialize(treeNodeStr));
 
 
 //        System.out.println(Arrays.toString(mergeSortedArray(new int[] {1,2,3,4}, new int[] {2,4,5,6})));
