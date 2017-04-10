@@ -443,7 +443,99 @@ public class Solution {
         return false;
     }
 
+
+
+
+    @SuppressWarnings("unchecked")
+    public ArrayList<ArrayList<Integer>> subsets(int[] nums) {
+        ArrayList<ArrayList<Integer>> result = new ArrayList<>();
+        if (nums != null) {
+            Arrays.sort(nums);
+
+            result.add(new ArrayList<Integer>());
+
+            for (int num : nums) {
+                for (int i = 0, size = result.size(); i < size; i++) {
+                    ArrayList<Integer> clone = (ArrayList<Integer>) result.get(i).clone();
+                    clone.add(num);
+                    result.add(clone);
+                }
+            }
+        }
+        return result;
+    }
+
+
+
+    @SuppressWarnings("unchecked")
+    public ArrayList<ArrayList<Integer>> subsetsWithDup(int[] nums) {
+        ArrayList<ArrayList<Integer>> result = new ArrayList<>();
+        if (nums != null) {
+            Arrays.sort(nums);
+
+            result.add(new ArrayList<Integer>());
+
+            int len = nums.length;
+            for (int i = 0; i < len; ) {
+                int size = result.size();
+                ArrayList<Integer> dups = new ArrayList<>();
+                do {
+                    dups.add(nums[i]);
+                    ArrayList<Integer> dupsClone = (ArrayList<Integer>) dups.clone();
+                    for (int k = 0; k < size; k++) {
+                        ArrayList<Integer> clone = (ArrayList<Integer>) result.get(k).clone();
+                        clone.addAll(dupsClone);
+                        result.add(clone);
+                    }
+                    i++;
+                } while (i < len && nums[i - 1] == nums[i]);
+            }
+        }
+        return result;
+    }
+
+
+
+
+    public List<Map.Entry<Integer, Double>> dicesSum(int n) {
+        double[][] cache = new double[n + 1][];
+        cache[1] = new double[7];
+        for (int i = 1; i <= 6; i++) {
+            cache[1][i] = 1 / 6.0;
+        }
+
+        for (int i = 2; i <= n; i++) {
+            cache[i] = new double[6 * i + 1];
+            for (int j = i, last = 6 * i; j <= last; j++) {
+                for (int k = 1; k <= 6 && j - k > i - 1 && j - k <= 6 * (i - 1); k++) {
+                    cache[i][j] += cache[i - 1][j - k] / 6.0;
+                }
+            }
+        }
+
+
+        List<Map.Entry<Integer, Double>> result = new ArrayList<>();
+        for (int i = n, last = 6 * n; i <= last; i++) {
+            result.add(new AbstractMap.SimpleEntry<>(i,  cache[n][i]));
+        }
+        return result;
+    }
+
+
     private void test() {
+
+        XYLog.d(dicesSum(2));
+
+
+
+//        int[] nums = {1,2,2};
+//        XYLog.d(subsetsWithDup(nums));
+
+
+//        int[] nums = {1,2,3};
+//        XYLog.d(subsets(nums));
+
+
 
 //        int[] nums = {5,4,6,2};
 //        XYLog.d(permute(nums));
