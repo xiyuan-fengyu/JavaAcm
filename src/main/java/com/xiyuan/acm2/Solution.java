@@ -746,143 +746,107 @@ public class Solution {
     public ArrayList<ArrayList<String>> solveNQueens(int n) {
         ArrayList<ArrayList<String>> result = new ArrayList<>();
 
-        char[][] board = new char[n][n];
-        for (int i = 0; i < n; i++) {
-            char[] temp = new char[n];
-            Arrays.fill(temp, '.');
-            board[i] = temp;
-        }
-        boolean[] valids = new boolean[n * 6 - 2];
-        Arrays.fill(valids, true);
-        int row = 0;
-        int column = -1;
-        while (true) {
-            column++;
-
-            if (column >= n) {
-                if (row == 0) {
-                    break;
-                }
-                else {
-                    row--;
-                    for (int i = 0; i < n; i++) {
-                        if (board[row][i] == 'Q') {
-                            column = i;
-                            board[row][i] = '.';
-                            setValid(valids, row, i, true);
-                            break;
-                        }
-                    }
-                }
-            }
-            else {
-                if (isValid(valids, row, column)) {
-                    board[row][column] = 'Q';
+        char[] rowChars = new char[n];
+        Arrays.fill(rowChars, '.');
+        int[] columns = new int[n];
+        Arrays.fill(columns, -1);
+        for (int row = 0, col; ;) {
+            for (col = columns[row] + 1; col < n; col++) {
+                if (isValid(columns, row, col)) {
+                    columns[row] = col;
                     if (row == n - 1) {
                         ArrayList<String> strs = new ArrayList<>();
-                        for (char[] chars : board) {
-                            strs.add(String.valueOf(chars));
+                        for (int i = 0; i < n; i++) {
+                            int tempCol = columns[i];
+                            rowChars[tempCol] = 'Q';
+                            strs.add(String.valueOf(rowChars));
+                            rowChars[tempCol] = '.';
                         }
                         result.add(strs);
-
-                        board[row][column] = '.';
-                        column = n;
+                        col = n;
                     }
                     else {
-                        setValid(valids, row, column, false);
-                        column = -1;
                         row++;
                     }
+                    break;
                 }
+            }
+
+            if (col == n) {
+                if (row == 0) break;
+
+                columns[row] = -1;
+                row--;
             }
         }
         return result;
     }
 
-    private void setValid(boolean[] valids, int row, int col, boolean newVal) {
-        int len = valids.length;
-        int n = (len + 2) / 6;
-        valids[row] = newVal;
-        valids[n + col] = newVal;
-        valids[n * 2 + row + col] = newVal;
-        valids[n * 5 - 2 + row - col] = newVal;
+    private boolean isValid(int[] columns, int row, int col) {
+        for (int i = 0; i < row; i++) {
+            if (columns[i] == col || Math.abs(row - i) == Math.abs(col - columns[i])) {
+                return false;
+            }
+        }
+        return true;
     }
-
-    private boolean isValid(boolean[] valids, int row, int col) {
-        int len = valids.length;
-        int n = (len + 2) / 6;
-        return valids[row] && valids[n + col] && valids[n * 2 + row + col] && valids[n * 5 - 2 + row - col];
-    }
-
-
-
-
-
 
     public int totalNQueens(int n) {
         int total = 0;
-        char[][] board = new char[n][n];
-        for (int i = 0; i < n; i++) {
-            char[] temp = new char[n];
-            Arrays.fill(temp, '.');
-            board[i] = temp;
-        }
-        boolean[] valids = new boolean[n * 6 - 2];
-        Arrays.fill(valids, true);
-        int row = 0;
-        int column = -1;
-        while (true) {
-            column++;
 
-            if (column >= n) {
-                if (row == 0) {
-                    break;
-                }
-                else {
-                    row--;
-                    for (int i = 0; i < n; i++) {
-                        if (board[row][i] == 'Q') {
-                            column = i;
-                            board[row][i] = '.';
-                            setValid(valids, row, i, true);
-                            break;
-                        }
-                    }
-                }
-            }
-            else {
-                if (isValid(valids, row, column)) {
-                    board[row][column] = 'Q';
+        int[] columns = new int[n];
+        Arrays.fill(columns, -1);
+        for (int row = 0, col; ;) {
+            for (col = columns[row] + 1; col < n; col++) {
+                if (isValid(columns, row, col)) {
+                    columns[row] = col;
                     if (row == n - 1) {
                         total++;
-
-                        board[row][column] = '.';
-                        column = n;
+                        col = n;
                     }
                     else {
-                        setValid(valids, row, column, false);
-                        column = -1;
                         row++;
                     }
+                    break;
                 }
+            }
+
+            if (col == n) {
+                if (row == 0) break;
+
+                columns[row] = -1;
+                row--;
             }
         }
         return total;
     }
 
+    public ArrayList<ArrayList<String>> solveNQueensByBit(int n) {
+        ArrayList<ArrayList<String>> result = new ArrayList<>();
+
+        char[] rowChars = new char[n];
+        Arrays.fill(rowChars, '.');
+
+        return result;
+    }
+
+
+
+
 
     private void test() {
 
 
-//        http://www.tuicool.com/articles/6vYfmmj
+        System.out.println((1 << 2) - 1);
 
+        //http://www.tuicool.com/articles/6vYfmmj
 //        for (int i = 4; i <= 15; i++) {
 //            XYLog.d(i + " => " + totalNQueens(i));
 //        }
 
 
 
-//        XYLog.d(solveNQueens(8));
+//        XYLog.d(solveNQueens(4));
 
 
 //        System.out.println(minWindow("ADOBECODEBANC", "ABC"));
