@@ -741,7 +741,85 @@ public class Solution {
 
 
 
+
+
+    public ArrayList<ArrayList<String>> solveNQueens(int n) {
+        ArrayList<ArrayList<String>> result = new ArrayList<>();
+
+        char[][] board = new char[n][n];
+        for (int i = 0; i < n; i++) {
+            char[] temp = new char[n];
+            Arrays.fill(temp, '.');
+            board[i] = temp;
+        }
+        boolean[] valids = new boolean[n * 6 - 2];
+        Arrays.fill(valids, true);
+        int row = 0;
+        int column = -1;
+        while (true) {
+            column++;
+
+            if (column >= n) {
+                if (row == 0) {
+                    break;
+                }
+                else {
+                    row--;
+                    for (int i = 0; i < n; i++) {
+                        if (board[row][i] == 'Q') {
+                            column = i;
+                            board[row][i] = '.';
+                            setValid(valids, row, i, true);
+                            break;
+                        }
+                    }
+                }
+            }
+            else {
+                if (isValid(valids, row, column)) {
+                    board[row][column] = 'Q';
+                    if (row == n - 1) {
+                        ArrayList<String> strs = new ArrayList<>();
+                        for (char[] chars : board) {
+                            strs.add(String.valueOf(chars));
+                        }
+                        result.add(strs);
+
+                        board[row][column] = '.';
+                        column = n;
+                    }
+                    else {
+                        setValid(valids, row, column, false);
+                        column = -1;
+                        row++;
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    private void setValid(boolean[] valids, int row, int col, boolean newVal) {
+        int len = valids.length;
+        int n = (len + 2) / 6;
+        valids[row] = newVal;
+        valids[n + col] = newVal;
+        valids[n * 2 + row + col] = newVal;
+        valids[n * 5 - 2 + row - col] = newVal;
+    }
+
+    private boolean isValid(boolean[] valids, int row, int col) {
+        int len = valids.length;
+        int n = (len + 2) / 6;
+        return valids[row] && valids[n + col] && valids[n * 2 + row + col] && valids[n * 5 - 2 + row - col];
+    }
+
+
+
     private void test() {
+
+//        XYLog.d(solveNQueens(8));
+
 
 //        System.out.println(minWindow("ADOBECODEBANC", "ABC"));
 //        System.out.println(minWindow("abcdecf", "acc"));
