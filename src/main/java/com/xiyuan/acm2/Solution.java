@@ -2,13 +2,12 @@ package com.xiyuan.acm2;
 
 import com.xiyuan.acm.factory.TreeNodeFactory;
 import com.xiyuan.acm.model.TreeNode;
-import com.xiyuan.acm2.model.MinStack;
-import com.xiyuan.acm2.model.NestedInteger;
-import com.xiyuan.acm2.model.NestedIntegerItem;
-import com.xiyuan.acm2.model.NestedIntegerList;
+import com.xiyuan.acm2.model.*;
 import com.xiyuan.util.XYLog;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by xiyuan_fengyu on 2017/4/7.
@@ -581,6 +580,27 @@ public class Solution {
     }
 
     private void test() {
+
+
+
+        String str = "3, [set(1,10),set(2,20),set(3,30),get(1),set(4,40),get(4),get(3),get(2),get(1),set(5,50),get(1),get(2),get(3),get(4),get(5)]";
+        int capacity = Integer.parseInt(str.substring(0, str.indexOf(",")));
+        String options = str.substring(str.indexOf("[") + 1, str.indexOf("]"));
+        Pattern pattern = Pattern.compile("(set\\(([0-9]+),([0-9]+)\\))|(get\\(([0-9]+)\\))");
+        Matcher matcher = pattern.matcher(options);
+        LFUCache lfuCache = new LFUCache(capacity);
+        while (matcher.find()) {
+            if (matcher.group(1) != null) {
+                //set
+                int key = Integer.parseInt(matcher.group(2));
+                int value = Integer.parseInt(matcher.group(3));
+                lfuCache.set(key, value);
+            }
+            else {
+                System.out.println(lfuCache.get(Integer.parseInt(matcher.group(5))));
+            }
+        }
+
 
 //        ArrayList<NestedInteger> list = new ArrayList<>();
 //        list.add(new NestedIntegerItem(1));
