@@ -676,7 +676,37 @@ public class Solution {
     }
 
 
+
+
+    public int partitionArray(int[] nums, int k) {
+        if (nums == null) return -1;
+
+        int i = 0;
+        int j = nums.length - 1;
+
+        while (i < j) {
+            while (i < j && nums[j] >= k) {
+                j--;
+            }
+
+            while (i < j && nums[i] < k) {
+                i++;
+            }
+
+            int temp = nums[j];
+            nums[j] = nums[i];
+            nums[i] = temp;
+        }
+        return j < 0 || nums[j] < k ? j + 1 : j;
+    }
+
+
     private void test() {
+
+//        int[] arr = new int[]{9,9,9,8,9,8,7,9,8,8,8,9,8,9,8,8,6,9};
+//        System.out.println(partitionArray(arr, 9));
+//        XYLog.d(arr);
+
 
 //        ArrayList<Interval> intervals = new ArrayList<>();
 //        intervals.add(new Interval(1, 5));
