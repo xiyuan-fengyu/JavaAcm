@@ -816,7 +816,71 @@ public class Solution {
 
 
 
+
+
+
+    public int totalNQueens(int n) {
+        int total = 0;
+        char[][] board = new char[n][n];
+        for (int i = 0; i < n; i++) {
+            char[] temp = new char[n];
+            Arrays.fill(temp, '.');
+            board[i] = temp;
+        }
+        boolean[] valids = new boolean[n * 6 - 2];
+        Arrays.fill(valids, true);
+        int row = 0;
+        int column = -1;
+        while (true) {
+            column++;
+
+            if (column >= n) {
+                if (row == 0) {
+                    break;
+                }
+                else {
+                    row--;
+                    for (int i = 0; i < n; i++) {
+                        if (board[row][i] == 'Q') {
+                            column = i;
+                            board[row][i] = '.';
+                            setValid(valids, row, i, true);
+                            break;
+                        }
+                    }
+                }
+            }
+            else {
+                if (isValid(valids, row, column)) {
+                    board[row][column] = 'Q';
+                    if (row == n - 1) {
+                        total++;
+
+                        board[row][column] = '.';
+                        column = n;
+                    }
+                    else {
+                        setValid(valids, row, column, false);
+                        column = -1;
+                        row++;
+                    }
+                }
+            }
+        }
+        return total;
+    }
+
+
     private void test() {
+
+
+
+
+//        for (int i = 4; i <= 15; i++) {
+//            XYLog.d(i + " => " + totalNQueens(i));
+//        }
+
+
 
 //        XYLog.d(solveNQueens(8));
 
