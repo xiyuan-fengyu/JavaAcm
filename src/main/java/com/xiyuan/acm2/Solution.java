@@ -874,7 +874,7 @@ public class Solution {
     private void test() {
 
 
-
+//        http://www.tuicool.com/articles/6vYfmmj
 
 //        for (int i = 4; i <= 15; i++) {
 //            XYLog.d(i + " => " + totalNQueens(i));
