@@ -93,7 +93,7 @@ public class XYLog {
                 return objArrToString(objs);
             }
         }
-        else if (!toString.startsWith(clazzName + "@") && toString.charAt(0) != '[') {
+        else if (!toString.startsWith(clazzName + "@")) {
             return toString;
         }
         else if (t instanceof Iterable) {

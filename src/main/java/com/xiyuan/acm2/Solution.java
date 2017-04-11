@@ -636,7 +636,53 @@ public class Solution {
         return false;
     }
 
+
+
+
+
+    public ArrayList<Interval> insert(ArrayList<Interval> intervals, Interval newInterval) {
+        ArrayList<Interval> result = new ArrayList<Interval>();
+        ArrayList<int[]> points = new ArrayList<>();
+        for (Interval interval : intervals) {
+            points.add(new int[]{interval.start, 0});
+            points.add(new int[]{interval.end, 1});
+        }
+        points.add(new int[]{newInterval.start, 0});
+        points.add(new int[]{newInterval.end, 1});
+        Collections.sort(points, new Comparator<int[]>() {
+            @Override
+            public int compare(int[] o1, int[] o2) {
+                return o1[0] == o2[0] ? o1[1] - o2[1] : o1[0] - o2[0];
+            }
+        });
+        Stack<int[]> stack = new Stack<>();
+        for (int[] point : points) {
+            if (stack.isEmpty()) {
+                stack.push(point);
+            }
+            else {
+                if (point[1] == 0) {
+                    stack.push(point);
+                }
+                else {
+                    int[] top = stack.pop();
+                    if (stack.isEmpty()) {
+                        result.add(new Interval(top[0], point[0]));
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+
     private void test() {
+
+//        ArrayList<Interval> intervals = new ArrayList<>();
+//        intervals.add(new Interval(1, 5));
+//        Interval newInterval = new Interval(0, 0);
+//        XYLog.d(insert(intervals, newInterval));
+
 
 
 //        String s1 = "aabcc";
