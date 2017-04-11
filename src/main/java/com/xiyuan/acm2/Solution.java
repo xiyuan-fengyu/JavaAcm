@@ -3,6 +3,9 @@ package com.xiyuan.acm2;
 import com.xiyuan.acm.factory.TreeNodeFactory;
 import com.xiyuan.acm.model.TreeNode;
 import com.xiyuan.acm2.model.MinStack;
+import com.xiyuan.acm2.model.NestedInteger;
+import com.xiyuan.acm2.model.NestedIntegerItem;
+import com.xiyuan.acm2.model.NestedIntegerList;
 import com.xiyuan.util.XYLog;
 
 import java.util.*;
@@ -10,6 +13,7 @@ import java.util.*;
 /**
  * Created by xiyuan_fengyu on 2017/4/7.
  */
+@SuppressWarnings("unchecked")
 public class Solution {
 
     public int aplusb(int a, int b) {
@@ -446,7 +450,6 @@ public class Solution {
 
 
 
-    @SuppressWarnings("unchecked")
     public ArrayList<ArrayList<Integer>> subsets(int[] nums) {
         ArrayList<ArrayList<Integer>> result = new ArrayList<>();
         if (nums != null) {
@@ -467,7 +470,6 @@ public class Solution {
 
 
 
-    @SuppressWarnings("unchecked")
     public ArrayList<ArrayList<Integer>> subsetsWithDup(int[] nums) {
         ArrayList<ArrayList<Integer>> result = new ArrayList<>();
         if (nums != null) {
@@ -551,7 +553,42 @@ public class Solution {
         return result;
     }
 
+
+
+
+    public List<Integer> flatten(List<NestedInteger> nestedList) {
+        if (nestedList == null) return null;
+
+        List<Integer> result = new ArrayList<>();
+        Stack<NestedInteger> stack = new Stack<>();
+        for (int i = nestedList.size() - 1; i >= 0; i--) {
+            stack.push(nestedList.get(i));
+        }
+
+        while (!stack.isEmpty()) {
+            NestedInteger top = stack.pop();
+            if (top.isInteger()) {
+                result.add(top.getInteger());
+            }
+            else {
+                List<NestedInteger> list = top.getList();
+                for (int i = list.size() - 1; i >= 0; i--) {
+                    stack.push(list.get(i));
+                }
+            }
+        }
+        return result;
+    }
+
     private void test() {
+
+//        ArrayList<NestedInteger> list = new ArrayList<>();
+//        list.add(new NestedIntegerItem(1));
+//        list.add(new NestedIntegerItem(2));
+//        list.add(new NestedIntegerList((List<NestedInteger>) list.clone()));
+//        list.add(new NestedIntegerItem(3));
+//        XYLog.d(flatten(list));
+
 
 //        XYLog.d(dicesSum(15));
 //        XYLog.d(dicesSumLessComputeAndMem(15));
