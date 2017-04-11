@@ -579,8 +579,40 @@ public class Solution {
         return result;
     }
 
+
+
+
+
+    public boolean searchMatrix(int[][] matrix, int target) {
+        if (matrix == null) return false;
+
+        int row = matrix.length;
+        if (row > 0) {
+            int column = matrix[0].length;
+            int r = row - 1;
+            int c = 0;
+            while (r > -1 && c < column) {
+                int cur = matrix[r][c];
+                if (cur == target) return true;
+                else if (cur > target) {
+                    r--;
+                }
+                else {
+                    c++;
+                }
+            }
+        }
+        return false;
+    }
+
     private void test() {
 
+//        int[][] matrix = {
+//                {1, 3, 5, 7},
+//                {10, 11, 16, 20},
+//                {23, 30, 34, 50}
+//        };
+//        System.out.println(searchMatrix(matrix, 24));
 
 
 //        String str = "3, [set(1,10),set(2,20),set(3,30),get(1),set(4,40),get(4),get(3),get(2),get(1),set(5,50),get(1),get(2),get(3),get(4),get(5)]";
