@@ -583,23 +583,23 @@ public class Solution {
 
 
 
-        String str = "3, [set(1,10),set(2,20),set(3,30),get(1),set(4,40),get(4),get(3),get(2),get(1),set(5,50),get(1),get(2),get(3),get(4),get(5)]";
-        int capacity = Integer.parseInt(str.substring(0, str.indexOf(",")));
-        String options = str.substring(str.indexOf("[") + 1, str.indexOf("]"));
-        Pattern pattern = Pattern.compile("(set\\(([0-9]+),([0-9]+)\\))|(get\\(([0-9]+)\\))");
-        Matcher matcher = pattern.matcher(options);
-        LFUCache lfuCache = new LFUCache(capacity);
-        while (matcher.find()) {
-            if (matcher.group(1) != null) {
-                //set
-                int key = Integer.parseInt(matcher.group(2));
-                int value = Integer.parseInt(matcher.group(3));
-                lfuCache.set(key, value);
-            }
-            else {
-                System.out.println(lfuCache.get(Integer.parseInt(matcher.group(5))));
-            }
-        }
+//        String str = "3, [set(1,10),set(2,20),set(3,30),get(1),set(4,40),get(4),get(3),get(2),get(1),set(5,50),get(1),get(2),get(3),get(4),get(5)]";
+//        int capacity = Integer.parseInt(str.substring(0, str.indexOf(",")));
+//        String options = str.substring(str.indexOf("[") + 1, str.indexOf("]"));
+//        Pattern pattern = Pattern.compile("(set\\(([0-9]+),([0-9]+)\\))|(get\\(([0-9]+)\\))");
+//        Matcher matcher = pattern.matcher(options);
+//        LFUCache lfuCache = new LFUCache(capacity);
+//        while (matcher.find()) {
+//            if (matcher.group(1) != null) {
+//                //set
+//                int key = Integer.parseInt(matcher.group(2));
+//                int value = Integer.parseInt(matcher.group(3));
+//                lfuCache.set(key, value);
+//            }
+//            else {
+//                System.out.println(lfuCache.get(Integer.parseInt(matcher.group(5))));
+//            }
+//        }
 
 
 //        ArrayList<NestedInteger> list = new ArrayList<>();
