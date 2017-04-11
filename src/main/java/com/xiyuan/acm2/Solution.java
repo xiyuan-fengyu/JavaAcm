@@ -609,14 +609,41 @@ public class Solution {
 
 
     public boolean isInterleave(String s1, String s2, String s3) {
-        // write your code here
-        return true;
+        if (s1 == null || s2 == null || s3 == null) return false;
+        return s1.length() + s2.length() == s3.length() && isInterleave(s1, 0, s2, 0, s3, 0);
+    }
+
+    private boolean isInterleave(String s1, int index1, String s2, int index2, String s3, int index3) {
+        int len1 = s1.length();
+        int len2 = s2.length();
+        int len3 = s3.length();
+
+        if (len1 == index1 && len2 == index2 && index3 == len3) return true;
+        else {
+            char c3 = s3.charAt(index3);
+            if (index1 < len1 && c3 == s1.charAt(index1)) {
+                if (isInterleave(s1, index1 + 1, s2, index2, s3, index3 + 1)) {
+                    return true;
+                }
+            }
+
+            if (index2 < len2 && c3 == s2.charAt(index2)) {
+                if (isInterleave(s1, index1, s2, index2 + 1, s3, index3 + 1)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private void test() {
 
 
-        //http://www.lintcode.com/zh-cn/problem/interleaving-string/
+//        String s1 = "aabcc";
+//        String s2 = "dbbca";
+//        String s3 = "aadbbcbcac";
+//        System.out.println(isInterleave(s1, s2, s3));
+
 
 
 //        int[][] matrix = {
