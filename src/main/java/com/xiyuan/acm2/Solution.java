@@ -836,7 +836,7 @@ public class Solution {
 
     private void test() {
 
-
+        //学习位运算技巧，然后理解n皇问题的位运算解法
         System.out.println((1 << 2) - 1);
 
         //http://www.tuicool.com/articles/6vYfmmj
