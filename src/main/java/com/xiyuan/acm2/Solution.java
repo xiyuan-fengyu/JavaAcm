@@ -521,10 +521,40 @@ public class Solution {
         return result;
     }
 
+    public List<Map.Entry<Integer, Double>> dicesSumLessComputeAndMem(int n) {
+        double[][] cache = new double[n + 1][];
+        cache[1] = new double[3];
+        for (int i = 0; i < 3; i++) {
+            cache[1][i] = 1 / 6.0;
+        }
+
+        for (int i = 2; i <= n; i++) {
+            int lastMinMaxSum = 7 * (i - 1);
+            int lastMinMaxHalf = lastMinMaxSum / 2;
+            int halfLen = (5 * i + 2) / 2;
+            cache[i] = new double[halfLen];
+            for (int j = 0; j < halfLen; j++) {
+                for (int k = Math.max(j - 5 * i, 1); k <= Math.min(j + 1, 6); k++) {
+                    int lastSum = j + i - k;
+                    if (lastSum > lastMinMaxHalf) {
+                        lastSum = lastMinMaxSum - lastSum;
+                    }
+                    cache[i][j] += cache[i - 1][lastSum - (i - 1)] / 6.0;
+                }
+            }
+        }
+
+        List<Map.Entry<Integer, Double>> result = new ArrayList<>();
+        for (int i = 0, len = 5 * n + 1, half = (len - 1) / 2; i < len; i++) {
+            result.add(new AbstractMap.SimpleEntry<>(i + n,  cache[n][i <= half ? i : len - 1 - i]));
+        }
+        return result;
+    }
 
     private void test() {
 
 //        XYLog.d(dicesSum(15));
+//        XYLog.d(dicesSumLessComputeAndMem(15));
 
 
 
