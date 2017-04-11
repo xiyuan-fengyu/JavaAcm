@@ -701,7 +701,51 @@ public class Solution {
     }
 
 
+
+    public String minWindow(String source, String target) {
+        if (source == null || target == null || source.equals("") || target.equals("")) return "";
+
+        int[] charCounts = new int[256];
+        int charNum = 0;
+        for (int i = 0; i < target.length(); i++) {
+            char c = target.charAt(i);
+            if (charCounts[c] == 0) {
+                charNum++;
+            }
+            charCounts[c]++;
+        }
+
+        int minLeft = -1;
+        int minRight = -1;
+        int[] charFound = new int[256];
+        int found = 0;
+        for (int right = 0, left = 0; right < source.length(); right++) {
+            char c = source.charAt(right);
+            if (charCounts[c] > 0 && (charFound[c]++) == charCounts[c] - 1) {
+                found++;
+                while (found == charNum) {
+                    if (minRight == -1 || minRight - minLeft > right - left) {
+                        minLeft = left;
+                        minRight = right;
+                    }
+                    char leftC = source.charAt(left++);
+                    if (charCounts[leftC] > 0 && (charFound[leftC]--) == charCounts[leftC]) {
+                        found--;
+                    }
+                }
+            }
+        }
+
+        return minRight == -1 ? "" : source.substring(minLeft, minRight + 1);
+    }
+
+
+
     private void test() {
+
+//        System.out.println(minWindow("ADOBECODEBANC", "ABC"));
+//        System.out.println(minWindow("abcdecf", "acc"));
+
 
 //        int[] arr = new int[]{9,9,9,8,9,8,7,9,8,8,8,9,8,9,8,8,6,9};
 //        System.out.println(partitionArray(arr, 9));
