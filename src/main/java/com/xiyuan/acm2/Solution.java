@@ -605,7 +605,19 @@ public class Solution {
         return false;
     }
 
+
+
+
+    public boolean isInterleave(String s1, String s2, String s3) {
+        // write your code here
+        return true;
+    }
+
     private void test() {
+
+
+        //http://www.lintcode.com/zh-cn/problem/interleaving-string/
+
 
 //        int[][] matrix = {
 //                {1, 3, 5, 7},
