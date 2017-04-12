@@ -1122,7 +1122,6 @@ public class Solution {
 
 
     public int maxSubArray(int[] nums, int k) {
-        int result = 0;
         int positiveNum = 0;
         int len = nums.length;
         for (int i = 0; i < len; i++) {
@@ -1133,13 +1132,16 @@ public class Solution {
         if (positiveNum <= k) {
             Arrays.sort(nums);
 
+            int sum = 0;
             for (int i = 0; i < k; i++) {
-                result += nums[len - 1 - i];
+                sum += nums[len - 1 - i];
             }
+            return sum;
         }
         else {
             ArrayList<Integer> posNegs = new ArrayList<>();
             posNegs.add(0);
+            int posSum = 0;
             for (int num : nums) {
                 int size = posNegs.size();
                 if (posNegs.get(size - 1) * num >= 0) {
@@ -1148,45 +1150,23 @@ public class Solution {
                 else {
                     posNegs.add(num);
                 }
-            }
-            result = maxSum(posNegs, k);
-        }
-        return result;
-    }
 
-    public int maxSum(ArrayList<Integer> nums, int k) {
-        ArrayList<Integer> poses = new ArrayList<>();
-        int sum = 0;
-        for (Integer posNeg : nums) {
-            if (posNeg > 0) {
-                poses.add(posNeg);
-                sum += posNeg;
-            }
-        }
-
-        if (poses.size() <= k) {
-            return sum;
-        }
-        else {
-            Collections.sort(poses);
-            sum = 0;
-            for (int i = 0, size = poses.size(); i < k; i++) {
-                sum += poses.get(size - 1 - i);
+                if (num > 0) posSum += num;
             }
 
-            int maxNegIndex = -1;
-            for (int i = nums.get(0) < 0 ? 2 : 1, size = nums.size(); i <= size - 1; i += 2) {
-                if (maxNegIndex == -1 || nums.get(maxNegIndex) < nums.get(i)) {
-                    maxNegIndex = i;
-                }
-            }
-            nums.set(maxNegIndex - 1, nums.get(maxNegIndex - 1) + nums.get(maxNegIndex) + nums.get(maxNegIndex + 1));
-            nums.remove(maxNegIndex);
-            nums.remove(maxNegIndex);
-            if (nums.get(0) < 0) nums.remove(0);
-            if (nums.get(nums.size() - 1) < 0) nums.remove(nums.size() - 1);
+            positiveNum = posNegs.get(0) < 0 ? posNegs.size() / 2 : (posNegs.size() - 1) / 2 + 1;
+            if (positiveNum <= k) return posSum;
 
-            return Math.max(sum, maxSum(nums, k));
+            int[] numArr = new int[posNegs.size()];
+            for (int i = 0; i < numArr.length; i++) {
+                numArr[i] = posNegs.get(i);
+            }
+            if (k == 1) return maxSubArray(numArr);
+            else if (k == 2) return maxTwoSubArrays(numArr);
+            else {
+
+                return 0;
+            }
         }
     }
 
