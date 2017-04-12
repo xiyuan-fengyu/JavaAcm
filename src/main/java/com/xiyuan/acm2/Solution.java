@@ -1,6 +1,8 @@
 package com.xiyuan.acm2;
 
+import com.xiyuan.acm.factory.ListNodeFactory;
 import com.xiyuan.acm.factory.TreeNodeFactory;
+import com.xiyuan.acm.model.ListNode;
 import com.xiyuan.acm.model.TreeNode;
 import com.xiyuan.acm2.model.*;
 import com.xiyuan.util.XYLog;
@@ -913,7 +915,68 @@ public class Solution {
     }
 
 
+
+
+
+
+    public ListNode reverse(ListNode head) {
+        ListNode cur = null;
+        while (head != null) {
+            ListNode tempNext = head.next;
+            head.next = cur;
+            cur = head;
+            head = tempNext;
+        }
+        return cur;
+    }
+
+
+    public ListNode reverseBetween(ListNode head, int m , int n) {
+        if (head == null || m == n) return head;
+
+        ListNode newHead = new ListNode(0);
+        newHead.next = head;
+
+        ListNode last = newHead;
+        ListNode cur = head;
+        int curIndex = 1;
+        while (cur != null && curIndex != m) {
+            last = cur;
+            cur = cur.next;
+            curIndex++;
+        }
+
+        if (curIndex == m) {
+            last.next = null;
+
+            ListNode reverseTail = cur;
+            ListNode reverseNode = null;
+            while (cur != null && curIndex <= n) {
+                ListNode tempNext = cur.next;
+                cur.next = reverseNode;
+                reverseNode = cur;
+                cur = tempNext;
+                curIndex++;
+            }
+            last.next = reverseNode;
+            if (reverseTail != null) {
+                reverseTail.next = cur;
+            }
+        }
+        return newHead.next;
+    }
+
     private void test() {
+
+//        ListNode head = ListNodeFactory.build("3760->2881->7595->3904->5069->4421->8560->8879->8488->5040->5792->56->1007->2270->3403->6062");
+//        System.out.println(head);
+//        System.out.println(reverseBetween(head, 2, 7));
+
+
+//        ListNode head = ListNodeFactory.build("1->2->3->4->5->6");
+//        System.out.println(head);
+//        System.out.println(reverse(head));
+
 
         // N皇问题的集中不同算法
         // http://www.tuicool.com/articles/6vYfmmj
