@@ -1030,7 +1030,68 @@ public class Solution {
         }
     }
 
+
+
+
+
+    public int maxSubArray(int[] nums) {
+        if (nums == null || nums.length == 0) return 0;
+
+        int tempMaxSum = nums[0];
+        int maxSum = tempMaxSum;
+        for (int i = 1; i < nums.length; i++) {
+            int num = nums[i];
+            tempMaxSum = Math.max(tempMaxSum + num, num);
+            maxSum = Math.max(maxSum, tempMaxSum);
+        }
+        return maxSum;
+    }
+
+
+
+    public int maxTwoSubArrays(ArrayList<Integer> nums) {
+        if (nums == null || nums.size() <= 1) return 0;
+
+        int size = nums.size();
+        int[] l2rMax = new int[size];
+        int[] r2lMax = new int[size];
+
+        int tempMaxSum = nums.get(0);
+        int maxSum = tempMaxSum;
+        l2rMax[0] = tempMaxSum;
+        for (int i = 1; i < size - 1; i++) {
+            int num = nums.get(i);
+            tempMaxSum = Math.max(tempMaxSum + num, num);
+            maxSum = Math.max(maxSum, tempMaxSum);
+            l2rMax[i] = maxSum;
+        }
+
+        tempMaxSum = nums.get(size - 1);
+        maxSum = tempMaxSum;
+        r2lMax[size - 1] = tempMaxSum;
+        for (int i = size - 2; i > 0; i--) {
+            int num = nums.get(i);
+            tempMaxSum = Math.max(tempMaxSum + num, num);
+            maxSum = Math.max(maxSum, tempMaxSum);
+            r2lMax[i] = maxSum;
+        }
+
+        maxSum = l2rMax[0] + r2lMax[1];
+        for (int i = 1; i < size - 1; i++) {
+            maxSum = Math.max(maxSum, l2rMax[i] + r2lMax[i + 1]);
+        }
+
+        return maxSum;
+    }
+
     private void test() {
+
+
+//        System.out.println(maxTwoSubArrays(new ArrayList<>(Arrays.asList(1, 3, -1, 2, -1, 2))));
+
+
+//        System.out.println(maxSubArray(new int[]{-2, 2, -3, 4, -1, 2, 1, -5, 3}));
+
 
 //        MyQueue myQueue = new MyQueue();
 //        myQueue.push(1);
