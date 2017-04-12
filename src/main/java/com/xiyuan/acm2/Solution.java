@@ -966,7 +966,41 @@ public class Solution {
         return newHead.next;
     }
 
+
+    public int searchMatrixII(int[][] matrix, int target) {
+        if (matrix == null || matrix.length == 0) return 0;
+
+        int row = matrix.length;
+        int col = matrix[0].length;
+        if (target < matrix[0][0] || target > matrix[row - 1][col - 1]) return 0;
+
+        int total = 0;
+        for (int i = row - 1, j = 0; i > -1 && j < col;) {
+            int cur = matrix[i][j];
+            if (cur == target) {
+                total++;
+                i--;
+                j++;
+            }
+            else if (cur < target) {
+                j++;
+            }
+            else {
+                i--;
+            }
+        }
+        return total;
+    }
+
     private void test() {
+
+        int[][] matrix = {
+                {1, 3, 5, 7},
+                {2, 4, 7, 8},
+                {3, 5, 9, 10}
+        };
+        System.out.println(searchMatrixII(matrix, 3));
+
 
 //        ListNode head = ListNodeFactory.build("3760->2881->7595->3904->5069->4421->8560->8879->8488->5040->5792->56->1007->2270->3403->6062");
 //        System.out.println(head);
