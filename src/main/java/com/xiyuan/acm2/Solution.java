@@ -1134,7 +1134,7 @@ public class Solution {
             Arrays.sort(nums);
 
             for (int i = 0; i < k; i++) {
-                result += nums[len - 1 - k];
+                result += nums[len - 1 - i];
             }
         }
         else {
@@ -1149,33 +1149,57 @@ public class Solution {
                     posNegs.add(num);
                 }
             }
-
-            ArrayList<Integer> poses = new ArrayList<>();
-            for (Integer posNeg : posNegs) {
-                if (posNeg > 0) {
-                    poses.add(posNeg);
-                }
-            }
-
-            while (poses.size() > k) {
-
-            }
-
+            result = maxSum(posNegs, k);
         }
         return result;
     }
 
+    public int maxSum(ArrayList<Integer> nums, int k) {
+        ArrayList<Integer> poses = new ArrayList<>();
+        int sum = 0;
+        for (Integer posNeg : nums) {
+            if (posNeg > 0) {
+                poses.add(posNeg);
+                sum += posNeg;
+            }
+        }
+
+        if (poses.size() <= k) {
+            return sum;
+        }
+        else {
+            Collections.sort(poses);
+            sum = 0;
+            for (int i = 0, size = poses.size(); i < k; i++) {
+                sum += poses.get(size - 1 - i);
+            }
+
+            int maxNegIndex = -1;
+            for (int i = nums.get(0) < 0 ? 2 : 1, size = nums.size(); i <= size - 1; i += 2) {
+                if (maxNegIndex == -1 || nums.get(maxNegIndex) < nums.get(i)) {
+                    maxNegIndex = i;
+                }
+            }
+            nums.set(maxNegIndex - 1, nums.get(maxNegIndex - 1) + nums.get(maxNegIndex) + nums.get(maxNegIndex + 1));
+            nums.remove(maxNegIndex);
+            nums.remove(maxNegIndex);
+            if (nums.get(0) < 0) nums.remove(0);
+            if (nums.get(nums.size() - 1) < 0) nums.remove(nums.size() - 1);
+
+            return Math.max(sum, maxSum(nums, k));
+        }
+    }
 
     private void test() {
 
-//        System.out.println(maxSubArray(new int[]{
-//                1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,-2,1,-15,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
-//        }, 20));
+        System.out.println(maxSubArray(new int[]{
+                -42,81,-43,97,-82,20,-33,49,-62,2,-43,18,-54,52,-29,31,-70,87,-75,47,-22,42,-56,97,-100,54,-33,14,-89,34,-81,60,-66,75,-99,91,-93,70,-10,30,-26,72,-95,66,-41,23,-23,31,-14,78,-74,92,-20,25,-57,41,-72,58,-46,44,-52,53,-85,73,-37,96,-91,85,-77,62,-9,73,-64,63,-12,18,-61,24,-75,95,-54,89,-61,63,-19,24,-46,87,-87,69,-98,26,-92,26,-70,40,-63,20,-10,18,-64,26,-23,84,-35,65,-81,26,-55,92,-72,15,-99,18,-84,95,-50,77,-44,20,-20,94,-98,62,-67,17,-23,23,-75,33,-90,1,-1,86,-31,96,-80,100,-65,93,-51,48,-47,81,-63,100,-84,3,-15,59,-53,99,-67,12,-94,24,-98,74,-24,4,-34,79,-19,35,-54,36,-42,60,-68,18,-62,12,-50,44,-22,61,-21,27,-14,48,0,78,-39,70,-46,1,-86,77,-98,55,-93,81,-70,48,-3,0,-46,71,-50,11
+        }, 47));
 
 //        System.out.println(maxTwoSubArrays(new ArrayList<>(Arrays.asList(1, 3, -1, 2, -1, 2))));
 
 
-        System.out.println(maxSubArray(new int[]{-2, 2, -3, 4, -1, 2, 1, -5, 3}));
+//        System.out.println(maxSubArray(new int[]{-2, 2, -3, 4, -1, 2, 1, -5, 3}));
 
 
 //        MyQueue myQueue = new MyQueue();
