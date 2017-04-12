@@ -992,7 +992,54 @@ public class Solution {
         return total;
     }
 
+
+
+
+    public void recoverRotatedSortedArray(ArrayList<Integer> nums) {
+        if (nums == null || nums.size() <= 1) return;
+
+        int size = nums.size();
+        int offset = 0;
+        for (int i = 1; i < size; i++) {
+            if (nums.get(i - 1) > nums.get(i)) {
+                offset = i;
+                break;
+            }
+        }
+
+        if (offset > 0) {
+            offset = size - offset;
+            int changeNum = 0;
+            Integer temp;
+            for (int i = 0; changeNum < size && i < offset; i++) {
+                Integer last = nums.get(i);
+                int index = (i + offset) % size;
+                while (true) {
+                    temp = nums.get(index);
+                    nums.set(index, last);
+                    last = temp;
+                    changeNum++;
+                    if (i == index) {
+                        break;
+                    }
+                    else {
+                        index = (index + offset) % size;
+                    }
+                }
+            }
+        }
+    }
+
     private void test() {
+
+//        ArrayList<Integer> nums = new ArrayList<>();
+//        nums.add(3);
+//        nums.add(4);
+//        nums.add(1);
+//        nums.add(2);
+//        recoverRotatedSortedArray(nums);
+//        XYLog.d(nums);
+
 
 //        int[][] matrix = {
 //                {1, 3, 5, 7},
