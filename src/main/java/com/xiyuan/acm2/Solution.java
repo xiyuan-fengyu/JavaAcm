@@ -1032,6 +1032,14 @@ public class Solution {
 
     private void test() {
 
+//        MyQueue myQueue = new MyQueue();
+//        myQueue.push(1);
+//        myQueue.push(2);
+//        System.out.println(myQueue.top());
+//        System.out.println(myQueue.pop());
+
+
+
 //        ArrayList<Integer> nums = new ArrayList<>();
 //        nums.add(3);
 //        nums.add(4);
