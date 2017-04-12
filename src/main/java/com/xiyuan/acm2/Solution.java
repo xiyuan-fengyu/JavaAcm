@@ -791,6 +791,46 @@ public class Solution {
         return true;
     }
 
+    public ArrayList<ArrayList<String>> solveNQueensIt(int n) {
+        ArrayList<ArrayList<String>> result = new ArrayList<>();
+
+        char[][] chars = new char[n][];
+        for (int i = 0; i < n; i++) {
+            char[] temp = new char[n];
+            Arrays.fill(temp, '.');
+            chars[i] = temp;
+        }
+
+        int[] columns = new int[n];
+        Arrays.fill(columns, -1);
+
+        solveNQueensIt(result, chars, 0, columns);
+        return result;
+    }
+
+    private void solveNQueensIt(ArrayList<ArrayList<String>> result, char[][] chars, int row, int[] columns) {
+        int n = chars.length;
+        if (row == n) {
+            ArrayList<String> resultItem = new ArrayList<>();
+            for (char[] cs : chars) {
+                resultItem.add(String.valueOf(cs));
+            }
+            result.add(resultItem);
+        }
+        else {
+            for (int col = 0; col < n; col++) {
+                if (isValid(columns, row, col)) {
+                    columns[row] = col;
+                    chars[row][col] = 'Q';
+                    solveNQueensIt(result, chars, row + 1, columns);
+                    columns[row] = -1;
+                    chars[row][col] = '.';
+                }
+            }
+        }
+    }
+
+
     public int totalNQueens(int n) {
         int total = 0;
 
@@ -821,30 +861,77 @@ public class Solution {
         return total;
     }
 
+    /**
+     * 最高效的算法
+     * @param n
+     * @return
+     */
     public ArrayList<ArrayList<String>> solveNQueensByBit(int n) {
         ArrayList<ArrayList<String>> result = new ArrayList<>();
 
-        char[] rowChars = new char[n];
-        Arrays.fill(rowChars, '.');
+        char[][] chars = new char[n][];
+        for (int i = 0; i < n; i++) {
+            char[] temp = new char[n];
+            Arrays.fill(temp, '.');
+            chars[i] = temp;
+        }
 
+        int upperLimit = (1 << n) - 1;
+        solveNQueensByBitIt(result, chars, upperLimit, 0, 0, 0, 0);
         return result;
     }
 
+    private void solveNQueensByBitIt(ArrayList<ArrayList<String>> result, char[][] chars, int upperLimit, int row, int rowBit, int ldBit, int rdBit) {
+        int valid;
+        int col;
+        if (rowBit != upperLimit) {
+            valid = upperLimit & (~(rowBit | ldBit | rdBit));
+            while (valid != 0) {
+                col = valid & (~valid + 1);
+                valid -= col;
+                setQueen(chars, row, col, 'Q');
+                solveNQueensByBitIt(result, chars, upperLimit, row + 1, rowBit | col, (ldBit | col) << 1, (rdBit | col) >>> 1);
+                setQueen(chars, row, col, '.');
+            }
+        }
+        else {
+            ArrayList<String> resultItem = new ArrayList<>();
+            for (char[] cs : chars) {
+                resultItem.add(String.valueOf(cs));
+            }
+            result.add(resultItem);
+        }
+    }
 
-
+    private void setQueen(char[][] chars, int row, int col, char c) {
+        int colIndex = 0;
+        while ((col & 1) == 0) {
+            col >>>= 1;
+            colIndex++;
+        }
+        chars[row][chars.length - 1 - colIndex] = c;
+    }
 
 
     private void test() {
 
-        //学习位运算技巧，然后理解n皇问题的位运算解法
-        System.out.println((1 << 2) - 1);
+        // N皇问题的集中不同算法
+        // http://www.tuicool.com/articles/6vYfmmj
+//        long startTime = System.currentTimeMillis();
+//        System.out.println(solveNQueensByBit(14).size());
+//        System.out.println("solveNQueensByBit cost: " + (System.currentTimeMillis() - startTime));
+//
+//        startTime = System.currentTimeMillis();
+//        System.out.println(solveNQueens(14).size());
+//        System.out.println("solveNQueens cost: " + (System.currentTimeMillis() - startTime));
+//
+//        startTime = System.currentTimeMillis();
+//        System.out.println(solveNQueensIt(14).size());
+//        System.out.println("solveNQueensIt cost: " + (System.currentTimeMillis() - startTime));
 
-        //http://www.tuicool.com/articles/6vYfmmj
 //        for (int i = 4; i <= 15; i++) {
 //            XYLog.d(i + " => " + totalNQueens(i));
 //        }
-
-
 
 //        XYLog.d(solveNQueens(4));
 
