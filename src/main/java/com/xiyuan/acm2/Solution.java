@@ -994,12 +994,12 @@ public class Solution {
 
     private void test() {
 
-        int[][] matrix = {
-                {1, 3, 5, 7},
-                {2, 4, 7, 8},
-                {3, 5, 9, 10}
-        };
-        System.out.println(searchMatrixII(matrix, 3));
+//        int[][] matrix = {
+//                {1, 3, 5, 7},
+//                {2, 4, 7, 8},
+//                {3, 5, 9, 10}
+//        };
+//        System.out.println(searchMatrixII(matrix, 3));
 
 
 //        ListNode head = ListNodeFactory.build("3760->2881->7595->3904->5069->4421->8560->8879->8488->5040->5792->56->1007->2270->3403->6062");
