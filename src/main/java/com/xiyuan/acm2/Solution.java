@@ -1084,13 +1084,98 @@ public class Solution {
         return maxSum;
     }
 
+
+    public int maxTwoSubArrays(int[] nums) {
+        if (nums == null || nums.length <= 1) return 0;
+
+        int len = nums.length;
+        int[] l2rMax = new int[len];
+        int[] r2lMax = new int[len];
+
+        int tempMaxSum = nums[0];
+        int maxSum = tempMaxSum;
+        l2rMax[0] = tempMaxSum;
+        for (int i = 1; i < len - 1; i++) {
+            int num = nums[i];
+            tempMaxSum = Math.max(tempMaxSum + num, num);
+            maxSum = Math.max(maxSum, tempMaxSum);
+            l2rMax[i] = maxSum;
+        }
+
+        tempMaxSum = nums[len - 1];
+        maxSum = tempMaxSum;
+        r2lMax[len - 1] = tempMaxSum;
+        for (int i = len - 2; i > 0; i--) {
+            int num = nums[i];
+            tempMaxSum = Math.max(tempMaxSum + num, num);
+            maxSum = Math.max(maxSum, tempMaxSum);
+            r2lMax[i] = maxSum;
+        }
+
+        maxSum = l2rMax[0] + r2lMax[1];
+        for (int i = 1; i < len - 1; i++) {
+            maxSum = Math.max(maxSum, l2rMax[i] + r2lMax[i + 1]);
+        }
+
+        return maxSum;
+    }
+
+
+    public int maxSubArray(int[] nums, int k) {
+        int result = 0;
+        int positiveNum = 0;
+        int len = nums.length;
+        for (int i = 0; i < len; i++) {
+            if (nums[i] > 0) {
+                positiveNum++;
+            }
+        }
+        if (positiveNum <= k) {
+            Arrays.sort(nums);
+
+            for (int i = 0; i < k; i++) {
+                result += nums[len - 1 - k];
+            }
+        }
+        else {
+            ArrayList<Integer> posNegs = new ArrayList<>();
+            posNegs.add(0);
+            for (int num : nums) {
+                int size = posNegs.size();
+                if (posNegs.get(size - 1) * num >= 0) {
+                    posNegs.set(size - 1, posNegs.get(size - 1) + num);
+                }
+                else {
+                    posNegs.add(num);
+                }
+            }
+
+            ArrayList<Integer> poses = new ArrayList<>();
+            for (Integer posNeg : posNegs) {
+                if (posNeg > 0) {
+                    poses.add(posNeg);
+                }
+            }
+
+            while (poses.size() > k) {
+
+            }
+
+        }
+        return result;
+    }
+
+
     private void test() {
 
+//        System.out.println(maxSubArray(new int[]{
+//                1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,-2,1,-15,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+//        }, 20));
 
 //        System.out.println(maxTwoSubArrays(new ArrayList<>(Arrays.asList(1, 3, -1, 2, -1, 2))));
 
 
-//        System.out.println(maxSubArray(new int[]{-2, 2, -3, 4, -1, 2, 1, -5, 3}));
+        System.out.println(maxSubArray(new int[]{-2, 2, -3, 4, -1, 2, 1, -5, 3}));
 
 
 //        MyQueue myQueue = new MyQueue();
