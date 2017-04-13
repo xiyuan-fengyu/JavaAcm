@@ -1677,7 +1677,7 @@ public class Solution {
 
     private int searchInsert(int[] arr, int target, int left, int right) {
         if (left >= right) {
-            return left == arr.length || arr[left] > target ? left : left + 1;
+            return left == arr.length || arr[left] >= target ? left : left + 1;
         }
 
         int midI = (left + right) / 2;
@@ -1686,17 +1686,17 @@ public class Solution {
             return midI;
         }
         else if (mid > target) {
-            return searchInsert(arr, target, left, mid - 1);
+            return searchInsert(arr, target, left, midI - 1);
         }
-        else return searchInsert(arr, target, mid + 1, right);
+        else return searchInsert(arr, target, midI + 1, right);
     }
 
 
     private void test() {
 
-        d(searchInsert(new int[]{
-                1,3,5,6
-        }, 1));
+//        d(searchInsert(new int[]{
+//                1,3,5,6
+//        }, 7));
 
 //        d(threeSumClosest(new int[]{
 //                1,2,33,23,2423,33,23,1,7,6,8787,5,33,2,3,-23,-54,-67,100,400,-407,-500,-35,-8,0,0,7,6,0,1,2,-56,-89,24,2
