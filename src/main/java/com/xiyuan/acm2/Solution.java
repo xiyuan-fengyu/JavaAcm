@@ -1040,8 +1040,7 @@ public class Solution {
         int tempMaxSum = nums[0];
         int maxSum = tempMaxSum;
         for (int i = 1; i < nums.length; i++) {
-            int num = nums[i];
-            tempMaxSum = Math.max(tempMaxSum + num, num);
+            tempMaxSum = Math.max(tempMaxSum, 0) + nums[i];
             maxSum = Math.max(maxSum, tempMaxSum);
         }
         return maxSum;
@@ -1060,8 +1059,7 @@ public class Solution {
         int maxSum = tempMaxSum;
         l2rMax[0] = tempMaxSum;
         for (int i = 1; i < size - 1; i++) {
-            int num = nums.get(i);
-            tempMaxSum = Math.max(tempMaxSum + num, num);
+            tempMaxSum = Math.max(tempMaxSum, 0) + nums.get(i);
             maxSum = Math.max(maxSum, tempMaxSum);
             l2rMax[i] = maxSum;
         }
@@ -1070,8 +1068,7 @@ public class Solution {
         maxSum = tempMaxSum;
         r2lMax[size - 1] = tempMaxSum;
         for (int i = size - 2; i > 0; i--) {
-            int num = nums.get(i);
-            tempMaxSum = Math.max(tempMaxSum + num, num);
+            tempMaxSum = Math.max(tempMaxSum, 0) + nums.get(i);
             maxSum = Math.max(maxSum, tempMaxSum);
             r2lMax[i] = maxSum;
         }
@@ -1096,8 +1093,7 @@ public class Solution {
         int maxSum = tempMaxSum;
         l2rMax[0] = tempMaxSum;
         for (int i = 1; i < len - 1; i++) {
-            int num = nums[i];
-            tempMaxSum = Math.max(tempMaxSum + num, num);
+            tempMaxSum = Math.max(tempMaxSum, 0) + nums[i];
             maxSum = Math.max(maxSum, tempMaxSum);
             l2rMax[i] = maxSum;
         }
@@ -1106,8 +1102,7 @@ public class Solution {
         maxSum = tempMaxSum;
         r2lMax[len - 1] = tempMaxSum;
         for (int i = len - 2; i > 0; i--) {
-            int num = nums[i];
-            tempMaxSum = Math.max(tempMaxSum + num, num);
+            tempMaxSum = Math.max(tempMaxSum, 0) + nums[i];
             maxSum = Math.max(maxSum, tempMaxSum);
             r2lMax[i] = maxSum;
         }
@@ -1122,59 +1117,40 @@ public class Solution {
 
 
     public int maxSubArray(int[] nums, int k) {
-        int positiveNum = 0;
+        if (nums.length < k) {
+            return 0;
+        }
+
         int len = nums.length;
-        for (int i = 0; i < len; i++) {
-            if (nums[i] > 0) {
-                positiveNum++;
+        int[][] localMax = new int[k + 1][len + 1];
+        int[][] globalMax = new int[k + 1][len + 1];
+        for (int i = 1; i <= k; i++) {
+            localMax[i][i - 1] = Integer.MIN_VALUE;
+            for (int j = i; j <= len; j++) {
+                // localMax[i][j - 1] + nums[j - 1] 可以理解为：将前j - 1个数分为 i 组， nums[j - 1]附加到最后一组，所以还是i组；
+                // globalMax[i - 1][j - 1] + nums[j - 1] 理解为：将前j - 1个数分为 i - 1 组， nums[j - 1]单独做为一个新组；
+
+                // 由 localMax[i][j] 的计算公式，可以保证 nums[j - 1]一定在locaMax[i][j]这种分组情况的最后一个组中
+                // 同理，nums[j - 2] 一定在locaMax[i][j - 1]这种分组情况的最后一个组中, 所以 nums[j - 1] 可以直接附加到 localMax[i][j - 1]的最后一组（因为nums[j - 2]和nums[j - 1]紧挨着）
+
+                // 由 globalMax[i][j] 的计算公式，可以知道：
+                // 当 globalMax[i][j - 1] 更大的时候，nums[j - 1] 没有包含在分组中；
+                // 当 localMax[i][j] 更大的时候，nums[j - 1] 包含在最后一个分组中；
+                // 所以在 globalMax[i][j] 这种分组情况下，不能保证 nums[j - 1] 包含在分组中；
+                // 同理在 globalMax[i][j - 1] 这种分组情况下，不能保证 nums[j - 2] 包含在分组中；
+                // 所以在计算 localMax[i][j] 的第二种情况时，只能将 nums[j - 1] 单独做为一组， 前 j - 1 个数分为 i - 1 组
+                localMax[i][j] = Math.max(localMax[i][j - 1], globalMax[i - 1][j - 1]) + nums[j - 1];
+                globalMax[i][j] = Math.max(globalMax[i][j - 1], localMax[i][j]);
             }
         }
-        if (positiveNum <= k) {
-            Arrays.sort(nums);
-
-            int sum = 0;
-            for (int i = 0; i < k; i++) {
-                sum += nums[len - 1 - i];
-            }
-            return sum;
-        }
-        else {
-            ArrayList<Integer> posNegs = new ArrayList<>();
-            posNegs.add(0);
-            int posSum = 0;
-            for (int num : nums) {
-                int size = posNegs.size();
-                if (posNegs.get(size - 1) * num >= 0) {
-                    posNegs.set(size - 1, posNegs.get(size - 1) + num);
-                }
-                else {
-                    posNegs.add(num);
-                }
-
-                if (num > 0) posSum += num;
-            }
-
-            positiveNum = posNegs.get(0) < 0 ? posNegs.size() / 2 : (posNegs.size() - 1) / 2 + 1;
-            if (positiveNum <= k) return posSum;
-
-            int[] numArr = new int[posNegs.size()];
-            for (int i = 0; i < numArr.length; i++) {
-                numArr[i] = posNegs.get(i);
-            }
-            if (k == 1) return maxSubArray(numArr);
-            else if (k == 2) return maxTwoSubArrays(numArr);
-            else {
-
-                return 0;
-            }
-        }
+        return globalMax[k][len];
     }
 
     private void test() {
 
-        System.out.println(maxSubArray(new int[]{
-                -42,81,-43,97,-82,20,-33,49,-62,2,-43,18,-54,52,-29,31,-70,87,-75,47,-22,42,-56,97,-100,54,-33,14,-89,34,-81,60,-66,75,-99,91,-93,70,-10,30,-26,72,-95,66,-41,23,-23,31,-14,78,-74,92,-20,25,-57,41,-72,58,-46,44,-52,53,-85,73,-37,96,-91,85,-77,62,-9,73,-64,63,-12,18,-61,24,-75,95,-54,89,-61,63,-19,24,-46,87,-87,69,-98,26,-92,26,-70,40,-63,20,-10,18,-64,26,-23,84,-35,65,-81,26,-55,92,-72,15,-99,18,-84,95,-50,77,-44,20,-20,94,-98,62,-67,17,-23,23,-75,33,-90,1,-1,86,-31,96,-80,100,-65,93,-51,48,-47,81,-63,100,-84,3,-15,59,-53,99,-67,12,-94,24,-98,74,-24,4,-34,79,-19,35,-54,36,-42,60,-68,18,-62,12,-50,44,-22,61,-21,27,-14,48,0,78,-39,70,-46,1,-86,77,-98,55,-93,81,-70,48,-3,0,-46,71,-50,11
-        }, 47));
+//        System.out.println(maxSubArray(new int[]{
+//                -42,81,-43,97,-82,20,-33,49,-62,2,-43,18,-54,52,-29,31,-70,87,-75,47,-22,42,-56,97,-100,54,-33,14,-89,34,-81,60,-66,75,-99,91,-93,70,-10,30,-26,72,-95,66,-41,23,-23,31,-14,78,-74,92,-20,25,-57,41,-72,58,-46,44,-52,53,-85,73,-37,96,-91,85,-77,62,-9,73,-64,63,-12,18,-61,24,-75,95,-54,89,-61,63,-19,24,-46,87,-87,69,-98,26,-92,26,-70,40,-63,20,-10,18,-64,26,-23,84,-35,65,-81,26,-55,92,-72,15,-99,18,-84,95,-50,77,-44,20,-20,94,-98,62,-67,17,-23,23,-75,33,-90,1,-1,86,-31,96,-80,100,-65,93,-51,48,-47,81,-63,100,-84,3,-15,59,-53,99,-67,12,-94,24,-98,74,-24,4,-34,79,-19,35,-54,36,-42,60,-68,18,-62,12,-50,44,-22,61,-21,27,-14,48,0,78,-39,70,-46,1,-86,77,-98,55,-93,81,-70,48,-3,0,-46,71,-50,11
+//        }, 47));
 
 //        System.out.println(maxTwoSubArrays(new ArrayList<>(Arrays.asList(1, 3, -1, 2, -1, 2))));
 
