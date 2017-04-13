@@ -1237,7 +1237,114 @@ public class Solution {
         return major;
     }
 
+
+    public int majorityNumber1_3(ArrayList<Integer> nums) {
+        int count0 = 0;
+        int count1 = 0;
+        int major0 = 0;
+        int major1 = 0;
+
+        for (Integer num : nums) {
+            if (num == major0) {
+                count0++;
+            }
+            else if (num == major1) {
+                count1 = 1;
+            }
+            else {
+                if (count0 == 0) {
+                    major0 = num;
+                    count0 = 1;
+                }
+                else if (count1 == 0) {
+                    major1 = num;
+                    count1 = 2;
+                }
+                else {
+                    count0--;
+                    count1--;
+                }
+            }
+        }
+
+        count0 = count1 = 0;
+        for (Integer num : nums) {
+            if (num == major0) count0++;
+            else if (num == major1) count1++;
+        }
+        return count0 > count1 ? major0 : major1;
+    }
+
+
+
+    public int majorityNumber(ArrayList<Integer> nums, int k) {
+        HashMap<Integer, Integer> counts = new HashMap<>();
+        for (Integer num : nums) {
+            Integer count = counts.get(num);
+            if (count != null) {
+                counts.put(num, count + 1);
+            }
+            else {
+                if (counts.size() >= k) {
+                    Iterator<Map.Entry<Integer, Integer>> it = counts.entrySet().iterator();
+                    while (it.hasNext()) {
+                        Map.Entry<Integer, Integer> keyVal = it.next();
+                        if (keyVal.getValue() - 1 == 0) {
+                            it.remove();
+                        }
+                        else {
+                            keyVal.setValue(keyVal.getValue() - 1);
+                        }
+                    }
+                }
+                else {
+                    counts.put(num, 1);
+                }
+            }
+        }
+
+        for (Map.Entry<Integer, Integer> entry : counts.entrySet()) {
+            entry.setValue(0);
+        }
+
+        for (Integer num : nums) {
+            Integer count = counts.get(num);
+            if (count != null) {
+                counts.put(num, count + 1);
+            }
+        }
+
+        int maxCount = 0;
+        int maxNum = 0;
+        for (Map.Entry<Integer, Integer> entry : counts.entrySet()) {
+            if (entry.getValue() > maxCount) {
+                maxCount = entry.getValue();
+                maxNum = entry.getKey();
+            }
+        }
+
+        return maxNum;
+    }
+
     private void test() {
+
+//        System.out.println(majorityNumber(new ArrayList<>(Arrays.asList(
+//                3,1,2,3,2,3,3,4,4,4
+//        )), 3) + " expected: 3");
+
+//        System.out.println(majorityNumber1_3(new ArrayList<>(Arrays.asList(
+//                1,2,1,2,1,3,3
+//        ))) + " expected: 1");
+//        System.out.println(majorityNumber1_3(new ArrayList<>(Arrays.asList(
+//                2,1,2,2,3,3,3,4,4,4,3
+//        ))) + " expected: 3");
+//        System.out.println(majorityNumber1_3(new ArrayList<>(Arrays.asList(
+//                1,1,1,1,2,2,3,3,4,4,4
+//        ))) + " expected: 1");
+//        System.out.println(majorityNumber1_3(new ArrayList<>(Arrays.asList(
+//                2,3,4,2,3,4,1,4,1,1,4
+//        ))) + " expected: 4");
+
 
 //        System.out.println(majorityNumber(new ArrayList<>(Arrays.asList(
 //                44,50,24,50,5,79,50,87,50,50,64,50,69,17,6,50,19,50,55,50,26,50,50,50,16,50,81,46,50,10,19,64,50,87,16,28,50,28,16,50,42,35,50,50,65,84,81,50,50,5,50,50,67,50,76,50,91,50,44,72,50,50,50,50,72,93,85,50,85,66,53,52,50,32,4,50,7,9,50,89,58,8,44,64,50,68,50,8,65,21,38,15,95,41,55,88,76,50,50,4,32,45,50,7,79,79,35,54,50,50,50,53,71,50,50,28,50,26,50,90,34,45,50,77,50,67,73,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50
