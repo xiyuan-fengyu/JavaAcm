@@ -1139,6 +1139,10 @@ public class Solution {
                 // 所以在 globalMax[i][j] 这种分组情况下，不能保证 nums[j - 1] 包含在分组中；
                 // 同理在 globalMax[i][j - 1] 这种分组情况下，不能保证 nums[j - 2] 包含在分组中；
                 // 所以在计算 localMax[i][j] 的第二种情况时，只能将 nums[j - 1] 单独做为一组， 前 j - 1 个数分为 i - 1 组
+
+                // 综上：
+                // localMax[i][j] 的意义为：将前j个数分为i组，其中 nums[i - 1]一定包含在最后一个分组的情况下的最大值；
+                // globalMax[i][j] 的意义为：将前j个数分为i组，其中 nums[i - 1]不一定包含在最后一个分组的情况下的最大值；
                 localMax[i][j] = Math.max(localMax[i][j - 1], globalMax[i - 1][j - 1]) + nums[j - 1];
                 globalMax[i][j] = Math.max(globalMax[i][j - 1], localMax[i][j]);
             }
