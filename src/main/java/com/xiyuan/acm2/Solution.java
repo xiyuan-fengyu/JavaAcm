@@ -11,6 +11,8 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.xiyuan.util.XYLog.d;
+
 /**
  * Created by xiyuan_fengyu on 2017/4/7.
  */
@@ -1326,7 +1328,322 @@ public class Solution {
         return maxNum;
     }
 
+
+
+
+    public void sortLetters(char[] chars) {
+        int i = 0;
+        int j = chars.length - 1;
+        while (i < j) {
+            while (i < j && chars[j] <= 'Z') {
+                j--;
+            }
+
+            while (i < j && chars[i] >= 'a') {
+                i++;
+            }
+
+            if (i < j) {
+                char temp = chars[j];
+                chars[j] = chars[i];
+                chars[i] = temp;
+            }
+        }
+    }
+
+
+    public ArrayList<Long> productExcludeItself(ArrayList<Integer> nums) {
+        ArrayList<Long> result = new ArrayList<>();
+        if (nums == null || nums.size() <= 1) {
+            result.add(1L);
+            return result;
+        }
+
+        int size = nums.size();
+        long[] r2l = new long[size];
+        r2l[size - 1] = nums.get(size - 1);
+        for (int i = size - 2; i > 0; i--) {
+            r2l[i] = nums.get(i) * r2l[i + 1];
+        }
+
+        long l2r = 1;
+        for (int i = 0; i < size - 1; i++) {
+            result.add(l2r * r2l[i + 1]);
+            l2r *= nums.get(i);
+        }
+        result.add(l2r);
+        return result;
+    }
+
+
+
+    public ArrayList<Integer> previousPermuation(ArrayList<Integer> nums) {
+        if (nums == null || nums.size() <= 1) return nums;
+
+        Comparator<Integer> reverse = new Comparator<Integer>() {
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                return o2 - o1;
+            }
+        };
+
+        boolean isLast = true;
+        int size = nums.size();
+        loop:
+        for (int i = size - 2; i > -1; i--) {
+            int numI = nums.get(i);
+            for (int j = size - 1; j > i; j--) {
+                if (numI > nums.get(j)) {
+                    isLast = false;
+                    nums.set(i, nums.get(j));
+                    nums.set(j, numI);
+                    quickSort(nums, reverse, i + 1, size - 1);
+                    break loop;
+                }
+            }
+        }
+
+        if (isLast) {
+            quickSort(nums, reverse, 0, size - 1);
+        }
+        return nums;
+    }
+
+    private <T> void quickSort(List<T> list, Comparator<T> comparator) {
+        if (list != null && comparator != null) {
+            quickSort(list, comparator, 0, list.size() - 1);
+        }
+    }
+
+    private <T> void quickSort(List<T> list, Comparator<T> comparator, int left, int right) {
+        if (left >= right) return;
+
+        T key = list.get(left);
+        int i = left;
+        int j = right;
+        while (i < j) {
+            while (i < j && comparator.compare(key, list.get(j)) <= 0) {
+                j--;
+            }
+            list.set(i, list.get(j));
+
+            while (i < j && comparator.compare(key, list.get(i)) >= 0) {
+                i++;
+            }
+            list.set(j, list.get(i));
+        }
+        list.set(i, key);
+
+        quickSort(list, comparator, left, i - 1);
+        quickSort(list, comparator, i + 1, right);
+    }
+
+
+    public int[] nextPermutation(int[] nums) {
+        if (nums == null || nums.length <= 1) return nums;
+
+        int len = nums.length;
+        for (int i = len - 2; i > -1; i--) {
+            int numI = nums[i];
+            for (int j = len - 1; j > i; j--) {
+                if (numI < nums[j]) {
+                    nums[i] = nums[j];
+                    nums[j] = numI;
+                    Arrays.sort(nums, i + 1, len);
+                    return nums;
+                }
+            }
+        }
+        Arrays.sort(nums, 0, len);
+        return nums;
+    }
+
+
+
+    public String reverseWords(String s) {
+        if (s == null || s.isEmpty()) return s;
+
+        StringBuilder builder = new StringBuilder();
+        int len = s.length();
+        char[] chars = s.toCharArray();
+        for (int i = len - 1, j = len; i > -1; i--) {
+            char c = chars[i];
+            if (c == ' ') {
+                if (j - i > 1) {
+                    builder.append(chars, i + 1, j - i - 1).append(' ');
+                }
+                j = i;
+            }
+            else if (i == 0) {
+                builder.append(chars, 0, j).append(' ');
+            }
+        }
+
+        len = builder.length();
+        if (len > 0) {
+            builder.deleteCharAt(len - 1);
+        }
+        return builder.toString();
+    }
+
+
+
+    public int atoi(String str) {
+        if (str == null) return 0;
+
+        char sign = '\0';
+        long result = 0;
+        int resultLen = 0;
+        boolean numFound = false;
+        for (int i = 0, len = str.length(); i < len; i++) {
+            char c = str.charAt(i);
+            if (c >= '0' && c <= '9') {
+                numFound = true;
+                result = result * 10 + c - '0';
+                resultLen++;
+                if (resultLen == 11) {
+                    break;
+                }
+            }
+            else {
+                if (numFound) {
+                    break;
+                }
+                else if (c == '+' || c == '-') {
+                    if (sign != '\0') {
+                        result = 0;
+                        break;
+                    }
+                    else {
+                        sign = c;
+                    }
+                }
+            }
+        }
+
+        result *= (sign == '-' ? -1 : 1);
+        if (result > Integer.MAX_VALUE) result = Integer.MAX_VALUE;
+        else if (result < Integer.MIN_VALUE) result = Integer.MIN_VALUE;
+        return (int) result;
+    }
+
+
+    public boolean compareStrings(String strA, String strB) {
+        int[] counts = new int['Z' - 'A' + 1];
+        for (int i = 0; i < strA.length(); i++) {
+            counts[strA.charAt(i) - 'A']++;
+        }
+        for (int i = 0; i < strB.length(); i++) {
+            if ((--counts[strB.charAt(i) - 'A']) < 0) return false;
+        }
+        return true;
+    }
+
+
+    public int[] twoSum(int[] nums, int target) {
+        int len = nums.length;
+        HashMap<Integer, Integer> indexs = new HashMap<>(len);
+        for (int i = 0; i < len; i++) {
+            Integer existedIndex = indexs.get(target - nums[i]);
+            if (existedIndex != null) {
+                return new int[]{existedIndex + 1, i + 1};
+            }
+            else {
+                indexs.put(nums[i], i);
+            }
+        }
+        return new int[]{};
+    }
+
+
+
+
+    public ArrayList<ArrayList<Integer>> threeSum(int[] nums) {
+        ArrayList<ArrayList<Integer>> result = new ArrayList<>();
+        if (nums != null && nums.length >= 3) {
+            Arrays.sort(nums);
+
+            int len = nums.length;
+            for (int i = 0; i <= len - 3; i++) {
+                if (nums[i] > 0) break;
+                else if (i > 0 && nums[i] == nums[i - 1]) {}
+                else {
+                    ArrayList<int[]> twos = twoSum(nums, -nums[i], i + 1);
+                    int size = twos.size();
+                    if (size > 0) {
+                        for (int[] two : twos) {
+                            result.add(new ArrayList<Integer>(Arrays.asList(
+                                nums[i], two[0], two[1]
+                            )));
+                        }
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    private ArrayList<int[]> twoSum(int[] nums, int target, int fromIndex) {
+        ArrayList<int[]> result = new ArrayList<>();
+        int len = nums.length;
+        HashMap<Integer, Boolean> expecteds = new HashMap<>();
+        for (int i = fromIndex; i < len; i++) {
+            int expected = target - nums[i];
+            Boolean exp = expecteds.get(expected);
+            if (exp != null) {
+                if (exp) {
+                    result.add(new int[]{expected, nums[i]});
+                    expecteds.put(expected, false);
+                }
+            }
+            else {
+                expecteds.put(nums[i], true);
+            }
+        }
+        return result;
+    }
+
     private void test() {
+
+        d(threeSum(new int[]{
+                -1, 0, 1, 2, -1, -4
+        }));
+
+
+//        d(twoSum(new int[]{
+//                2, 7, 11, 15
+//        }, 9));
+
+
+//        d(compareStrings("ABCD", "ACD"));
+
+
+//        d(atoi("1234567890123456789012345678901234567890"));
+
+
+//        d(reverseWords("just  test"));
+
+
+//        d(nextPermutation(new int[]{1,3,2,3}));
+
+
+//        ArrayList<Integer> list = new ArrayList<>(Arrays.asList(
+//                1, 2, 3, 4, 5
+//        ));
+//        d(previousPermuation(list));
+//        d(previousPermuation(list));
+
+
+
+//        d(productExcludeItself(new ArrayList<Integer>(Arrays.asList(
+//                1, 2, 3
+//        ))));
+
+
+//        char[] str = "abAcD".toCharArray();
+//        sortLetters(str);
+//        d(str);
+
 
 //        System.out.println(majorityNumber(new ArrayList<>(Arrays.asList(
 //                3,1,2,3,2,3,3,4,4,4
