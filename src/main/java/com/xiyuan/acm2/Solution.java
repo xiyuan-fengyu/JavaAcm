@@ -1559,23 +1559,27 @@ public class Solution {
 
 
     public ArrayList<ArrayList<Integer>> threeSum(int[] nums) {
-        ArrayList<ArrayList<Integer>> result = new ArrayList<>();
         if (nums != null && nums.length >= 3) {
             Arrays.sort(nums);
+            return threeSum(nums, 0, 0);
+        }
+        return new ArrayList<>();
+    }
 
-            int len = nums.length;
-            for (int i = 0; i <= len - 3; i++) {
-                if (nums[i] > 0) break;
-                else if (i > 0 && nums[i] == nums[i - 1]) {}
-                else {
-                    ArrayList<int[]> twos = twoSum(nums, -nums[i], i + 1);
-                    int size = twos.size();
-                    if (size > 0) {
-                        for (int[] two : twos) {
-                            result.add(new ArrayList<Integer>(Arrays.asList(
+    private ArrayList<ArrayList<Integer>> threeSum(int[] nums, int target, int fromIndex) {
+        ArrayList<ArrayList<Integer>> result = new ArrayList<>();
+        int len = nums.length;
+        for (int i = fromIndex; i <= len - 3; i++) {
+            if (target > 0 && nums[i] > target) break;
+            else if (i > fromIndex && nums[i] == nums[i - 1]) {}
+            else {
+                ArrayList<int[]> twos = twoSum(nums, target - nums[i], i + 1);
+                int size = twos.size();
+                if (size > 0) {
+                    for (int[] two : twos) {
+                        result.add(new ArrayList<>(Arrays.asList(
                                 nums[i], two[0], two[1]
-                            )));
-                        }
+                        )));
                     }
                 }
             }
@@ -1603,11 +1607,110 @@ public class Solution {
         return result;
     }
 
+
+
+
+    public ArrayList<ArrayList<Integer>> fourSum(int[] nums, int target) {
+        ArrayList<ArrayList<Integer>> result = new ArrayList<>();
+        if (nums != null && nums.length >= 4) {
+            Arrays.sort(nums);
+            int len = nums.length;
+            for (int i = 0; i <= len - 4; i++) {
+                if (target > 0 && nums[i] > target) break;
+                else if (i > 0 && nums[i] == nums[i - 1]) {}
+                else {
+                    ArrayList<ArrayList<Integer>> threes = threeSum(nums, target - nums[i], i + 1);
+                    int size = threes.size();
+                    if (size > 0) {
+                        for (ArrayList<Integer> three : threes) {
+                            ArrayList<Integer> resultItem = new ArrayList<>();
+                            resultItem.add(nums[i]);
+                            resultItem.addAll(three);
+                            result.add(resultItem);
+                        }
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+
+
+
+    public int threeSumClosest(int[] nums, int target) {
+        if (nums == null || nums.length < 3) return 0;
+
+        Arrays.sort(nums);
+
+        int len = nums.length;
+        int closet = nums[0] + nums[len / 2] + nums[len - 1];
+        for (int i = 0; i < len - 2; i++) {
+            int l = i + 1;
+            int r = len - 1;
+            while (l < r) {
+                int sum = nums[i] + nums[l] + nums[r];
+                if (Math.abs(target - closet) > Math.abs(target - sum)) {
+                    closet = sum;
+                }
+                if (sum == target) {
+                    return closet;
+                }
+                else if (sum < target) {
+                    l++;
+                }
+                else {
+                    r--;
+                }
+            }
+        }
+        return closet;
+    }
+
+
+
+
+    public int searchInsert(int[] arr, int target) {
+        if (arr == null) return -1;
+        return searchInsert(arr, target, 0, arr.length - 1);
+    }
+
+    private int searchInsert(int[] arr, int target, int left, int right) {
+        if (left >= right) {
+            return left == arr.length || arr[left] > target ? left : left + 1;
+        }
+
+        int midI = (left + right) / 2;
+        int mid = arr[midI];
+        if (mid == target) {
+            return midI;
+        }
+        else if (mid > target) {
+            return searchInsert(arr, target, left, mid - 1);
+        }
+        else return searchInsert(arr, target, mid + 1, right);
+    }
+
+
     private void test() {
 
-        d(threeSum(new int[]{
-                -1, 0, 1, 2, -1, -4
-        }));
+        d(searchInsert(new int[]{
+                1,3,5,6
+        }, 1));
+
+//        d(threeSumClosest(new int[]{
+//                1,2,33,23,2423,33,23,1,7,6,8787,5,33,2,3,-23,-54,-67,100,400,-407,-500,-35,-8,0,0,7,6,0,1,2,-56,-89,24,2
+//        }, 148));
+
+
+//        d(fourSum(new int[]{
+//                -8,-0,-7,-101,-123,-1,-2,1,1,4,-2,0,-1,0,-1111,0,-1,-2,-3,-4,-5,-6,-100,-98,-111,-11
+//        }, -111));
+
+
+//        d(threeSum(new int[]{
+//                -1, 0, 1, 2, -1, -4
+//        }));
 
 
 //        d(twoSum(new int[]{
