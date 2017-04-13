@@ -1150,7 +1150,80 @@ public class Solution {
         return globalMax[k][len];
     }
 
+
+
+    public int minSubArray(ArrayList<Integer> nums) {
+        if (nums == null || nums.size() == 0) return 0;
+
+        int localMin = nums.get(0);
+        int globalMin = localMin;
+        for (int i = 1, size = nums.size(); i < size ; i++) {
+            localMin = Math.min(localMin, 0) + nums.get(i);
+            globalMin = Math.min(localMin, globalMin);
+        }
+        return globalMin;
+    }
+
+
+    public int maxDiffSubArrays(int[] nums) {
+        if (nums == null || nums.length < 2) return 0;
+
+        int len = nums.length;
+
+        int localMaxL2R = Integer.MIN_VALUE;
+        int globalMaxL2R = localMaxL2R;
+        int[] l2rMax = new int[len];
+
+        int localMaxR2L = Integer.MIN_VALUE;
+        int globalMaxR2L = localMaxR2L;
+        int[] r2lMax = new int[len];
+
+        int localMinL2R = Integer.MAX_VALUE;
+        int globalMinL2R = localMinL2R;
+        int[] l2rMin = new int[len];
+
+        int localMinR2L = Integer.MAX_VALUE;
+        int globalMinR2L = localMinR2L;
+        int[] r2lMin = new int[len];
+
+        for (int i = 0, j = len - 1; i < len; i++, j--) {
+            int numI = nums[i];
+            int numJ = nums[j];
+
+            localMaxL2R = Math.max(localMaxL2R, 0) + numI;
+            globalMaxL2R = Math.max(localMaxL2R, globalMaxL2R);
+            l2rMax[i] = globalMaxL2R;
+
+            localMaxR2L = Math.max(localMaxR2L, 0) + numJ;
+            globalMaxR2L = Math.max(localMaxR2L, globalMaxR2L);
+            r2lMax[j] = globalMaxR2L;
+
+            localMinL2R = Math.min(localMinL2R, 0) + numI;
+            globalMinL2R = Math.min(localMinL2R, globalMinL2R);
+            l2rMin[i] = globalMinL2R;
+
+            localMinR2L = Math.min(localMinR2L, 0) + numJ;
+            globalMinR2L = Math.min(localMinR2L, globalMinR2L);
+            r2lMin[j] = globalMinR2L;
+        }
+
+        int maxDiff = Integer.MIN_VALUE;
+        for (int i = 0; i < len - 1; i++) {
+            maxDiff = Math.max(maxDiff, Math.abs(l2rMax[i] - r2lMin[i + 1]));
+            maxDiff = Math.max(maxDiff, Math.abs(l2rMin[i] - r2lMax[i + 1]));
+        }
+        return maxDiff;
+    }
+
+
+
     private void test() {
+
+        System.out.println(maxDiffSubArrays(new int[]{1, 2, -3, 1}));
+
+
+//        System.out.println(minSubArray(new ArrayList<Integer>(Arrays.asList(1, -1, -2, 1))));
+
 
 //        System.out.println(maxSubArray(new int[]{
 //                -1,-2,-3,-100,-1,-50
