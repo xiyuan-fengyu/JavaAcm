@@ -1217,9 +1217,34 @@ public class Solution {
 
 
 
+    public int majorityNumber(ArrayList<Integer> nums) {
+        int count = 0;
+        int major = 0;
+        for (Integer num : nums) {
+            if (count == 0) {
+                major = num;
+                count++;
+            }
+            else {
+                if (num != major) {
+                    count--;
+                }
+                else {
+                    count++;
+                }
+            }
+        }
+        return major;
+    }
+
     private void test() {
 
-        System.out.println(maxDiffSubArrays(new int[]{1, 2, -3, 1}));
+//        System.out.println(majorityNumber(new ArrayList<>(Arrays.asList(
+//                44,50,24,50,5,79,50,87,50,50,64,50,69,17,6,50,19,50,55,50,26,50,50,50,16,50,81,46,50,10,19,64,50,87,16,28,50,28,16,50,42,35,50,50,65,84,81,50,50,5,50,50,67,50,76,50,91,50,44,72,50,50,50,50,72,93,85,50,85,66,53,52,50,32,4,50,7,9,50,89,58,8,44,64,50,68,50,8,65,21,38,15,95,41,55,88,76,50,50,4,32,45,50,7,79,79,35,54,50,50,50,53,71,50,50,28,50,26,50,90,34,45,50,77,50,67,73,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50,50
+//        ))));
+
+
+//        System.out.println(maxDiffSubArrays(new int[]{1, 2, -3, 1}));
 
 
 //        System.out.println(minSubArray(new ArrayList<Integer>(Arrays.asList(1, -1, -2, 1))));
