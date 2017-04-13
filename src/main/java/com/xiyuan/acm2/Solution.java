@@ -1127,11 +1127,10 @@ public class Solution {
         for (int i = 1; i <= k; i++) {
             localMax[i][i - 1] = Integer.MIN_VALUE;
             for (int j = i; j <= len; j++) {
+                // 由 localMax[i][j] 的计算公式，可以保证 nums[j - 1]一定在locaMax[i][j]这种分组情况的最后一个组中
+                // 同理，nums[j - 2] 一定在locaMax[i][j - 1]这种分组情况的最后一个组中, 所以 nums[j - 1] 可以直接附加到 localMax[i][j - 1]的最后一组
                 // localMax[i][j - 1] + nums[j - 1] 可以理解为：将前j - 1个数分为 i 组， nums[j - 1]附加到最后一组，所以还是i组；
                 // globalMax[i - 1][j - 1] + nums[j - 1] 理解为：将前j - 1个数分为 i - 1 组， nums[j - 1]单独做为一个新组；
-
-                // 由 localMax[i][j] 的计算公式，可以保证 nums[j - 1]一定在locaMax[i][j]这种分组情况的最后一个组中
-                // 同理，nums[j - 2] 一定在locaMax[i][j - 1]这种分组情况的最后一个组中, 所以 nums[j - 1] 可以直接附加到 localMax[i][j - 1]的最后一组（因为nums[j - 2]和nums[j - 1]紧挨着）
 
                 // 由 globalMax[i][j] 的计算公式，可以知道：
                 // 当 globalMax[i][j - 1] 更大的时候，nums[j - 1] 没有包含在分组中；
