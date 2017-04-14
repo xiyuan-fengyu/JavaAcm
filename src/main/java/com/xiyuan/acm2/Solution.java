@@ -1821,7 +1821,135 @@ public class Solution {
         }
     }
 
+
+
+
+
+
+    public ArrayList<Integer> preorderTraversal(TreeNode root) {
+        ArrayList<Integer> values = new ArrayList<>();
+        if (root != null) {
+            Stack<TreeNode> nodes = new Stack<>();
+            nodes.push(root);
+            while (!nodes.isEmpty()) {
+                TreeNode cur = nodes.pop();
+                values.add(cur.val);
+
+                if (cur.right != null) {
+                    nodes.push(cur.right);
+                }
+                if (cur.left != null) {
+                    nodes.push(cur.left);
+                }
+            }
+        }
+        return values;
+    }
+
+    public ArrayList<Integer> preorderTraversalIt(TreeNode root) {
+        ArrayList<Integer> values = new ArrayList<>();
+        preorderTraversalIt(root, values);
+        return values;
+    }
+
+    private void preorderTraversalIt(TreeNode root, ArrayList<Integer> values) {
+        if (root != null) {
+            values.add(root.val);
+            preorderTraversalIt(root.left, values);
+            preorderTraversalIt(root.right, values);
+        }
+    }
+
+
+
+    public ArrayList<Integer> inorderTraversal(TreeNode root) {
+        ArrayList<Integer> values = new ArrayList<>();
+        Stack<Map.Entry<TreeNode, Boolean>> nodes = new Stack<>();
+        if (root != null) {
+            nodes.push(new AbstractMap.SimpleEntry<>(root, false));
+            while (!nodes.isEmpty()) {
+                Map.Entry<TreeNode, Boolean> entry = nodes.pop();
+                TreeNode node = entry.getKey();
+                if (entry.getValue()) {
+                    values.add(node.val);
+                }
+                else {
+                    if (node.right != null) {
+                        nodes.push(new AbstractMap.SimpleEntry<>(node.right, false));
+                    }
+                    nodes.push(new AbstractMap.SimpleEntry<>(node, true));
+                    if (node.left != null) {
+                        nodes.push(new AbstractMap.SimpleEntry<>(node.left, false));
+                    }
+                }
+            }
+        }
+        return values;
+    }
+
+    public ArrayList<Integer> inorderTraversalIt(TreeNode root) {
+        ArrayList<Integer> values = new ArrayList<>();
+        inorderTraversalIt(root, values);
+        return values;
+    }
+
+    private void inorderTraversalIt(TreeNode root, ArrayList<Integer> values) {
+        if (root != null) {
+            inorderTraversalIt(root.left, values);
+            values.add(root.val);
+            inorderTraversalIt(root.right, values);
+        }
+    }
+
+
+
+
+
+    public ArrayList<Integer> postorderTraversal(TreeNode root) {
+        ArrayList<Integer> values = new ArrayList<>();
+        Stack<Map.Entry<TreeNode, Boolean>> nodes = new Stack<>();
+        if (root != null) {
+            nodes.push(new AbstractMap.SimpleEntry<>(root, false));
+            while (!nodes.isEmpty()) {
+                Map.Entry<TreeNode, Boolean> entry = nodes.peek();
+                TreeNode node = entry.getKey();
+                if (entry.getValue()) {
+                    if (node.right != null) {
+                        nodes.push(new AbstractMap.SimpleEntry<>(node.right, false));
+                    }
+                }
+                else {
+                    if (node.left != null) {
+                        nodes.push(new AbstractMap.SimpleEntry<>(node.left, false));
+                    }
+                    entry.setValue(true);
+                }
+            }
+        }
+        return null;
+    }
+
+    public ArrayList<Integer> postorderTraversalIt(TreeNode root) {
+        ArrayList<Integer> values = new ArrayList<>();
+        postorderTraversalIt(root, values);
+        return values;
+    }
+
+    private void postorderTraversalIt(TreeNode root, ArrayList<Integer> values) {
+        if (root != null) {
+            postorderTraversalIt(root.left, values);
+            postorderTraversalIt(root.right, values);
+            values.add(root.val);
+        }
+    }
+
     private void test() {
+
+        TreeNode treeNode = TreeNodeFactory.build("1,2,3,4,5,6");
+        d(treeNode);
+        d("前序：", preorderTraversal(treeNode));
+        d("中序：", inorderTraversal(treeNode));
+        d("后序：", postorderTraversalIt(treeNode));
 
 //        d(findMedianSortedArrays(new int[]{
 //                5,6,9,10
