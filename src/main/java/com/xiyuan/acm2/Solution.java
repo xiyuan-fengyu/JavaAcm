@@ -1911,22 +1911,23 @@ public class Solution {
         if (root != null) {
             nodes.push(new AbstractMap.SimpleEntry<>(root, false));
             while (!nodes.isEmpty()) {
-                Map.Entry<TreeNode, Boolean> entry = nodes.peek();
+                Map.Entry<TreeNode, Boolean> entry = nodes.pop();
                 TreeNode node = entry.getKey();
                 if (entry.getValue()) {
+                    values.add(node.val);
+                }
+                else {
+                    nodes.push(new AbstractMap.SimpleEntry<>(node, true));
                     if (node.right != null) {
                         nodes.push(new AbstractMap.SimpleEntry<>(node.right, false));
                     }
-                }
-                else {
                     if (node.left != null) {
                         nodes.push(new AbstractMap.SimpleEntry<>(node.left, false));
                     }
-                    entry.setValue(true);
                 }
             }
         }
-        return null;
+        return values;
     }
 
     public ArrayList<Integer> postorderTraversalIt(TreeNode root) {
@@ -1945,11 +1946,11 @@ public class Solution {
 
     private void test() {
 
-        TreeNode treeNode = TreeNodeFactory.build("1,2,3,4,5,6");
-        d(treeNode);
-        d("前序：", preorderTraversal(treeNode));
-        d("中序：", inorderTraversal(treeNode));
-        d("后序：", postorderTraversalIt(treeNode));
+//        TreeNode treeNode = TreeNodeFactory.build("1,2,3,4,5,6");
+//        d(treeNode);
+//        d("前序：", preorderTraversal(treeNode));
+//        d("中序：", inorderTraversal(treeNode));
+//        d("后序：", postorderTraversal(treeNode));
 
 //        d(findMedianSortedArrays(new int[]{
 //                5,6,9,10
