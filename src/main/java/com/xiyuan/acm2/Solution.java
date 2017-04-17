@@ -2014,7 +2014,95 @@ public class Solution {
     }
 
 
+
+
+    public TreeNode buildTreePreIn(int[] preorder, int[] inorder) {
+        return buildTreePreIn(preorder, 0, preorder.length - 1, inorder, 0, inorder.length - 1);
+    }
+
+    private TreeNode buildTreePreIn(int[] preorder, int preFrom, int preTo, int[] inorder, int inFrom, int inTo) {
+        if (inFrom > inTo) return null;
+
+        int rootVal = preorder[preFrom];
+        TreeNode root = new TreeNode(rootVal);
+        int rootInorderI = -1;
+        for (int i = inFrom; i <= inTo; i++) {
+            if (inorder[i] == rootVal) {
+                rootInorderI = i;
+                break;
+            }
+        }
+        if (rootInorderI != -1) {
+            root.left = buildTreePreIn(preorder, preFrom + 1, preFrom + rootInorderI - inFrom, inorder, inFrom, rootInorderI - 1);
+            root.right = buildTreePreIn(preorder, preFrom + rootInorderI - inFrom + 1, preTo, inorder, rootInorderI + 1, inTo);
+        }
+        return root;
+    }
+
+
+
+
+    public int findPeak(int[] nums) {
+        int len = nums.length;
+        int start = 1;
+        int end = len - 2;
+        while (start < end) {
+            int mid = (start + end) / 2;
+            if (nums[mid] > nums[mid + 1]) {
+                end = mid;
+            }
+            else {
+                start = mid + 1;
+            }
+        }
+
+        return end;
+    }
+
+
+
+
+
+
+    public int longestIncreasingSubsequence(int[] nums) {
+        if (nums == null || nums.length == 0) return 0;
+
+        int len = nums.length;
+        int[] incs = new int[len];
+        incs[0] = 1;
+        int globalMax = 1;
+        for (int i = 1; i < len; i++) {
+            int max = 1;
+            int numI = nums[i];
+            for (int j = i - 1; j >= 0; j--) {
+                if (numI > nums[j]) {
+                    max = Math.max(max, incs[j] + 1);
+                }
+            }
+            incs[i] = max;
+            globalMax = Math.max(globalMax, max);
+        }
+        return globalMax;
+    }
+
     private void test() {
+
+        d(longestIncreasingSubsequence(new int[]{
+                4,2,4,5,3,7
+        }));
+
+
+//        d(findPeak(new int[]{
+//                1, 2, 1, 3, 4, 8, 7, 6
+//        }));
+
+
+//        d(buildTreePreIn(new int[]{
+//                1,2,4,5,3,6,7
+//        }, new int[]{
+//                4,2,5,1,6,3,7
+//        }));
+
 
 //        d(buildTree(new int[]{
 //                1,2,3
