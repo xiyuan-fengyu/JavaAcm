@@ -1944,13 +1944,104 @@ public class Solution {
         }
     }
 
+
+
+
+    public ArrayList<ArrayList<Integer>> levelOrder(TreeNode root) {
+        ArrayList<ArrayList<Integer>> values = new ArrayList<>();
+        levelOrder(values, root, 0);
+        return values;
+    }
+
+    private void levelOrder(ArrayList<ArrayList<Integer>> values, TreeNode node, int level) {
+        if (node != null) {
+            while (values.size() <= level) {
+                values.add(new ArrayList<Integer>());
+            }
+            values.get(level).add(node.val);
+            levelOrder(values, node.left, level + 1);
+            levelOrder(values, node.right, level + 1);
+        }
+    }
+
+
+
+
+    public ArrayList<ArrayList<Integer>> levelOrderBottom(TreeNode root) {
+        ArrayList<ArrayList<Integer>> values = new ArrayList<>();
+        levelOrder(values, root, 0);
+        Collections.reverse(values);
+        return values;
+    }
+
+
+    public ArrayList<ArrayList<Integer>> zigzagLevelOrder(TreeNode root) {
+        ArrayList<ArrayList<Integer>> values = new ArrayList<>();
+        levelOrder(values, root, 0);
+        for (int i = 0; i < values.size(); i++) {
+            if (i % 2 == 1) {
+                Collections.reverse(values.get(i));
+            }
+        }
+        return values;
+    }
+
+
+
+
+
+    public TreeNode buildTree(int[] inorder, int[] postorder) {
+        return buildTree(inorder, 0, inorder.length - 1, postorder, 0, postorder.length - 1);
+    }
+
+    private TreeNode buildTree(int[] inorder, int inFrom, int inTo, int[] postorder, int postFrom, int postTo) {
+        if (inFrom > inTo) return null;
+
+        int rootVal = postorder[postTo];
+        TreeNode root = new TreeNode(rootVal);
+        int rootInorderI = -1;
+        for (int i = inFrom; i <= inTo; i++) {
+            if (inorder[i] == rootVal) {
+                rootInorderI = i;
+                break;
+            }
+        }
+        if (rootInorderI != -1) {
+            root.left = buildTree(inorder, inFrom, rootInorderI - 1, postorder, postFrom, postFrom + rootInorderI - inFrom - 1);
+            root.right = buildTree(inorder, rootInorderI + 1, inTo, postorder, postFrom + rootInorderI - inFrom,  postTo - 1);
+        }
+        return root;
+    }
+
+
     private void test() {
+
+//        d(buildTree(new int[]{
+//                1,2,3
+//        }, new int[]{
+//                1,3,2
+//        }));
+
+
+//        TreeNode treeNode = TreeNodeFactory.build("3,9,20,#,#,15,7");
+//        d(zigzagLevelOrder(treeNode));
+
+
+//        TreeNode treeNode = TreeNodeFactory.build("3,9,20,#,#,15,7");
+//        d(levelOrderBottom(treeNode));
+
+
+//        TreeNode treeNode = TreeNodeFactory.build("3,9,20,#,#,15,7");
+//        d(levelOrder(treeNode));
+
 
 //        TreeNode treeNode = TreeNodeFactory.build("1,2,3,4,5,6");
 //        d(treeNode);
 //        d("前序：", preorderTraversal(treeNode));
 //        d("中序：", inorderTraversal(treeNode));
 //        d("后序：", postorderTraversal(treeNode));
+
+
 
 //        d(findMedianSortedArrays(new int[]{
 //                5,6,9,10
