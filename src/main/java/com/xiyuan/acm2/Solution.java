@@ -2067,29 +2067,127 @@ public class Solution {
     public int longestIncreasingSubsequence(int[] nums) {
         if (nums == null || nums.length == 0) return 0;
 
+        //o(n^2)
+//        int len = nums.length;
+//        int[] incs = new int[len];
+//        incs[0] = 1;
+//        int globalMax = 1;
+//        for (int i = 1; i < len; i++) {
+//            incs[i] = 1;
+//            int numI = nums[i];
+//            for (int j = i - 1; j >= 0; j--) {
+//                if (numI > nums[j]) {
+//                    incs[i] = Math.max(incs[i], incs[j] + 1);
+//                }
+//            }
+//            globalMax = Math.max(globalMax, incs[i]);
+//        }
+//        return globalMax;
+
+        //o(n * log(n))
         int len = nums.length;
-        int[] incs = new int[len];
-        incs[0] = 1;
-        int globalMax = 1;
-        for (int i = 1; i < len; i++) {
-            int max = 1;
-            int numI = nums[i];
-            for (int j = i - 1; j >= 0; j--) {
-                if (numI > nums[j]) {
-                    max = Math.max(max, incs[j] + 1);
+        int[] mins = new int[len + 1];
+        mins[0] = Integer.MIN_VALUE;
+        for (int i = 1; i <= len; i++) {
+            mins[i] = Integer.MAX_VALUE;
+        }
+        for (int i = 0; i < len; i++) {
+            mins[prevMinIndex(mins, nums[i])] = nums[i];
+        }
+
+        for (int i = len; i >= 1; i--) {
+            if (mins[i] != Integer.MAX_VALUE) {
+                return i;
+            }
+        }
+
+        return 0;
+    }
+
+    private int prevMinIndex(int[] mins, int num) {
+        int left = 0;
+        int right = mins.length - 1;
+        while (left + 1 < right) {
+            int mid = (left + right) / 2;
+            if (mins[mid] < num) {
+                left = mid;
+            }
+            else right = mid;
+        }
+        return mins[left] > num ? left : right;
+    }
+
+
+
+
+
+
+
+    public int longestCommonSubsequence(String strA, String strB) {
+        if (strA == null || strB == null || strA.isEmpty() || strB.isEmpty()) {
+            return 0;
+        }
+
+        int lenA = strA.length();
+        int lenB = strB.length();
+        int[][] cache = new int[lenA + 1][lenB + 1];
+        for (int i = 0; i < lenA; i++) {
+            char a = strA.charAt(i);
+            for (int j = 0; j < lenB; j++) {
+                cache[i + 1][j + 1] = Math.max(cache[i + 1][j], cache[i][j + 1]);
+                if (strB.charAt(j) == a) {
+                    cache[i + 1][j + 1] = Math.max(cache[i + 1][j + 1], cache[i][j] + 1);
                 }
             }
-            incs[i] = max;
-            globalMax = Math.max(globalMax, max);
         }
-        return globalMax;
+        return cache[lenA][lenB];
     }
+
+
+
+
+
+
+    public String longestCommonPrefix(String[] strs) {
+        if (strs == null || strs.length == 0) return "";
+        else if (strs.length == 1) return strs[0];
+
+        String firstStr = strs[0];
+        if (firstStr == null) {
+            return "";
+        }
+
+        int lenFS = firstStr.length();
+        int lenS = strs.length;
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < lenFS; i++) {
+            char c = firstStr.charAt(i);
+            for (int j = 1; j < lenS; j++) {
+                String str = strs[j];
+                if (str == null || i == str.length() || c != str.charAt(i)) {
+                    return builder.toString();
+                }
+            }
+            builder.append(c);
+        }
+
+        return builder.toString();
+    }
+
 
     private void test() {
 
-        d(longestIncreasingSubsequence(new int[]{
-                4,2,4,5,3,7
-        }));
+//        d(longestCommonPrefix(new String[]{
+//            null, "ABCEFG", "ABCEFA"
+//        }));
+
+
+//        d(longestCommonSubsequence("ABCD", "EDCA"));
+
+
+//        d(longestIncreasingSubsequence(new int[]{
+//                4,2,4,5,3,7
+//        }));
 
 
 //        d(findPeak(new int[]{
