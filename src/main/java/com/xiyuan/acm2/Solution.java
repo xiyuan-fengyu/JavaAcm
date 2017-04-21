@@ -2175,10 +2175,232 @@ public class Solution {
     }
 
 
+
+
+    public int longestCommonSubstring(String strA, String strB) {
+        if (strA == null || strA.isEmpty() || strB == null || strB.isEmpty()) {
+            return 0;
+        }
+
+        int max = 0;
+        int lenA = strA.length();
+        int lenB = strB.length();
+        int[][] cache = new int[lenA + 1][lenB + 1];
+        for (int i = 0; i < lenA; i++) {
+            char a = strA.charAt(i);
+            for (int j = 0; j < lenB; j++) {
+                if (strB.charAt(j) == a) {
+                    cache[i + 1][j + 1] = cache[i][j] + 1;
+                }
+                else {
+                    cache[i + 1][j + 1] = 0;
+                }
+                max = Math.max(max, cache[i + 1][j + 1]);
+            }
+        }
+        return max;
+    }
+
+
+
+
+    public int median(int[] nums) {
+        return nums == null || nums.length == 0 ? 0 : median(nums, 0, nums.length - 1, (nums.length - 1) / 2);
+    }
+
+    private int median(int[] nums, int left, int right, int target) {
+        if (left >= right) {
+            return nums[left];
+        }
+
+        int key = nums[left];
+        int l = left;
+        int r = right;
+        while (l < r) {
+            while (l < r && nums[r] >= key) {
+                r--;
+            }
+            nums[l] = nums[r];
+
+            while (l < r && nums[l] <= key) {
+                l++;
+            }
+            nums[r] = nums[l];
+        }
+        nums[l] = key;
+
+        if (l == target) {
+            return key;
+        }
+        else if (target < l) {
+            return median(nums, left, l - 1, target);
+        }
+        else {
+            return median(nums, l + 1, right, target);
+        }
+    }
+
+
+
+    public int[] medianII(int[] nums) {
+        if (nums == null) return null;
+
+        int len = nums.length;
+        int[] medians = new int[len];
+        if (len > 0) {
+            PriorityQueue<Integer> minHeap = new PriorityQueue<>((len + 1) / 2, new Comparator<Integer>() {
+                @Override
+                public int compare(Integer o1, Integer o2) {
+                    return o1 - o2;
+                }
+            });
+            PriorityQueue<Integer> maxHeap = new PriorityQueue<>((len + 1) / 2, new Comparator<Integer>() {
+                @Override
+                public int compare(Integer o1, Integer o2) {
+                    return o2 - o1;
+                }
+            });
+
+            for (int i = 0; i < len; i++) {
+                int numI = nums[i];
+                if (maxHeap.isEmpty() || maxHeap.peek() >= numI) {
+                    maxHeap.offer(numI);
+                }
+                else {
+                    minHeap.offer(numI);
+                }
+
+                int sizeDiff;
+                while ((sizeDiff = maxHeap.size() - minHeap.size()) != 0 && sizeDiff != 1) {
+                    if (sizeDiff > 1) {
+                        minHeap.offer(maxHeap.poll());
+                    }
+                    else {
+                        maxHeap.offer(minHeap.poll());
+                    }
+                }
+
+                medians[i] = maxHeap.peek();
+            }
+        }
+        return medians;
+    }
+
+
+
+    public int singleNumber(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+        int result = 0;
+        for (int num : nums) {
+            result ^= num;
+        }
+        return result;
+    }
+
+
+
+
+    public int singleNumberII(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return 0;
+        }
+
+        int[] bitCounts = new int[32];
+        for (int num : nums) {
+            int index = 0;
+            while (num != 0) {
+                bitCounts[index++] += num & 1;
+                num >>>= 1;
+            }
+        }
+
+        int result = 0;
+        int two = 1;
+        for (int count : bitCounts) {
+            if (count % 3 != 0) {
+                result += two;
+            }
+            two <<= 1;
+        }
+        return result;
+    }
+
+
+
+
+    public List<Integer> singleNumberIII(int[] nums) {
+        List<Integer> result = new ArrayList<>();
+        if (nums == null || nums.length == 0) {
+            return result;
+        }
+
+        int xor = 0;
+        int[] bitCounts = new int[32];
+        for (int num : nums) {
+            xor ^= num;
+            int index = 0;
+            while (num != 0) {
+                bitCounts[index++] += num & 1;
+                num >>>= 1;
+            }
+        }
+
+        for (int i = 0; i < bitCounts.length; i++) {
+            int count = bitCounts[i];
+            if (count % 2 == 1) {
+                int bit = 1 << i;
+                int xorOther = 0;
+                for (int num : nums) {
+                    if ((num & bit) == 0) {
+                        xorOther ^= num;
+                    }
+                }
+                result.add(xorOther);
+                result.add(xor ^ xorOther);
+                return result;
+            }
+        }
+
+        result.add(0);
+        result.add(xor);
+        return result;
+    }
+
+
     private void test() {
 
+//        d(singleNumberIII(new int[] {
+//                -4,2,2,3,4,4,5,3
+//        }));
+
+
+//        d(singleNumberII(new int[] {
+//                1,1,2,3,3,3,2,2,-4,1
+//        }));
+
+
+//        d(singleNumber(new int[] {
+//                1,2,2,1,3,4,3
+//        }));
+
+
+//        d(medianII(new int[] {
+//                2, 20, 100
+//        }));
+
+
+//        d(median(new int[] {
+//                4,5,1,2,3
+//        }));
+
+
+//        d(longestCommonSubstring("DBCEFG", "ABCEFA"));
+
+
 //        d(longestCommonPrefix(new String[]{
-//            null, "ABCEFG", "ABCEFA"
+//            "ABCEFG", "ABCEFA"
 //        }));
 
 
