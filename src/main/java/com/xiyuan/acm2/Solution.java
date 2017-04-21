@@ -2369,7 +2369,476 @@ public class Solution {
     }
 
 
+
+    public TreeNode insertNode(TreeNode root, TreeNode node) {
+        if (root != null) {
+            TreeNode cur = root;
+            while (cur != null) {
+                if (cur.val > node.val) {
+                    if (cur.left == null) {
+                        cur.left = node;
+                        break;
+                    }
+                    else {
+                        cur = cur.left;
+                    }
+                }
+                else {
+                    if (cur.right == null) {
+                        cur.right = node;
+                        break;
+                    }
+                    else {
+                        cur = cur.right;
+                    }
+                }
+            }
+            return root;
+        }
+        else return node;
+    }
+
+
+
+    public TreeNode removeNode(TreeNode root, int value) {
+        if (root != null) {
+            TreeNode newRoot = new TreeNode(0);
+            newRoot.left = root;
+            TreeNode parent = newRoot;
+            TreeNode cur = root;
+            while (cur != null) {
+                if (cur.val == value) {
+                    break;
+                }
+                else if (cur.val > value) {
+                    parent = cur;
+                    cur = parent.left;
+                }
+                else {
+                    parent = cur;
+                    cur = parent.right;
+                }
+            }
+
+            if (cur != null) {
+                TreeNode left = cur.left;
+                cur.left = null;
+                TreeNode right = cur.right;
+                cur.right = null;
+
+                TreeNode replaceNode;
+                if (right == null) {
+                    replaceNode = left;
+                }
+                else {
+                    TreeNode parentR = right;
+                    while (parentR.left != null && parentR.left.left != null) {
+                        parentR = parentR.left;
+                    }
+                    if (parentR.left != null) {
+                        replaceNode = parentR.left;
+                        parentR.left = parentR.left.right;
+                        replaceNode.right = right;
+                    }
+                    else {
+                        replaceNode = parentR;
+                    }
+                    replaceNode.left = left;
+                }
+
+                if (parent.left == cur) {
+                    parent.left = replaceNode;
+                }
+                else {
+                    parent.right = replaceNode;
+                }
+            }
+
+            return newRoot.left;
+        }
+        else return null;
+    }
+
+
+
+
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode nodeA, TreeNode nodeB) {
+        if (root == null || root == nodeA || root == nodeB) {
+            return root;
+        }
+
+        TreeNode left = lowestCommonAncestor(root.left, nodeA, nodeB);
+        TreeNode right = lowestCommonAncestor(root.right, nodeA, nodeB);
+        if (left != null && right != null) {
+            return root;
+        }
+        else if (left != null) {
+            return left;
+        }
+        else if (right != null) {
+            return right;
+        }
+        return null;
+    }
+
+
+
+
+
+    public int kSum(int[] nums, int k, int target) {
+        kSumCache.clear();
+        return kSum(nums, k, target, nums.length - 1);
+    }
+
+    private HashMap<String, Integer> kSumCache = new HashMap<>();
+
+    private int kSum(int[] nums, int k, int target, int endIndex) {
+        String key = k + "," + target + "," + endIndex;
+        Integer result = kSumCache.get(key);
+        if (result != null) {
+            return result;
+        }
+
+        if (k == 0 && target == 0) {
+            result =  1;
+        }
+        else if (endIndex < 0) {
+            result = 0;
+        }
+        else if (endIndex + 1 == k) {
+            int sum = 0;
+            for (int i = 0; i <= endIndex; i++) {
+                sum += nums[i];
+            }
+            result = target == sum ? 1 : 0;
+        }
+        else if (endIndex + 1 < k) {
+            result = 0;
+        }
+        else {
+            result = kSum(nums, k, target, endIndex - 1) + kSum(nums, k - 1, target - nums[endIndex], endIndex - 1);
+        }
+
+        kSumCache.put(key, result);
+        return result;
+    }
+
+
+    public ArrayList<ArrayList<Integer>> kSumII(int[] nums, int k, int target) {
+        kSumIICache.clear();
+        return kSumII(nums, k, target, nums.length - 1);
+    }
+
+    private HashMap<String, ArrayList<ArrayList<Integer>>> kSumIICache = new HashMap<>();
+
+    private ArrayList<ArrayList<Integer>> kSumII(int[] nums, int k, int target, int endIndex) {
+        String key = k + "," + target + "," + endIndex;
+        ArrayList<ArrayList<Integer>> result = kSumIICache.get(key);
+        if (result != null) {
+            return result;
+        }
+
+        result = new ArrayList<>();
+        if (k == 0 && target == 0) {
+            result.add(new ArrayList<Integer>());
+        }
+        else if (endIndex < 0) {
+        }
+        else if (endIndex + 1 == k) {
+            int sum = 0;
+            for (int i = 0; i <= endIndex; i++) {
+                sum += nums[i];
+            }
+            if (sum == target) {
+                ArrayList<Integer> resultItem = new ArrayList<>();
+                for (int i = 0; i <= endIndex; i++) {
+                    resultItem.add(nums[i]);
+                }
+                result.add(resultItem);
+            }
+        }
+        else if (endIndex + 1 < k) {
+        }
+        else {
+            result.addAll(kSumII(nums, k, target, endIndex - 1));
+
+            ArrayList<ArrayList<Integer>> subResult = kSumII(nums, k - 1, target - nums[endIndex], endIndex - 1);
+            for (ArrayList<Integer> list : subResult) {
+                ArrayList<Integer> copy = (ArrayList<Integer>) list.clone();
+                copy.add(nums[endIndex]);
+                result.add(copy);
+            }
+        }
+
+        kSumIICache.put(key, result);
+        return result;
+    }
+
+
+
+
+    public int MinAdjustmentCost(ArrayList<Integer> nums, int target) {
+        int[][]cost = new int[nums.size() + 1][101];
+        int size = nums.size();
+        for (int i = 1; i <= size; i++) {
+            for (int j = 1; j <= 100; j++) {
+                cost[i][j] = Integer.MAX_VALUE;
+                for (int k = j - target; k <= j + target; k++) {
+                    if (k >= 1 && k <= 100) {
+                        cost[i][j] = Math.min(cost[i][j], cost[i - 1][k] + Math.abs(j - nums.get(i - 1)));
+                    }
+                }
+            }
+        }
+
+        int min = Integer.MAX_VALUE;
+        for (int j = 1; j <= 100; j++) {
+           min = Math.min(min, cost[size][j]);
+        }
+        return min;
+    }
+
+
+
+
+    public int backPack(int m, int[] vs) {
+        int len = vs.length;
+        int[][] cache = new int[len][];
+        for (int i = 0; i < len; i++) {
+            int[] temp = new int[m + 1];
+            Arrays.fill(temp, -1);
+            cache[i] = temp;
+        }
+        return backPack(m, len - 1, vs, cache);
+    }
+
+    private int backPack(int m, int n, int[] vs, int[][] cache) {
+        if (m <= 0 || n < 0) {
+            return 0;
+        }
+
+        int result = cache[n][m];
+        if (result > -1) {
+            return result;
+        }
+        else {
+            result = backPack(m, n - 1, vs, cache);
+            if (m >= vs[n]) {
+                result = Math.max(result, backPack(m - vs[n], n - 1, vs, cache) + vs[n]);
+            }
+        }
+        cache[n][m] = result;
+        return result;
+    }
+
+
+
+    public boolean isBalanced(TreeNode root) {
+        int[] check = checkBalance(root);
+        return Math.abs(check[0] - check[1]) <= 1;
+    }
+
+    private int[] checkBalance(TreeNode root) {
+        if (root == null) {
+            return new int[] {0, 0};
+        }
+
+        int[] left = checkBalance(root.left);
+        if (Math.abs(left[0] - left[1]) > 1) {
+            return left;
+        }
+
+        int[] right = checkBalance(root.right);
+        if (Math.abs(right[0] - right[1]) > 1) {
+            return right;
+        }
+
+        return new int[] {Math.max(left[0], left[1]) + 1, Math.max(right[0], right[1]) + 1};
+    }
+
+
+
+    public int maxPathSum(TreeNode root) {
+        int[] maxs = maxPathSumIt(root);
+        return Math.max(maxs[0], maxs[1]);
+    }
+
+    private int[] maxPathSumIt(TreeNode root) {
+        if (root == null) {
+            return new int[] {Integer.MIN_VALUE, 0};
+        }
+
+        int[] left = maxPathSumIt(root.left);
+        int[] right = maxPathSumIt(root.right);
+        int[] result = new int[] {
+                Math.max(Math.max(left[0], right[0]), Math.max(left[1] + right[1], 0) + root.val),
+                Math.max(Math.max(left[1] , right[1]), 0) + root.val
+        };
+        return result;
+    }
+
+
+
+
+    public boolean isValidBST(TreeNode root) {
+        return isValidBST(root, Long.MIN_VALUE, Long.MAX_VALUE);
+    }
+
+    private  boolean isValidBST(TreeNode root, long min, long max) {
+        if (root == null) return true;
+
+        if (root.val <= min || root.val >= max) return false;
+        return isValidBST(root.left, min, root.val) && isValidBST(root.right, root.val, max);
+    }
+
+
+
+
+    public ListNode partition(ListNode head, int x) {
+        ListNode minHead = new ListNode(0);
+        ListNode minCur = minHead;
+        ListNode maxHead = new ListNode(0);
+        ListNode maxCur = maxHead;
+        while (head != null) {
+            if (head.val < x) {
+                minCur.next = head;
+                minCur = head;
+            }
+            else {
+                maxCur.next = head;
+                maxCur = head;
+            }
+            head = head.next;
+        }
+        minCur.next = maxHead.next;
+        maxCur.next = null;
+        return minHead.next;
+    }
+
+
+
+    public int maxDepth(TreeNode root) {
+        if (root == null) return 0;
+        return Math.max(maxDepth(root.left), maxDepth(root.right)) + 1;
+    }
+
+
+
+
+    public ListNode sortList(ListNode head) {
+        if (head == null) {
+            return null;
+        }
+
+        ListNode minHead = new ListNode(0);
+        ListNode curMin = minHead;
+
+        ListNode maxHead = new ListNode(0);
+        ListNode curMax = maxHead;
+
+        ListNode key = head;
+        head = head.next;
+        key.next = null;
+        while (head != null) {
+            if (head.val < key.val) {
+                curMin.next = head;
+                curMin = head;
+            }
+            else {
+                curMax.next = head;
+                curMax = head;
+            }
+            head = head.next;
+        }
+        curMin.next = null;
+        curMax.next = null;
+
+        minHead.next = sortList(minHead.next);
+        maxHead.next = sortList(maxHead.next);
+
+        curMin = minHead;
+        while (curMin.next != null) {
+            curMin = curMin.next;
+        }
+        curMin.next = key;
+        key.next = maxHead.next;
+        return minHead.next;
+    }
+
+
+
+
+    public void reorderList(ListNode head) {
+
+    }
+
     private void test() {
+
+//        ListNode listNode = ListNodeFactory.build("0->5->4->3->2->1->6");
+//        d(listNode);
+//        d(sortList(listNode));
+
+
+//        TreeNode treeNode = TreeNodeFactory.build("1,2,3, #,#,4,5");
+//        d(treeNode);
+//        d(maxDepth(treeNode));
+
+
+//        ListNode listNode = ListNodeFactory.build("1->4->3->2->5->2");
+//        d(listNode);
+//        d(partition(listNode, 3));
+
+
+//        TreeNode treeNode = TreeNodeFactory.build("10,5,15,#,#,6,20");
+//        d(treeNode);
+//        d(isValidBST(treeNode));
+
+
+//        TreeNode treeNode = TreeNodeFactory.build("-10,-20,#,#,-31,-24,-5,#,#,-6,-7,-8,-9");
+//        d(treeNode);
+//        d(maxPathSum(treeNode));
+
+
+//        TreeNode treeNode = TreeNodeFactory.build("3,9,20,#,#,15,7,6,#,#,#,8");
+//        d(treeNode);
+//        d(isBalanced(treeNode));
+
+
+//        d(backPack(12, new int[]{
+//                2, 3, 5, 7
+//        }));
+
+
+//        d(MinAdjustmentCost(new ArrayList<Integer>(Arrays.asList(
+//                1, 4, 2, 3
+//        )), 1));
+
+
+//        d(kSumII(new int[]{
+//                1,2,3,4
+//        }, 2, 5));
+
+
+//        d(kSum(new int[]{
+//                1,3,4,5,8,10,11,12,14,17,20,22,24,25,28,30,31,34,35,37,38,40,42,44,45,48,51,54,56,59,60,61,63,66
+//        }, 24, 842));
+
+
+//        TreeNode treeNode = TreeNodeFactory.build("20,1,40,#,#,35");
+//        d(treeNode);
+//        d(lowestCommonAncestor(treeNode, treeNode.right, treeNode.right.left).val);
+
+
+//        TreeNode treeNode = TreeNodeFactory.build("20,1,40,#,#,35");
+//        d(treeNode);
+//        d(removeNode(treeNode, 20));
+
+
+//        TreeNode treeNode = TreeNodeFactory.build("2,1,4,#,#,3");
+//        TreeNode newNode = new TreeNode(6);
+//        d(insertNode(treeNode, newNode));
+
+
 
 //        d(singleNumberIII(new int[] {
 //                -4,2,2,3,4,4,5,3
