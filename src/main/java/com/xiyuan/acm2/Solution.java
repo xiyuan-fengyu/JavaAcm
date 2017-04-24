@@ -2769,10 +2769,43 @@ public class Solution {
 
 
     public void reorderList(ListNode head) {
+        if (head == null) return;
 
+        ListNode slow = head;
+        ListNode fast = head.next;
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+
+        fast = slow.next;
+        slow.next = null;
+        ListNode rightReverse = null;
+        while (fast != null) {
+            ListNode next = fast.next;
+            fast.next = rightReverse;
+            rightReverse = fast;
+            fast = next;
+        }
+
+        slow = head;
+        while (slow != null && rightReverse != null) {
+            ListNode leftNext = slow.next;
+            ListNode rightNext = rightReverse.next;
+            slow.next = rightReverse;
+            rightReverse.next = leftNext;
+            slow = leftNext;
+            rightReverse = rightNext;
+        }
     }
 
     private void test() {
+
+        ListNode listNode = ListNodeFactory.build("1->2->3->4");
+        d(listNode);
+        reorderList(listNode);
+        d(listNode);
+
 
 //        ListNode listNode = ListNodeFactory.build("0->5->4->3->2->1->6");
 //        d(listNode);
