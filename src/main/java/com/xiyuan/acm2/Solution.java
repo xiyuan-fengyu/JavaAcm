@@ -2905,7 +2905,45 @@ public class Solution {
         return null;
     }
 
+
+
+    public ListNode mergeKLists(List<ListNode> lists) {
+        if (lists == null || lists.isEmpty()) return null;
+        while (lists.size() > 1) {
+            ListNode list1 = lists.remove(lists.size() - 1);
+            ListNode list2 = lists.remove(lists.size() - 1);
+            lists.add(mergeList(list1, list2));
+        }
+        return lists.get(0);
+    }
+
+    private ListNode mergeList(ListNode list1, ListNode list2) {
+        ListNode tempHead = new ListNode(0);
+        ListNode cur = tempHead;
+        while (list1 != null && list2 != null) {
+            if (list1.val <= list2.val) {
+                cur.next = list1;
+                list1 = list1.next;
+            }
+            else {
+                cur.next = list2;
+                list2 = list2.next;
+            }
+            cur = cur.next;
+        }
+        cur.next = list1 != null ? list1 : list2;
+        return tempHead.next;
+    }
+
+
     private void test() {
+
+//        ArrayList<ListNode> lists = new ArrayList<>();
+//        lists.add(ListNodeFactory.build("2->4"));
+//        lists.add(ListNodeFactory.build(""));
+//        lists.add(ListNodeFactory.build("-1"));
+//        d(mergeKLists(lists));
+
 
 //        ListNode listNode = ListNodeFactory.build("0->1->2->3->4");
 //        d(detectCycle(listNode));
