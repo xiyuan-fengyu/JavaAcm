@@ -33,4 +33,37 @@ public class ListNodeFactory {
         return tempHead.next;
     }
 
+    public static void tailConnectNodeAt(ListNode node, int index) {
+        if (!hasCycle(node)) {
+            ListNode nodeAtIndex = null;
+            while (node != null) {
+                if (index == 0) {
+                    nodeAtIndex = node;
+                }
+
+                ListNode next = node.next;
+                if (next == null) {
+                    node.next = nodeAtIndex;
+                }
+                node = next;
+                index--;
+            }
+        }
+    }
+
+    public static boolean hasCycle(ListNode head) {
+        if (head == null || head.next == null) return false;
+
+        ListNode slow = head;
+        ListNode fast = head.next;
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+            if (slow == fast) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

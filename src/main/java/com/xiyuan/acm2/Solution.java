@@ -2799,12 +2799,145 @@ public class Solution {
         }
     }
 
+
+
+
+    public int removeDuplicates(int[] nums) {
+        if (nums == null) {
+            return 0;
+        }
+
+        int len = nums.length;
+        if (len <= 1) {
+            return len;
+        }
+
+        int i = 0;
+        int j = 1;
+        for (; i < len && j < len; i++) {
+            int numI = nums[i];
+            while (j < len && nums[j] == numI) {
+                j++;
+            }
+            if (j < len) {
+                nums[i + 1] = nums[j];
+            }
+        }
+        return i;
+    }
+
+
+
+    public int removeDuplicatesII(int[] nums) {
+        if (nums == null) {
+            return 0;
+        }
+
+        int len = nums.length;
+        if (len <= 2) {
+            return len;
+        }
+
+        int i = 0;
+        int j = 0;
+        int equal = 0;
+        for (; i < len && j < len;) {
+            int numI = nums[i];
+            if (numI == nums[j]) {
+                equal++;
+                if (equal == 2) {
+                    nums[i + 1] = nums[j];
+                    i++;
+                }
+                j++;
+            }
+            else {
+                equal = 1;
+                if (j - i > 0) {
+                    nums[i + 1] = nums[j];
+                }
+                i++;
+                j++;
+            }
+        }
+        return i + 1;
+    }
+
+
+
+
+
+    public boolean hasCycle(ListNode head) {
+        if (head == null || head.next == null) return false;
+
+        ListNode slow = head;
+        ListNode fast = head.next;
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+            if (slow == fast) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+
+
+    public ListNode detectCycle(ListNode head) {
+        if (head == null || head.next == null) return null;
+
+        ListNode slow = head;
+        ListNode fast = head.next;
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+            if (slow == fast) {
+                slow = head;
+                while (slow != fast.next) {
+                    slow = slow.next;
+                    fast = fast.next;
+                }
+                return slow;
+            }
+        }
+        return null;
+    }
+
     private void test() {
 
-        ListNode listNode = ListNodeFactory.build("1->2->3->4");
-        d(listNode);
-        reorderList(listNode);
-        d(listNode);
+//        ListNode listNode = ListNodeFactory.build("0->1->2->3->4");
+//        d(detectCycle(listNode));
+//        ListNodeFactory.tailConnectNodeAt(listNode, 2);
+//        d(listNode);
+//        d(detectCycle(listNode).val);
+
+
+//        ListNode listNode = ListNodeFactory.build("0->1->2");
+//        d(hasCycle(listNode));
+//        listNode.next.next.next = listNode.next;
+//        d(hasCycle(listNode));
+
+
+//        int[] nums = new int[]{
+//                1,2,3,3,4,4,4
+//        };
+//        d(removeDuplicatesII(nums));
+//        d(nums);
+
+
+//        int[] nums = new int[]{
+//                1,2,2,2,5,5,6
+//        };
+//        d(removeDuplicates(nums));
+//        d(nums);
+
+
+//        ListNode listNode = ListNodeFactory.build("1->2->3->4");
+//        d(listNode);
+//        reorderList(listNode);
+//        d(listNode);
 
 
 //        ListNode listNode = ListNodeFactory.build("0->5->4->3->2->1->6");
