@@ -3108,9 +3108,211 @@ public class Solution {
         return true;
     }
 
+
+
+    public int minimumTotal(int[][] triangle) {
+        if (triangle == null || triangle.length == 0) return 0;
+
+        int levels = triangle.length;
+        int maxLen = triangle[levels - 1].length;
+        if (maxLen == 0) return 0;
+
+        int[] temp = null;
+        int[] lastSums = new int[maxLen];
+        int[] curSums = new int[maxLen];
+        for (int i = 0; i < levels; i++) {
+            int len = triangle[i].length;
+            for (int j = 0; j < len; j++) {
+                if (j == 0) {
+                    curSums[j] = lastSums[j] + triangle[i][j];
+                }
+                else if (j == len - 1) {
+                    curSums[j] = lastSums[j - 1] + triangle[i][j];
+                }
+                else {
+                    curSums[j] = Math.min(lastSums[j - 1], lastSums[j]) + triangle[i][j];
+                }
+            }
+            temp = lastSums;
+            lastSums = curSums;
+            curSums = temp;
+        }
+
+        int minSum = lastSums[0];
+        for (int i = 1; i < maxLen; i++) {
+            if (minSum > lastSums[i]) {
+                minSum = lastSums[i];
+            }
+        }
+        return minSum;
+    }
+
+
+
+    public int minPathSum(int[][] grid) {
+        if (grid == null || grid.length == 0) return 0;
+
+        int row = grid.length;
+        int col = grid[0].length;
+
+        if (col == 0) return 0;
+
+        int[][] cache = new int[row][col];
+        for (int i = 0; i < row; i++) {
+            cache[i][0] = i == 0 ? grid[i][0] : cache[i - 1][0] + grid[i][0];
+        }
+        for (int i = 0; i < col; i++) {
+            cache[0][i] = i == 0 ? grid[0][i] : cache[0][i - 1] + grid[0][i];
+        }
+        for (int i = 1; i < row; i++) {
+            for (int j = 1; j < col; j++) {
+                cache[i][j] = Math.min(cache[i - 1][j], cache[i][j - 1]) + grid[i][j];
+            }
+        }
+        return cache[row - 1][col - 1];
+    }
+
+
+
+    public int climbStairs(int n) {
+        int a = 0;
+        int b = 1;
+        while (n-- > 0){
+            b = b + a;
+            a = b - a;
+        }
+        return b;
+    }
+
+
+
+    public ListNode deleteDuplicates(ListNode head) {
+        if (head != null) {
+            ListNode i = head;
+            ListNode j = head.next;
+            while (j != null) {
+                while (j != null && i.val == j.val) {
+                    j = j.next;
+                }
+                i.next = j;
+                i = j;
+            }
+        }
+        return head;
+    }
+
+    public ListNode deleteDuplicatesII(ListNode head) {
+        if (head == null || head.next == null) return head;
+
+        ListNode newHead = new ListNode(0);
+        ListNode cur = newHead;
+        ListNode i = head;
+        ListNode j = head.next;
+        while (i != null) {
+            if (j == null || i.val != j.val) {
+                cur.next = i;
+                cur = i;
+                i.next = null;
+            }
+            else {
+                while (j != null && j.val == i.val) {
+                    j = j.next;
+                }
+            }
+            i = j;
+            j = j == null ? null : j.next;
+        }
+
+        return newHead.next;
+    }
+
+
+
+
+    public int uniquePaths(int m, int n) {
+        if (m == 0 || n == 0) return 1;
+
+        int[] last = new int[n + 1];
+        last[1] = 1;
+        int[] cur = new int[n + 1];
+        int[] temp;
+        for (int i = 1; i <= m; i++) {
+            for (int j = 1; j <= n; j++) {
+                cur[j] = last[j] + cur[j - 1];
+            }
+            temp = last;
+            last = cur;
+            cur = temp;
+        }
+        return last[n];
+    }
+
+
+
+    public int uniquePathsWithObstacles(int[][] grid) {
+        int m = grid == null ? 0: grid.length;
+        int n = m == 0 ? 0 : grid[0].length;
+
+        if (m == 0 || n == 0) return 1;
+
+        int[] last = new int[n + 1];
+        last[1] = 1;
+        int[] cur = new int[n + 1];
+        int[] temp;
+        for (int i = 1; i <= m; i++) {
+            for (int j = 1; j <= n; j++) {
+                cur[j] = grid[i - 1][j - 1] == 1 ? 0 : last[j] + cur[j - 1];
+            }
+            temp = last;
+            last = cur;
+            cur = temp;
+        }
+        return last[n];
+    }
+
     private void test() throws Exception {
 
-        d(minCut("aabbac"));
+
+//        int[][] grid = {
+//                {0,0,0},
+//                {0,1,0},
+//                {0,0,0}
+//        };
+//        d(uniquePathsWithObstacles(grid));
+
+
+//        d(uniquePaths(4,5));
+
+
+//        ListNode head = ListNodeFactory.build("1->2->3->3->3->4->4->5");
+//        d(deleteDuplicatesII(head));
+
+
+//        ListNode head = ListNodeFactory.build("1->2->3->3->3->4->4->5");
+//        d(deleteDuplicates(head));
+
+
+//        d(climbStairs(4));
+
+
+//        int[][] grid = {
+//                {1,1,2,3},
+//                {0,1,4,1},
+//        };
+//        d(minPathSum(grid));
+
+
+//        int[][] triangle = {
+//                {2},
+//                {3, 4},
+//                {6, 5, 7},
+//                {4, 1, 8, 3}
+//        };
+//        d(minimumTotal(triangle));
+
+
+
+//        d(minCut("aabbac"));
 
 
 //        List<String> lines = Files.readAllLines(Paths.get("./data/word-break-88.in"), StandardCharsets.UTF_8);
