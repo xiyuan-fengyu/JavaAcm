@@ -3,10 +3,16 @@ package com.xiyuan.acm2;
 import com.xiyuan.acm.factory.ListNodeFactory;
 import com.xiyuan.acm.factory.TreeNodeFactory;
 import com.xiyuan.acm.model.ListNode;
+import com.xiyuan.acm.model.RandomListNode;
 import com.xiyuan.acm.model.TreeNode;
 import com.xiyuan.acm2.model.*;
+import com.xiyuan.acm2.model.Dictionary;
 import com.xiyuan.util.XYLog;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -2936,7 +2942,147 @@ public class Solution {
     }
 
 
-    private void test() {
+
+
+
+    public RandomListNode copyRandomList(RandomListNode head) {
+        if (head == null) return head;
+
+        RandomListNode cur = head;
+        while (cur != null) {
+            RandomListNode next = cur.next;
+            cur.next = new RandomListNode(cur.label);
+            cur.next.next = next;
+            cur = next;
+        }
+
+        cur = head;
+        while (cur != null) {
+            if (cur.random != null) {
+                cur.next.random = cur.random.next;
+            }
+            cur = cur.next.next;
+        }
+
+        cur = head;
+        RandomListNode newHead = head.next;
+        while (cur != null) {
+            RandomListNode next = cur.next.next;
+            if (next != null) {
+                cur.next.next = next.next;
+            }
+            cur.next = next;
+            cur = next;
+        }
+        return newHead;
+    }
+
+
+
+    public TreeNode sortedListToBST(ListNode head) {
+        if (head == null) return null;
+
+        ListNode midPrev = null;
+        ListNode slow = head;
+        ListNode fast = head.next;
+        while (fast != null && fast.next != null) {
+            midPrev = slow;
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+
+        TreeNode root = new TreeNode(slow.val);
+        if (midPrev != null) {
+            midPrev.next = null;
+            root.left = sortedListToBST(head);
+            midPrev.next = slow;
+        }
+        if (slow.next != null) {
+            root.right = sortedListToBST(slow.next);
+        }
+        return root;
+    }
+
+
+
+
+    public boolean wordBreak(String s, Set<String> dict) {
+        if (s == null) return false;
+        else if (s.isEmpty()) return true;
+
+        Dictionary dictionary = new Dictionary(dict);
+        return wordBreak(s, 0, dictionary);
+    }
+
+    //当单词很长的时候未出现栈溢出
+    private boolean wordBreak(String s, int from, Set<String> dict) {
+        int len = s.length();
+        if (from == len) return true;
+
+        for (int i = from; i < len; i++) {
+            if (dict.contains(s.substring(from, i + 1))) {
+                if (wordBreak(s, i + 1, dict)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    //通过字典树来解决
+    private boolean wordBreak(String s, int from, Dictionary dictionary) {
+        int len = s.length();
+        if (from == len) return true;
+
+        while (true) {
+            List<Integer> endIndexs = dictionary.search(s, from);
+            if (endIndexs.isEmpty()) {
+                return false;
+            }
+            else if (endIndexs.size() == 1) {
+                int endIndex = endIndexs.get(0);
+                if (endIndex + 1 == len) {
+                    return true;
+                }
+                else {
+                    from = endIndex + 1;
+                }
+            }
+            else {
+                for (Integer endIndex : endIndexs) {
+                    if (wordBreak(s, endIndex + 1, dictionary)) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        }
+    }
+
+    private void test() throws Exception {
+
+//        List<String> lines = Files.readAllLines(Paths.get("./data/word-break-88.in"), StandardCharsets.UTF_8);
+//        String s = lines.get(0);
+//        Set<String> dic = new HashSet<>(lines.subList(1, lines.size()));
+//        d(wordBreak(s, dic));
+////        String s = "aaaaaaa";
+////        Set<String> dic = new HashSet<>(Arrays.asList(
+////           "aaaa", "aa"
+////        ));
+////        d(wordBreak(s, dic));
+
+
+
+
+
+//        ListNode list = ListNodeFactory.build("1->2->3");
+//        d(sortedListToBST(list));
+
+
+//        RandomListNode listNode = new RandomListNode(-1);
+//        listNode.next = new RandomListNode(1);
+//        d(copyRandomList(listNode));
+
 
 //        ArrayList<ListNode> lists = new ArrayList<>();
 //        lists.add(ListNodeFactory.build("2->4"));
@@ -3482,7 +3628,7 @@ public class Solution {
 
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         new Solution().test();
     }
 
