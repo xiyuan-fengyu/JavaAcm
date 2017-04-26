@@ -3270,7 +3270,135 @@ public class Solution {
         return last[n];
     }
 
+
+
+    public boolean canJump(int[] jumps) {
+        if (jumps == null || jumps.length <= 1) return true;
+
+        int len = jumps.length;
+        int cur = 0;
+        int maxReach = jumps[cur];
+        while (++cur <= maxReach) {
+            if (maxReach >= len - 1) return true;
+            maxReach = Math.max(maxReach, cur + jumps[cur]);
+        }
+        return false;
+    }
+
+
+
+
+    public int jump(int[] jumps) {
+        if (jumps == null || jumps.length <= 1) return 0;
+
+        int len = jumps.length;
+        int cur = 0;
+        int jumpNum = 1;
+        int maxReach = cur + jumps[cur];
+        while (++cur <= maxReach) {
+            if (maxReach >= len - 1) {
+                return jumpNum;
+            }
+
+            int temp = cur + jumps[cur];
+            if (temp > maxReach) {
+                jumpNum++;
+                maxReach = temp;
+            }
+        }
+        return -1;
+    }
+
+
+
+
+    public int numDistinct(String source, String target) {
+        if (source == null || target == null) return 0;
+        else if (target.isEmpty()) return 1;
+
+        int lenS = source.length();
+        int[][] cache = new int[lenS][target.length()];
+        for (int i = 0; i < lenS; i++) {
+            Arrays.fill(cache[i], -1);
+        }
+        return numDistinct(source, 0, target, 0, cache);
+    }
+
+    private int numDistinct(String source, int sFrom, String target, int tFrom, int[][] cache) {
+        if (tFrom == target.length()) return 1;
+        else if (sFrom == source.length()) return 0;
+
+        int num = cache[sFrom][tFrom];
+        if (num != -1) {
+            return num;
+        }
+
+        num = numDistinct(source, sFrom + 1, target, tFrom, cache);
+        if (source.charAt(sFrom) == target.charAt(tFrom)) {
+            num += numDistinct(source, sFrom + 1, target, tFrom + 1, cache);
+        }
+        cache[sFrom][tFrom] = num;
+        return num;
+    }
+
+
+
+
+    public int minDistance(String word1, String word2) {
+        int len1 = word1 == null ? 0 : word1.length();
+        int len2 = word2 == null ? 0 : word2.length();
+        if (len1 == 0 || len2 == 0) return len1 + len2;
+
+        int[][] cache = new int[len1 + 1][len2 + 1];
+        for (int i = 0; i <= len1; i++) {
+            cache[i][0] = i;
+        }
+        for (int i = 0; i <= len2; i++) {
+            cache[0][i] = i;
+        }
+        for (int i = 0; i < len1; i++) {
+            for (int j = 0; j < len2; j++) {
+                cache[i + 1][j + 1] = Math.min(cache[i + 1][j], cache[i][j + 1]) + 1;
+                if (word1.charAt(i) == word2.charAt(j)) {
+                    cache[i + 1][j + 1] = Math.min(cache[i + 1][j + 1], cache[i][j]);
+                }
+                else {
+                    cache[i + 1][j + 1] = Math.min(cache[i + 1][j + 1], cache[i][j] + 1);
+                }
+            }
+        }
+        return cache[len1][len2];
+    }
+
+
     private void test() throws Exception {
+
+//        http://www.lintcode.com/zh-cn/problem/word-ladder/
+
+
+//        String s1 = "sea";
+//        String s2 = "atae";
+//        d(minDistance(s1, s2));
+
+
+//        String source = "rabbbit";
+//        String target = "rabbit";
+//        d(numDistinct(source, target));
+
+
+//        d(jump(new int[]{
+//                2,3,1,27,0,1,1,1,1,1,1,1,0,1
+//        }));
+
+
+//        int[] jumps1 = {
+//                2,3,2,1,1,1
+//        };
+//        d(canJump(jumps1));
+//        int[] jumps2 = {
+//                3,2,1,0,4
+//        };
+//        d(canJump(jumps2));
 
 
 //        int[][] grid = {
