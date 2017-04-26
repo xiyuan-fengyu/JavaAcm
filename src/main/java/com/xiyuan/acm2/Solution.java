@@ -3072,9 +3072,6 @@ public class Solution {
 ////        d(wordBreak(s, dic));
 
 
-
-
-
 //        ListNode list = ListNodeFactory.build("1->2->3");
 //        d(sortedListToBST(list));
 
