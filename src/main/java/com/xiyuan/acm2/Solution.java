@@ -3059,7 +3059,59 @@ public class Solution {
         }
     }
 
+
+
+
+    public int minCut(String str) {
+        if (str == null || str.isEmpty()) return 0;
+
+        int len = str.length();
+        int[] cache = new int[len + 1];
+        for (int i = 0; i <= len; i++) {
+            cache[i] = i - 1;
+        }
+
+        int l;
+        int r;
+        for (int i = 0; i < len; i++) {
+            l = i;
+            r = i + 1;
+            while (l > -1 && r < len && str.charAt(l) == str.charAt(r)) {
+                cache[r] = Math.min(cache[r], 1 + cache[l + 1]);
+                l--;
+                r++;
+            }
+            cache[r] = Math.min(cache[r], 1 + cache[l + 1]);
+
+            l = i - 1;
+            r = i + 1;
+            while (l > -1 && r < len && str.charAt(l) == str.charAt(r)) {
+                cache[r] = Math.min(cache[r], 1 + cache[l + 1]);
+                l--;
+                r++;
+            }
+            cache[r] = Math.min(cache[r], 1 + cache[l + 1]);
+        }
+        return cache[len];
+    }
+
+    private boolean isPalindrome(String str, int from, int to) {
+        if (from == to) return true;
+
+        int i = (from + to - 1) / 2;
+        int j = (from + to) / 2 + 1;
+        while (i >= from && j <= to) {
+            if (str.charAt(i--) != str.charAt(j++)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     private void test() throws Exception {
+
+        d(minCut("aabbac"));
+
 
 //        List<String> lines = Files.readAllLines(Paths.get("./data/word-break-88.in"), StandardCharsets.UTF_8);
 //        String s = lines.get(0);
