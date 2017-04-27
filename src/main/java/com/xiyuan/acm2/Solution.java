@@ -3423,14 +3423,134 @@ public class Solution {
         return max;
     }
 
+
+
+
+    public boolean exist(char[][] board, String word) {
+        if (board == null || word == null) return false;
+        if (word.isEmpty()) return true;
+        if (board.length == 0) return false;
+
+        int row = board.length;
+        int col = board[0].length;
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                if (exist(board, word, i, j, 0)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean exist(char[][] board, String word, int r, int c, int index) {
+        int row = board.length;
+        int col = board[0].length;
+
+        char curC = word.charAt(index);
+        if (board[r][c] != curC) return false;
+        else if (index == word.length() - 1) return true;
+
+        board[r][c] = '\0';
+        if (r > 0 && board[r - 1][c] != '\0' && exist(board, word, r - 1, c, index + 1)) {
+            board[r][c] = curC;
+            return true;
+        }
+        if (r < row - 1 && board[r + 1][c] != '\0' && exist(board, word, r + 1, c, index + 1)) {
+            board[r][c] = curC;
+            return true;
+        }
+        if (c > 0 && board[r][c - 1] != '\0' && exist(board, word, r, c - 1, index + 1)) {
+            board[r][c] = curC;
+            return true;
+        }
+        if (c < col - 1 && board[r][c + 1] != '\0' && exist(board, word, r, c + 1, index + 1)) {
+            board[r][c] = curC;
+            return true;
+        }
+        board[r][c] = curC;
+        return false;
+    }
+
+
+
+    public int longestConsecutive(int[] nums) {
+        int longest = 0;
+        HashSet<Integer> existed = new HashSet<>();
+        for (int num : nums) {
+            existed.add(num);
+        }
+
+        for (int num : nums) {
+            int left = num - 1;
+            while (existed.contains(left)) {
+                existed.remove(left);
+                left--;
+            }
+
+            int right = num + 1;
+            while (existed.contains(right)) {
+                existed.remove(right);
+                right++;
+            }
+            longest = Math.max(longest, right - left - 1);
+        }
+        return longest;
+    }
+
+
+    public int backPackII(int m, int[] volumes, int[] values) {
+        if (m <= 0 || volumes == null || volumes.length == 0 || values == null || values.length == 0) return 0;
+
+        int len = volumes.length;
+        int[] last = new int[m + 1];
+        int[] cur = new int[m + 1];
+        int[] temp;
+        for (int i = 0; i < len; i++) {
+            for (int j = 0; j < m; j++) {
+                cur[j + 1] = last[j + 1];
+                if (volumes[i] <= j + 1) {
+                    cur[j + 1] = Math.max(cur[j + 1], last[j + 1 - volumes[i]] + values[i]);
+                }
+            }
+            temp = last;
+            last = cur;
+            cur = temp;
+        }
+        return last[m];
+    }
+
     private void test() throws Exception {
 
-        d(largestRectangleArea(new int[]{
-                2,1,5,6,2,3
+        d(backPackII(10, new int[]{
+                2, 3, 5, 7
+        }, new int[]{
+                1, 5, 2, 4
         }));
-        d(largestRectangleArea(new int[]{
-                5,4,1,2
-        }));
+
+//        d(longestConsecutive(new int[]{
+//                100, 4, 200, 1, 3, 2
+//        }));
+
+
+//        String[] strs = {
+//                "ABCE",
+//                "SFCS",
+//                "ADEE"
+//        };
+//        char[][] board = new char[strs.length][];
+//        for (int i = 0; i < strs.length; i++) {
+//            board[i] = strs[i].toCharArray();
+//        }
+//        d(exist(board, "ABCCED"));
+
+
+//        d(largestRectangleArea(new int[]{
+//                2,1,5,6,2,3
+//        }));
+//        d(largestRectangleArea(new int[]{
+//                5,4,1,2
+//        }));
 
 
 //        String str1 = "hit";
