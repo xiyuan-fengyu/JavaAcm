@@ -3400,10 +3400,11 @@ public class Solution {
         int max = 0;
         int len;
         if (height != null && (len = height.length) > 0) {
+            int num;
             Stack<int[]> stack = new Stack<>();
             for (int i = 0; i < len; i++) {
                 int h = height[i];
-                int num = 0;
+                num = 0;
                 while (!stack.isEmpty() && stack.peek()[0] >= h) {
                     int[] hNum = stack.pop();
                     num += hNum[1];
@@ -3412,7 +3413,7 @@ public class Solution {
                 stack.push(new int[]{h, num + 1});
             }
 
-            int num = 0;
+            num = 0;
             for (int size = stack.size(), j = size - 1; j >= 0; j--) {
                 int[] hNum = stack.get(j);
                 num += hNum[1];
@@ -3424,12 +3425,12 @@ public class Solution {
 
     private void test() throws Exception {
 
-//        d(largestRectangleArea(new int[]{
-//                2,1,5,6,2,3
-//        }));
-//        d(largestRectangleArea(new int[]{
-//                5,4,1,2
-//        }));
+        d(largestRectangleArea(new int[]{
+                2,1,5,6,2,3
+        }));
+        d(largestRectangleArea(new int[]{
+                5,4,1,2
+        }));
 
 
 //        String str1 = "hit";
