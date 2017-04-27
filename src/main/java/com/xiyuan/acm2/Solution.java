@@ -3371,6 +3371,9 @@ public class Solution {
     }
 
 
+
+
+
     public int ladderLength(String start, String end, Set<String> dict) {
         if (start == null || end == null || dict == null) return 0;
         StrsUndirectedGraph graph = new StrsUndirectedGraph(dict);
@@ -3379,9 +3382,25 @@ public class Solution {
         return graph.minDistance(start, end) + 1;
     }
 
+
+
+
+    public List<List<String>> findLadders(String start, String end, Set<String> dict) {
+        if (start == null || end == null || dict == null) return new ArrayList<>();
+        StrsUndirectedGraph graph = new StrsUndirectedGraph(dict);
+        graph.addStr(start);
+        graph.addStr(end);
+        return graph.minDisPaths(start, end);
+    }
+
     private void test() throws Exception {
 
-
+//        String str1 = "hit";
+//        String str2 = "cog";
+//        Set<String> dic = new HashSet<>(Arrays.asList(
+//                "hot", "dot","dog","lot","log"
+//        ));
+//        d(findLadders(str1, str2, dic));
 
 
 //        String str1 = "hit";
