@@ -3371,9 +3371,25 @@ public class Solution {
     }
 
 
+    public int ladderLength(String start, String end, Set<String> dict) {
+        if (start == null || end == null || dict == null) return 0;
+        StrsUndirectedGraph graph = new StrsUndirectedGraph(dict);
+        graph.addStr(start);
+        graph.addStr(end);
+        return graph.minDistance(start, end) + 1;
+    }
+
     private void test() throws Exception {
 
-//        http://www.lintcode.com/zh-cn/problem/word-ladder/
+
+
+
+//        String str1 = "hit";
+//        String str2 = "cog";
+//        Set<String> dic = new HashSet<>(Arrays.asList(
+//                "hot", "dot","dog","lot","log"
+//        ));
+//        d(ladderLength(str1, str2, dic));
 
 
 //        String s1 = "sea";
