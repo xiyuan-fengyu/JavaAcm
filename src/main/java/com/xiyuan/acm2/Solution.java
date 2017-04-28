@@ -2,6 +2,7 @@ package com.xiyuan.acm2;
 
 import com.xiyuan.acm.factory.ListNodeFactory;
 import com.xiyuan.acm.factory.TreeNodeFactory;
+import com.xiyuan.acm.model.DirectedGraphNode;
 import com.xiyuan.acm.model.ListNode;
 import com.xiyuan.acm.model.RandomListNode;
 import com.xiyuan.acm.model.TreeNode;
@@ -3520,13 +3521,77 @@ public class Solution {
         return last[m];
     }
 
+
+
+    public ArrayList<DirectedGraphNode> topSort(ArrayList<DirectedGraphNode> graph) {
+        if (graph != null && graph.size() > 0) {
+            return topSortByBFS(graph);
+        }
+        return null;
+    }
+
+    private ArrayList<DirectedGraphNode> topSortByBFS(ArrayList<DirectedGraphNode> graph) {
+        ArrayList<DirectedGraphNode> result = new ArrayList<>();
+        HashSet<DirectedGraphNode> notStarts = new HashSet<>();
+        for (DirectedGraphNode node : graph) {
+            for (DirectedGraphNode neighbor : node.neighbors) {
+                notStarts.add(neighbor);
+            }
+        }
+
+        Queue<DirectedGraphNode> queue = new ArrayDeque<>();
+        for (DirectedGraphNode node : graph) {
+            if (!notStarts.contains(node)) {
+                queue.offer(node);
+                while (!queue.isEmpty()) {
+                    DirectedGraphNode first = queue.poll();
+                    boolean existed = false;
+                    for (int i = 0, size = result.size(); i < size; i++) {
+                        if (!existed && result.get(i) == first) {
+                            existed = true;
+                        }
+                        if (existed && i + 1 < size) {
+                            result.set(i, result.get(i + 1));
+                        }
+                    }
+                    if (!existed) {
+                        result.add(first);
+                    }
+                    else {
+                        result.set(result.size() - 1, first);
+                    }
+                    for (DirectedGraphNode neighbor : first.neighbors) {
+                        queue.offer(neighbor);
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
     private void test() throws Exception {
 
-        d(backPackII(10, new int[]{
-                2, 3, 5, 7
-        }, new int[]{
-                1, 5, 2, 4
-        }));
+        ArrayList<DirectedGraphNode> nodes = new ArrayList<>();
+        for (int i = 0; i < 6; i++) {
+            nodes.add(new DirectedGraphNode(i));
+        }
+        nodes.get(0).addNeighbors(nodes.get(1), nodes.get(2));
+        nodes.get(1).addNeighbors(nodes.get(4), nodes.get(5));
+        nodes.get(2).addNeighbors(nodes.get(3));
+        nodes.get(3).addNeighbors(nodes.get(1));
+        for (DirectedGraphNode node : topSort(nodes)) {
+            System.out.print(node.label + ", ");
+        }
+        System.out.println();
+
+
+
+//        d(backPackII(10, new int[]{
+//                2, 3, 5, 7
+//        }, new int[]{
+//                1, 5, 2, 4
+//        }));
+
 
 //        d(longestConsecutive(new int[]{
 //                100, 4, 200, 1, 3, 2
