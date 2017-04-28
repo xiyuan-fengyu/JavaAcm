@@ -3525,47 +3525,48 @@ public class Solution {
 
     public ArrayList<DirectedGraphNode> topSort(ArrayList<DirectedGraphNode> graph) {
         if (graph != null && graph.size() > 0) {
-            return topSortByBFS(graph);
+//            return topSortByBFS(graph);
+            return topSortByDFS(graph);
         }
         return null;
     }
 
     private ArrayList<DirectedGraphNode> topSortByBFS(ArrayList<DirectedGraphNode> graph) {
         ArrayList<DirectedGraphNode> result = new ArrayList<>();
-        HashSet<DirectedGraphNode> notStarts = new HashSet<>();
+        HashMap<DirectedGraphNode, Integer> reachCounts = new HashMap<>();
         for (DirectedGraphNode node : graph) {
             for (DirectedGraphNode neighbor : node.neighbors) {
-                notStarts.add(neighbor);
+                Integer count = reachCounts.get(neighbor);
+                reachCounts.put(neighbor, count == null ? 1 : count + 1);
             }
         }
 
         Queue<DirectedGraphNode> queue = new ArrayDeque<>();
         for (DirectedGraphNode node : graph) {
-            if (!notStarts.contains(node)) {
+            if (!reachCounts.containsKey(node)) {
                 queue.offer(node);
-                while (!queue.isEmpty()) {
-                    DirectedGraphNode first = queue.poll();
-                    boolean existed = false;
-                    for (int i = 0, size = result.size(); i < size; i++) {
-                        if (!existed && result.get(i) == first) {
-                            existed = true;
-                        }
-                        if (existed && i + 1 < size) {
-                            result.set(i, result.get(i + 1));
-                        }
-                    }
-                    if (!existed) {
-                        result.add(first);
-                    }
-                    else {
-                        result.set(result.size() - 1, first);
-                    }
-                    for (DirectedGraphNode neighbor : first.neighbors) {
-                        queue.offer(neighbor);
-                    }
+                result.add(node);
+            }
+        }
+
+        while (!queue.isEmpty()) {
+            DirectedGraphNode cur = queue.poll();
+            for (DirectedGraphNode neighbor : cur.neighbors) {
+                Integer count = reachCounts.get(neighbor);
+                reachCounts.put(neighbor, count - 1);
+                if (count == 1) {
+                    result.add(neighbor);
+                    queue.offer(neighbor);
                 }
             }
         }
+        return result;
+    }
+
+
+    private ArrayList<DirectedGraphNode> topSortByDFS(ArrayList<DirectedGraphNode> graph) {
+        ArrayList<DirectedGraphNode> result = new ArrayList<>();
+
         return result;
     }
 
