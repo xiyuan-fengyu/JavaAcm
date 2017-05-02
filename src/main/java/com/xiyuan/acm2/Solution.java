@@ -3609,7 +3609,164 @@ public class Solution {
         return (int) hash;
     }
 
+    public ListNode[] rehashing(ListNode[] hashTable) {
+        if (hashTable == null || hashTable.length == 0) return hashTable;
+
+        int newSize = hashTable.length * 2;
+        ListNode[] newHashTable = new ListNode[newSize];
+        ListNode temp;
+        for (ListNode node : hashTable) {
+            while (node != null) {
+                int hash = (node.val % newSize + newSize) % newSize;
+                if (newHashTable[hash] == null) {
+                    newHashTable[hash] = node;
+                }
+                else {
+                    temp = newHashTable[hash];
+                    while (temp.next != null) {
+                        temp = temp.next;
+                    }
+                    temp.next = node;
+                }
+                temp = node;
+                node = node.next;
+                temp.next = null;
+            }
+        }
+        return newHashTable;
+    }
+
+
+
+
+    public void heapify(int[] nums) {
+        if (nums == null || nums.length <= 1) return;
+
+        int len = nums.length;
+        for (int i = len / 2 - 1; i >= 0; i--) {
+            checkChild(nums, i);
+        }
+    }
+
+    private void checkChild(int[] heap, int index) {
+        int len = heap.length;
+        int childIndex;
+        int temp;
+        while ((childIndex = index * 2 + 1) < len) {
+            if (childIndex + 1 < len && heap[childIndex] > heap[childIndex + 1]) {
+                childIndex++;
+            }
+            if (heap[index] > heap[childIndex]) {
+                temp = heap[index];
+                heap[index] = heap[childIndex];
+                heap[childIndex] = temp;
+            }
+            else {
+                break;
+            }
+            index = childIndex;
+        }
+    }
+
+
+
+    public ArrayList<ArrayList<Integer>> buildingOutline(int[][] buildings) {
+        if (buildings == null || buildings.length == 0) return new ArrayList<>();
+
+        int len = buildings.length;
+        int[][] edges = new int[len * 2][];
+        ArrayList<ArrayList<Integer>> outlines = new ArrayList<>();
+        int index = 0;
+        for (int[] building : buildings) {
+            edges[index++] = new int[] {building[0], building[2], 0};
+            edges[index++] = new int[] {building[1], building[2], 1};
+        }
+
+        Arrays.sort(edges, new Comparator<int[]>() {
+            @Override
+            public int compare(int[] o1, int[] o2) {
+                if (o1[0] != o2[0]) {
+                    return o1[0] - o2[0];
+                }
+                else if (o1[1] != o2[1]) {
+                    return o2[1] - o1[1];
+                }
+                else {
+                    return o1[2] - o2[2];
+                }
+            }
+        });
+
+        d(edges);
+
+        Stack<int[]> stack = new Stack<>();
+        int lastEdge = 0;
+        for (int[] edge : edges) {
+            if (stack.isEmpty()) {
+                if (edge[2] == 0) {
+                    stack.push(edge);
+                }
+                else if (lastEdge < edge[0]) {
+                    outlines.add(building(lastEdge, edge[0], edge[1]));
+                }
+            }
+            else {
+                int[] top = stack.peek();
+                if (top[1] == edge[1]) {
+                    if (edge[2] == 0) {
+                        stack.push(edge);
+                    }
+                    else {
+                        stack.pop();
+                        if (stack.isEmpty()) {
+                            outlines.add(building(top[0], edge[0], edge[1]));
+                        }
+                    }
+                }
+                else if (top[1] < edge[1]) {
+                    stack.pop();
+                    outlines.add(building(top[0], edge[0], top[1]));
+                    stack.push(edge);
+                }
+            }
+            lastEdge = edge[0];
+        }
+
+        return outlines;
+    }
+
+    private ArrayList<Integer> building(int left, int right, int height) {
+        ArrayList<Integer> outline = new ArrayList<>();
+        outline.add(left);
+        outline.add(right);
+        outline.add(height);
+        return outline;
+    }
+
     private void test() throws Exception {
+
+        int[][] buildings = {
+                {1, 10, 3},
+                {2, 5, 8},
+                {7, 9, 8}
+        };
+        d(buildingOutline(buildings));
+
+
+//        int[] heap = {
+//                6,3,5,4,1,2,7
+//        };
+//        heapify(heap);
+//        d(heap);
+
+
+//        ListNode[] hashTable = new ListNode[] {
+//                null,
+//                null,
+//                ListNodeFactory.build("29->5")
+//        };
+//        d(rehashing(hashTable), "");
+
 
 //        d(hashCode("Wrong answer or accepted?".toCharArray(), 1000000007));
 
