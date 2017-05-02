@@ -3566,24 +3566,66 @@ public class Solution {
 
     private ArrayList<DirectedGraphNode> topSortByDFS(ArrayList<DirectedGraphNode> graph) {
         ArrayList<DirectedGraphNode> result = new ArrayList<>();
+        HashMap<DirectedGraphNode, Integer> reachCounts = new HashMap<>();
+        for (DirectedGraphNode node : graph) {
+            for (DirectedGraphNode neighbor : node.neighbors) {
+                Integer count = reachCounts.get(neighbor);
+                reachCounts.put(neighbor, count == null ? 1 : count + 1);
+            }
+        }
+
+        for (DirectedGraphNode node : graph) {
+            if (!reachCounts.containsKey(node)) {
+                result.add(node);
+                for (DirectedGraphNode neighbor : node.neighbors) {
+                    topSortByDFS(neighbor, result, reachCounts);
+                }
+            }
+        }
 
         return result;
     }
 
+    private void topSortByDFS(DirectedGraphNode node, ArrayList<DirectedGraphNode> result, HashMap<DirectedGraphNode, Integer> reachCounts) {
+        Integer count = reachCounts.get(node);
+        if (count == 1) {
+            result.add(node);
+            for (DirectedGraphNode neighbor : node.neighbors) {
+                topSortByDFS(neighbor, result, reachCounts);
+            }
+        }
+        if (count > 0) {
+            reachCounts.put(node, count - 1);
+        }
+    }
+
+
+
+    public int hashCode(char[] chars,int HASH_SIZE) {
+        long hash = 0;
+        for (char c : chars) {
+            hash = (hash * 33 + c) % HASH_SIZE;
+        }
+        return (int) hash;
+    }
+
     private void test() throws Exception {
 
-        ArrayList<DirectedGraphNode> nodes = new ArrayList<>();
-        for (int i = 0; i < 6; i++) {
-            nodes.add(new DirectedGraphNode(i));
-        }
-        nodes.get(0).addNeighbors(nodes.get(1), nodes.get(2));
-        nodes.get(1).addNeighbors(nodes.get(4), nodes.get(5));
-        nodes.get(2).addNeighbors(nodes.get(3));
-        nodes.get(3).addNeighbors(nodes.get(1));
-        for (DirectedGraphNode node : topSort(nodes)) {
-            System.out.print(node.label + ", ");
-        }
-        System.out.println();
+//        d(hashCode("Wrong answer or accepted?".toCharArray(), 1000000007));
+
+
+//        ArrayList<DirectedGraphNode> nodes = new ArrayList<>();
+//        for (int i = 0; i < 6; i++) {
+//            nodes.add(new DirectedGraphNode(i));
+//        }
+//        nodes.get(0).addNeighbors(nodes.get(1), nodes.get(2));
+//        nodes.get(1).addNeighbors(nodes.get(4), nodes.get(5));
+//        nodes.get(2).addNeighbors(nodes.get(3));
+//        nodes.get(3).addNeighbors(nodes.get(1));
+//        for (DirectedGraphNode node : topSort(nodes)) {
+//            System.out.print(node.label + ", ");
+//        }
+//        System.out.println();
 
 
 
