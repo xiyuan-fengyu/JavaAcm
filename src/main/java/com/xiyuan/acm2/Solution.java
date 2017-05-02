@@ -3676,10 +3676,10 @@ public class Solution {
         int len = buildings.length;
         int[][] edges = new int[len * 2][];
         ArrayList<ArrayList<Integer>> outlines = new ArrayList<>();
-        int index = 0;
-        for (int[] building : buildings) {
-            edges[index++] = new int[] {building[0], building[2], 0};
-            edges[index++] = new int[] {building[1], building[2], 1};
+        for (int i = 0; i < len; i++) {
+            int[] building = buildings[i];
+            edges[i * 2] = new int[] {building[0], building[2], 0, i};
+            edges[i * 2 + 1] = new int[] {building[1], building[2], 1, i};
         }
 
         Arrays.sort(edges, new Comparator<int[]>() {
@@ -3746,9 +3746,9 @@ public class Solution {
     private void test() throws Exception {
 
         int[][] buildings = {
-                {1, 10, 3},
-                {2, 5, 8},
-                {7, 9, 8}
+                {1,4,3},
+                {3,6,1},
+                {5,8,3}
         };
         d(buildingOutline(buildings));
 
