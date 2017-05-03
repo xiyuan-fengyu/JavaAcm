@@ -3762,11 +3762,11 @@ public class Solution {
         d(buildingOutline(buildings));
 
 
-        int[] heap = {
-                6,3,5,4,1,2,7
-        };
-        heapify(heap);
-        d(heap);
+//        int[] heap = {
+//                6,3,5,4,1,2,7
+//        };
+//        heapify(heap);
+//        d(heap);
 
 
 //        ListNode[] hashTable = new ListNode[] {
