@@ -3688,50 +3688,59 @@ public class Solution {
                 if (o1[0] != o2[0]) {
                     return o1[0] - o2[0];
                 }
-                else if (o1[1] != o2[1]) {
-                    return o2[1] - o1[1];
+                else if (o1[2] == o2[2]) {
+                    return o1[1] - o2[1];
                 }
                 else {
-                    return o1[2] - o2[2];
+                    return o1[2] == 0 ? -1 : 1;
                 }
             }
         });
 
-        d(edges);
-
-        Stack<int[]> stack = new Stack<>();
+        PriorityQueue<int[]> heap = new PriorityQueue<>(len, new Comparator<int[]>() {
+            @Override
+            public int compare(int[] o1, int[] o2) {
+                if (o1[1] != o2[1]) {
+                    return o2[1] - o1[1];
+                }
+                else if (o1[0] != o2[0]) {
+                    return o1[1] - o2[1];
+                }
+                else {
+                    return o1[2] == 0 ? -1 : 1;
+                }
+            }
+        });
         int lastEdge = 0;
         for (int[] edge : edges) {
-            if (stack.isEmpty()) {
-                if (edge[2] == 0) {
-                    stack.push(edge);
-                }
-                else if (lastEdge < edge[0]) {
-                    outlines.add(building(lastEdge, edge[0], edge[1]));
-                }
+            if (heap.isEmpty()) {
+                heap.offer(edge);
+                lastEdge = edge[0];
             }
             else {
-                int[] top = stack.peek();
-                if (top[1] == edge[1]) {
-                    if (edge[2] == 0) {
-                        stack.push(edge);
+                if (edge[2] == 0) {
+                    int[] top = heap.peek();
+                    if (edge[1] > top[1]) {
+                        outlines.add(building(lastEdge, edge[0], top[1]));
+                        lastEdge = edge[0];
                     }
-                    else {
-                        stack.pop();
-                        if (stack.isEmpty()) {
-                            outlines.add(building(top[0], edge[0], edge[1]));
+                    heap.offer(edge);
+                }
+                else {
+                    Iterator<int[]> it = heap.iterator();
+                    while (it.hasNext()) {
+                        if (it.next()[3] == edge[3]) {
+                            it.remove();
+                            break;
                         }
                     }
-                }
-                else if (top[1] < edge[1]) {
-                    stack.pop();
-                    outlines.add(building(top[0], edge[0], top[1]));
-                    stack.push(edge);
+                    if (heap.isEmpty() || heap.peek()[1] < edge[1]) {
+                        outlines.add(building(lastEdge, edge[0], edge[1]));
+                        lastEdge = edge[0];
+                    }
                 }
             }
-            lastEdge = edge[0];
         }
-
         return outlines;
     }
 
@@ -3753,11 +3762,11 @@ public class Solution {
         d(buildingOutline(buildings));
 
 
-//        int[] heap = {
-//                6,3,5,4,1,2,7
-//        };
-//        heapify(heap);
-//        d(heap);
+        int[] heap = {
+                6,3,5,4,1,2,7
+        };
+        heapify(heap);
+        d(heap);
 
 
 //        ListNode[] hashTable = new ListNode[] {
