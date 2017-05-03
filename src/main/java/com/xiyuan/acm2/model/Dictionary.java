@@ -11,6 +11,8 @@ public class Dictionary {
 
     private CharNode start = new CharNode('\0');
 
+    private static final Finder notFound = new Finder(null);
+
     public Dictionary() {
 
     }
@@ -68,6 +70,21 @@ public class Dictionary {
         return result;
     }
 
+    public Finder finder(String prefix) {
+        if (prefix == null) return notFound;
+        else if (prefix.isEmpty()) return new Finder(start);
+        else {
+            CharNode cur = start;
+            for (int i = 0, len = prefix.length(); i < len; i++) {
+                cur = cur.nexts.get(prefix.charAt(i));
+                if (cur == null) {
+                    return notFound;
+                }
+            }
+            return new Finder(cur);
+        }
+    }
+
     private class CharNode {
 
         private Character val;
@@ -85,6 +102,26 @@ public class Dictionary {
                 return next;
             }
             return nexts.get(c);
+        }
+
+    }
+
+    public static class Finder {
+
+        private final CharNode curNode;
+
+        public final boolean notNull;
+
+        public final boolean found;
+
+        private Finder(CharNode node) {
+            this.curNode = node;
+            this.notNull = node != null;
+            this.found = this.notNull && node.nexts.containsKey('\0');
+        }
+
+        public Finder next(char c) {
+            return curNode != null ? new Finder(curNode.nexts.get(c)) : notFound;
         }
 
     }

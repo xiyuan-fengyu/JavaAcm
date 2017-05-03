@@ -3762,7 +3762,78 @@ public class Solution {
         }
     }
 
+
+
+
+
+    public ArrayList<String> wordSearchII(char[][] board, ArrayList<String> words) {
+        ArrayList<String> result = new ArrayList<>();
+        if (board != null && board.length > 0 && words != null && words.size() > 0) {
+            int row = board.length;
+            int col = board[0].length;
+            if (col > 0) {
+                HashSet<String> set = new HashSet<>();
+                Dictionary dic = new Dictionary(words);
+                StringBuilder builder = new StringBuilder();
+                for (int i = 0; i < row; i++) {
+                    for (int j = 0; j < col; j++) {
+                        Dictionary.Finder finder = dic.finder("" + board[i][j]);
+                        wordSearch(board, finder, i, j, builder, set);
+                    }
+                }
+                result.addAll(set);
+            }
+        }
+        return result;
+    }
+
+    private void wordSearch(char[][] board, Dictionary.Finder finder, int i, int j, StringBuilder builder, HashSet<String> result) {
+        if (finder.notNull) {
+            char c = board[i][j];
+            board[i][j] = '\0';
+            builder.append(c);
+            if (finder.found) {
+                result.add(builder.toString());
+            }
+
+            char nextC;
+            if (i > 0 && (nextC = board[i - 1][j]) != '\0') {
+                wordSearch(board, finder.next(nextC), i - 1, j, builder, result);
+            }
+
+            if (i < board.length - 1 && (nextC = board[i + 1][j]) != '\0') {
+                wordSearch(board, finder.next(nextC), i + 1, j, builder, result);
+            }
+
+            if (j > 0 && (nextC = board[i][j - 1]) != '\0') {
+                wordSearch(board, finder.next(nextC), i, j - 1, builder, result);
+            }
+
+            if (j < board[0].length - 1 && (nextC = board[i][j + 1]) != '\0') {
+                wordSearch(board, finder.next(nextC), i, j + 1, builder, result);
+            }
+
+            board[i][j] = c;
+            builder.deleteCharAt(builder.length() - 1);
+        }
+    }
+
     private void test() throws Exception {
+
+//        String[] strs = {
+//                "doaf",
+//                "agai",
+//                "dcan"
+//        };
+//        char[][] board = new char[strs.length][];
+//        for (int i = 0; i < strs.length; i++) {
+//            board[i] = strs[i].toCharArray();
+//        }
+//        ArrayList<String> words = new ArrayList<>(Arrays.asList(
+//                "dog", "dad", "dgdg", "can", "again"
+//        ));
+//        d(wordSearchII(board, words));
+
 
 //        int[][] buildings = {
 //                {1,100,20},
