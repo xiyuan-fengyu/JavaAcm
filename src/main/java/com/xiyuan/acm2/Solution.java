@@ -19,6 +19,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.xiyuan.util.XYLog.d;
+import static com.xiyuan.util.XYLog.e;
 
 /**
  * Created by xiyuan_fengyu on 2017/4/7.
@@ -3674,92 +3675,101 @@ public class Solution {
         if (buildings == null || buildings.length == 0) return new ArrayList<>();
 
         int len = buildings.length;
-        int[][] edges = new int[len * 2][];
         ArrayList<ArrayList<Integer>> outlines = new ArrayList<>();
+        ArrayList<Edge> edges = new ArrayList<>();
+        Edge[] starts = new Edge[len];
         for (int i = 0; i < len; i++) {
             int[] building = buildings[i];
-            edges[i * 2] = new int[] {building[0], building[2], 0, i};
-            edges[i * 2 + 1] = new int[] {building[1], building[2], 1, i};
+            Edge start = new Edge(building[0], building[2], true, i);
+            starts[i] = start;
+            edges.add(start);
+            edges.add(new Edge(building[1], building[2], false, i));
         }
-
-        Arrays.sort(edges, new Comparator<int[]>() {
+        Collections.sort(edges, new Comparator<Edge>() {
             @Override
-            public int compare(int[] o1, int[] o2) {
-                if (o1[0] != o2[0]) {
-                    return o1[0] - o2[0];
+            public int compare(Edge o1, Edge o2) {
+                if (o1.x != o2.x) {
+                    return o1.x - o2.x;
                 }
-                else if (o1[2] == o2[2]) {
-                    return o1[1] - o2[1];
+                else if (o1.isStart == o2.isStart) {
+                    return o1.y - o2.y;
                 }
                 else {
-                    return o1[2] == 0 ? -1 : 1;
+                    return o1.isStart ? -1 : 1;
+                }
+            }
+        });
+        IndexHeap<Edge> heap = new IndexHeap<>(new Comparator<Edge>() {
+            @Override
+            public int compare(Edge o1, Edge o2) {
+                if (o1.y != o2.y) {
+                    return -(o1.y - o2.y);
+                }
+                else if (o1.x != o2.x) {
+                    return -(o1.x - o2.x);
+                }
+                else {
+                    return o1.isStart ? 1 : -1;
                 }
             }
         });
 
-        PriorityQueue<int[]> heap = new PriorityQueue<>(len, new Comparator<int[]>() {
-            @Override
-            public int compare(int[] o1, int[] o2) {
-                if (o1[1] != o2[1]) {
-                    return o2[1] - o1[1];
-                }
-                else if (o1[0] != o2[0]) {
-                    return o1[1] - o2[1];
-                }
-                else {
-                    return o1[2] == 0 ? -1 : 1;
-                }
-            }
-        });
-        int lastEdge = 0;
-        for (int[] edge : edges) {
+        int lastX = 0;
+        for (Edge edge : edges) {
             if (heap.isEmpty()) {
-                heap.offer(edge);
-                lastEdge = edge[0];
+                heap.push(edge);
+                lastX = edge.x;
+            }
+            else if (edge.isStart) {
+                Edge top = heap.top();
+                if (top.y < edge.y) {
+                    addBuilding(outlines, lastX, edge.x, top.y);
+                    lastX = edge.x;
+                }
+                heap.push(edge);
             }
             else {
-                if (edge[2] == 0) {
-                    int[] top = heap.peek();
-                    if (edge[1] > top[1]) {
-                        outlines.add(building(lastEdge, edge[0], top[1]));
-                        lastEdge = edge[0];
-                    }
-                    heap.offer(edge);
-                }
-                else {
-                    Iterator<int[]> it = heap.iterator();
-                    while (it.hasNext()) {
-                        if (it.next()[3] == edge[3]) {
-                            it.remove();
-                            break;
-                        }
-                    }
-                    if (heap.isEmpty() || heap.peek()[1] < edge[1]) {
-                        outlines.add(building(lastEdge, edge[0], edge[1]));
-                        lastEdge = edge[0];
-                    }
+                heap.remove(starts[edge.i]);
+                if (heap.isEmpty() || heap.top().y < edge.y) {
+                    addBuilding(outlines, lastX, edge.x, edge.y);
+                    lastX = edge.x;
                 }
             }
         }
         return outlines;
     }
 
-    private ArrayList<Integer> building(int left, int right, int height) {
-        ArrayList<Integer> outline = new ArrayList<>();
-        outline.add(left);
-        outline.add(right);
-        outline.add(height);
-        return outline;
+    private class Edge extends IndexHeap.IndexT {
+        public final int x;
+        public final int y;
+        public final boolean isStart;
+        public final int i;
+        public Edge(int x, int y, boolean isStart, int i) {
+            this.x = x;
+            this.y = y;
+            this.isStart = isStart;
+            this.i = i;
+        }
+    }
+
+    private void addBuilding(ArrayList<ArrayList<Integer>> outlines, int left, int right, int height) {
+        if (left != right) {
+            ArrayList<Integer> outline = new ArrayList<>();
+            outline.add(left);
+            outline.add(right);
+            outline.add(height);
+            outlines.add(outline);
+        }
     }
 
     private void test() throws Exception {
 
-        int[][] buildings = {
-                {1,4,3},
-                {3,6,1},
-                {5,8,3}
-        };
-        d(buildingOutline(buildings));
+//        int[][] buildings = {
+//                {1,100,20},
+//                {2,99,19},
+//                {3,98,18}
+//        };
+//        d(buildingOutline(buildings));
 
 
 //        int[] heap = {
