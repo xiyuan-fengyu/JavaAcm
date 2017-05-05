@@ -3818,7 +3818,42 @@ public class Solution {
         }
     }
 
+
+
+
+    public ArrayList<String> longestWords(String[] dictionary) {
+        ArrayList<String> result = new ArrayList<>();
+        if (dictionary != null && dictionary.length > 0) {
+            int curMax = -1;
+            for (String s : dictionary) {
+                int lenS = s.length();
+                if (lenS > curMax) {
+                    result.clear();
+                    result.add(s);
+                    curMax = lenS;
+                }
+                else if (lenS == curMax) {
+                    result.add(s);
+                }
+            }
+        }
+        return result;
+    }
+
     private void test() throws Exception {
+
+//        http://www.lintcode.com/zh-cn/problem/lru-cache/
+
+
+//        String[] strs = {
+//                "dog",
+//                "google",
+//                "facebook",
+//                "internationalization",
+//                "blabla"
+//        };
+//        d(longestWords(strs));
+
 
 //        String[] strs = {
 //                "doaf",
