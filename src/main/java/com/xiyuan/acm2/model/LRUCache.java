@@ -8,49 +8,85 @@ import java.util.HashMap;
  */
 public class LRUCache {
 
-    private final HashMap<Integer, Integer> caches;
+    private final int capacity;
 
-    private final int[] keys;
+    private final HashMap<Integer, Entry> caches;
+
+    private Entry head;
+
+    private Entry tail;
 
     public LRUCache(int capacity) {
+        this.capacity = capacity;
         caches = new HashMap<>(capacity);
-        keys = new int[capacity];
+        head = new Entry(0, 0);
+        tail = new Entry(0, 0);
+        head.next = tail;
+        tail.prev = head;
     }
 
     public void set(int key, int value) {
-        if (caches.containsKey(key)) {
-            caches.put(key, value);
-//            resortKeys();
+        Entry item = caches.get(key);
+        if (item != null) {
+            item.value = value;
+            moveAfterHead(item);
         }
         else {
-            int size = caches.size();
-            if (size == keys.length) {
-                caches.remove(keys[size - 1]);
-                size--;
+            if (caches.size() == this.capacity) {
+                removeBeforeTail();
             }
-            caches.put(key, value);
-            keys[size] = key;
-//            resortKeys();
+            item = new Entry(key, value);
+            caches.put(key, item);
+            insertAfterHead(item);
         }
     }
 
     public int get(int key) {
-        if (caches.containsKey(key)) {
-            int value = caches.get(key);
-//            resortKeys();
-            return value;
+        Entry item = caches.get(key);
+        if (item != null) {
+            moveAfterHead(item);
+            return item.value;
         }
         return -1;
     }
 
-    private void swapKeys(int i1, int i2) {
-        int temp = keys[i1];
-        keys[i1] = keys[i2];
-        keys[i2] = temp;
+    private void moveAfterHead(Entry item) {
+        Entry prev = item.prev;
+        if (prev != head) {
+            Entry next = item.next;
+            prev.next = next;
+            next.prev = prev;
+            insertAfterHead(item);
+        }
     }
 
-    private void resortKeys(int index) {
+    private void insertAfterHead(Entry item) {
+        Entry next = head.next;
+        head.next = item;
+        item.next = next;
+        next.prev = item;
+        item.prev = head;
+    }
 
+    private void removeBeforeTail() {
+        Entry item = tail.prev;
+        if (item != head) {
+            Entry prev = item.prev;
+            prev.next = tail;
+            tail.prev = prev;
+            caches.remove(item.key);
+        }
+    }
+
+    private static class Entry {
+        private final int key;
+        private int value;
+        private Entry prev;
+        private Entry next;
+        private Entry(int key, int value) {
+            this.key = key;
+            this.value = value;
+        }
     }
 
 }
