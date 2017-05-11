@@ -3842,7 +3842,15 @@ public class Solution {
 
     private void test() throws Exception {
 
-//        http://www.lintcode.com/zh-cn/problem/lru-cache/
+        LRUCache cache = new LRUCache(3);
+        cache.set(0, 0);
+        cache.set(1, 1);
+        cache.set(2, 2);
+        cache.set(3, 3);
+        System.out.println(cache.get(1));
+        cache.set(4, 4);
+        System.out.println(cache.get(2));
+
 
 
 //        String[] strs = {
