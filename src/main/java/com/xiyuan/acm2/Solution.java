@@ -3840,16 +3840,71 @@ public class Solution {
         return result;
     }
 
+
+
+
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        return combinationSum(candidates, 0, target);
+    }
+
+    public List<List<Integer>> combinationSum(int[] candidates, int fromIndex, int target) {
+        int len = candidates.length;
+        if (fromIndex >= len) {
+            return null;
+        }
+
+        int cur = candidates[fromIndex];
+        if (cur == target) {
+            List<List<Integer>> result = new ArrayList<>();
+            List<Integer> item = new ArrayList<>();
+            item.add(cur);
+            result.add(item);
+            return result;
+        }
+        else if (cur < target) {
+            return null;
+        }
+        else {
+            List<List<Integer>> result = null;
+            List<List<Integer>> subResult = combinationSum(candidates, fromIndex, target - cur);
+            if (subResult != null) {
+                result = new ArrayList<>();
+                for (List<Integer> list : subResult) {
+                    list.add(cur);
+                    result.add(list);
+                }
+            }
+            subResult = combinationSum(candidates, fromIndex + 1, target - cur);
+            if (subResult != null) {
+                if (result == null) {
+                    result = new ArrayList<>();
+                }
+                for (List<Integer> list : subResult) {
+                    list.add(cur);
+                    result.add(list);
+                }
+            }
+            return result;
+        }
+    }
+
+
+
     private void test() throws Exception {
 
-        LRUCache cache = new LRUCache(3);
-        cache.set(0, 0);
-        cache.set(1, 1);
-        cache.set(2, 2);
-        cache.set(3, 3);
-        System.out.println(cache.get(1));
-        cache.set(4, 4);
-        System.out.println(cache.get(2));
+        d(combinationSum(new int[] {
+                2, 3, 4, 5, 6, 7, 8, 9, 10
+        }, 10));
+
+
+//        LRUCache cache = new LRUCache(3);
+//        cache.set(0, 0);
+//        cache.set(1, 1);
+//        cache.set(2, 2);
+//        cache.set(3, 3);
+//        System.out.println(cache.get(1));
+//        cache.set(4, 4);
+//        System.out.println(cache.get(2));
 
 
 
