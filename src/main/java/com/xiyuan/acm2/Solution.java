@@ -3844,6 +3844,7 @@ public class Solution {
 
 
     public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        Arrays.sort(candidates);
         return combinationSum(candidates, 0, target);
     }
 
@@ -3861,7 +3862,7 @@ public class Solution {
             result.add(item);
             return result;
         }
-        else if (cur < target) {
+        else if (cur > target) {
             return null;
         }
         else {
@@ -3870,19 +3871,18 @@ public class Solution {
             if (subResult != null) {
                 result = new ArrayList<>();
                 for (List<Integer> list : subResult) {
-                    list.add(cur);
+                    list.add(0, cur);
                     result.add(list);
                 }
             }
-            subResult = combinationSum(candidates, fromIndex + 1, target - cur);
+
+            while (++fromIndex < len && cur == candidates[fromIndex]) {}
+            subResult = combinationSum(candidates, fromIndex, target);
             if (subResult != null) {
                 if (result == null) {
                     result = new ArrayList<>();
                 }
-                for (List<Integer> list : subResult) {
-                    list.add(cur);
-                    result.add(list);
-                }
+                result.addAll(subResult);
             }
             return result;
         }
@@ -3892,9 +3892,9 @@ public class Solution {
 
     private void test() throws Exception {
 
-        d(combinationSum(new int[] {
-                2, 3, 4, 5, 6, 7, 8, 9, 10
-        }, 10));
+//        d(combinationSum(new int[] {
+//                2, 3, 4, 5, 6, 7, 8, 9, 10
+//        }, 10));
 
 
 //        LRUCache cache = new LRUCache(3);
