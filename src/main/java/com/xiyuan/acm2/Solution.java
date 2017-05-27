@@ -3975,9 +3975,45 @@ public class Solution {
         return clone;
     }
 
+
+
+
+    public ArrayList<Integer> subarraySum(int[] nums) {
+        ArrayList<Integer> res = new ArrayList<>();
+        HashMap<Integer, Integer> indexs = new HashMap<>();
+        indexs.put(0, -1);
+        int sum = 0;
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] == 0) {
+                res.add(i);
+                res.add(i);
+                break;
+            }
+            sum += nums[i];
+
+            Integer existed = indexs.get(sum);
+            if (existed != null) {
+                res.add(existed + 1);
+                res.add(i);
+                break;
+            }
+            else {
+                indexs.put(sum, i);
+            }
+        }
+        return res;
+    }
+
+
+
+    public int[] subarraySumClosest(int[] nums) {
+
+        return null;
+    }
+
     private void test() throws Exception {
 
-
+//        d(subarraySum(new int[]{-3, 1, 2, -3, 4}));
 
 
 
