@@ -3890,7 +3890,112 @@ public class Solution {
 
 
 
+
+
+    public List<List<String>> partition(String s) {
+        return s == null || s.equals("") ? new ArrayList<List<String>>() : partition(s, 0);
+    }
+
+    public List<List<String>> partition(String s, int from) {
+        List<List<String>> result = new ArrayList<>();
+        for (int i = from, len = s.length(); i < len; i++) {
+            if (isPalindromeI(s, from, i)) {
+                if (i == len - 1) {
+                    List<String> list = new ArrayList<>();
+                    list.add(s.substring(from, i + 1));
+                    result.add(list);
+                }
+                else {
+                    List<List<String>> subResult = partition(s, i + 1);
+                    for (List<String> list : subResult) {
+                        list.add(0, s.substring(from, i + 1));
+                        result.add(list);
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    private boolean isPalindromeI(String s, int from, int to) {
+        while (from < to) {
+            if (s.charAt(from++) != s.charAt(to--)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+
+
+    public UndirectedGraphNode cloneGraph(UndirectedGraphNode node) {
+        if (node == null) return null;
+
+        HashMap<UndirectedGraphNode, UndirectedGraphNode> cache = new HashMap<>();
+        Queue<UndirectedGraphNode> queue = new ArrayDeque<>();
+        queue.add(node);
+        UndirectedGraphNode nodeClone = new UndirectedGraphNode(node.label);
+        cache.put(node, nodeClone);
+
+        while (queue.size() > 0) {
+            UndirectedGraphNode cur = queue.poll();
+            UndirectedGraphNode clone = cache.get(cur);
+            UndirectedGraphNode neiClone;
+            for (UndirectedGraphNode neighbor : cur.neighbors) {
+                neiClone = cache.get(neighbor);
+                if (neiClone == null) {
+                    neiClone = new UndirectedGraphNode(neighbor.label);
+                    cache.put(neighbor, neiClone);
+                    queue.offer(neighbor);
+                }
+                clone.neighbors.add(neiClone);
+            }
+        }
+
+        return nodeClone;
+    }
+
+    /**
+     * 递归的方式，深度优先
+     * @param node
+     * @param cache
+     * @return
+     */
+    private UndirectedGraphNode cloneGraph(UndirectedGraphNode node, HashMap<UndirectedGraphNode, UndirectedGraphNode> cache) {
+        UndirectedGraphNode clone = cache.get(node);
+        if (clone == null) {
+            clone = new UndirectedGraphNode(node.label);
+            cache.put(node, clone);
+
+            for (UndirectedGraphNode neighbor : node.neighbors) {
+                clone.neighbors.add(cloneGraph(neighbor, cache));
+            }
+        }
+        return clone;
+    }
+
     private void test() throws Exception {
+
+
+
+
+
+//        UndirectedGraphNode n0 = new UndirectedGraphNode(0);
+//        UndirectedGraphNode n1 = new UndirectedGraphNode(1);
+//        UndirectedGraphNode n2 = new UndirectedGraphNode(2);
+//        UndirectedGraphNode n3 = new UndirectedGraphNode(3);
+//        n0.addNeighbours(n0, n1, n2);
+//        n1.addNeighbours(n0, n2);
+//        n2.addNeighbours(n0, n1, n3);
+//        n3.addNeighbours(n2);
+//        d(n0);
+//        d(cloneGraph(n0));
+
+
+
+//        d(partition("aabaa"));
+
 
 //        d(combinationSum(new int[] {
 //                2, 3, 4, 5, 6, 7, 8, 9, 10
