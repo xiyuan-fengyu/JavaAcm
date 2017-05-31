@@ -4045,11 +4045,27 @@ public class Solution {
         return indexs;
     }
 
+
+
+    public int fastPower(int a, int b, int n) {
+        if (n == 0) return 1 % b;
+        else if (n == 1) return a % b;
+        long temp = fastPower(a, b, n / 2);
+        temp = temp * temp % b;
+        if (n % 2 == 0) {
+            return (int) temp;
+        }
+        else return (int) ((a % b) * temp % b);
+    }
+
+
     private void test() throws Exception {
 
-        d(subarraySumClosest(new int[]{
-                -3,1,1,-3,5
-        }));
+//        d(fastPower(4, 6, 2));
+
+//        d(subarraySumClosest(new int[]{
+//                -3,1,1,-3,5
+//        }));
 
 
 
