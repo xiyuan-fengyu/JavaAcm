@@ -4007,11 +4007,51 @@ public class Solution {
 
 
     public int[] subarraySumClosest(int[] nums) {
+        int[] indexs = new int[2];
+        if (nums == null) return indexs;
 
-        return null;
+        int len = nums.length;
+        if (len == 0) return indexs;
+        else if (len == 1) {
+            indexs[0] = indexs[1] = 0;
+            return indexs;
+        }
+
+        int[][] lSums = new int[len + 1][2];
+        lSums[0][1] = -1;
+        for (int i = 0; i < len; i++) {
+            lSums[i + 1][0] = lSums[i][0] + nums[i];
+            lSums[i + 1][1] = i;
+        }
+
+        Arrays.sort(lSums, new Comparator<int[]>() {
+            @Override
+            public int compare(int[] o1, int[] o2) {
+                return o1[0] - o2[0];
+            }
+        });
+
+        int closest = Integer.MAX_VALUE;
+        for (int i = 0; i < len; i++) {
+            int temp = lSums[i + 1][0] - lSums[i][0];
+            if (closest > temp) {
+                closest = temp;
+                indexs[0] = lSums[i + 1][1];
+                indexs[1] = lSums[i][1];
+            }
+        }
+        Arrays.sort(indexs);
+        indexs[0]++;
+        return indexs;
     }
 
     private void test() throws Exception {
+
+        d(subarraySumClosest(new int[]{
+                -3,1,1,-3,5
+        }));
+
+
 
 //        d(subarraySum(new int[]{-3, 1, 2, -3, 4}));
 
