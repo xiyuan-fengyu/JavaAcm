@@ -4059,7 +4059,56 @@ public class Solution {
     }
 
 
+
+    public int sqrt(int x) {
+        long start = 1;
+        long end = x;
+        while (start + 1 < end) {
+            long mid = (start + end) / 2;
+            if (mid * mid > x) {
+                end = mid;
+            }
+            else {
+                start = mid;
+            }
+        }
+        if (end * end > x) return (int) start;
+        else return (int) end;
+    }
+
+
+    private static final int[] powersOf2 = {
+            1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072, 262144, 524288, 1048576, 2097152, 4194304, 8388608, 16777216, 33554432, 67108864, 134217728, 268435456, 536870912, 1073741824
+    } ;
+
+    public boolean checkPowerOf2(int n) {
+        for (int num : powersOf2) {
+            if (num == n) return true;
+        }
+        return false;
+    }
+
+
+
+    public void sortColors2(int[] colors, int k) {
+        int len = colors.length;
+        if (len > 0) {
+            int left = 0;
+            int right = len - 1;
+
+        }
+    }
+
     private void test() throws Exception {
+
+//        d(checkPowerOf2(1024));
+//        d(checkPowerOf2(1023));
+
+
+//        for (int i = 0; i < 10; i++) {
+//            d(sqrt(i));
+//        }
+
 
 //        d(fastPower(4, 6, 2));
 
