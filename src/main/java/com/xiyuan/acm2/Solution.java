@@ -4184,24 +4184,21 @@ public class Solution {
     public void sortColors(int[] nums) {
         if (nums != null && nums.length > 1) {
             int len = nums.length;
-            int num0 = 0;
-            int num2 = 0;
-            for (int i = 0; i < len - num2; ) {
+            int left = 0;
+            int right = len - 1;
+            for (int i = 0; i <= right; ) {
                 if (nums[i] == 0) {
-                    int temp = nums[num0];
-                    nums[num0] = 0;
+                    int temp = nums[left];
+                    nums[left] = 0;
                     nums[i] = temp;
-                    num0++;
-
-                    if (num0 > i) {
-                        i = num0;
-                    }
+                    left++;
+                    i++;
                 }
                 else if (nums[i] == 2) {
-                    int temp = nums[len - 1 - num2];
-                    nums[len - 1 - num2] = 2;
+                    int temp = nums[right];
+                    nums[right] = 2;
                     nums[i] = temp;
-                    num2++;
+                    right--;
                 }
                 else {
                     i++;
