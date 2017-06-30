@@ -4091,15 +4091,87 @@ public class Solution {
 
 
     public void sortColors2(int[] colors, int k) {
-        int len = colors.length;
-        if (len > 0) {
-            int left = 0;
-            int right = len - 1;
+        if (colors != null && colors.length > 1) {
+            Arrays.sort(colors);
+//            sortColors2(colors, 0, colors.length - 1, 1, k);
+        }
+    }
 
+    private void sortColors2(int[] colors, int left, int right, int fromC, int toC) {
+        if (left < right && fromC < toC) {
+            int midC = (fromC + toC) / 2;
+            int l = left;
+            int r = right;
+            while (l < r) {
+                while (l < r && colors[l] <= midC) {
+                    l++;
+                }
+                while (l < r && colors[r] > midC) {
+                    r--;
+                }
+                if (l < r) {
+                    int temp = colors[l];
+                    colors[l] = colors[r];
+                    colors[r] = temp;
+                    l++;
+                    r--;
+                }
+            }
+            sortColors2(colors, left, r, fromC, midC);
+            sortColors2(colors, l, right, midC + 1, toC);
+        }
+    }
+
+
+
+
+    public void insertionSort(int[] arr) {
+        if (arr != null && arr.length > 1) {
+            for (int i = 0, j = i, len = arr.length; i < len - 1; j = ++i) {
+                int next = arr[j + 1];
+                while (next < arr[j]) {
+                    arr[j + 1] = arr[j];
+                    if (j-- == 0) {
+                        break;
+                    }
+                }
+                arr[j + 1] = next;
+            }
         }
     }
 
     private void test() throws Exception {
+
+//        int[] arr = {1,8,5,6,2,5,6,2,3,4,3,1,9,8};
+//        insertionSort(arr);
+//        d(arr);
+
+
+//        int[] arr = {1,3,2,4,1,2,1,2,1,4,1,3,1,3,3,4,1,1,1,1};
+//        int k = 4;
+////        StringBuilder builder = new StringBuilder();
+////        for (String s : Files.readAllLines(Paths.get("./data/sort-colors-ii-13.in"), StandardCharsets.UTF_8)) {
+////            for (char c : s.toCharArray()) {
+////                if (c != '[' && c != ']' && c != ' ') {
+////                    builder.append(c);
+////                }
+////            }
+////        }
+////        String[] strs = builder.toString().split(",");
+////        int len = strs.length;
+////        int[] arr = new int[len - 1];
+////        int k = 0;
+////        for (int i = 0; i < len; i++) {
+////            if (i < len - 1) {
+////                arr[i] = Integer.parseInt(strs[i]);
+////            }
+////            else {
+////                k = Integer.parseInt(strs[i]);
+////            }
+////        }
+//        sortColors2(arr, k);
+//        d(arr);
+
 
 //        d(checkPowerOf2(1024));
 //        d(checkPowerOf2(1023));
