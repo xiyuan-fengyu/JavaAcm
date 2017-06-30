@@ -4179,11 +4179,49 @@ public class Solution {
         }
     }
 
+
+
+    public void sortColors(int[] nums) {
+        if (nums != null && nums.length > 1) {
+            int len = nums.length;
+            int num0 = 0;
+            int num2 = 0;
+            for (int i = 0; i < len - num2; ) {
+                if (nums[i] == 0) {
+                    int temp = nums[num0];
+                    nums[num0] = 0;
+                    nums[i] = temp;
+                    num0++;
+
+                    if (num0 > i) {
+                        i = num0;
+                    }
+                }
+                else if (nums[i] == 2) {
+                    int temp = nums[len - 1 - num2];
+                    nums[len - 1 - num2] = 2;
+                    nums[i] = temp;
+                    num2++;
+                }
+                else {
+                    i++;
+                }
+            }
+        }
+    }
+
+
+
     private void test() throws Exception {
 
-        int[] arr = {-1, 5, -3, 4, -2};
-        rerange(arr);
+        int[] arr = {2,0,0,1,2,0,2};
+        sortColors(arr);
         d(arr);
+
+
+//        int[] arr = {-1, 5, -3, 4, -2};
+//        rerange(arr);
+//        d(arr);
 
 
 //        int[] arr = {1,8,5,6,2,5,6,2,3,4,3,1,9,8};
