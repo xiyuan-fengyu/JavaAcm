@@ -4140,7 +4140,51 @@ public class Solution {
         }
     }
 
+
+
+    public void rerange(int[] arr) {
+        if (arr != null && arr.length > 2) {
+            int len = arr.length;
+            int posNum = 0;
+            for (int i : arr) {
+                if (i >= 0) {
+                    posNum++;
+                }
+            }
+
+            int flag = 1;
+            if (posNum < len - posNum) {
+                flag = -1;
+            }
+
+            int i = 0;
+            int j = 1;
+            while (i < len && j < len) {
+                //找到一个偶数位错误的位置
+                while (i < len && flag * arr[i] > 0) {
+                    i += 2;
+                }
+
+                //找到一个奇数位错误的位置
+                while (j < len && -flag * arr[j] > 0) {
+                    j += 2;
+                }
+
+                if (i < len && j < len) {
+                    int temp = arr[i];
+                    arr[i] = arr[j];
+                    arr[j] = temp;
+                }
+            }
+        }
+    }
+
     private void test() throws Exception {
+
+        int[] arr = {-1, 5, -3, 4, -2};
+        rerange(arr);
+        d(arr);
+
 
 //        int[] arr = {1,8,5,6,2,5,6,2,3,4,3,1,9,8};
 //        insertionSort(arr);
