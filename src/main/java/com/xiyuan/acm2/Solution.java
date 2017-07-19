@@ -4234,16 +4234,33 @@ public class Solution {
             return 0;
         }
 
+        int len = prices.length;
+        int totalMax = 0;
+        int min = prices[0];
+        int max = min;
+        for (int i = 1; i < len; i++) {
+            if (prices[i] > max) {
+                max = prices[i];
+            }
+            else {
+                totalMax += max - min;
+                min = prices[i];
+                max = min;
+            }
 
-        return 0;
+            if (i == len - 1 && max > min) {
+                totalMax += max - min;
+            }
+        }
+        return totalMax;
     }
 
     private void test() throws Exception {
 
-        int[] prices = {
-                2,1,2,0,1
-        };
-        System.out.println(maxProfitII(prices));
+//        int[] prices = {
+//                2,1,2,0,1
+//        };
+//        System.out.println(maxProfitII(prices));
 
 
 //        int[] prices = {
