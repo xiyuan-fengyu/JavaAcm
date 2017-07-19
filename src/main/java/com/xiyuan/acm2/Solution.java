@@ -4255,7 +4255,49 @@ public class Solution {
         return totalMax;
     }
 
+
+    public int maxProfitIII(int[] prices) {
+        if (prices == null || prices.length < 2) {
+            return 0;
+        }
+
+        int len = prices.length;
+        int lMin = prices[0];
+        int[] lMaxPs = new int[len];
+        for (int i = 1; i < len; i++) {
+            if (prices[i] > lMin) {
+                lMaxPs[i] = Math.max(lMaxPs[i - 1], prices[i] - lMin);
+            }
+            else {
+                lMin = prices[i];
+            }
+        }
+
+        int rMax = prices[len - 1];
+        int[] rMaxPs = new int[len];
+        for (int i = len - 2; i > 0; i--) {
+            if (prices[i] < rMax) {
+                rMaxPs[i] = Math.max(rMaxPs[i + 1], rMax - prices[i]);
+            }
+            else {
+                rMax = prices[i];
+            }
+        }
+
+        int gMax = lMaxPs[len - 1];
+        for (int i = 1; i < len - 2; i++) {
+            gMax = Math.max(gMax, lMaxPs[i] + rMaxPs[i + 1]);
+        }
+        return gMax;
+    }
+
     private void test() throws Exception {
+
+        int[] prices = {
+                2,1,2,0,1
+        };
+        System.out.println(maxProfitIII(prices));
+
 
 //        int[] prices = {
 //                2,1,2,0,1
