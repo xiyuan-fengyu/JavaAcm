@@ -4293,10 +4293,10 @@ public class Solution {
 
     private void test() throws Exception {
 
-        int[] prices = {
-                2,1,2,0,1
-        };
-        System.out.println(maxProfitIII(prices));
+//        int[] prices = {
+//                2,1,2,0,1
+//        };
+//        System.out.println(maxProfitIII(prices));
 
 
 //        int[] prices = {
