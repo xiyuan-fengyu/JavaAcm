@@ -4216,9 +4216,13 @@ public class Solution {
 
         int len = prices.length;
         int max = 0;
-        for (int i = 0; i < len - 1; i++) {
-            for (int j = i; j < len; j++) {
-                max = Math.max(max, prices[j] - prices[i]);
+        int min = prices[0];
+        for (int i = 1; i < len; i++) {
+            if (prices[i] > min) {
+                max = Math.max(prices[i] - min, max);
+            }
+            else {
+                min = prices[i];
             }
         }
         return max;
@@ -4226,10 +4230,10 @@ public class Solution {
 
     private void test() throws Exception {
 
-        int[] prices = {
-                3,2,3,1,2
-        };
-        System.out.println(maxProfit(prices));
+//        int[] prices = {
+//                1,2,3,1,2
+//        };
+//        System.out.println(maxProfit(prices));
 
 
 //        int[] arr = {2,0,0,1,2,0,2};
