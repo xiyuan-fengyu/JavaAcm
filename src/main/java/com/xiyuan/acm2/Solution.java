@@ -4228,7 +4228,23 @@ public class Solution {
         return max;
     }
 
+
+    public int maxProfitII(int[] prices) {
+        if (prices == null || prices.length < 2) {
+            return 0;
+        }
+
+
+        return 0;
+    }
+
     private void test() throws Exception {
+
+        int[] prices = {
+                2,1,2,0,1
+        };
+        System.out.println(maxProfitII(prices));
+
 
 //        int[] prices = {
 //                1,2,3,1,2
