@@ -4322,7 +4322,59 @@ public class Solution {
 
 
 
+    public List<List<Integer>> combinationSum2(int[] num, int target) {
+        if (num == null || num.length == 0) return new ArrayList<>();
+        Arrays.sort(num);
+        return combinationSum2(num, target, 0);
+    }
+
+    private List<List<Integer>> combinationSum2(int[] num, int target, int from) {
+        List<List<Integer>> result = new ArrayList<>();
+        if (num[from] == target) {
+            List<Integer> item = new ArrayList<>();
+            item.add(target);
+            result.add(item);
+            return result;
+        }
+        else if (num[from] > target) {
+            return result;
+        }
+
+        if (from + 1 < num.length) {
+            int cur = num[from];
+            int next = from + 1;
+            while (next < num.length && cur == num[next]) {
+                next++;
+            }
+
+            ArrayList<Integer> sames = new ArrayList<>();
+            for (int i = 0; i <= next - from; i++) {
+                if (target == cur * i) {
+                    ArrayList<Integer> clone = (ArrayList<Integer>) sames.clone();
+                    result.add(clone);
+                }
+                else {
+                    List<List<Integer>> subResult = combinationSum2(num, target - cur * i, next);
+                    if (!subResult.isEmpty()) {
+                        for (List<Integer> list : subResult) {
+                            ArrayList<Integer> clone = (ArrayList<Integer>) sames.clone();
+                            clone.addAll(list);
+                            result.add(clone);
+                        }
+                    }
+                }
+                sames.add(cur);
+            }
+        }
+        return result;
+    }
+
+
     private void test() throws Exception {
+
+        d(combinationSum2(new int[]{
+                3,1,3,5,1,1
+        }, 8));
 
 //        d(combine(4, 2));
 
