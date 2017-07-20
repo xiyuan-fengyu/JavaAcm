@@ -4291,7 +4291,41 @@ public class Solution {
         return gMax;
     }
 
+
+
+
+    public List<List<Integer>> combine(int n, int k) {
+        return combine(n, k, 1);
+    }
+
+    private List<List<Integer>> combine(int n, int k, int from) {
+        List<List<Integer>> result = new ArrayList<>();
+        if (from + k >= n + 1) {
+            List<Integer> item = new ArrayList<>();
+            for (int i = from; i <= n; i++) {
+                item.add(i);
+            }
+            result.add(item);
+        }
+        else {
+            result.addAll(combine(n, k, from + 1));
+            if (k > 0) {
+                List<List<Integer>> subResult = combine(n, k - 1, from + 1);
+                for (List<Integer> list : subResult) {
+                    list.add(0, from);
+                    result.add(list);
+                }
+            }
+        }
+        return result;
+    }
+
+
+
     private void test() throws Exception {
+
+//        d(combine(4, 2));
+
 
 //        int[] prices = {
 //                2,1,2,0,1
