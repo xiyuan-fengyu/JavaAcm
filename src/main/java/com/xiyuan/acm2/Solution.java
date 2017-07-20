@@ -4369,12 +4369,17 @@ public class Solution {
         return result;
     }
 
+    //http://www.lintcode.com/zh-cn/problem/regular-expression-matching/
 
     private void test() throws Exception {
 
-        d(combinationSum2(new int[]{
-                3,1,3,5,1,1
-        }, 8));
+
+
+
+//        d(combinationSum2(new int[]{
+//                3,1,3,5,1,1
+//        }, 8));
+
 
 //        d(combine(4, 2));
 
