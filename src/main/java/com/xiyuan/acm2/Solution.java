@@ -4514,9 +4514,80 @@ public class Solution {
         return true;
     }
 
+
+
+
+    public int findMin(int[] nums) {
+        if (nums == null || nums.length == 0) return 0;
+        return findMin(nums, 0, nums.length - 1);
+    }
+
+    private int findMin(int[] nums, int left, int right) {
+        int lV = nums[left];
+        int rV = nums[right];
+
+        if (lV <= rV) {
+            return lV;
+        }
+
+        int mid = (left + right) / 2;
+        int mV = nums[mid];
+        if (lV < mV) {
+            return findMin(nums, mid + 1, right);
+        }
+        else if (lV > mV) {
+            return findMin(nums, left + 1, mid);
+        }
+        else return Math.min(mV, rV);
+    }
+
+
+
+    public int findMinII(int[] nums) {
+        if (nums == null || nums.length == 0) return 0;
+        return findMin(nums, 0, nums.length - 1);
+    }
+
+    private int findMinII(int[] nums, int left, int right) {
+        if (left == right) return nums[left];
+
+        int lV = nums[left];
+        int rV = nums[right];
+
+        if (lV < rV) {
+            return lV;
+        }
+
+        int mid = (left + right) / 2;
+        int mV = nums[mid];
+        if (lV == rV) {
+            if (lV == mV) {
+                int l = findMinII(nums, left, mid);
+                if (l < lV) return l;
+                else return findMinII(nums, mid, right);
+            }
+            else if (lV > mV) {
+                return findMinII(nums, left, mid);
+            }
+            else {
+                return findMinII(nums, mid, right);
+            }
+        }
+        else {
+            if (rV >= mV) {
+                return findMinII(nums, left, mid);
+            }
+            else {
+                return findMinII(nums, mid + 1, right);
+            }
+        }
+    }
+
     private void test() throws Exception {
-
-
+        //http://www.lintcode.com/zh-cn/problem/find-minimum-in-rotated-sorted-array-ii/
+//        d(findMin(new int[]{
+//               2,2,2,2,2,1,2,2,2
+//        }));
 
 
 //        d(anagram("abcd", "abdc"));
