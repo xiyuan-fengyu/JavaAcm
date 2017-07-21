@@ -4369,11 +4369,45 @@ public class Solution {
         return result;
     }
 
-    //http://www.lintcode.com/zh-cn/problem/regular-expression-matching/
+    public boolean isMatch(String s, String p) {
+        if (s == null || p == null) return false;
+        return isMatch(s, 0, p, 0);
+    }
+
+    private boolean isMatch(String str, int sFrom, String pattern, int pFrom) {
+        int sLen = str.length();
+        int pLen = pattern.length();
+        if (sFrom >= sLen && pFrom >= pLen) return true;
+
+        char s1 = sFrom < sLen ? str.charAt(sFrom) : '\0';
+        char p1 = pFrom < pLen ? pattern.charAt(pFrom) : '\0';
+        char p2 = pFrom + 1 < pLen ? pattern.charAt(pFrom + 1) : '\0';
+        if (p2 != '*') p2 = '\0';
+
+        if (p2 == '\0') {
+            if (s1 == p1 || (p1 == '.' && s1 != '\0')) {
+                return isMatch(str, sFrom + 1, pattern, pFrom + 1);
+            }
+            else return false;
+        }
+        else {
+            if (s1 == p1 || (p1 == '.' && s1 != '\0')) {
+                boolean subResult = isMatch(str, sFrom + 1, pattern, pFrom);
+                if (subResult) {
+                    return true;
+                }
+            }
+
+            return isMatch(str, sFrom, pattern, pFrom + 2);
+        }
+    }
 
     private void test() throws Exception {
 
 
+
+
+//        d(isMatch("aaa", "a*"));
 
 
 //        d(combinationSum2(new int[]{
