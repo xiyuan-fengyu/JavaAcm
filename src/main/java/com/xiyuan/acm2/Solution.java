@@ -4402,9 +4402,91 @@ public class Solution {
         }
     }
 
+
+
+    public int minDepth(TreeNode root) {
+        if (root == null) return 0;
+
+        ArrayList<Map.Entry<TreeNode, Integer>> queue = new ArrayList<>();
+        queue.add(new AbstractMap.SimpleImmutableEntry<>(root, 1));
+        for (int i = 0; i < queue.size(); i++) {
+            Map.Entry<TreeNode, Integer> entry = queue.get(i);
+            TreeNode node = entry.getKey();
+            int depth = entry.getValue();
+            if (node.left == null && node.right == null) {
+                return depth;
+            }
+            else {
+                if (node.left != null) {
+                    queue.add(new AbstractMap.SimpleImmutableEntry<>(node.left, depth + 1));
+                }
+                if (node.right != null) {
+                    queue.add(new AbstractMap.SimpleImmutableEntry<>(node.right, depth + 1));
+                }
+            }
+        }
+        return 0;
+    }
+
+
+
+    public List<Interval> merge(final List<Interval> intervals) {
+        if (intervals == null || intervals.size() <= 1) return intervals;
+
+        ArrayList<int[]> edges = new ArrayList<>();
+        for (int i = 0, size = intervals.size(); i < size; i++) {
+            Interval interval = intervals.get(i);
+            edges.add(new int[]{
+                    interval.start, 0, i
+            });
+            edges.add(new int[]{
+                    interval.end, 1, i
+            });
+        }
+
+        Collections.sort(edges, new Comparator<int[]>() {
+            @Override
+            public int compare(int[] o1, int[] o2) {
+                if (o1[0] != o2[0]) {
+                    return o1[0] - o2[0];
+                }
+                else {
+                    return o1[1] - o2[1];
+                }
+            }
+        });
+
+        Stack<int[]> stack = new Stack<>();
+        List<Interval> result = new ArrayList<>();
+        for (int[] edge : edges) {
+            if (stack.isEmpty() || edge[1] == 0) {
+                stack.push(edge);
+            }
+            else {
+                int[] top = stack.pop();
+                if (stack.isEmpty()) {
+                    result.add(new Interval(top[0], edge[0]));
+                }
+            }
+        }
+        return result;
+    }
+
+
     private void test() throws Exception {
 
+//        List<Interval> intervals = Arrays.asList(
+//                new Interval(1,3),
+//                new Interval(3,6),
+//                new Interval(8,10),
+//                new Interval(15,18)
+//        );
+//        d(merge(intervals));
 
+
+//        TreeNode treeNode = TreeNodeFactory.build("1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16");
+//        d(treeNode);
+//        d(minDepth(treeNode));
 
 
 //        d(isMatch("aaa", "a*"));
