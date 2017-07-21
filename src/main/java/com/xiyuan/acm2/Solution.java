@@ -4473,7 +4473,55 @@ public class Solution {
     }
 
 
+
+    public boolean isUnique(String str) {
+        if (str == null || str.length() <= 1) return true;
+
+        HashSet<Character> set = new HashSet<>();
+        for (int i = 0, len = str.length(); i < len; i++) {
+            char c = str.charAt(i);
+            if (set.contains(c)) {
+                return false;
+            }
+            else {
+                set.add(c);
+            }
+        }
+        return true;
+    }
+
+
+
+    public boolean anagram(String s, String t) {
+        if (s == null || t == null || s.length() != t.length()) return false;
+
+        int len = s.length();
+        int[] nums = new int[256];
+        for (int i = 0; i < len; i++) {
+            int iS = s.charAt(i);
+            int iT = t.charAt(i);
+            if (iS != iT) {
+                nums[iS]++;
+                nums[iT]--;
+            }
+        }
+
+        for (int i = 0; i < 256; i++) {
+            if (nums[i] != 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     private void test() throws Exception {
+
+        d(anagram("abcd", "abdc"));
+        d(anagram("abcd", "abdd"));
+
+
+//        d(isUnique("aab"));
+
 
 //        List<Interval> intervals = Arrays.asList(
 //                new Interval(1,3),
