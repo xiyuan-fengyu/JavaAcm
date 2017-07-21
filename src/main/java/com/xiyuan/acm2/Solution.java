@@ -4516,8 +4516,11 @@ public class Solution {
 
     private void test() throws Exception {
 
-        d(anagram("abcd", "abdc"));
-        d(anagram("abcd", "abdd"));
+
+
+
+//        d(anagram("abcd", "abdc"));
+//        d(anagram("abcd", "abdd"));
 
 
 //        d(isUnique("aab"));
