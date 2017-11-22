@@ -4545,48 +4545,50 @@ public class Solution {
 
     public int findMinII(int[] nums) {
         if (nums == null || nums.length == 0) return 0;
-        return findMin(nums, 0, nums.length - 1);
+        return findMinII(nums, 0, nums.length - 1);
     }
 
     private int findMinII(int[] nums, int left, int right) {
-        if (left == right) return nums[left];
+        if (left >= right) return nums[left];
+        int mid = (left + right) / 2;
 
         int lV = nums[left];
         int rV = nums[right];
-
+        int mV = nums[mid];
         if (lV < rV) {
             return lV;
         }
-
-        int mid = (left + right) / 2;
-        int mV = nums[mid];
-        if (lV == rV) {
-            if (lV == mV) {
-                int l = findMinII(nums, left, mid);
-                if (l < lV) return l;
-                else return findMinII(nums, mid, right);
-            }
-            else if (lV > mV) {
-                return findMinII(nums, left, mid);
-            }
-            else {
-                return findMinII(nums, mid, right);
-            }
-        }
-        else {
-            if (rV >= mV) {
-                return findMinII(nums, left, mid);
+        else if (lV > rV) {
+            if (mV <= rV) {
+                return findMinII(nums, left + 1, mid);
             }
             else {
                 return findMinII(nums, mid + 1, right);
             }
         }
+        else {
+            if (mV < rV) {
+                return findMinII(nums, left + 1, mid);
+            }
+            else if (mV > rV) {
+                return findMinII(nums, mid + 1, right);
+            }
+            else {
+                return Math.min(
+                        findMinII(nums, left, mid - 1),
+                        findMinII(nums, mid + 1, right)
+                );
+            }
+        }
     }
 
     private void test() throws Exception {
-        //http://www.lintcode.com/zh-cn/problem/find-minimum-in-rotated-sorted-array-ii/
-//        d(findMin(new int[]{
-//               2,2,2,2,2,1,2,2,2
+
+
+
+
+//        d(findMinII(new int[]{
+//                999,999,1000,1000,10000,0,999,999,999
 //        }));
 
 
