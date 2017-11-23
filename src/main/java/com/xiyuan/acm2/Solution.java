@@ -4686,7 +4686,36 @@ public class Solution {
         }
     }
 
+
+
+    public int numTrees(int n) {
+        if (n <= 1) return 1;
+
+        int[] cache = new int[n + 1];
+        cache[0] = cache[1] = 1;
+        cache[2] = 2;
+
+        for (int i = 3; i <= n; i++) {
+            int sum = 0;
+            int mid = (i + 2) / 2;
+            for (int j = 1; j < mid; j++) {
+                sum += cache[j - 1] * cache[i - j];
+            }
+            sum *= 2;
+            if (i % 2 == 1) {
+                int temp = cache[(i - 1) / 2];
+                sum += temp * temp;
+            }
+            cache[i] = sum;
+        }
+
+        return cache[n];
+    }
+
     private void test() throws Exception {
+
+//        System.out.println(numTrees(3));
+
 
 //        int[][] matrix = {
 //                {1,2},
