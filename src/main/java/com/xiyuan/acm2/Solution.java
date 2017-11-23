@@ -4602,7 +4602,101 @@ public class Solution {
         }
     }
 
+
+//    /**
+//     * 空间复杂度O(m + n)
+//     * @param matrix
+//     */
+//    public void setZeroes(int[][] matrix) {
+//        if (matrix == null || matrix.length == 0) return;
+//
+//        int row = matrix.length;
+//        int col = matrix[0].length;
+//        int[] rows = new int[row];
+//        int[] cols = new int[col];
+//        for (int i = 0; i < row; i++) {
+//            for (int j = 0; j < col; j++) {
+//                if (matrix[i][j] == 0) {
+//                    rows[i] = 1;
+//                    cols[j] = 1;
+//                }
+//            }
+//        }
+//
+//        for (int i = 0; i < row; i++) {
+//            for (int j = 0; j < col; j++) {
+//                if (rows[i] == 1 || cols[j] == 1) {
+//                    matrix[i][j] = 0;
+//                }
+//            }
+//        }
+//    }
+
+
+    /**
+     * 空间复杂度O(1)
+     * @param matrix
+     */
+    public void setZeroes(int[][] matrix) {
+        if (matrix == null || matrix.length == 0) return;
+
+        int row = matrix.length;
+        int col = matrix[0].length;
+        boolean firstRowToZero = false;
+        boolean firstColToZero = false;
+
+        for (int i = 0; i < col; i++) {
+            if (matrix[0][i] == 0) {
+                firstRowToZero = true;
+                break;
+            }
+        }
+        for (int i = 0; i < row; i++) {
+            if (matrix[i][0] == 0) {
+                firstColToZero = true;
+                break;
+            }
+        }
+
+        for (int i = 1; i < row; i++) {
+            for (int j = 1; j < col; j++) {
+                if (matrix[i][j] == 0) {
+                    matrix[0][j] = 0;
+                    matrix[i][0] = 0;
+                }
+            }
+        }
+
+        for (int i = 1; i < row; i++) {
+            for (int j = 1; j < col; j++) {
+                if (matrix[i][0] == 0 || matrix[0][j] == 0) {
+                    matrix[i][j] = 0;
+                }
+            }
+        }
+        if (firstRowToZero) {
+            for (int i = 0; i < col; i++) {
+                matrix[0][i] = 0;
+            }
+        }
+        if (firstColToZero) {
+            for (int i = 0; i < row; i++) {
+                matrix[i][0] = 0;
+            }
+        }
+    }
+
     private void test() throws Exception {
+
+//        int[][] matrix = {
+//                {1,2},
+//                {0,3}
+//        };
+//        setZeroes(matrix);
+//        for (int[] ints : matrix) {
+//            d(ints);
+//        }
+
 
 //        int[][] matrix = {
 //                {1,2,3,4},
