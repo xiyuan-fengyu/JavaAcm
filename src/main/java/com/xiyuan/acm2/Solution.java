@@ -4712,7 +4712,42 @@ public class Solution {
         return cache[n];
     }
 
+
+
+
+    public List<TreeNode> generateTrees(int n) {
+        return generateTrees(1, n);
+    }
+
+    private List<TreeNode> generateTrees(int from, int to) {
+        List<TreeNode> result = new ArrayList<>();
+
+        if (from > to) {
+            result.add(null);
+        }
+        else {
+            for (int i = from; i <= to; i++) {
+                List<TreeNode> leftSubs = generateTrees(from, i - 1);
+                List<TreeNode> rightSubs = generateTrees(i + 1, to);
+                for (TreeNode leftSub : leftSubs) {
+                    for (TreeNode rightSub : rightSubs) {
+                        TreeNode root = new TreeNode(i);
+                        root.left = leftSub;
+                        root.right = rightSub;
+                        result.add(root);
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
     private void test() throws Exception {
+
+//        for (TreeNode treeNode : generateTrees(3)) {
+//            System.out.println(treeNode);
+//        }
+
 
 //        System.out.println(numTrees(3));
 
