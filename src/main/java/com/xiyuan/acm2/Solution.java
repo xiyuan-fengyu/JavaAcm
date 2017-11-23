@@ -4582,9 +4582,38 @@ public class Solution {
         }
     }
 
+
+
+
+    public void rotate(int[][] matrix) {
+        if (matrix == null || matrix.length <= 1) return;
+
+        int size = matrix.length;
+        int row = 0;
+        while (row < size / 2) {
+            for (int col = row; col < size - row - 1; col++) {
+                int first = matrix[row][col];
+                matrix[row][col] = matrix[size - col - 1][row];
+                matrix[size - col - 1][row] = matrix[size - row - 1][size - col - 1];
+                matrix[size - row - 1][size - col - 1] = matrix[col][size - row - 1];
+                matrix[col][size - row - 1] = first;
+            }
+            row++;
+        }
+    }
+
     private void test() throws Exception {
 
-
+//        int[][] matrix = {
+//                {1,2,3,4},
+//                {4,5,6,7},
+//                {7,8,9,10},
+//                {10,11,12,13}
+//        };
+//        rotate(matrix);
+//        for (int[] ints : matrix) {
+//            d(ints);
+//        }
 
 
 //        d(findMinII(new int[]{
