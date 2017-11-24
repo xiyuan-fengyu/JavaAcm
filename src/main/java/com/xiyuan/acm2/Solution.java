@@ -4742,7 +4742,50 @@ public class Solution {
         return result;
     }
 
+
+
+
+    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+        if (l1 == null) return l2;
+        else if (l2 == null) return l1;
+
+        ListNode tempHead = new ListNode(0);
+        ListNode cur = tempHead;
+        ListNode cur1 = l1;
+        ListNode cur2 = l2;
+        while (cur1 != null && cur2 != null) {
+            if (cur1.val <= cur2.val) {
+                cur.next = cur1;
+                cur1 = cur1.next;
+            }
+            else {
+                cur.next = cur2;
+                cur2 = cur2.next;
+            }
+            cur = cur.next;
+        }
+
+        while (cur1 != null) {
+            cur.next = cur1;
+            cur = cur.next;
+            cur1 = cur1.next;
+        }
+
+        while (cur2 != null) {
+            cur.next = cur2;
+            cur = cur.next;
+            cur2 = cur2.next;
+        }
+
+        return tempHead.next;
+    }
+
     private void test() throws Exception {
+
+        ListNode l1 = ListNodeFactory.build("1->3->5->7->9");
+        ListNode l2 = ListNodeFactory.build("2->4->6");
+        System.out.println(mergeTwoLists(l1, l2));
+
 
 //        for (TreeNode treeNode : generateTrees(3)) {
 //            System.out.println(treeNode);
