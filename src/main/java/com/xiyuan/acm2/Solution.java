@@ -4780,11 +4780,85 @@ public class Solution {
         return tempHead.next;
     }
 
+
+
+
+    public ListNode nthToLast(ListNode head, int n) {
+        ListNode fast = head;
+        ListNode slow = null;
+        while (n-- > 0 && fast != null) {
+            fast = fast.next;
+        }
+
+        if (n == -1) {
+            slow = head;
+            while (fast != null) {
+                fast = fast.next;
+                slow = slow.next;
+            }
+        }
+        return slow;
+    }
+
+
+
+    public ListNode addLists(ListNode l1, ListNode l2) {
+        if (l1 == null) return l2;
+        else if (l2 == null) return l1;
+
+        ListNode newHead = new ListNode(0);
+        ListNode it = newHead;
+        ListNode it1 = l1;
+        ListNode it2 = l2;
+        int val1;
+        int val2;
+        int carry = 0;
+        int sum;
+        while (it1 != null || it2 != null || carry > 0) {
+            if (it1 != null) {
+                val1 = it1.val;
+                it1 = it1.next;
+            }
+            else {
+                val1 = 0;
+            }
+
+            if (it2 != null) {
+                val2 = it2.val;
+                it2 = it2.next;
+            }
+            else {
+                val2 = 0;
+            }
+
+            sum = val1 + val2 + carry;
+
+            it.next = new ListNode(sum % 10);
+            it = it.next;
+            carry = sum / 10;
+        }
+        return newHead.next;
+    }
+
+
     private void test() throws Exception {
 
-        ListNode l1 = ListNodeFactory.build("1->3->5->7->9");
-        ListNode l2 = ListNodeFactory.build("2->4->6");
-        System.out.println(mergeTwoLists(l1, l2));
+        ListNode l1 = ListNodeFactory.build("3->1->9");
+        ListNode l2 = ListNodeFactory.build("5->9");
+        System.out.println(addLists(l1, l2));
+
+
+
+//        ListNode l1 = ListNodeFactory.build("5->4->3->2->1");
+//        for (int i = 1; i <= 5; i++) {
+//            System.out.println(nthToLast(l1, i));
+//        }
+
+
+
+//        ListNode l1 = ListNodeFactory.build("1->3->5->7->9");
+//        ListNode l2 = ListNodeFactory.build("2->4->6");
+//        System.out.println(mergeTwoLists(l1, l2));
 
 
 //        for (TreeNode treeNode : generateTrees(3)) {
