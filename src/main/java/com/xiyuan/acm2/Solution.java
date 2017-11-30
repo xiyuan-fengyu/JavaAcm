@@ -8,6 +8,7 @@ import com.xiyuan.acm.model.RandomListNode;
 import com.xiyuan.acm.model.TreeNode;
 import com.xiyuan.acm2.model.*;
 import com.xiyuan.acm2.model.Dictionary;
+import com.xiyuan.tuple.Tuple;
 import com.xiyuan.util.XYLog;
 
 import java.io.IOException;
@@ -4840,12 +4841,171 @@ public class Solution {
         return newHead.next;
     }
 
+    public int maxCoins(int[] nums) {
+        if (nums == null || nums.length == 0) return 0;
+        else if (nums.length == 1) return nums[0];
+
+        int len = nums.length;
+        int[] newNums = new int[len + 2];
+        newNums[0] = newNums[len + 1] = 1;
+        for (int i = 0; i < len; i++) {
+            newNums[1 + i] = nums[i];
+        }
+        int[][] cache = new int[len + 2][len + 2];
+        return maxCoins(newNums, cache, 0, len + 1);
+    }
+
+    private int maxCoins(int[] nums, int[][] cache, int left, int right) {
+        if (left > right) {
+            return 0;
+        }
+        else if (cache[left][right] != 0) {
+            return cache[left][right];
+        }
+
+        int result = 0;
+        if (left == right) {
+            result = nums[left];
+        }
+        else {
+            for (int i = left + 1; i < right; i++) {
+                result = Math.max(result, nums[left] * nums[i] * nums[right] + maxCoins(nums, cache, left, i) + maxCoins(nums, cache, i, right));
+            }
+        }
+        cache[left][right] = result;
+        return result;
+    }
+
+
+    /**
+     * 还是超时
+     * @param nums
+     * @return
+     */
+    public int maxCoinsV2(int[] nums) {
+        if (nums == null || nums.length == 0) return 0;
+        else if (nums.length == 1) return nums[0];
+
+        HashMap<Long, Integer> cache = new HashMap<>();
+        return maxCoinsV2(nums, (1L << nums.length) - 1, cache);
+    }
+
+    private int maxCoinsV2(int[] nums, long indexs, HashMap<Long, Integer> cache) {
+        Integer result = cache.get(indexs);
+        if (result != null) {
+            return result;
+        }
+
+        int len = nums.length;
+        int left;
+        int leftV;
+        int right;
+        int rightV;
+        int max = Integer.MIN_VALUE;
+        for (int i = 0; i < len; i++) {
+            if ((indexs & (1L << (len - 1 - i))) == 0) {
+                continue;
+            }
+
+            left = i - 1;
+            while (left > -1 && (indexs & (1L << (len - 1 - left))) == 0) {
+                left--;
+            }
+            leftV = left == -1 ? 1 : nums[left];
+
+            right = i + 1;
+            while (right < len && (indexs & (1L << (len - 1 - right))) == 0) {
+                right++;
+            }
+            rightV = right == len ? 1 : nums[right];
+
+            if (left == -1 && right == len) {
+                max = Math.max(max, leftV * nums[i] * rightV);
+            }
+            else {
+                max = Math.max(max, leftV * nums[i] * rightV + maxCoinsV2(nums, indexs & (Long.MAX_VALUE - (1L << (len - 1 - i))), cache));
+            }
+        }
+        cache.put(indexs, max);
+        return max;
+    }
+
+
+    public int maxCoinsV1(int[] nums) {
+        if (nums == null || nums.length == 0) return 0;
+        else if (nums.length == 1) return nums[0];
+
+        ArrayList<Integer> list = new ArrayList<>();
+        for (int num : nums) {
+            list.add(num);
+        }
+        Tuple<Integer, Stack<Integer>> result = maxCoinsV1(list);
+        while (!result.t2.empty()) {
+            int exclude = result.t2.pop();
+            for (int i = 0, size = list.size(); i < size; i++) {
+                if (i == exclude) {
+                    System.out.print(String.format("[%3d]   ", list.get(i)));
+                }
+                else {
+                    System.out.print(String.format(" %3d    ", list.get(i)));
+                }
+            }
+            System.out.println();
+            list.remove(exclude);
+        }
+        return result.t1;
+    }
+
+    private Tuple<Integer, Stack<Integer>> maxCoinsV1(ArrayList<Integer> nums) {
+        int size = nums.size();
+        Tuple<Integer, Stack<Integer>> result = new Tuple<>(null, null);
+        if (size == 1) {
+            result.t2 = new Stack<>();
+            result.t2.push(0);
+            result.t1 = nums.get(0);
+        }
+        else {
+            for (int i = 0; i < size; i++) {
+                int left = i == 0 ? 1 : nums.get(i - 1);
+                int right = i == size - 1 ? 1 : nums.get(i + 1);
+
+                ArrayList<Integer> clone = exclude(nums, i);
+                Tuple<Integer, Stack<Integer>> subResult = maxCoinsV1(clone);
+                subResult.t1 += left * nums.get(i) * right;
+                if (result.t1 == null || result.t1 < subResult.t1) {
+                    subResult.t2.push(i);
+                    result.t1 = subResult.t1;
+                    result.t2 = subResult.t2;
+                }
+            }
+        }
+        return result;
+    }
+
+    private ArrayList<Integer> exclude(ArrayList<Integer> from, int exclude) {
+        ArrayList<Integer> to = new ArrayList<>();
+        for (int i = 0, size = from.size(); i < size; i++) {
+            if (i != exclude) {
+                to.add(from.get(i));
+            }
+        }
+        return to;
+    }
 
     private void test() throws Exception {
 
-        ListNode l1 = ListNodeFactory.build("3->1->9");
-        ListNode l2 = ListNodeFactory.build("5->9");
-        System.out.println(addLists(l1, l2));
+
+        int[] nums = {
+                4, 1, 5, 2
+        };
+        d(maxCoins(nums));//不能有负数
+        d(maxCoinsV2(nums));//即使有负数也是正确解法
+        d(maxCoinsV1(nums));
+
+
+//        ListNode l1 = ListNodeFactory.build("3->1->9");
+//        ListNode l2 = ListNodeFactory.build("5->9");
+//        System.out.println(addLists(l1, l2));
 
 
 
