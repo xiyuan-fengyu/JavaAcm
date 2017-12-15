@@ -158,15 +158,9 @@ public class Solution {
     public int findClosestLeaf(TreeNode root, int k) {
         if (root == null) return 0;
 
-        Integer[] minDepths = new Integer[4];
+        Integer[] minDepths = new Integer[2];
         computeMinDepth(root, k, minDepths);
-
-        if (minDepths[2] == null || minDepths[1] <= minDepths[3] + 1) {
-            return minDepths[0];
-        }
-        else {
-            return minDepths[2];
-        }
+        return minDepths[0];
     }
 
     private Integer[] computeMinDepth(TreeNode root, int k, Integer[] minDepths) {
@@ -180,21 +174,21 @@ public class Solution {
             rightMD = computeMinDepth(root.right, k, minDepths);
         }
 
-        boolean isKsParent = false;
+        int ksParent = -1;
         Integer[] res;
         if (leftMD == null && rightMD == null) {
             res = new Integer[]{root.val, 1, null};
         }
         else if (leftMD == null) {
-            isKsParent = rightMD[2] == 1;
+            ksParent = rightMD[2];
             res = new Integer[] {rightMD[0], 1 + rightMD[1], null};
         }
         else if (rightMD == null) {
-            isKsParent = leftMD[2] == 1;
+            ksParent = leftMD[2];
             res = new Integer[] {leftMD[0], 1 + leftMD[1], null};
         }
         else {
-            isKsParent = leftMD[2] == 1 || rightMD[2] == 1;
+            ksParent = leftMD[2] > -1 ? leftMD[2] : rightMD[2];
             if (leftMD[1] <= rightMD[1]) {
                 res = new Integer[] {leftMD[0], 1 + leftMD[1], null};
             }
@@ -202,15 +196,21 @@ public class Solution {
                 res = new Integer[] {rightMD[0], 1 + rightMD[1], null};
             }
         }
-        res[2] = k == root.val ? 1 : 0;
 
-        if (res[2] == 1) {
+        if (k == root.val) {
             minDepths[0] = res[0];
             minDepths[1] = res[1];
+            res[2] = 0;
         }
-        else if (isKsParent) {
-            minDepths[2] = res[0];
-            minDepths[3] = res[1];
+        else if (ksParent > -1) {
+            res[2] = ksParent + 1;
+            if (minDepths[1] > res[2] + res[1]) {
+                minDepths[0] = res[0];
+                minDepths[1] = res[2] + res[1];
+            }
+        }
+        else {
+            res[2] = -1;
         }
         return res;
     }
@@ -219,11 +219,12 @@ public class Solution {
 
     private void test() {
 
-//        TreeNode root = TreeNodeFactory.build("1,3,2");
-//        int k = 1;
-        TreeNode root = TreeNodeFactory.build("1,2,3,4,null,null,null,5,null,6");
-        int k = 2;
-        System.out.println(findClosestLeaf(root, k));
+//        TreeNode root = TreeNodeFactory.build("1,2,3,4,null,null,null,5,null,6");
+//        int k = 2;
+////        TreeNode root = TreeNodeFactory.build("1,2,3,4,null,null,null,5,null,6,null,7,null,8");
+////        int k = 4;
+//        System.out.println(root);
+//        System.out.println(findClosestLeaf(root, k));
 
 
 ////        int[][] grid = Util.toIntArr2("[[1,1,-1],[1,-1,1],[-1,1,1]]");
