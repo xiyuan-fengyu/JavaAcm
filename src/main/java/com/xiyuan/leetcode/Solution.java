@@ -3,10 +3,7 @@ package com.xiyuan.leetcode;
 import com.xiyuan.acm.factory.TreeNodeFactory;
 import com.xiyuan.acm.model.TreeNode;
 
-import java.util.AbstractMap;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.*;
 
 import static com.xiyuan.util.XYLog.d;
 
@@ -158,42 +155,48 @@ public class Solution {
     public int findClosestLeaf(TreeNode root, int k) {
         if (root == null) return 0;
 
-        Integer[] minDepths = new Integer[2];
+        int[] minDepths = new int[2];
         computeMinDepth(root, k, minDepths);
         return minDepths[0];
     }
 
-    private Integer[] computeMinDepth(TreeNode root, int k, Integer[] minDepths) {
-        Integer[] leftMD = null;
+    private int[] computeMinDepth(TreeNode root, int k, int[] minDepths) {
+        int[] leftMD = null;
         if (root.left != null) {
             leftMD = computeMinDepth(root.left, k, minDepths);
+            if (leftMD == null) {
+                return null;
+            }
         }
 
-        Integer[] rightMD = null;
+        int[] rightMD = null;
         if (root.right != null) {
             rightMD = computeMinDepth(root.right, k, minDepths);
+            if (rightMD == null) {
+                return null;
+            }
         }
 
         int ksParent = -1;
-        Integer[] res;
+        int[] res;
         if (leftMD == null && rightMD == null) {
-            res = new Integer[]{root.val, 1, null};
+            res = new int[]{root.val, 1, -1};
         }
         else if (leftMD == null) {
             ksParent = rightMD[2];
-            res = new Integer[] {rightMD[0], 1 + rightMD[1], null};
+            res = new int[] {rightMD[0], 1 + rightMD[1], -1};
         }
         else if (rightMD == null) {
             ksParent = leftMD[2];
-            res = new Integer[] {leftMD[0], 1 + leftMD[1], null};
+            res = new int[] {leftMD[0], 1 + leftMD[1], -1};
         }
         else {
             ksParent = leftMD[2] > -1 ? leftMD[2] : rightMD[2];
             if (leftMD[1] <= rightMD[1]) {
-                res = new Integer[] {leftMD[0], 1 + leftMD[1], null};
+                res = new int[] {leftMD[0], 1 + leftMD[1], -1};
             }
             else {
-                res = new Integer[] {rightMD[0], 1 + rightMD[1], null};
+                res = new int[] {rightMD[0], 1 + rightMD[1], -1};
             }
         }
 
@@ -208,21 +211,67 @@ public class Solution {
                 minDepths[0] = res[0];
                 minDepths[1] = res[2] + res[1];
             }
-        }
-        else {
-            res[2] = -1;
+            else if (minDepths[1] <= res[2]) {
+                return null;
+            }
         }
         return res;
     }
 
 
 
+    // https://leetcode.com/problems/open-the-lock/description/
+    public int openLock(String[] deadends, String target) {
+        if ("0000".equals(target)) return 0;
+
+        int[] cache = new int[10000];
+        for (String deadend : deadends) {
+            if ("0000".equals(deadend)) return -1;
+            cache[Integer.parseInt(deadend)] = -1;
+        }
+
+        int[] tenPowers = {1000, 100, 10, 1};
+        int targetI = Integer.parseInt(target);
+        ArrayDeque<Integer> queue = new ArrayDeque<>();
+        queue.offer(0);
+        while (!queue.isEmpty()) {
+            Integer curCode = queue.poll();
+            int dis = cache[curCode];
+            for (int i = 0; i < 8; i++) {
+                int neighbor;
+                int tenPower = tenPowers[i / 2];
+                if (i % 2 == 0) {
+                    neighbor = curCode % (tenPower * 10) >= tenPower ? curCode - tenPower : curCode + tenPower * 9;
+                }
+                else {
+                    neighbor = curCode % (tenPower * 10) >= tenPower * 9 ? curCode - tenPower * 9 : curCode + tenPower;
+                }
+                if (neighbor == targetI) {
+                    return dis + 1;
+                }
+                else if (neighbor != 0 && cache[neighbor] == 0) {
+                    cache[neighbor] = dis + 1;
+                    queue.offer(neighbor);
+                }
+            }
+        }
+        return -1;
+    }
+
     private void test() {
 
-//        TreeNode root = TreeNodeFactory.build("1,2,3,4,null,null,null,5,null,6");
-//        int k = 2;
-////        TreeNode root = TreeNodeFactory.build("1,2,3,4,null,null,null,5,null,6,null,7,null,8");
-////        int k = 4;
+        String[] deadends = {"0201","0101","0102","1212","2002"};
+        String target = "0202";
+//        String[] deadends = {"8888"};
+//        String target = "0009";
+        int minDis = openLock(deadends, target);
+        System.out.println(minDis);
+
+
+////        TreeNode root = TreeNodeFactory.build("1,2,3,4,null,null,null,5,null,6");
+////        int k = 2;
+//        TreeNode root = TreeNodeFactory.build("1,2,3,4,null,null,null,5,null,6,null,7,null,8");
+//        int k = 4;
 //        System.out.println(root);
 //        System.out.println(findClosestLeaf(root, k));
 
