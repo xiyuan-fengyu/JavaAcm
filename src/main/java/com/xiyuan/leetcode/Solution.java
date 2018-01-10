@@ -258,14 +258,42 @@ public class Solution {
         return -1;
     }
 
+
+
+    public int[] twoSum(int[] nums, int target) {
+        int[] res = {-1, -1};
+        int cur;
+        Integer otherIndex;
+        Map<Integer, Integer> cache = new HashMap<>();
+        for (int i = 0, len = nums.length; i < len; ++i) {
+            cur = nums[i];
+            otherIndex = cache.get(target - cur);
+            if (otherIndex != null) {
+                res[0] = otherIndex;
+                res[1] = i;
+                return res;
+            }
+            else {
+                cache.put(cur, i);
+            }
+        }
+        return res;
+    }
+
+
+
+
     private void test() {
 
-        String[] deadends = {"0201","0101","0102","1212","2002"};
-        String target = "0202";
-//        String[] deadends = {"8888"};
-//        String target = "0009";
-        int minDis = openLock(deadends, target);
-        System.out.println(minDis);
+
+
+
+//        String[] deadends = {"0201","0101","0102","1212","2002"};
+//        String target = "0202";
+////        String[] deadends = {"8888"};
+////        String target = "0009";
+//        int minDis = openLock(deadends, target);
+//        System.out.println(minDis);
 
 
 ////        TreeNode root = TreeNodeFactory.build("1,2,3,4,null,null,null,5,null,6");
